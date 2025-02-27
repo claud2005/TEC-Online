@@ -1,39 +1,73 @@
-.signup-content {
-    background: linear-gradient(to right, #007bff, #00aaff); /* Gradiente azul */
-    color: white; /* Cor do texto */
-  }
-  
-  
-  .center-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%; /* Preencher a altura da tela */
-    padding: 16px; /* Espaçamento interno */
-  }
-  
-  .app-logo {
-    width: 150px; /* Ajuste conforme necessário */
-    margin-bottom: 20px; /* Espaço abaixo do logo */
-  }
-  
-  .form-box {
-    background: rgba(255, 255, 255, 0.9); /* Fundo branco com transparência */
-    border-radius: 10px; /* Cantos arredondados */
-    padding: 20px; /* Espaçamento interno */
-    width: 100%; /* Largura total */
-    max-width: 400px; /* Limite de largura */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra */
-  }
-  
-  h2 {
-    text-align: center; /* Centraliza o título */
-    margin-bottom: 20px; /* Espaço abaixo do título */
-  }
-  
-  ion-button {
-    margin-top: 10px; /* Espaçamento entre os botões */
-  }
-  
+/* Centralizar o conteúdo */
+.center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #2c3e50, #3498db);
+  color: #fff;
+}
 
+/* Logo */
+.app-logo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin-bottom: 20px; /* Espaço entre o logo e o formulário */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Caixa do formulário */
+.form-box {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 25px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Título */
+h2 {
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+/* Inputs */
+ion-item {
+  --background: rgba(255, 255, 255, 0.15);
+  --color: white;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+/* Botão de registrar */
+.btn-register {
+  background: #3498db !important;
+  color: #ffffff !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: 0.3s ease;
+}
+
+/* Garante que o botão seja clicável */
+.btn-register:disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Botão de voltar */
+.btn-back {
+  margin-top: 10px;
+  background: #e74c3c !important;
+  color: white !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 8px;
+}
