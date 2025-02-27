@@ -1,13 +1,64 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>plano-semanal</ion-title>
+    <ion-row class="header-container">
+      <ion-col size="auto">
+        <img src="assets/icon/logotipo.png" alt="Logo" class="logo" />
+      </ion-col>
+      <ion-col>
+        <ion-title class="user-title">Olá, (User)</ion-title>
+      </ion-col>
+    </ion-row>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">plano-semanal</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-grid>
+    <!-- Cronograma e Pesquisa -->
+    <ion-row class="top-bar">
+      <ion-col size="6">
+        <ion-label class="label-title">Cronograma</ion-label>
+        <ion-select interface="popover">
+          <ion-select-option value="5">Próximos 5 dias</ion-select-option>
+          <ion-select-option value="7">Próximos 7 dias</ion-select-option>
+          <ion-select-option value="15">Próximos 15 dias</ion-select-option>
+          <ion-select-option value="30">Próximos 30 dias</ion-select-option>
+        </ion-select>
+      </ion-col>
+      <ion-col size="6">
+        <ion-searchbar placeholder="Procurar Tarefa"></ion-searchbar>
+      </ion-col>
+    </ion-row>
+
+    <!-- Lista de Tarefas -->
+    <ion-row>
+      <ion-col>
+        <h2>Tarefas</h2>
+        <p>Adicione suas tarefas aqui.</p>
+      </ion-col>
+    </ion-row>
+
+    <!-- Calendário -->
+    <ion-row>
+      <ion-col>
+        <ion-datetime presentation="date"></ion-datetime>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon name="checkmark-circle"></ion-icon>
+        Serviços Finalizados
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="person"></ion-icon>
+        Perfil
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

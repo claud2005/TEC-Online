@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular'; 
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms'; 
@@ -11,5 +12,9 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, IonicModule, FormsModule]
 })
 export class HomePage {
+  constructor(private router: Router) {}
 
+  entrar() {
+    this.router.navigate(['/plano-semanal']);
+  }
 }
