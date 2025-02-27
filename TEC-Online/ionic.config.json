@@ -1,7 +1,5 @@
 {
   "name": "TEC-Online",
-  "integrations": {
-    "capacitor": {}
-  },
+  "integrations": {},
   "type": "angular"
 }

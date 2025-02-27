@@ -11,26 +11,6 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
-  {
-    path: 'signup',
-    loadChildren: () => import('./signup/signup.module').then( m => m.SignupPageModule)
-  },
-  {
-    path: 'plano-semanal',
-    loadChildren: () => import('./plano-semanal/plano-semanal.module').then( m => m.PlanoSemanalPageModule)
-  },
-  {
-    path: 'criar-servicos',
-    loadChildren: () => import('./criar-servicos/criar-servicos.module').then( m => m.CriarServicosPageModule)
-  },
-  {
-    path: 'perfil',
-    loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule)
-  },
-  {
-    path: 'servicos',
-    loadChildren: () => import('./servicos/servicos.module').then( m => m.ServicosPageModule)
-  },
 ];
 
 @NgModule({
