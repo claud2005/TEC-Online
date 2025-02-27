@@ -40,4 +40,16 @@ export class PlanoSemanalPage {
       this.router.navigate(['/servicos']); // Altere '/servicos' para o caminho da sua página
     });
   }
-}
+
+  // Método para navegar para a página do perfil
+  navigateToPerfil() {
+    console.log('Navegando para o perfil...');
+    this.modal.dismiss().then(() => {
+      this.router.navigate(['/perfil']).then(() => {
+        console.log('Navegação para o perfil concluída.');
+      });
+    });
+  }
+  
+  }
+
