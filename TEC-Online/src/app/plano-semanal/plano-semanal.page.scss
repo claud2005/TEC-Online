@@ -47,13 +47,36 @@
   }
   
   ion-select,
-  ion-searchbar {
-    background: #e3f2fd;
-    border-radius: 8px;
-    padding: 5px;
-    border: 1px solid #007bff;
-    width: 100%;
-  }
+ /* Estilo personalizado para a barra de pesquisa */
+ion-searchbar {
+  --background: #ffffff; /* Fundo branco */
+  --border-radius: 25px; /* Bordas arredondadas */
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  --color: #004085; /* Cor do texto */
+  --icon-color: #007bff; /* Cor do ícone de pesquisa */
+  --placeholder-color: #6c757d; /* Cor do placeholder */
+  --placeholder-opacity: 0.8; /* Opacidade do placeholder */
+  padding: 8px; /* Espaçamento interno */
+  margin-top: 8px; /* Alinhamento com o seletor de cronograma */
+}
+
+/* Efeito ao focar na barra de pesquisa */
+ion-searchbar.searchbar-has-focus {
+  --box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3); /* Sombra azul ao focar */
+  --background: #e3f2fd; /* Fundo azul claro ao focar */
+}
+
+/* Ícone de pesquisa personalizado */
+ion-searchbar::part(search-icon) {
+  color: #007bff; /* Cor do ícone de pesquisa */
+  font-size: 1.5rem; /* Tamanho do ícone */
+}
+
+/* Input da barra de pesquisa */
+ion-searchbar::part(searchbar-input) {
+  font-size: 1rem; /* Tamanho da fonte */
+  font-weight: 500; /* Peso da fonte */
+}
   
   /* Estilizando as Tarefas */
   h2 {
@@ -128,5 +151,150 @@
   ion-fab-button {
     --background: #3880ff; /* Cor de fundo do botão */
     --background-activated: #3171e0; /* Cor de fundo ao clicar */
-    --color: #ffffff; /* Cor do ícone */
+    --color: #ffffff; /* Cor do ícone *//* Estilos Gerais */
+    :host {
+      --ion-background-color: #f0f7ff; /* Azul claro suave */
+      --ion-text-color: #004085; /* Azul escuro */
+    }
+    
+    /* Header */
+    .header-container {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      background: #007bff; /* Azul vibrante */
+      color: white;
+    }
+    
+    .logo {
+      width: 50px;
+      height: auto;
+      margin-right: 10px;
+    }
+    
+    .user-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: white;
+    }
+    
+    /* Toolbar */
+    ion-toolbar {
+      --background: #007bff;
+      --color: white;
+      text-align: center;
+      border-bottom: 3px solid #0056b3;
+    }
+    
+    /* Cronograma e Pesquisa alinhados */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      margin: 15px 0; /* Espaçamento entre a barra e os elementos abaixo */
+    }
+    
+    ion-label {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #004085;
+    }
+    
+    ion-select,
+    ion-searchbar {
+      background: #e3f2fd;
+      border-radius: 8px;
+      padding: 5px;
+      border: 1px solid #007bff;
+      width: 100%;
+    }
+    
+    /* Ajuste específico para alinhar a barra de pesquisa */
+    ion-searchbar {
+      padding-top: 0; /* Remove o padding superior padrão */
+      margin-top: 8px; /* Alinha com o seletor de cronograma */
+    }
+    
+    /* Estilizando as Tarefas */
+    h2 {
+      font-size: 1.5rem; /* Tamanho da fonte maior para mais destaque */
+      font-weight: bold;
+      color: #004085;
+      margin-top: 20px; /* Espaçamento acima do título */
+    }
+    
+    p {
+      font-size: 1rem;
+      color: #6c757d;
+    }
+    
+    /* Calendário */
+    ion-datetime {
+      width: 100%;
+      background: #e3f2fd;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 1rem;
+      border: 2px solid #007bff;
+      margin-top: 15px; /* Espaçamento acima do calendário */
+    }
+    
+    /* Rodapé e Botões */
+    ion-footer {
+      border-top: 3px solid #0056b3;
+    }
+    
+    ion-toolbar {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+    }
+    
+    ion-button {
+      --background: transparent;
+      --color: #004085;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    
+    ion-button ion-icon {
+      font-size: 1.2rem;
+      margin-right: 5px;
+    }
+    
+    /* Estilos do Modal */
+    ion-modal {
+      --background: #f0f7ff; /* Mesmo fundo da página */
+      --ion-background-color: #f0f7ff; /* Mesmo fundo da página */
+      --ion-text-color: #004085; /* Mesmo texto da página */
+      --width: 80%;
+      --height: 50%;
+      --border-radius: 10px;
+    }
+    
+    ion-modal ion-header {
+      --background: #007bff; /* Mesmo fundo do header */
+      --color: white; /* Mesmo texto do header */
+    }
+    
+    ion-modal ion-footer {
+      --background: #007bff; /* Mesmo fundo do footer */
+      --color: white; /* Mesmo texto do footer */
+    }
+    
+    ion-modal ion-button {
+      --color: white; /* Cor dos ícones */
+    }
+    
+    /* Botão flutuante no modal */
+    ion-fab-button {
+      --background: #3880ff; /* Cor de fundo do botão */
+      --background-activated: #3171e0; /* Cor de fundo ao clicar */
+      --color: #ffffff; /* Cor do ícone */
+    }
+    
+    /* Ajuste para o botão flutuante no modal */
+    ion-fab {
+      margin-bottom: 20px; /* Espaçamento do fundo */
+      margin-right: 20px; /* Espaçamento da direita */
+    }
   }

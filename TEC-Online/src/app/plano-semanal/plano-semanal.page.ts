@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, IonModal } from '@ionic/angular';
-import { Router } from '@angular/router'; // Importe o Router
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-plano-semanal',
@@ -18,7 +18,7 @@ import { Router } from '@angular/router'; // Importe o Router
 export class PlanoSemanalPage {
   @ViewChild('modal') modal!: IonModal;
 
-  constructor(private router: Router) {} // Injete o Router
+  constructor(private router: Router) {}
 
   // Método para abrir o modal
   openModal(event: any) {
@@ -34,6 +34,10 @@ export class PlanoSemanalPage {
 
   // Método para navegar para outra página
   navigateToOtherPage() {
-    this.router.navigate(['/servicos']); // Altere '/outra-pagina' para o caminho da sua página
+    // Fecha o modal primeiro
+    this.modal.dismiss().then(() => {
+      // Navega para a próxima página após o modal ser fechado
+      this.router.navigate(['/servicos']); // Altere '/servicos' para o caminho da sua página
+    });
   }
 }
