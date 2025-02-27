@@ -1,5 +1,3 @@
-
-
 <ion-content [fullscreen]="true">
   <div class="login-container">
     <img src="assets/icon/logotipo.png" alt="Logo" class="app-logo" />
@@ -20,8 +18,9 @@
       Registar
     </ion-button>
 
-    <ion-button expand="block" color="secondary" routerLink="/plano-semanal" class="btn-animate">
+    <ion-button expand="block" color="secondary" (click)="entrar()" class="btn-animate">
       Entrar
     </ion-button>
+    
   </div>
 </ion-content>
