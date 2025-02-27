@@ -14,7 +14,8 @@ import { PlanoSemanalPage } from './plano-semanal.page';
     FormsModule,
     IonicModule,
     PlanoSemanalPageRoutingModule,
-    PlanoSemanalPage,
+    PlanoSemanalPage, // Adicione diretamente em `imports`
   ],
 })
 export class PlanoSemanalPageModule {}
+

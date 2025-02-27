@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-criar-servicos',
   templateUrl: './criar-servicos.page.html',
   styleUrls: ['./criar-servicos.page.scss'],
+  standalone: true,
+  imports: [CommonModule, IonicModule, RouterModule], // Importe RouterModule
 })
-export class CriarServicosPage implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-}
+export class CriarServicosPage {}

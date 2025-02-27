@@ -14,7 +14,9 @@ import { ServicosPage } from './servicos.page';
     FormsModule,
     IonicModule,
     ServicosPageRoutingModule,
-    ServicosPage,
+    ServicosPage, // Adicione diretamente em `imports`
   ],
 })
 export class ServicosPageModule {}
+
+
