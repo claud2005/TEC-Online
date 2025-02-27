@@ -14,7 +14,12 @@
 <ion-content>
   <ion-grid>
     <ion-row class="top-bar">
-      <ion-col size="6">
+      <ion-col size="12">
+        <!-- Barra de pesquisa -->
+        <ion-searchbar placeholder="Procurar Tarefa"></ion-searchbar>
+      </ion-col>
+      <ion-col size="12">
+        <!-- Seletor de cronograma -->
         <ion-label class="label-title">Cronograma</ion-label>
         <ion-select interface="popover">
           <ion-select-option value="5">Próximos 5 dias</ion-select-option>
@@ -22,9 +27,6 @@
           <ion-select-option value="15">Próximos 15 dias</ion-select-option>
           <ion-select-option value="30">Próximos 30 dias</ion-select-option>
         </ion-select>
-      </ion-col>
-      <ion-col size="6">
-        <ion-searchbar placeholder="Procurar Tarefa" class="searchbar"></ion-searchbar>
       </ion-col>
     </ion-row>
 
@@ -50,16 +52,16 @@
   <ng-template>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Detalhes do Dia</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="closeModal()">Fechar</ion-button>
+        <ion-buttons slot="start">
+          <ion-button (click)="closeModal()">
+            <ion-icon name="arrow-back"></ion-icon>
+          </ion-button>
         </ion-buttons>
+        <ion-title>Detalhes do Dia</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
       <p>Detalhes do dia selecionado...</p>
-
-      <!-- Botão "Mais" no canto inferior direito -->
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button (click)="navigateToOtherPage()">
           <ion-icon name="add-circle"></ion-icon>
