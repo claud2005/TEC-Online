@@ -1,0 +1,178 @@
+/* ======= Estilização Geral ======= */
+ion-toolbar {
+    --background: #1e1e1e;
+    --color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 14px 0;
+    box-shadow: 0px 2px 10px rgba(255, 255, 255, 0.955);
+}
+
+/* Aumenta o tamanho do título "Serviços" */
+.titulo-principal {
+    font-size: 22px; /* Aumenta ainda mais */
+    font-weight: bold;
+}
+
+/* ======= Fundo Branco ======= */
+ion-content {
+    --background: white; /* Define o fundo branco */
+}
+
+
+/* ======= Segmento de Filtros ======= */
+ion-segment {
+    background: white;
+    margin: 16px;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+ion-segment-button {
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+ion-segment-button.ion-activated {
+    background: #007aff;
+    color: white;
+    border-radius: 8px;
+    transition: background 0.3s ease-in-out;
+}
+
+/* ======= Barra de Pesquisa ======= */
+ion-searchbar {
+    margin: 16px;
+    --background: white;
+    --border-radius: 12px;
+    --box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    
+    /* Torna o texto digitado preto */
+    --color: black;
+
+    /* Cor do ícone da lupa e do "X" */
+    --icon-color: black;
+
+    /* Cor do placeholder */
+    --placeholder-color: black;
+}
+
+
+
+/* ======= Tabela de Serviços ======= */
+.tabela-header {
+    font-weight: bold;
+    background: #007aff;
+    color: white;
+    padding: 16px 0;
+    border-radius: 12px 12px 0 0;
+    text-align: center;
+    font-size: 18px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* Letras das colunas da tabela em preto */
+.tabela-row ion-col {
+    color: black; /* Agora o texto dentro das células fica preto */
+    padding: 14px;
+    border-right: 1px solid #d1d1d1;
+    font-size: 16px;
+    font-weight: 500;
+}
+.tabela-wrapper {
+    overflow-x: auto;
+    padding: 0 16px;
+}
+
+.tabela-servicos {
+    background: rgb(0, 0, 0);
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    min-width: 600px;
+}
+
+/* Cabeçalho da tabela (fixo) */
+.tabela-header {
+    font-weight: bold;
+    background: #007aff;
+    color: white;
+    padding: 16px 0;
+    border-radius: 12px 12px 0 0;
+    text-align: center;
+    font-size: 18px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* Linhas da tabela */
+.tabela-row {
+    background: #fff;
+    border-bottom: 2px solid #150f0f;
+    text-align: center;
+    transition: background 0.2s ease-in-out;
+    font-size: 16px;
+}
+
+/* Efeito hover nas linhas */
+.tabela-row:hover {
+    background: #090707;
+}
+
+/* Linhas alternadas */
+.tabela-row:nth-child(even) {
+    background: #f9f9f9;
+}
+
+/* Última linha sem borda inferior */
+.tabela-row:last-child {
+    border-bottom: none;
+}
+
+/* Colunas */
+.tabela-row ion-col {
+    padding: 14px;
+    border-right: 1px solid #d1d1d1;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Remove a borda da última coluna */
+.tabela-row ion-col:last-child {
+    border-right: none;
+}
+
+/* Badges */
+ion-badge {
+    font-size: 16px;
+    padding: 6px 14px;
+    border-radius: 15px;
+    font-weight: bold;
+    box-shadow: 0px 3px 6px rgb(255, 239, 239);
+}
+
+/* Status ABERTA (vermelho) */
+ion-badge[color="danger"] {
+    background-color: #ff3b30;
+    color: white;
+}
+
+/* Status FECHADA (verde) */
+ion-badge[color="success"] {
+    background-color: #28a745;
+    color: white;
+}
+
+/* ======= Ajustes Globais ======= */
+ion-title,
+ion-label {
+    font-size: 18px;
+    font-weight: bold;
+}

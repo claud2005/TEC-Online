@@ -1,6 +1,13 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Serviços</ion-title>
+    <!-- Botão de Voltar -->
+    <ion-buttons slot="start">
+      <ion-button (click)="voltarParaPlanoSemanal()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="titulo-principal">Serviços</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -11,17 +18,48 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-list>
-    <ion-item *ngFor="let servico of servicos">
-      <ion-label>
-        <h2>{{ servico.cliente }}</h2>
-        <p><strong>Status:</strong> {{ servico.status }}</p>
-        <p><strong>Marca:</strong> {{ servico.marca }}</p>
-        <p><strong>Modelo:</strong> {{ servico.modelo }}</p>
-      </ion-label>
-      <ion-badge [color]="servico.status === 'ABERTA' ? 'danger' : 'success'">
-        {{ servico.status }}
-      </ion-badge>
-    </ion-item>
-  </ion-list>
+  <!-- Segmento para Filtros -->
+  <ion-segment [(ngModel)]="filtroStatus" (ionChange)="filtrarServicos()">
+    <ion-segment-button value="todos">
+      <ion-label>Todos</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="ABERTA">
+      <ion-label>Abertos</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="FECHADA">
+      <ion-label>Fechados</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- Barra de Pesquisa -->
+  <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filtrarServicos()"></ion-searchbar>
+
+  <!-- Tabela de Serviços -->
+  <div class="tabela-wrapper">
+    <ion-grid class="tabela-servicos">
+      <!-- Cabeçalho fixo -->
+      <ion-row class="tabela-header">
+        <ion-col size="1">Nº OS</ion-col>
+        <ion-col size="2">Aberta em</ion-col>
+        <ion-col size="2">Status</ion-col>
+        <ion-col size="3">Cliente</ion-col>
+        <ion-col size="2">Equipamento</ion-col>
+        <ion-col size="2">Modelo</ion-col>
+      </ion-row>
+
+      <!-- Lista de Serviços -->
+      <ion-row *ngFor="let servico of servicosFiltrados" class="tabela-row">
+        <ion-col size="1">{{ servico.numero }}</ion-col>
+        <ion-col size="2">{{ servico.data }}</ion-col>
+        <ion-col size="2">
+          <ion-badge [color]="servico.status === 'ABERTA' ? 'danger' : 'success'">
+            {{ servico.status }}
+          </ion-badge>
+        </ion-col>
+        <ion-col size="3">{{ servico.cliente }}</ion-col>
+        <ion-col size="2">{{ servico.equipamento }}</ion-col>
+        <ion-col size="2">{{ servico.modelo }}</ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>
