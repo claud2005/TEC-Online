@@ -16,5 +16,9 @@ import { Router } from '@angular/router';
   ],
 })
 export class PlanoSemanalPage {
+  goToPerfil() {
+    console.log('Navegando para a página de perfil...');
+  }
+  
 
   }
