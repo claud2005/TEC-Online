@@ -17,4 +17,8 @@ export class HomePage {
   entrar() {
     this.router.navigate(['/plano-semanal']);
   }
+
+  registrar() {
+    this.router.navigate(['/signup']);
+  }
 }
