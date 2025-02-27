@@ -1,14 +1,14 @@
 :host {
   --ion-background-color: #f0f7ff;
-  --ion-text-color: #004085;
+  --ion-text-color: #048;
 }
 
 .header-container {
   display: flex;
   align-items: center;
   padding: 10px;
-  background: #007bff;
-  color: white;
+  background: #07f;
+  color: #fff;
 }
 
 .logo {
@@ -20,12 +20,12 @@
 .user-title {
   font-size: 1.3rem;
   font-weight: bold;
-  color: white;
+  color: #fff;
 }
 
 ion-toolbar {
-  --background: #007bff;
-  --color: white;
+  --background: #07f;
+  --color: #fff;
   text-align: center;
   border-bottom: 3px solid #0056b3;
 }
@@ -37,26 +37,14 @@ ion-toolbar {
 ion-label {
   font-size: 1rem;
   font-weight: bold;
-  color: #004085;
+  color: #048;
 }
 
-ion-select {
-  --background: #ffffff;
+ion-select, ion-searchbar {
+  --background: #fff;
   --border-radius: 25px;
   --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --color: #004085;
-  --placeholder-color: #6c757d;
-  --placeholder-opacity: 0.8;
-  padding: 8px;
-  width: 100%;
-}
-
-ion-searchbar {
-  --background: #ffffff;
-  --border-radius: 25px;
-  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --color: #004085;
-  --icon-color: #007bff;
+  --color: #048;
   --placeholder-color: #6c757d;
   --placeholder-opacity: 0.8;
   padding: 8px;
@@ -69,7 +57,7 @@ ion-searchbar.searchbar-has-focus {
 }
 
 ion-searchbar::part(search-icon) {
-  color: #007bff;
+  color: #07f;
   font-size: 1.5rem;
 }
 
@@ -81,7 +69,7 @@ ion-searchbar::part(searchbar-input) {
 h2 {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #004085;
+  color: #048;
   margin-top: 20px;
 }
 
@@ -96,7 +84,7 @@ ion-datetime {
   border-radius: 10px;
   padding: 10px;
   font-size: 1rem;
-  border: 2px solid #007bff;
+  border: 2px solid #07f;
   margin-top: 15px;
 }
 
@@ -104,15 +92,9 @@ ion-footer {
   border-top: 3px solid #0056b3;
 }
 
-ion-toolbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-}
-
 ion-button {
   --background: transparent;
-  --color: #004085;
+  --color: #048;
   font-size: 1rem;
   font-weight: bold;
 }
@@ -125,29 +107,19 @@ ion-button ion-icon {
 ion-modal {
   --background: #f0f7ff;
   --ion-background-color: #f0f7ff;
-  --ion-text-color: #004085;
-  --width: 60%; /* Reduzir a largura do modal */
-  --height: 40%; /* Reduzir a altura do modal */
+  --ion-text-color: #048;
+  --width: 60%;
+  --height: 40%;
   --border-radius: 10px;
 }
 
-ion-modal ion-header {
-  --background: #007bff;
-  --color: white;
-}
-
-ion-modal ion-footer {
-  --background: #007bff;
-  --color: white;
+ion-modal ion-header, ion-modal ion-footer {
+  --background: #07f;
+  --color: #fff;
 }
 
 ion-modal ion-button {
-  --color: white;
-}
-
-ion-modal ion-button[slot="start"] {
-  --color: white;
-  --background: transparent;
+  --color: #fff;
 }
 
 ion-modal ion-button[slot="start"] ion-icon {
@@ -155,9 +127,9 @@ ion-modal ion-button[slot="start"] ion-icon {
 }
 
 ion-fab-button {
-  --background: #3880ff;
+  --background: #38f;
   --background-activated: #3171e0;
-  --color: #ffffff;
+  --color: #fff;
 }
 
 ion-fab {
