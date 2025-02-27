@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
   },
   {
     path: '',
@@ -13,24 +13,24 @@ const routes: Routes = [
   },
   {
     path: 'perfil',
-    loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule)
+    loadChildren: () => import('./perfil/perfil.module').then(m => m.PerfilPageModule)
   },
   {
     path: 'criar-servicos',
-    loadChildren: () => import('./criar-servicos/criar-servicos.module').then( m => m.CriarServicosPageModule)
+    loadChildren: () => import('./criar-servicos/criar-servicos.module').then(m => m.CriarServicosPageModule)
   },
   {
     path: 'servicos',
-    loadChildren: () => import('./servicos/servicos.module').then( m => m.ServicosPageModule)
+    loadChildren: () => import('./servicos/servicos.module').then(m => m.ServicosPageModule)
   },
   {
     path: 'plano-semanal',
-    loadChildren: () => import('./plano-semanal/plano-semanal.module').then( m => m.PlanoSemanalPageModule)
+    loadChildren: () => import('./plano-semanal/plano-semanal.module').then(m => m.PlanoSemanalPageModule)
   },
   {
     path: 'signup',
-    loadChildren: () => import('./signup/signup.module').then( m => m.SignupPageModule)
-  },
+    loadChildren: () => import('./signup/signup.module').then(m => m.SignupPageModule)
+  }
 ];
 
 @NgModule({
@@ -39,4 +39,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
