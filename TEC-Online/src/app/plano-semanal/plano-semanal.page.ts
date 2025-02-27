@@ -20,6 +20,11 @@ export class PlanoSemanalPage {
 
   constructor(private router: Router) {}
 
+  navigateToServicos() {
+    this.router.navigate(['/servicos']); // Altere '/servicos' para o caminho correto da sua página de serviços
+  }
+
+
   // Método para abrir o modal
   openModal(event: any) {
     const selectedDate = event.detail.value;
@@ -37,7 +42,7 @@ export class PlanoSemanalPage {
     // Fecha o modal primeiro
     this.modal.dismiss().then(() => {
       // Navega para a próxima página após o modal ser fechado
-      this.router.navigate(['/servicos']); // Altere '/servicos' para o caminho da sua página
+      this.router.navigate(['/criar-servicos']); // Altere '/servicos' para o caminho da sua página
     });
   }
 
