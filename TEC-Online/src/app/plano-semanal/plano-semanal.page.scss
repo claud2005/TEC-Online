@@ -107,6 +107,9 @@
     --background: #f0f7ff; /* Mesmo fundo da página */
     --ion-background-color: #f0f7ff; /* Mesmo fundo da página */
     --ion-text-color: #004085; /* Mesmo texto da página */
+    --width: 80%;
+    --height: 50%;
+    --border-radius: 10px;
   }
   
   ion-modal ion-header {
@@ -122,4 +125,8 @@
   ion-modal ion-button {
     --color: white; /* Cor dos ícones */
   }
-  
+  ion-fab-button {
+    --background: #3880ff; /* Cor de fundo do botão */
+    --background-activated: #3171e0; /* Cor de fundo ao clicar */
+    --color: #ffffff; /* Cor do ícone */
+  }
