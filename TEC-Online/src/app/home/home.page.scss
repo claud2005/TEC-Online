@@ -1,41 +1,92 @@
+:host {
+  --ion-background-color: #6a1b9a; /* Fundo roxo vibrante */
+}
+
 .login-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  height: 100%;
+  justify-content: center;
+  height: 100vh;
   padding: 20px;
-  background: linear-gradient(135deg, #6a82fb, #fc5c7d); /* Gradiente suave */
-  border-radius: 15px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #6a1b9a, #9c27b0); /* Gradiente roxo vibrante */
 }
 
 .app-logo {
-  width: 120px;
+  width: 150px;
+  height: auto;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.welcome-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-align: center;
   margin-bottom: 30px;
-  border-radius: 50%;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .form-group {
   width: 100%;
-  max-width: 400px; /* Limitar a largura do formulário */
+  max-width: 400px;
   margin-bottom: 20px;
 }
 
 ion-item {
   --background: rgba(255, 255, 255, 0.1); /* Fundo semi-transparente */
-  border-radius: 10px;
+  --border-color: rgba(255, 255, 255, 0.3);
+  --color: white;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  margin-bottom: 15px;
+  border-radius: 12px; /* Bordas mais arredondadas */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.btn-animate {
-  margin: 10px 0;
-  border-radius: 12px;
+ion-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+ion-label {
+  font-size: 1rem;
   font-weight: bold;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: white;
 }
 
-.btn-animate:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+ion-input {
+  --color: white;
+  --placeholder-color: rgba(255, 255, 255, 0.7);
+  --placeholder-opacity: 1;
+  font-size: 1rem;
+  --padding-start: 0;
+}
+
+ion-button {
+  width: 100%;
+  max-width: 400px;
+  margin-top: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 25px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+ion-button.btn-animate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+ion-button[color="primary"] {
+  --background: #ff4081; /* Rosa vibrante para o botão primário */
+  --background-activated: #e91e63; /* Rosa mais escuro ao clicar */
+  --color: white;
+}
+
+ion-button[color="secondary"] {
+  --background: #00bcd4; 
+  --background-activated: #0097a7;
+  --color: white;
 }
