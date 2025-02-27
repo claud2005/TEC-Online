@@ -1,28 +1,19 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <img src="assets/icon/logotipo.png" alt="Logo" class="logo" />
-    </ion-buttons>
-    <ion-title>Olá (User)</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
   <div class="profile-container">
-    <h2>Perfil</h2>
+    <h2 class="profile-title">Perfil</h2>
 
     <!-- Foto de Perfil -->
-    <div class="profile-picture">
-      <img src="assets/icon/user.png" alt="Foto de Perfil" />
+    <div class="profile-picture" (click)="alterarFoto()">
+      <img [src]="fotoPerfil || 'assets/icon/user.png'" alt="Foto de Perfil" />
     </div>
 
     <!-- Botão de Alterar Foto -->
-    <ion-button expand="block" class="small-button">Alterar Foto</ion-button>
+    <ion-button expand="block" class="small-button" (click)="alterarFoto()">Alterar Foto</ion-button>
 
     <!-- Informações do Usuário -->
     <div class="user-info">
-      <p><strong>Nome Completo:</strong></p>
-      <p><strong>Nome de Utilizador:</strong></p>
+      <p><strong>Nome Completo:</strong> João Silva</p>
+      <p><strong>Nome de Utilizador:</strong> joaosilva123</p>
     </div>
 
     <!-- Botões de ação -->
@@ -31,23 +22,4 @@
       <ion-button expand="block" color="danger" class="small-button">Logout</ion-button>
     </div>
   </div>
-
-  <!-- Menu de navegação inferior -->
-  <ion-footer>
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-button>
-          <ion-icon name="checkmark-circle"></ion-icon>
-          <p>Serviços</p>
-        </ion-button>
-      </ion-buttons>
-
-      <ion-buttons slot="start">
-        <ion-button>
-          <ion-icon name="person"></ion-icon>
-          <p>Perfil</p>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-footer>
 </ion-content>
