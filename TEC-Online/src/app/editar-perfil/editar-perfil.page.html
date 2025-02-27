@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Editar Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (ngSubmit)="salvarPerfil()">
+    <ion-item>
+      <ion-label position="floating">Nome</ion-label>
+      <ion-input [(ngModel)]="usuario.nome" name="nome"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input [(ngModel)]="usuario.email" name="email" type="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Telefone</ion-label>
+      <ion-input [(ngModel)]="usuario.telefone" name="telefone"></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" type="submit">Salvar</ion-button>
+  </form>
+</ion-content>
