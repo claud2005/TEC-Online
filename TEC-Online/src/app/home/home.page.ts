@@ -10,14 +10,6 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, IonicModule, FormsModule]
 })
-export class HomePage implements OnInit {
-  
-  constructor() {
-    // Construtor da classe
-  }
+export class HomePage {
 
-  ngOnInit() {
-    // Este método é chamado quando o componente é inicializado
-    console.log("HomePage carregada!");
-  }
 }
