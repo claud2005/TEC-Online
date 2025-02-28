@@ -14,8 +14,7 @@ export class EditarPerfilPage {
   // Exemplo de lógica do componente
   usuario = {
     nome: 'João Silva',
-    email: 'joao.silva@example.com',
-    telefone: '(11) 98765-4321'
+    username: 'joaosilva123',
   };
 
   salvarPerfil() {

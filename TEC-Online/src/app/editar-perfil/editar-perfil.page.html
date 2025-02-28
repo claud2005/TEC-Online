@@ -1,26 +1,43 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Editar Perfil</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-buttons slot="start">
+  <ion-back-button defaultHref="/home"></ion-back-button>
+</ion-buttons>
 
 <ion-content>
-  <form (ngSubmit)="salvarPerfil()">
+  <form #form="ngForm" (ngSubmit)="salvarPerfil()">
+    <!-- Nome Completo -->
     <ion-item>
-      <ion-label position="floating">Nome</ion-label>
-      <ion-input [(ngModel)]="usuario.nome" name="nome"></ion-input>
+      <ion-label position="floating">Nome Completo:</ion-label>
+      <ion-input
+        [(ngModel)]="usuario.nome"
+        name="nome"
+        aria-label="Nome Completo"
+        required
+        minlength="3"
+      ></ion-input>
     </ion-item>
+    <ion-note *ngIf="!usuario.nome && form.submitted" color="danger">
+      O nome completo é obrigatório.
+    </ion-note>
 
+    <!-- Nome de Utilizador -->
     <ion-item>
-      <ion-label position="floating">Email</ion-label>
-      <ion-input [(ngModel)]="usuario.email" name="email" type="email"></ion-input>
+      <ion-label position="floating">Nome de Utilizador:</ion-label>
+      <ion-input
+        [(ngModel)]="usuario.username"
+        name="username"
+        aria-label="Nome de Utilizador"
+        required
+        minlength="3"
+      ></ion-input>
     </ion-item>
+    <ion-note *ngIf="!usuario.username && form.submitted" color="danger">
+      O nome de utilizador é obrigatório.
+    </ion-note>
 
-    <ion-item>
-      <ion-label position="floating">Telefone</ion-label>
-      <ion-input [(ngModel)]="usuario.telefone" name="telefone"></ion-input>
-    </ion-item>
-
-    <ion-button expand="full" type="submit">Salvar</ion-button>
+    <!-- Botão de Salvar -->
+    <ion-button expand="full" type="submit">
+      <ion-icon name="save-outline" slot="start"></ion-icon>
+      Salvar
+    </ion-button>
   </form>
 </ion-content>
