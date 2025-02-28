@@ -1,20 +1,24 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
+import { RouterModule, Routes } from '@angular/router';
+import { CriarServicosPage } from './criar-servicos.page'; // Importação do componente standalone
 
-import { CriarServicosPageRoutingModule } from './criar-servicos-routing.module';
-
-import { CriarServicosPage } from './criar-servicos.page';
+const routes: Routes = [
+  {
+    path: '',
+    component: CriarServicosPage
+  }
+];
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    CriarServicosPageRoutingModule,
-    CriarServicosPage
-  ],
+    RouterModule.forChild(routes),
+    CriarServicosPage // ✅ Adiciona o componente standalone aqui em `imports`
+  ]
 })
 export class CriarServicosPageModule {}
