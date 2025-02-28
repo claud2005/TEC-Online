@@ -1,127 +1,33 @@
-/* Estilo global do conteudo */
+/* No seu arquivo de estilo (ex: .scss) do componente */
+
 ion-content {
-    --background: #f0f0f0; /* Fundo cinza claro */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 24px;
-    height: 100vh;
-    width: 100%;
-}
-
-/* Titulo principal (Ordem de Servico) */
-h1 {
-    font-size: 32px; /* Maior para mais destaque */
-    font-weight: bold;
-    color: #000000; /* Preto puro */
-    margin-bottom: 20px;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-/* Descricao opcional */
-p {
-    font-size: 18px;
-    color: #000000; /* Preto puro */
-    text-align: center;
-    margin-bottom: 25px;
-}
-
-/* Grid responsivo para ocupar TODA a largura */
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Agora sao 3 colunas */
-    gap: 20px;
-    padding: 0;
-    width: 100%;
-}
-
-/* Quando a tela for menor, usa apenas duas colunas */
-@media (max-width: 1024px) {
-    .grid-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Quando a tela for muito pequena, usa apenas uma coluna */
-@media (max-width: 768px) {
-    .grid-container {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Labels */
-ion-label {
-    font-weight: bold;
-    font-size: 18px;
-    color: #000000; /* Preto puro */
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 6px;
-}
-
-/* Inputs com fundo branco, bordas cinzas e texto preto */
-ion-input,
-ion-textarea,
-ion-select {
-    border: 2px solid #cccccc; /* Bordas cinzas claras */
-    border-radius: 5px; /* Bordas arredondadas */
-    padding: 14px;
-    font-size: 20px;
-    color: #000000; /* Texto preto */
-    background: #ffffff; /* Fundo branco */
-    width: 100%;
-    transition: border-color 0.3s ease;
-}
-
-/* Mudanca de cor ao focar nos inputs */
-ion-input:focus,
-ion-textarea:focus,
-ion-select:focus {
-    border-color: #007bff; /* Borda azul para indicar foco */
-    outline: none;
-}
-
-/* Inputs que ocupam linha inteira */
-.full-width {
-    grid-column: span 3;
-}
-
-/* Para telas menores, os inputs ocupam toda a linha */
-@media (max-width: 1024px) {
-    .full-width {
-        grid-column: span 2;
-    }
-}
-
-@media (max-width: 768px) {
-    .full-width {
-        grid-column: span 1;
-    }
-}
-
-/* Botao */
-ion-button {
     --background: #ffffff; /* Fundo branco */
-    --border-radius: 8px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #000000; /* Texto preto */
-    padding: 16px;
-    width: 100%;
-    transition: background 0.3s ease;
-    border: 2px solid #000000; /* Borda preta */
-}
-
-/* Efeito ao passar o mouse no botao */
-ion-button:hover {
-    --background: #f0f0f0; /* Cinza claro ao passar o mouse */
-}
-
-/* Centraliza o botao */
-.button-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 25px;
-    width: 100%;
-}
+    --color: #000000; /* Texto preto */
+  }
+  
+  ion-header {
+    --background: #ffffff; /* Fundo branco no header */
+    --color: #000000; /* Texto preto */
+  }
+  
+  ion-toolbar {
+    --background: #ffffff; /* Fundo branco na toolbar */
+    --color: #000000; /* Texto preto */
+  }
+  
+  ion-title {
+    color: #000000; /* Título preto */
+  }
+  
+  ion-label,
+  ion-input,
+  ion-textarea,
+  ion-select {
+    color: #000000; /* Texto preto nos campos */
+  }
+  
+  ion-button {
+    --background: #000000; /* Botão com fundo preto */
+    --color: #ffffff; /* Texto branco no botão */
+  }
+  
