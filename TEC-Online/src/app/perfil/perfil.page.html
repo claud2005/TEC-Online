@@ -4,11 +4,22 @@
 
     <!-- Foto de Perfil -->
     <div class="profile-picture" (click)="alterarFoto()">
-      <img [src]="fotoPerfil || 'assets/icon/user.png'" alt="Foto de Perfil" />
+      <img [src]="fotoPerfil" alt="Foto de Perfil" />
     </div>
 
     <!-- Botão de Alterar Foto -->
-    <ion-button expand="block" class="small-button" (click)="alterarFoto()">Alterar Foto</ion-button>
+    <ion-button expand="block" class="small-button" (click)="alterarFoto()">
+      Alterar Foto
+    </ion-button>
+
+    <!-- Input escondido para escolher arquivo na web -->
+    <input 
+      type="file" 
+      id="fileInput" 
+      accept="image/*" 
+      (change)="onFileSelected($event)" 
+      style="display: none;"
+    />
 
     <!-- Informações do Usuário -->
     <div class="user-info">
@@ -18,8 +29,12 @@
 
     <!-- Botões de ação -->
     <div class="button-group">
-      <ion-button expand="block" fill="outline" class="small-button">Editar Perfil</ion-button>
-      <ion-button expand="block" color="danger" class="small-button">Logout</ion-button>
+      <ion-button expand="block" fill="outline" class="small-button">
+        Editar Perfil
+      </ion-button>
+      <ion-button expand="block" color="danger" class="small-button">
+        Logout
+      </ion-button>
     </div>
   </div>
 </ion-content>

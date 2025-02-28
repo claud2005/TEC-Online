@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { PerfilPageRoutingModule } from './perfil-routing.module';
-import { PerfilPage } from './perfil.page'; // Adicione esta linha
+import { PerfilPage } from './perfil.page'; // ✅ Apenas importar, não declarar!
 
 @NgModule({
   imports: [
@@ -11,7 +11,7 @@ import { PerfilPage } from './perfil.page'; // Adicione esta linha
     FormsModule,
     IonicModule,
     PerfilPageRoutingModule,
-    PerfilPage
+    PerfilPage // ✅ Importa o componente standalone
   ],
 })
 export class PerfilPageModule {}
