@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Platform } from '@ionic/angular';
+import { Router } from '@angular/router'; // ✅ Importa o Router
 
 @Component({
   standalone: true,
@@ -13,10 +14,11 @@ import { Platform } from '@ionic/angular';
   imports: [IonicModule, CommonModule, FormsModule], // ✅ Importa aqui!
 })
 export class PerfilPage {
+
   fotoPerfil: string = 'assets/icon/user.png';
   isWeb: boolean;
 
-  constructor(private platform: Platform) {
+  constructor(private platform: Platform, private router: Router) { // ✅ Injeta o Router
     this.isWeb = !this.platform.is('hybrid');
     if (!this.isWeb) {
       this.checkCameraPermissions();
@@ -65,5 +67,15 @@ export class PerfilPage {
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  // Função para redirecionar para a página de home (Logout)
+  logout() {
+    this.router.navigate(['/home']); // Redireciona para a página home
+  }
+
+  // Função para redirecionar para a página de editar perfil
+  editarPerfil() {
+    this.router.navigate(['/editar-perfil']); // Redireciona para a página editar-perfil
   }
 }
