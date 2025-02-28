@@ -1,49 +1,51 @@
-/* Estilo global do conteudo */
+/* Estilo global */
 ion-content {
-    --background: #f0f0f0; /* Fundo cinza claro */
+    --background: #f0f0f0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     padding: 24px;
     height: 100vh;
-    width: 100%;
+    width: 100vw;
 }
 
-/* Titulo principal (Ordem de Servico) */
+/* Título */
 h1 {
-    font-size: 32px; /* Maior para mais destaque */
+    font-size: 35px;
     font-weight: bold;
-    color: #000000; /* Preto puro */
-    margin-bottom: 20px;
+    color: #000;
     text-align: center;
     text-transform: uppercase;
+    width: 100%;
+    margin-bottom: 10px;
 }
 
-/* Descricao opcional */
+/* Descrição */
 p {
     font-size: 18px;
-    color: #000000; /* Preto puro */
+    color: #000;
     text-align: center;
-    margin-bottom: 25px;
+    width: 100%;
+    margin-bottom: 10px;
 }
 
-/* Grid responsivo para ocupar TODA a largura */
+/* Grid responsivo que ocupa toda a tela */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Agora sao 3 colunas */
-    gap: 20px;
-    padding: 0;
-    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    width: 100vw;
+    align-items: start;
 }
 
-/* Quando a tela for menor, usa apenas duas colunas */
+/* Ajusta para telas médias */
 @media (max-width: 1024px) {
     .grid-container {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-/* Quando a tela for muito pequena, usa apenas uma coluna */
+/* Ajusta para telas pequenas */
 @media (max-width: 768px) {
     .grid-container {
         grid-template-columns: 1fr;
@@ -54,40 +56,51 @@ p {
 ion-label {
     font-weight: bold;
     font-size: 18px;
-    color: #000000; /* Preto puro */
+    color: #000;
     text-transform: uppercase;
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 10px;
+    text-align: left;
+    width: 100%;
 }
 
-/* Inputs com fundo branco, bordas cinzas e texto preto */
+/* Inputs e Selects */
 ion-input,
 ion-textarea,
 ion-select {
-    border: 2px solid #cccccc; /* Bordas cinzas claras */
-    border-radius: 5px; /* Bordas arredondadas */
-    padding: 14px;
-    font-size: 20px;
-    color: #000000; /* Texto preto */
-    background: #ffffff; /* Fundo branco */
+    border: 2px solid #cccccc;
+    border-radius: 15px;
+    padding: 4px 8px;
+    font-size: 16px;
+    color: #000;
+    background: #fff;
     width: 100%;
     transition: border-color 0.3s ease;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    line-height: 1.2;
+    min-height: 40px;
+    margin-top: 10px;
 }
 
-/* Mudanca de cor ao focar nos inputs */
+/* Ajustando a posição do texto no ion-textarea */
+ion-textarea {
+    padding-top: 10px;
+}
+
+/* Efeito de foco */
 ion-input:focus,
 ion-textarea:focus,
 ion-select:focus {
-    border-color: #007bff; /* Borda azul para indicar foco */
-    outline: none;
+    border-color: #007bff;
 }
 
-/* Inputs que ocupam linha inteira */
+/* Campos que ocupam a linha toda */
 .full-width {
     grid-column: span 3;
+    width: 100%;
 }
 
-/* Para telas menores, os inputs ocupam toda a linha */
 @media (max-width: 1024px) {
     .full-width {
         grid-column: span 2;
@@ -100,28 +113,44 @@ ion-select:focus {
     }
 }
 
-/* Botao */
+/* Botão */
 ion-button {
-    --background: #ffffff; /* Fundo branco */
+    --background: #ffffff;
     --border-radius: 8px;
     font-size: 20px;
     font-weight: bold;
-    color: #000000; /* Texto preto */
-    padding: 16px;
+    color: #000;
+    padding: 14px;
     width: 100%;
-    transition: background 0.3s ease;
-    border: 2px solid #000000; /* Borda preta */
+    border: none;
 }
 
-/* Efeito ao passar o mouse no botao */
 ion-button:hover {
-    --background: #f0f0f0; /* Cinza claro ao passar o mouse */
+    --background: #f0f0f0;
 }
 
-/* Centraliza o botao */
+/* Centralizar botão */
 .button-container {
     display: flex;
     justify-content: center;
-    margin-top: 25px;
+    margin-top: 20px;
     width: 100%;
+}
+
+/* Alinhamento do botão de voltar à esquerda */
+ion-header {
+    --background: #f0f0f0;
+    padding-left: 0; /* Remove qualquer espaçamento extra à esquerda */
+}
+
+ion-toolbar {
+    --background: #f0f0f0;
+}
+
+ion-buttons[slot="start"] {
+    margin-left: 0 !important; /* Garante que o botão de voltar ocupe a posição à esquerda */
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(10%); /* Alinha verticalmente */
 }

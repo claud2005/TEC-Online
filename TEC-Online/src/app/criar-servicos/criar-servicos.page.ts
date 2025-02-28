@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, NavController } from '@ionic/angular';  // Certifique-se de que o NavController está importado
 
 @Component({
   selector: 'app-criar-servicos',
@@ -27,7 +27,7 @@ export class CriarServicosPage {
   observacoes: string = '';
   autorServico: string = '';
 
-  constructor() {}
+  constructor(private navController: NavController) {}  // Certifique-se de que o NavController está sendo injetado corretamente
 
   salvarServico() {
     if (!this.isFormValid()) {
@@ -77,5 +77,9 @@ export class CriarServicosPage {
 
     return camposObrigatorios.every(campo => campo && campo.trim() !== '') &&
            valoresObrigatorios.every(valor => valor !== null && valor >= 0);
+  }
+
+  goBack() {
+    this.navController.back(); // Volta para a página anterior
   }
 }
