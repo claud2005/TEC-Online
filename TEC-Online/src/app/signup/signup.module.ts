@@ -1,21 +1,15 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
+import { IonicModule } from '@ionic/angular'; // Certifique-se de importar o IonicModule
+import { CommonModule } from '@angular/common'; 
+import { FormsModule } from '@angular/forms'; 
 
-import { IonicModule } from '@ionic/angular';
-import { SignupPageRoutingModule } from './signup-routing.module';
-
-import { SignupPage } from './signup.page';
-
-
-@NgModule({
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    SignupPageRoutingModule,
-    SignupPage,
-  ],
+@Component({
+  selector: 'app-signup',
+  templateUrl: './signup.page.html',
+  styleUrls: ['./signup.page.scss'],
+  standalone: true,
+  imports: [CommonModule, IonicModule, FormsModule] // Certifique-se de adicionar o IonicModule aqui
 })
-export class SignupPageModule {}
+export class SignupPage {
+  // O seu código para a página de registro
+}

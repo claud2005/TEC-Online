@@ -1,10 +1,15 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { SignupPage } from './signup/signup.page'; // Importe o SignupPage diretamente
 
 const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
+  },
+  {
+    path: 'signup',
+    component: SignupPage, // Rota para o componente standalone
   },
   {
     path: '',
@@ -15,7 +20,6 @@ const routes: Routes = [
     path: 'perfil',
     loadChildren: () => import('./perfil/perfil.module').then(m => m.PerfilPageModule)
   },
-  
   {
     path: 'criar-servicos',
     loadChildren: () => import('./criar-servicos/criar-servicos.module').then(m => m.CriarServicosPageModule)
@@ -29,13 +33,9 @@ const routes: Routes = [
     loadChildren: () => import('./plano-semanal/plano-semanal.module').then(m => m.PlanoSemanalPageModule)
   },
   {
-    path: 'signup',
-    loadChildren: () => import('./signup/signup.module').then(m => m.SignupPageModule)
-  },  {
     path: 'editar-perfil',
     loadChildren: () => import('./editar-perfil/editar-perfil.module').then( m => m.EditarPerfilPageModule)
   }
-
 ];
 
 @NgModule({

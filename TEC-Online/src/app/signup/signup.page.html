@@ -5,7 +5,7 @@
     <div class="form-box">
       <h2>Crie sua conta</h2>
 
-      <form #signupForm="ngForm" (ngSubmit)="onSubmit(signupForm)">
+      <form #signupForm="ngForm" (ngSubmit)="submitForm()">
         <ion-item>
           <ion-label position="floating">Usuário</ion-label>
           <ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>

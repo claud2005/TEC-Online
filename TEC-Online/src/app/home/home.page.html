@@ -4,18 +4,18 @@
 
     <div class="welcome-text">
       Bem-vindo!🚀<br />
-      Faça login para continuar.
+      Faça login para continuar.
     </div>
 
     <div class="form-group">
       <ion-item>
         <ion-label position="floating">Nome de Utilizador</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-input [(ngModel)]="username" type="text"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="floating">Senha</ion-label>
-        <ion-input type="password"></ion-input>
+        <ion-input [(ngModel)]="password" type="password"></ion-input>
       </ion-item>
     </div>
     <ion-button expand="block" color="secondary" (click)="entrar()" class="btn-animate">
@@ -25,6 +25,5 @@
     <ion-button expand="block" color="primary" (click)="registrar()" class="btn-animate">
       Registar
     </ion-button>
-
   </div>
 </ion-content>
