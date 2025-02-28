@@ -11,8 +11,8 @@ import { EditarPerfilPage } from './editar-perfil.page';
     FormsModule,
     IonicModule,
     EditarPerfilPageRoutingModule,
-    EditarPerfilPage // Importe o componente standalone aqui
+    EditarPerfilPage 
   ],
-  declarations: [] // Não declare o componente standalone aqui
+  declarations: [] 
 })
 export class EditarPerfilPageModule {}

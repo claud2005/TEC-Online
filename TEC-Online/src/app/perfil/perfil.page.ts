@@ -1,8 +1,10 @@
+import { Router } from '@angular/router'; // Import Router
 import { Component } from '@angular/core';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-perfil',
@@ -12,6 +14,16 @@ import { IonicModule } from '@ionic/angular';
   imports: [CommonModule, FormsModule, IonicModule]
 })
 export class PerfilPage {
+  constructor(private router: Router) {}
+  editarperfil() {
+    this.router.navigate(['/editar-perfil']);
+  }
+
+  logout() {
+    this.router.navigate(['/home']);
+  }
+
+
   fotoPerfil: string | null = null; // Adicionando variável
 
   async alterarFoto() {

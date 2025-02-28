@@ -1,13 +1,62 @@
 ion-content {
-    --padding-top: 20px;
-    --padding-start: 20px;
-    --padding-end: 20px;
-  }
-  
-  ion-item {
-    margin-bottom: 15px;
-  }
-  
-  ion-button {
-    margin-top: 20px;
-  }
+  --background: #810773; /* Cor de fundo roxa */
+  position: relative; /* Necessário para usar o position absolute no formulário */
+  height: 100vh; /* Cobrir toda a altura da tela */
+  width: 100%;  /* Cobrir toda a largura da tela */
+  margin: 0; /* Remove margens padrão */
+  padding: 0; /* Remove paddings padrão */
+}
+
+form {
+  position: absolute;  /* Usando position absolute para centralizar */
+  top: 50%;            /* Posiciona o topo do formulário no meio da tela */
+  left: 50%;           /* Posiciona a esquerda do formulário no meio da tela */
+  transform: translate(-50%, -50%);  /* Ajuste para garantir que o formulário esteja centralizado */
+  width: 90%;           /* Largura relativa para telas menores */
+  max-width: 400px;     /* Largura máxima do formulário */
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.1); /* Fundo semi-transparente */
+  border-radius: 16px;
+  backdrop-filter: blur(10px); /* Efeito de desfoque */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Borda sutil */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* Sombra */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Alinha os elementos dentro do formulário ao centro */
+}
+
+ion-item {
+  --background: transparent;
+  --border-radius: 8px;
+  width: 100%; /* Garantir que ocupe toda a largura disponível */
+  margin-bottom: 16px;
+}
+
+ion-label {
+  font-weight: bold;
+  color: #fff;
+}
+
+ion-input {
+  --padding-start: 10px;
+  font-size: 16px;
+  color: #fff;
+}
+
+ion-button {
+  --background: #ffcc00;
+  --border-radius: 8px;
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+ion-note {
+  display: block;
+  margin-top: -10px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #ff6b6b; /* Cor de erro mais vibrante */
+}
