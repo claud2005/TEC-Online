@@ -20,41 +20,37 @@ export class PlanoSemanalPage {
 
   constructor(private router: Router) {}
 
-  navigateToServicos() {
-    this.router.navigate(['/servicos']); // Altere '/servicos' para o caminho correto da sua página de serviços
-  }
-
-
   // Método para abrir o modal
   openModal(event: any) {
-    const selectedDate = event.detail.value;
+    const selectedDate = event.detail.value;  // Obtém a data selecionada
     console.log('Data selecionada:', selectedDate);
-    this.modal.present();
+    this.modal.present();  // Abre o modal
   }
 
   // Método para fechar o modal
-  closeModal() {
-    this.modal.dismiss();
+  async closeModal() {
+    console.log('Fechando o modal...');
+    await this.modal.dismiss();  // Garante que o modal seja fechado
   }
 
   // Método para navegar para outra página
-  navigateToOtherPage() {
-    // Fecha o modal primeiro
-    this.modal.dismiss().then(() => {
-      // Navega para a próxima página após o modal ser fechado
-      this.router.navigate(['/criar-servicos']); // Altere '/servicos' para o caminho da sua página
-    });
+  async navigateToOtherPage() {
+    console.log('Fechando o modal e navegando para /criar-servicos');
+    await this.modal.dismiss();  // Garante que o modal seja fechado
+    this.router.navigate(['/criar-servicos']);  // Navega para a página de criação de serviços
   }
 
-  // Método para navegar para a página do perfil
-  navigateToPerfil() {
-    console.log('Navegando para o perfil...');
-    this.modal.dismiss().then(() => {
-      this.router.navigate(['/perfil']).then(() => {
-        console.log('Navegação para o perfil concluída.');
-      });
-    });
-  }
-  
+  // Método para navegar para a página de perfil
+  async navigateToPerfil() {
+    console.log('Fechando o modal e navegando para /perfil');
+    await this.modal.dismiss();  // Garante que o modal seja fechado
+    this.router.navigate(['/perfil']);  // Navega para a página do perfil
   }
 
+  // Método para navegar para a página de serviços
+  async navigateToServicos() {
+    console.log('Fechando o modal e navegando para /servicos');
+    await this.modal.dismiss();  // Garante que o modal seja fechado
+    this.router.navigate(['/servicos']);  // Navega para a página de serviços
+  }
+}

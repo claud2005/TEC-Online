@@ -53,6 +53,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
+          <!-- Botão para fechar o modal -->
           <ion-button (click)="closeModal()">
             <ion-icon name="arrow-back"></ion-icon>
           </ion-button>
@@ -63,6 +64,7 @@
     <ion-content>
       <p>Detalhes do dia selecionado...</p>
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <!-- Botão para navegar para a próxima página -->
         <ion-fab-button (click)="navigateToOtherPage()">
           <ion-icon name="add-circle"></ion-icon>
         </ion-fab-button>
@@ -87,4 +89,3 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-footer>
-
