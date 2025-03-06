@@ -61,7 +61,20 @@
             <div class="detalhes-container">
               <p><strong>Descrição:</strong> {{ servico.descricao }}</p>
               <p><strong>Observações:</strong> {{ servico.observacoes }}</p>
+
+              <!-- Botão para Gerar PDF -->
               <ion-button expand="full" fill="solid" color="tertiary" (click)="gerarPDF(servico)">Gerar PDF</ion-button>
+              
+              <!-- Botões de Edição e Exclusão -->
+              <ion-button expand="full" fill="clear" color="warning" (click)="editarServico(servico)">
+                <ion-icon name="create-outline"></ion-icon>
+                <ion-label>Editar Serviço</ion-label>
+              </ion-button>
+
+              <ion-button expand="full" fill="clear" color="danger" (click)="apagarServico(servico)">
+                <ion-icon name="trash-outline"></ion-icon>
+                <ion-label>Apagar Serviço</ion-label>
+              </ion-button>
             </div>
           </ion-col>
         </ion-row>
