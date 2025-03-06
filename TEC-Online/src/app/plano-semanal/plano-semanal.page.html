@@ -53,7 +53,6 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <!-- Botão para fechar o modal -->
           <ion-button (click)="closeModal()">
             <ion-icon name="arrow-back"></ion-icon>
           </ion-button>
@@ -62,9 +61,18 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <p>Detalhes do dia selecionado...</p>
+      <form (ngSubmit)="createService()">
+        <ion-item>
+          <ion-label position="floating">Nome do Serviço</ion-label>
+          <ion-input [(ngModel)]="serviceData.name" name="name" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Descrição</ion-label>
+          <ion-input [(ngModel)]="serviceData.description" name="description" required></ion-input>
+        </ion-item>
+        <ion-button expand="block" type="submit" [disabled]="!serviceData.name || !serviceData.description">Criar Serviço</ion-button>
+      </form>
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <!-- Botão para navegar para a próxima página -->
         <ion-fab-button (click)="navigateToOtherPage()">
           <ion-icon name="add-circle"></ion-icon>
         </ion-fab-button>
@@ -80,7 +88,7 @@
         <ion-icon name="checkmark-circle"></ion-icon>
         Serviços
       </ion-button>
-    </ion-buttons>    
+    </ion-buttons>
     <ion-buttons slot="end">
       <ion-button (click)="navigateToPerfil()">
         <ion-icon name="person"></ion-icon>

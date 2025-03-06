@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-// Definindo o esquema para o usuário
 const userSchema = new mongoose.Schema({
+  fullName: {  // 🔹 Nome Completo
+    type: String,
+    required: true,
+  },
   username: {
     type: String,
     required: true,
@@ -17,32 +20,33 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  profilePicture: {
+    type: String,
+    default: '', // Pode ser uma URL padrão
+  },
+  bio: {
+    type: String,
+    default: '',
+  },
 });
 
 // Middleware para criptografar a senha antes de salvar
 userSchema.pre('save', async function (next) {
-  // Verifica se a senha foi modificada ou é nova, se não, não faz nada
-  if (!this.isModified('password')) return next(); 
+  if (!this.isModified('password')) return next();
 
   try {
-    const salt = await bcrypt.genSalt(10); // Gerando o salt
-    this.password = await bcrypt.hash(this.password, salt); // Criptografando a senha
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
     next();
   } catch (err) {
-    next(err); // Caso haja um erro no processo de criptografia
+    next(err);
   }
 });
 
-// Comparar senhas
+// Comparar senha
 userSchema.methods.comparePassword = async function (candidatePassword) {
-  try {
-    return await bcrypt.compare(candidatePassword, this.password); // Comparando as senhas
-  } catch (err) {
-    throw new Error('Erro ao comparar as senhas');
-  }
+  return bcrypt.compare(candidatePassword, this.password);
 };
 
-// Criando o modelo de usuário a partir do esquema
 const User = mongoose.model('User', userSchema);
-
 module.exports = User;

@@ -4,11 +4,11 @@
 
     <!-- Foto de Perfil -->
     <div class="profile-picture" (click)="alterarFoto()">
-      <img [src]="fotoPerfil" alt="Foto de Perfil" />
+      <img [src]="fotoPerfil || 'assets/img/default-profile.png'" alt="Foto de Perfil" />
     </div>
 
     <!-- Botão de Alterar Foto -->
-    <ion-button expand="block" class="small-button" (click)="alterarFoto()">
+    <ion-button expand="block" class="small-button" (click)="alterarFoto()" aria-label="Alterar Foto">
       Alterar Foto
     </ion-button>
 
@@ -18,21 +18,21 @@
       id="fileInput" 
       accept="image/*" 
       (change)="onFileSelected($event)" 
-      style="display: none;"
+      hidden
     />
 
     <!-- Informações do Usuário -->
     <div class="user-info">
-      <p><strong>Nome Completo:</strong> João Silva</p>
-      <p><strong>Nome de Utilizador:</strong> joaosilva123</p>
+      <p><strong>Nome Completo:</strong> {{ nomeCompleto }}</p>
+      <p><strong>Nome de Utilizador:</strong> {{ nomeUtilizador }}</p>
     </div>
 
     <!-- Botões de ação -->
     <div class="button-group">
-      <ion-button expand="block" fill="outline" class="small-button" (click)="editarPerfil()">
+      <ion-button expand="block" fill="outline" class="small-button" (click)="editarPerfil()" aria-label="Editar Perfil">
         Editar Perfil
       </ion-button>
-      <ion-button expand="block" color="danger" class="small-button" (click)="logout()">
+      <ion-button expand="block" color="danger" class="small-button" (click)="logout()" aria-label="Logout">
         Logout
       </ion-button>
     </div>

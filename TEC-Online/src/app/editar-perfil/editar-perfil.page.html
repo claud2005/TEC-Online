@@ -1,6 +1,11 @@
-<ion-buttons slot="start">
-  <ion-back-button defaultHref="/home"></ion-back-button>
-</ion-buttons>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/perfil"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Editar Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content>
   <form #form="ngForm" (ngSubmit)="salvarPerfil()">
@@ -8,14 +13,14 @@
     <ion-item>
       <ion-label position="floating">Nome Completo:</ion-label>
       <ion-input
-        [(ngModel)]="usuario.nome"
-        name="nome"
+        [(ngModel)]="perfil.nomeCompleto"
+        name="nomeCompleto"
         aria-label="Nome Completo"
         required
         minlength="3"
       ></ion-input>
     </ion-item>
-    <ion-note *ngIf="!usuario.nome && form.submitted" color="danger">
+    <ion-note *ngIf="!perfil.nomeCompleto && form.submitted" color="danger">
       O nome completo é obrigatório.
     </ion-note>
 
@@ -23,14 +28,14 @@
     <ion-item>
       <ion-label position="floating">Nome de Utilizador:</ion-label>
       <ion-input
-        [(ngModel)]="usuario.username"
-        name="username"
+        [(ngModel)]="perfil.nomeUtilizador"
+        name="nomeUtilizador"
         aria-label="Nome de Utilizador"
         required
         minlength="3"
       ></ion-input>
     </ion-item>
-    <ion-note *ngIf="!usuario.username && form.submitted" color="danger">
+    <ion-note *ngIf="!perfil.nomeUtilizador && form.submitted" color="danger">
       O nome de utilizador é obrigatório.
     </ion-note>
 

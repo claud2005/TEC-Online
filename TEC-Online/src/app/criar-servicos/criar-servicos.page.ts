@@ -1,19 +1,24 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, NavController } from '@ionic/angular';  // Certifique-se de que o NavController está importado
+import { HttpClient } from '@angular/common/http';
+import { NavController, IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-criar-servicos',
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule],
   templateUrl: './criar-servicos.page.html',
   styleUrls: ['./criar-servicos.page.scss'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+  ],
 })
 export class CriarServicosPage {
   dataAbertura: string = '';
   dataEntrega: string = '';
-  status: string = 'orcamento';
+  status: string = 'pendente';
   nomeCliente: string = '';
   telefoneContato: string = '';
   cpfCliente: string = '';
@@ -27,11 +32,11 @@ export class CriarServicosPage {
   observacoes: string = '';
   autorServico: string = '';
 
-  constructor(private navController: NavController) {}  // Certifique-se de que o NavController está sendo injetado corretamente
+  constructor(private http: HttpClient, private navController: NavController) {}
 
   salvarServico() {
     if (!this.isFormValid()) {
-      alert('Por favor, preencha todos os campos obrigatórios antes de salvar.');
+      alert('Preencha todos os campos obrigatórios.');
       return;
     }
 
@@ -53,8 +58,25 @@ export class CriarServicosPage {
       autorServico: this.autorServico,
     };
 
-    console.table(novoServico);
-    alert('Ordem de serviço criada com sucesso!');
+    this.http.post('http://localhost:3000/api/servicos', novoServico).subscribe(
+      (response: any) => {
+        console.log('Serviço salvo:', response);
+        alert('Serviço criado com sucesso!');
+        this.fecharEAtualizar();
+      },
+      (error) => {
+        console.error('Erro ao salvar serviço:', error);
+        alert('Erro ao criar serviço.');
+      }
+    );
+  }
+
+  fecharEAtualizar() {
+    this.navController.back(); // Fecha a página e volta
+  }
+
+  goBack() {
+    this.navController.back();
   }
 
   isFormValid(): boolean {
@@ -73,13 +95,7 @@ export class CriarServicosPage {
       this.autorServico
     ];
 
-    const valoresObrigatorios = [this.valorTotal, this.valorEntrada];
-
     return camposObrigatorios.every(campo => campo && campo.trim() !== '') &&
-           valoresObrigatorios.every(valor => valor !== null && valor >= 0);
-  }
-
-  goBack() {
-    this.navController.back(); // Volta para a página anterior
+           this.valorTotal !== null && this.valorEntrada !== null;
   }
 }

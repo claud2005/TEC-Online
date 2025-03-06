@@ -1,39 +1,64 @@
-import { Component } from '@angular/core';
-import { IonicModule } from '@ionic/angular'; // ✅ Importa o módulo do Ionic
+import { Component, OnInit } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Platform } from '@ionic/angular';
-import { Router } from '@angular/router'; // ✅ Importa o Router
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   standalone: true,
   selector: 'app-perfil',
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.scss'],
-  imports: [IonicModule, CommonModule, FormsModule], // ✅ Importa aqui!
+  imports: [IonicModule, CommonModule, FormsModule],
 })
-export class PerfilPage {
-
-  fotoPerfil: string = 'assets/icon/user.png';
+export class PerfilPage implements OnInit {
+  fotoPerfil: string = 'assets/img/default-profile.png';
+  nomeCompleto: string = 'Carregando...';
+  nomeUtilizador: string = 'Carregando...';
   isWeb: boolean;
+  token: string | null = null;
 
-  constructor(private platform: Platform, private router: Router) { // ✅ Injeta o Router
+  constructor(private platform: Platform, private router: Router, private http: HttpClient) {
     this.isWeb = !this.platform.is('hybrid');
-    if (!this.isWeb) {
-      this.checkCameraPermissions();
+  }
+
+  ngOnInit() {
+    this.token = localStorage.getItem('token');
+    console.log('Token encontrado:', this.token);
+
+    if (!this.token) {
+      console.warn('Token não encontrado! Redirecionando para login.');
+      this.router.navigate(['/home']);
+    } else {
+      this.carregarDadosPerfil();
     }
   }
 
-  async checkCameraPermissions() {
-    try {
-      const permission = await Camera.checkPermissions();
-      if (permission.photos !== 'granted') {
-        await Camera.requestPermissions({ permissions: ['photos'] });
+  carregarDadosPerfil() {
+    console.log('Buscando perfil do usuário...');
+
+    this.http.get<any>('http://localhost:3000/api/users/perfil', {
+      headers: { Authorization: `Bearer ${this.token}` },
+    }).subscribe(
+      (data) => {
+        console.log('Dados do perfil recebidos:', data);
+
+        if (!data) {
+          console.error('Erro: Nenhum dado recebido.');
+          return;
+        }
+
+        this.nomeCompleto = data.name || 'Nome não disponível';
+        this.nomeUtilizador = data.username || 'Usuário não disponível';
+        this.fotoPerfil = data.profilePicture || this.fotoPerfil;
+      },
+      (error) => {
+        console.error('Erro ao carregar perfil:', error);
       }
-    } catch (error) {
-      console.error('Erro ao verificar permissões da câmera:', error);
-    }
+    );
   }
 
   async alterarFoto() {
@@ -69,13 +94,32 @@ export class PerfilPage {
     }
   }
 
-  // Função para redirecionar para a página de home (Logout)
-  logout() {
-    this.router.navigate(['/home']); // Redireciona para a página home
+  salvarPerfil() {
+    const perfilAtualizado = {
+      name: this.nomeCompleto,
+      username: this.nomeUtilizador,
+      profilePicture: this.fotoPerfil,
+    };
+
+    this.http.put('http://localhost:3000/api/users/profile', perfilAtualizado, {
+      headers: { Authorization: `Bearer ${this.token}` },
+    }).subscribe(
+      (response) => {
+        console.log('Perfil atualizado com sucesso:', response);
+        alert('Perfil atualizado com sucesso!');
+      },
+      (error) => {
+        console.error('Erro ao atualizar perfil:', error);
+      }
+    );
   }
 
-  // Função para redirecionar para a página de editar perfil
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/home']);
+  }
+
   editarPerfil() {
-    this.router.navigate(['/editar-perfil']); // Redireciona para a página editar-perfil
+    this.router.navigate(['/editar-perfil']);
   }
 }
