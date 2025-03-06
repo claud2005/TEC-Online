@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-button (click)="voltarParaPlanoSemanal()">
         <ion-icon name="arrow-back-outline"></ion-icon>
@@ -11,7 +11,7 @@
 
 <ion-content class="custom-background">
   <!-- Segmento para Filtros -->
-  <ion-segment [(ngModel)]="filtroStatus" (ionChange)="filtrarServicos()">
+  <ion-segment [(ngModel)]="filtroStatus" (ionChange)="filtrarServicos()" color="secondary">
     <ion-segment-button value="todos">
       <ion-label>Todos</ion-label>
     </ion-segment-button>
@@ -24,46 +24,45 @@
   </ion-segment>
 
   <!-- Barra de Pesquisa -->
-  <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filtrarServicos()" debounce="500" placeholder="Buscar serviço..."></ion-searchbar>
+  <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filtrarServicos()" debounce="500" placeholder="Buscar serviço..." animated></ion-searchbar>
 
   <!-- Lista de Serviços -->
   <div class="tabela-wrapper">
     <ion-grid class="tabela-servicos">
       <ion-row class="tabela-header">
-        <ion-col>Nº Serviço</ion-col>
-        <ion-col>Data</ion-col>
-        <ion-col>Status</ion-col>
-        <ion-col>Cliente</ion-col>
-        <ion-col>Responsável</ion-col>
-        <ion-col>Observações</ion-col>
-        <ion-col>Detalhes</ion-col> <!-- Coluna para o botão de Detalhes -->
+        <ion-col class="header-item">Nº Serviço</ion-col>
+        <ion-col class="header-item">Data</ion-col>
+        <ion-col class="header-item">Status</ion-col>
+        <ion-col class="header-item">Cliente</ion-col>
+        <ion-col class="header-item">Responsável</ion-col>
+        <ion-col class="header-item">Detalhes</ion-col>
       </ion-row>
 
       <!-- Iterando sobre os serviços filtrados -->
-      <ion-row *ngFor="let servico of servicosFiltrados" class="tabela-row">
-        <ion-col>{{ servico.numero }}</ion-col>
-        <ion-col>{{ servico.data }}</ion-col>
-        <ion-col>
-          <ion-badge [color]="servico.status === 'ABERTA' ? 'danger' : 'success'">{{ servico.status }}</ion-badge>
-        </ion-col>
-        <ion-col>{{ servico.cliente }}</ion-col>
-        <ion-col>{{ servico.responsavel }}</ion-col>
-        <ion-col>{{ servico.observacoes }}</ion-col>
-        <ion-col>
-          <!-- Botão para exibir detalhes -->
-          <ion-button (click)="toggleDetalhes(servico)">Detalhes</ion-button>
-        </ion-col>
-      </ion-row>
-
-      <!-- Detalhes Expandidos (dentro do *ngFor) -->
       <ng-container *ngFor="let servico of servicosFiltrados">
+        <ion-row class="tabela-row">
+          <ion-col>{{ servico.numero }}</ion-col>
+          <ion-col>{{ servico.data }}</ion-col>
+          <ion-col>
+            <ion-badge [color]="servico.status === 'ABERTA' ? 'warning' : 'success'">{{ servico.status }}</ion-badge>
+          </ion-col>
+          <ion-col>{{ servico.cliente }}</ion-col>
+          <ion-col>{{ servico.responsavel }}</ion-col>
+          <ion-col>
+            <ion-button fill="clear" color="primary" (click)="toggleDetalhes(servico)">
+              <ion-icon name="{{ servico.expandido ? 'chevron-up-outline' : 'chevron-down-outline' }}"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+        <!-- Detalhes Expandidos -->
         <ion-row *ngIf="servico.expandido" class="detalhes">
           <ion-col>
-            <p><strong>Descrição:</strong> {{ servico.descricao }}</p>
-            <p><strong>Responsável:</strong> {{ servico.responsavel }}</p>
-            <p><strong>Observações:</strong> {{ servico.observacoes }}</p>
-            <!-- Botão para gerar PDF -->
-            <ion-button (click)="gerarPDF(servico)">Gerar PDF</ion-button>
+            <div class="detalhes-container">
+              <p><strong>Descrição:</strong> {{ servico.descricao }}</p>
+              <p><strong>Observações:</strong> {{ servico.observacoes }}</p>
+              <ion-button expand="full" fill="solid" color="tertiary" (click)="gerarPDF(servico)">Gerar PDF</ion-button>
+            </div>
           </ion-col>
         </ion-row>
       </ng-container>
