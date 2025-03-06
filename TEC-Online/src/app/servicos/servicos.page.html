@@ -1,23 +1,15 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <!-- Botão de Voltar -->
     <ion-buttons slot="start">
       <ion-button (click)="voltarParaPlanoSemanal()">
         <ion-icon name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-
-    <ion-title class="titulo-principal">Serviços</ion-title>
+    <ion-title class="titulo-centralizado">Lista de Serviços</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Serviços</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
+<ion-content class="custom-background">
   <!-- Segmento para Filtros -->
   <ion-segment [(ngModel)]="filtroStatus" (ionChange)="filtrarServicos()">
     <ion-segment-button value="todos">
@@ -32,34 +24,49 @@
   </ion-segment>
 
   <!-- Barra de Pesquisa -->
-  <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filtrarServicos()"></ion-searchbar>
+  <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filtrarServicos()" debounce="500" placeholder="Buscar serviço..."></ion-searchbar>
 
-  <!-- Tabela de Serviços -->
+  <!-- Lista de Serviços -->
   <div class="tabela-wrapper">
     <ion-grid class="tabela-servicos">
-      <!-- Cabeçalho fixo -->
       <ion-row class="tabela-header">
-        <ion-col size="1">Nº OS</ion-col>
-        <ion-col size="2">Aberta em</ion-col>
-        <ion-col size="2">Status</ion-col>
-        <ion-col size="3">Cliente</ion-col>
-        <ion-col size="2">Equipamento</ion-col>
-        <ion-col size="2">Modelo</ion-col>
+        <ion-col>Nº Serviço</ion-col>
+        <ion-col>Data</ion-col>
+        <ion-col>Status</ion-col>
+        <ion-col>Cliente</ion-col>
+        <ion-col>Responsável</ion-col>
+        <ion-col>Observações</ion-col>
+        <ion-col>Detalhes</ion-col> <!-- Coluna para o botão de Detalhes -->
       </ion-row>
 
-      <!-- Lista de Serviços -->
+      <!-- Iterando sobre os serviços filtrados -->
       <ion-row *ngFor="let servico of servicosFiltrados" class="tabela-row">
-        <ion-col size="1">{{ servico.numero }}</ion-col>
-        <ion-col size="2">{{ servico.data }}</ion-col>
-        <ion-col size="2">
-          <ion-badge [color]="servico.status === 'ABERTA' ? 'danger' : 'success'">
-            {{ servico.status }}
-          </ion-badge>
+        <ion-col>{{ servico.numero }}</ion-col>
+        <ion-col>{{ servico.data }}</ion-col>
+        <ion-col>
+          <ion-badge [color]="servico.status === 'ABERTA' ? 'danger' : 'success'">{{ servico.status }}</ion-badge>
         </ion-col>
-        <ion-col size="3">{{ servico.cliente }}</ion-col>
-        <ion-col size="2">{{ servico.equipamento }}</ion-col>
-        <ion-col size="2">{{ servico.modelo }}</ion-col>
+        <ion-col>{{ servico.cliente }}</ion-col>
+        <ion-col>{{ servico.responsavel }}</ion-col>
+        <ion-col>{{ servico.observacoes }}</ion-col>
+        <ion-col>
+          <!-- Botão para exibir detalhes -->
+          <ion-button (click)="toggleDetalhes(servico)">Detalhes</ion-button>
+        </ion-col>
       </ion-row>
+
+      <!-- Detalhes Expandidos (dentro do *ngFor) -->
+      <ng-container *ngFor="let servico of servicosFiltrados">
+        <ion-row *ngIf="servico.expandido" class="detalhes">
+          <ion-col>
+            <p><strong>Descrição:</strong> {{ servico.descricao }}</p>
+            <p><strong>Responsável:</strong> {{ servico.responsavel }}</p>
+            <p><strong>Observações:</strong> {{ servico.observacoes }}</p>
+            <!-- Botão para gerar PDF -->
+            <ion-button (click)="gerarPDF(servico)">Gerar PDF</ion-button>
+          </ion-col>
+        </ion-row>
+      </ng-container>
     </ion-grid>
   </div>
 </ion-content>
