@@ -55,29 +55,37 @@
           </ion-col>
         </ion-row>
 
-        <!-- Detalhes Expandidos -->
-        <ion-row *ngIf="servico.expandido" class="detalhes">
-          <ion-col>
-            <div class="detalhes-container">
-              <p><strong>Descrição:</strong> {{ servico.descricao }}</p>
-              <p><strong>Observações:</strong> {{ servico.observacoes }}</p>
+<!-- Detalhes Expandidos -->
+<ion-row *ngIf="servico.expandido" class="detalhes">
+  <ion-col>
+    <div class="detalhes-container">
+      <p><strong>Descrição:</strong> {{ servico.descricao }}</p>
+      <p><strong>Observações:</strong> {{ servico.observacoes }}</p>
 
-              <!-- Botão para Gerar PDF -->
-              <ion-button expand="full" fill="solid" color="tertiary" (click)="gerarPDF(servico)">Gerar PDF</ion-button>
-              
-              <!-- Botões de Edição e Exclusão -->
-              <ion-button expand="full" fill="clear" color="warning" (click)="editarServico(servico)">
-                <ion-icon name="create-outline"></ion-icon>
-                <ion-label>Editar Serviço</ion-label>
-              </ion-button>
+      <!-- Botão para Gerar PDF -->
+      <ion-button expand="full" fill="solid" color="tertiary" (click)="gerarPDF(servico)">Gerar PDF</ion-button>
+      
+      <!-- Linha para botões de edição e exclusão -->
+      <ion-row>
+        <ion-col size="6">
+          <ion-button expand="full" fill="solid" color="warning" (click)="editarServico(servico)">
+            <ion-icon name="create-outline"></ion-icon>
+            <ion-label>Editar</ion-label>
+          </ion-button>
+        </ion-col>
+        
+        <ion-col size="6">
+          <ion-button expand="full" fill="solid" color="danger" (click)="confirmarExclusao(servico)">
+            <ion-icon name="trash-outline"></ion-icon>
+            <ion-label>Apagar</ion-label>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      
+    </div>
+  </ion-col>
+</ion-row>
 
-              <ion-button expand="full" fill="clear" color="danger" (click)="apagarServico(servico)">
-                <ion-icon name="trash-outline"></ion-icon>
-                <ion-label>Apagar Serviço</ion-label>
-              </ion-button>
-            </div>
-          </ion-col>
-        </ion-row>
       </ng-container>
     </ion-grid>
   </div>
