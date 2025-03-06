@@ -66,4 +66,21 @@ export class ServicosPage {
 
     doc.save(`Servico_${servico.numero}.pdf`);
   }
+
+  // Método para editar o serviço
+  editarServico(servico: any) {
+    this.router.navigate(['/editar-servico', servico.numero]); // Navega para a página de edição passando o número do serviço
+  }
+
+  // Método para apagar o serviço
+  apagarServico(servico: any) {
+    // Pedir confirmação antes de excluir
+    const confirmDelete = window.confirm(`Tem certeza que deseja apagar o serviço nº ${servico.numero}?`);
+    
+    if (confirmDelete) {
+      // Filtra o serviço para removê-lo da lista
+      this.servicos = this.servicos.filter(s => s.numero !== servico.numero);
+      this.filtrarServicos(); // Atualiza a lista após exclusão
+    }
+  }
 }
