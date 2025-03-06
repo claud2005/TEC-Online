@@ -32,7 +32,15 @@
               }
             ],
             "styles": ["src/global.scss", "src/theme/variables.scss"],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "canvg",
+              "jspdf",
+              "raf",
+              "rgbcolor",
+              "html2canvas",
+              "core-js"
+            ]
           },
           "configurations": {
             "production": {
