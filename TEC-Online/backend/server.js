@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 require('dotenv').config(); // Carrega variáveis de ambiente
 const User = require('./models/User'); // Modelo de Usuário
-const Servico = require('./models/Servico'); // Modelo de Serviço
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -134,28 +133,6 @@ app.put('/api/users/password', authenticateToken, async (req, res) => {
   }
 });
 
-// Rota para Criar um Serviço
-app.post('/api/servicos', authenticateToken, async (req, res) => {
-  try {
-    const novoServico = new Servico({ ...req.body, autorServico: req.user.userId });
-    await novoServico.save();
-    res.status(201).json({ message: 'Serviço criado com sucesso', servico: novoServico });
-  } catch (error) {
-    console.error('Erro ao criar serviço:', error);
-    res.status(500).json({ message: 'Erro ao criar serviço' });
-  }
-});
-
-// Rota para Listar Todos os Serviços
-app.get('/api/servicos', authenticateToken, async (req, res) => {
-  try {
-    const servicos = await Servico.find();
-    res.status(200).json(servicos);
-  } catch (error) {
-    console.error('Erro ao buscar serviços:', error);
-    res.status(500).json({ message: 'Erro ao buscar serviços' });
-  }
-});
 
 // Testando se o Servidor Está Rodando
 app.get('/', (req, res) => {

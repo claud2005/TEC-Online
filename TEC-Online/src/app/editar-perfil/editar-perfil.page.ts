@@ -8,14 +8,13 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  standalone: true,
   selector: 'app-editar-perfil',
   templateUrl: './editar-perfil.page.html',
   styleUrls: ['./editar-perfil.page.scss'],
   imports: [IonicModule, CommonModule, FormsModule],
 })
 export class EditarPerfilPage implements OnInit {
-
+  
   fotoPerfil: string = 'assets/icon/user.png';
   perfil: any = { nomeCompleto: '', nomeUtilizador: '' }; // Alterado para perfil
   isWeb: boolean;
@@ -34,7 +33,7 @@ export class EditarPerfilPage implements OnInit {
       (data) => {
         this.perfil.nomeCompleto = data.nomeCompleto;
         this.perfil.nomeUtilizador = data.nomeUtilizador;
-        this.fotoPerfil = data.fotoPerfil || this.fotoPerfil;
+        this.fotoPerfil = data.profilePicture || this.fotoPerfil;
       },
       (error) => {
         console.error('Erro ao carregar dados do perfil:', error);
@@ -75,11 +74,12 @@ export class EditarPerfilPage implements OnInit {
     }
   }
 
+  // Função para salvar as alterações no perfil
   salvarPerfil() {
     const perfilAtualizado = {
       nomeCompleto: this.perfil.nomeCompleto,
       nomeUtilizador: this.perfil.nomeUtilizador,
-      fotoPerfil: this.fotoPerfil
+      profilePicture: this.fotoPerfil
     };
 
     this.http.put(`http://localhost:3000/api/users/profile`, perfilAtualizado).subscribe(
