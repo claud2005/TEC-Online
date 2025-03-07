@@ -18,7 +18,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PlanoSemanalPage {
   @ViewChild('modal') modal!: IonModal;
-  serviceData = { name: '', description: '' };
+  serviceData = { name: '', description: '', location: '' }; // Incluindo "location" para o serviço
+  selectedDate: string = ''; // Data selecionada
   servicos: any[] = []; // ✅ Criado array para armazenar serviços
 
   constructor(private router: Router, private http: HttpClient) {
@@ -36,49 +37,51 @@ export class PlanoSemanalPage {
     );
   }
 
-  // Metodo para abrir o modal
+  // Método para abrir o modal
   openModal(event: any) {
     const selectedDate = event.detail.value;
+    this.selectedDate = selectedDate; // Armazenando a data selecionada
     console.log('Data selecionada:', selectedDate);
-    this.modal.present();
+    this.modal.present(); // Apresentando o modal
   }
 
-  // Metodo para fechar o modal
+  // Método para fechar o modal
   async closeModal() {
     console.log('Fechando o modal...');
-    await this.modal.dismiss();
+    await this.modal.dismiss(); // Fechando o modal
   }
 
-  // Metodo para navegar para outra pagina
+  // Método para navegar para outra página
   async navigateToOtherPage() {
     console.log('Fechando o modal e navegando para /criar-servicos');
-    await this.modal.dismiss();
-    this.router.navigate(['/criar-servicos']);
+    await this.modal.dismiss(); // Fechando o modal
+    this.router.navigate(['/criar-servicos']); // Navegando para página de criar serviço
   }
 
-  // Metodo para navegar para a pagina de perfil
+  // Método para navegar para a página de perfil
   async navigateToPerfil() {
     console.log('Fechando o modal e navegando para /perfil');
-    await this.modal.dismiss();
-    this.router.navigate(['/perfil']);
+    await this.modal.dismiss(); // Fechando o modal
+    this.router.navigate(['/perfil']); // Navegando para perfil
   }
 
-  // Metodo para navegar para a pagina de servicos
+  // Método para navegar para a página de serviços
   async navigateToServicos() {
     console.log('Fechando o modal e navegando para /servicos');
-    await this.modal.dismiss();
-    this.router.navigate(['/servicos']);
+    await this.modal.dismiss(); // Fechando o modal
+    this.router.navigate(['/servicos']); // Navegando para serviços
   }
 
-  // Metodo para criar um servico
+  // Método para criar um serviço
   createService() {
-    this.http.post('http://localhost:3000/api/servicos', this.serviceData)
+    const serviceWithDate = { ...this.serviceData, date: this.selectedDate }; // Incluindo a data no serviço
+    this.http.post('http://localhost:3000/api/servicos', serviceWithDate) // Criando o serviço
       .subscribe(
         response => {
           console.log('Servico criado com sucesso:', response);
-          this.serviceData = { name: '', description: '' }; // ✅ Resetando os campos após criar
-          this.carregarServicos(); // ✅ Atualizar lista de serviços
-          this.closeModal();
+          this.serviceData = { name: '', description: '', location: '' }; // Resetando os campos após criar
+          this.carregarServicos(); // Atualizando a lista de serviços
+          this.closeModal(); // Fechando o modal
         },
         error => {
           console.error('Erro ao criar servico:', error);

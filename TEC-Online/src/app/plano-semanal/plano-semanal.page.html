@@ -47,7 +47,7 @@
   </ion-grid>
 </ion-content>
 
-<!-- Modal -->
+<!-- Modal (com as informações do serviço) -->
 <ion-modal #modal>
   <ng-template>
     <ion-header>
@@ -61,17 +61,34 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <form (ngSubmit)="createService()">
-        <ion-item>
-          <ion-label position="floating">Nome do Serviço</ion-label>
-          <ion-input [(ngModel)]="serviceData.name" name="name" required></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Descrição</ion-label>
-          <ion-input [(ngModel)]="serviceData.description" name="description" required></ion-input>
-        </ion-item>
-        <ion-button expand="block" type="submit" [disabled]="!serviceData.name || !serviceData.description">Criar Serviço</ion-button>
-      </form>
+      <!-- Informações do Serviço dentro do Modal -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Informações do Serviço</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="6">
+                <strong>Hora:</strong> {{ selectedDate }}
+              </ion-col>
+              <ion-col size="6">
+                <strong>Nome do Serviço:</strong> {{ serviceData.name }}
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="6">
+                <strong>Local:</strong> {{ serviceData.location || 'Não informado' }}
+              </ion-col>
+              <ion-col size="6">
+                <strong>Descrição:</strong> {{ serviceData.description }}
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Botão de + dentro do Modal -->
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button (click)="navigateToOtherPage()">
           <ion-icon name="add-circle"></ion-icon>
