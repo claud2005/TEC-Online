@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,12 +16,17 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PerfilPage implements OnInit {
   fotoPerfil: string = 'assets/img/default-profile.png';
-  nomeCompleto: string = 'Carregando...';
-  nomeUtilizador: string = 'Carregando...';
+  nomeCompleto: string = '';
+  nomeUtilizador: string = '';
   isWeb: boolean;
   token: string | null = null;
 
-  constructor(private platform: Platform, private router: Router, private http: HttpClient) {
+  constructor(
+    private platform: Platform,
+    private router: Router,
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef
+  ) {
     this.isWeb = !this.platform.is('hybrid');
   }
 
@@ -39,8 +44,8 @@ export class PerfilPage implements OnInit {
 
   carregarDadosPerfil() {
     console.log('Buscando perfil do usuário...');
-
-    this.http.get<any>('http://localhost:3000/api/users/perfil', {
+    
+    this.http.get<any>('http://localhost:3000/api/users/profile', {
       headers: { Authorization: `Bearer ${this.token}` },
     }).subscribe(
       (data) => {
@@ -51,9 +56,13 @@ export class PerfilPage implements OnInit {
           return;
         }
 
-        this.nomeCompleto = data.name || 'Nome não disponível';
+        // A resposta deve ter o 'fullName' e 'username'
+        this.nomeCompleto = data.fullName || 'Nome não disponível';
         this.nomeUtilizador = data.username || 'Usuário não disponível';
         this.fotoPerfil = data.profilePicture || this.fotoPerfil;
+
+        // Forçar a detecção de mudanças
+        this.cdr.detectChanges();
       },
       (error) => {
         console.error('Erro ao carregar perfil:', error);
@@ -77,6 +86,7 @@ export class PerfilPage implements OnInit {
 
       if (image.dataUrl) {
         this.fotoPerfil = image.dataUrl;
+        this.cdr.detectChanges(); // Forçar atualização quando a foto é alterada
       }
     } catch (error) {
       console.error('Erro ao capturar imagem:', error);
@@ -89,6 +99,7 @@ export class PerfilPage implements OnInit {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.fotoPerfil = e.target.result;
+        this.cdr.detectChanges(); // Forçar atualização quando a foto é alterada
       };
       reader.readAsDataURL(file);
     }
@@ -96,7 +107,7 @@ export class PerfilPage implements OnInit {
 
   salvarPerfil() {
     const perfilAtualizado = {
-      name: this.nomeCompleto,
+      fullName: this.nomeCompleto,
       username: this.nomeUtilizador,
       profilePicture: this.fotoPerfil,
     };
@@ -110,12 +121,16 @@ export class PerfilPage implements OnInit {
       },
       (error) => {
         console.error('Erro ao atualizar perfil:', error);
+        alert('Erro ao atualizar perfil. Tente novamente.');
       }
     );
   }
 
   logout() {
     localStorage.removeItem('token');
+    this.nomeCompleto = '';
+    this.nomeUtilizador = '';
+    this.fotoPerfil = 'assets/img/default-profile.png';
     this.router.navigate(['/home']);
   }
 

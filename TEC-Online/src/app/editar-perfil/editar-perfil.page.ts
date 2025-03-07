@@ -14,7 +14,7 @@ import { HttpClient } from '@angular/common/http';
   imports: [IonicModule, CommonModule, FormsModule],
 })
 export class EditarPerfilPage implements OnInit {
-  
+
   fotoPerfil: string = 'assets/icon/user.png';
   perfil: any = { nomeCompleto: '', nomeUtilizador: '' }; // Alterado para perfil
   isWeb: boolean;
@@ -76,13 +76,32 @@ export class EditarPerfilPage implements OnInit {
 
   // Função para salvar as alterações no perfil
   salvarPerfil() {
+    // Log para depuração
+    console.log('Tentando salvar os dados do perfil:', this.perfil);
+  
     const perfilAtualizado = {
       nomeCompleto: this.perfil.nomeCompleto,
       nomeUtilizador: this.perfil.nomeUtilizador,
       profilePicture: this.fotoPerfil
     };
-
-    this.http.put(`http://localhost:3000/api/users/profile`, perfilAtualizado).subscribe(
+  
+    // Recuperar o token JWT do armazenamento local (ou de onde você estiver armazenando o token)
+    const token = localStorage.getItem('jwtToken');  // Supondo que o token esteja no localStorage
+  
+    if (!token) {
+      alert('Você precisa estar autenticado para atualizar o perfil');
+      return;
+    }
+  
+    // Log para depuração
+    console.log('Dados do perfil a serem enviados:', perfilAtualizado);
+  
+    // Enviar requisição PUT para o backend com o token no cabeçalho
+    this.http.put(`http://localhost:3000/api/users/profile`, perfilAtualizado, {
+      headers: {
+        'Authorization': `Bearer ${token}`  // Enviando o token no cabeçalho
+      }
+    }).subscribe(
       (response) => {
         console.log('Perfil atualizado com sucesso!', response);
         alert('Perfil atualizado com sucesso!');
@@ -90,9 +109,11 @@ export class EditarPerfilPage implements OnInit {
       },
       (error) => {
         console.error('Erro ao atualizar perfil:', error);
+        alert(`Erro ao atualizar perfil: ${error.status} - ${error.message}`);
       }
     );
   }
+  
 
   voltarParaPerfil() {
     this.router.navigate(['/perfil']);
