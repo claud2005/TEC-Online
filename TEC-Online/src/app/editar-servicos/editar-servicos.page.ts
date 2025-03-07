@@ -78,34 +78,13 @@ export class EditarServicosPage {
   }
 
   async adicionarFoto() {
-    const escolha = window.confirm('Deseja tirar uma foto com a câmera?');
-
-    if (escolha) {
-      // Usar a câmera
-      try {
-        const image = await Camera.getPhoto({
-          quality: 90,
-          allowEditing: false,
-          resultType: CameraResultType.Base64,
-          source: CameraSource.Prompt,
-        });
-
-        if (image.base64String) {
-          this.imagens.push(`data:image/jpeg;base64,${image.base64String}`);
-        }
-      } catch (error) {
-        console.error('Erro ao tirar foto:', error);
+    try {
+      const file = await this.escolherArquivo();
+      if (file) {
+        this.imagens.push(file);
       }
-    } else {
-      // Usar a galeria ou explorador de arquivos
-      try {
-        const file = await this.escolherArquivo();
-        if (file) {
-          this.imagens.push(file);
-        }
-      } catch (error) {
-        console.error('Erro ao escolher arquivo:', error);
-      }
+    } catch (error) {
+      console.error('Erro ao escolher arquivo:', error);
     }
   }
 
