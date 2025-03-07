@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "capacitor-file-chooser": "^0.0.1"
+  }
+}

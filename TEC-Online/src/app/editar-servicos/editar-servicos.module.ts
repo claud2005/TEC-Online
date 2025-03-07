@@ -9,5 +9,5 @@ import { EditarServicosPageRoutingModule } from './editar-servicos-routing.modul
     FormsModule,
     EditarServicosPageRoutingModule,
   ],
-})
+}) 
 export class EditarServicosPageModule {}

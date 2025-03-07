@@ -1,13 +1,112 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>editar-servicos</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">editar-servicos</ion-title>
-    </ion-toolbar>
+  <ion-header>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon slot="start" name="arrow-back"></ion-icon> Voltar
+      </ion-button>
+    </ion-buttons>
   </ion-header>
+
+  <h1>Editar Serviço</h1>
+  <p>Atualize os campos abaixo para editar o serviço.</p>
+
+  <form class="grid-container">
+    <div>
+      <ion-label position="stacked">Data de Abertura *</ion-label>
+      <ion-input type="date" [(ngModel)]="dataAbertura" required></ion-input>
+    </div>
+
+    <div>
+      <ion-label position="stacked">Data Prevista de Entrega *</ion-label>
+      <ion-input type="date" [(ngModel)]="dataEntrega" required></ion-input>
+    </div>
+
+    <div>
+      <ion-label position="stacked">Status do Serviço *</ion-label>
+      <ion-select [(ngModel)]="status" required>
+        <ion-select-option value="pendente">Pendente</ion-select-option>
+        <ion-select-option value="em_andamento">Em Andamento</ion-select-option>
+        <ion-select-option value="finalizado">Finalizado</ion-select-option>
+      </ion-select>
+    </div>
+
+    <div>
+      <ion-label position="stacked">Autor do Serviço *</ion-label>
+      <ion-input type="text" [(ngModel)]="autorServico" required></ion-input>
+    </div>
+
+    <div>
+      <ion-label position="stacked">Nome Completo do Cliente *</ion-label>
+      <ion-input type="text" [(ngModel)]="nomeCliente" required></ion-input>
+    </div>
+
+    <div>
+      <ion-label position="stacked">Telefone para Contato *</ion-label>
+      <ion-input type="tel" [(ngModel)]="telefoneContato" required></ion-input>
+    </div>
+
+    <div>
+      <ion-label position="stacked">Modelo do Aparelho *</ion-label>
+      <ion-input type="text" [(ngModel)]="modeloAparelho" required></ion-input>
+    </div>
+
+    <div>
+      <ion-label position="stacked">Marca do Aparelho *</ion-label>
+      <ion-input type="text" [(ngModel)]="marcaAparelho" required></ion-input>
+    </div>
+
+    <div>
+      <ion-label position="stacked">Cor do Aparelho *</ion-label>
+      <ion-input type="text" [(ngModel)]="corAparelho" required></ion-input>
+    </div>
+
+    <div class="full-width">
+      <ion-label position="stacked">Problema Relatado pelo Cliente *</ion-label>
+      <ion-textarea [(ngModel)]="problemaCliente" required></ion-textarea>
+    </div>
+
+    <div class="full-width">
+      <ion-label position="stacked">Solução Inicial *</ion-label>
+      <ion-textarea [(ngModel)]="solucaoInicial" required></ion-textarea>
+    </div>
+
+    <div>
+      <ion-label position="stacked">Valor Total *</ion-label>
+      <ion-input type="number" [(ngModel)]="valorTotal" min="0" required></ion-input>
+    </div>
+
+    <div>
+      <ion-label position="stacked">Valor Pago na Entrada *</ion-label>
+      <ion-input type="number" [(ngModel)]="valorEntrada" min="0" required></ion-input>
+    </div>
+
+    <div class="full-width">
+      <ion-label position="stacked">Observações</ion-label>
+      <ion-textarea [(ngModel)]="observacoes"></ion-textarea>
+    </div>
+
+    <!-- Parte da Câmera -->
+    <div class="full-width">
+      <ion-label position="stacked">Fotos do Serviço</ion-label>
+      <div class="fotos-container">
+        <ion-img *ngFor="let img of imagens; let i = index" [src]="img" class="foto-preview"></ion-img>
+        <ion-button *ngIf="imagens.length < 5" (click)="adicionarFoto()" expand="block">
+          Adicionar Foto
+        </ion-button>
+      </div>
+
+      <div class="fotos-list">
+        <div *ngFor="let img of imagens; let i = index" class="foto-item">
+          <ion-img [src]="img" class="foto-preview"></ion-img>
+          <ion-button color="danger" (click)="removerFoto(i)">Remover</ion-button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="button-container">
+    <ion-button expand="block" (click)="atualizarServico()" [disabled]="!isFormValid()">
+      Atualizar Serviço
+    </ion-button>
+  </div>
 </ion-content>
