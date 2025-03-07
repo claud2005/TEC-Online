@@ -1,10 +1,11 @@
 <ion-content [fullscreen]="true">
   <ion-header>
-    <ion-buttons slot="start">
-      <ion-button (click)="goBack()">
-        <ion-icon slot="start" name="arrow-back"></ion-icon> Voltar
-      </ion-button>
-    </ion-buttons>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <!-- Botão de voltar do Ionic -->
+        <ion-back-button defaultHref="/"></ion-back-button>
+      </ion-buttons>
+    </ion-toolbar>
   </ion-header>
 
   <h1>Editar Serviço</h1>
@@ -13,17 +14,17 @@
   <form class="grid-container">
     <div>
       <ion-label position="stacked">Data de Abertura *</ion-label>
-      <ion-input type="date" [(ngModel)]="dataAbertura" required></ion-input>
+      <ion-input type="date" [(ngModel)]="dataAbertura" name="dataAbertura" required></ion-input>
     </div>
 
     <div>
       <ion-label position="stacked">Data Prevista de Entrega *</ion-label>
-      <ion-input type="date" [(ngModel)]="dataEntrega" required></ion-input>
+      <ion-input type="date" [(ngModel)]="dataEntrega" name="dataEntrega" required></ion-input>
     </div>
 
     <div>
       <ion-label position="stacked">Status do Serviço *</ion-label>
-      <ion-select [(ngModel)]="status" required>
+      <ion-select [(ngModel)]="status" name="status" required>
         <ion-select-option value="pendente">Pendente</ion-select-option>
         <ion-select-option value="em_andamento">Em Andamento</ion-select-option>
         <ion-select-option value="finalizado">Finalizado</ion-select-option>
@@ -32,57 +33,57 @@
 
     <div>
       <ion-label position="stacked">Autor do Serviço *</ion-label>
-      <ion-input type="text" [(ngModel)]="autorServico" required></ion-input>
+      <ion-input type="text" [(ngModel)]="autorServico" name="autorServico" required></ion-input>
     </div>
 
     <div>
       <ion-label position="stacked">Nome Completo do Cliente *</ion-label>
-      <ion-input type="text" [(ngModel)]="nomeCliente" required></ion-input>
+      <ion-input type="text" [(ngModel)]="nomeCliente" name="nomeCliente" required></ion-input>
     </div>
 
     <div>
       <ion-label position="stacked">Telefone para Contato *</ion-label>
-      <ion-input type="tel" [(ngModel)]="telefoneContato" required></ion-input>
+      <ion-input type="tel" [(ngModel)]="telefoneContato" name="telefoneContato" required></ion-input>
     </div>
 
     <div>
       <ion-label position="stacked">Modelo do Aparelho *</ion-label>
-      <ion-input type="text" [(ngModel)]="modeloAparelho" required></ion-input>
+      <ion-input type="text" [(ngModel)]="modeloAparelho" name="modeloAparelho" required></ion-input>
     </div>
 
     <div>
       <ion-label position="stacked">Marca do Aparelho *</ion-label>
-      <ion-input type="text" [(ngModel)]="marcaAparelho" required></ion-input>
+      <ion-input type="text" [(ngModel)]="marcaAparelho" name="marcaAparelho" required></ion-input>
     </div>
 
     <div>
       <ion-label position="stacked">Cor do Aparelho *</ion-label>
-      <ion-input type="text" [(ngModel)]="corAparelho" required></ion-input>
+      <ion-input type="text" [(ngModel)]="corAparelho" name="corAparelho" required></ion-input>
     </div>
 
     <div class="full-width">
       <ion-label position="stacked">Problema Relatado pelo Cliente *</ion-label>
-      <ion-textarea [(ngModel)]="problemaCliente" required></ion-textarea>
+      <ion-textarea [(ngModel)]="problemaCliente" name="problemaCliente" required></ion-textarea>
     </div>
 
     <div class="full-width">
       <ion-label position="stacked">Solução Inicial *</ion-label>
-      <ion-textarea [(ngModel)]="solucaoInicial" required></ion-textarea>
+      <ion-textarea [(ngModel)]="solucaoInicial" name="solucaoInicial" required></ion-textarea>
     </div>
 
     <div>
       <ion-label position="stacked">Valor Total *</ion-label>
-      <ion-input type="number" [(ngModel)]="valorTotal" min="0" required></ion-input>
+      <ion-input type="number" [(ngModel)]="valorTotal" name="valorTotal" min="0" required></ion-input>
     </div>
 
     <div>
       <ion-label position="stacked">Valor Pago na Entrada *</ion-label>
-      <ion-input type="number" [(ngModel)]="valorEntrada" min="0" required></ion-input>
+      <ion-input type="number" [(ngModel)]="valorEntrada" name="valorEntrada" min="0" required></ion-input>
     </div>
 
     <div class="full-width">
       <ion-label position="stacked">Observações</ion-label>
-      <ion-textarea [(ngModel)]="observacoes"></ion-textarea>
+      <ion-textarea [(ngModel)]="observacoes" name="observacoes"></ion-textarea>
     </div>
 
     <!-- Parte das Fotos -->

@@ -1,59 +1,94 @@
+/* Remove estilos padrão do Ionic */
+ion-header {
+    background: var(--header-bg-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+ion-toolbar {
+    --background: transparent; /* Remove o fundo padrão */
+    --color: var(--header-text-color);
+    padding: 0 10px;
+}
+
+ion-back-button {
+    --background: var(--button-back-color) !important; /* Cor de fundo (azul) */
+    --color: rgb(98, 182, 250) !important; /* Cor do ícone (preto) */
+    --border-radius: 50% !important; /* Bordas arredondadas */
+    --padding-start: 10px !important;
+    --padding-end: 10px !important;
+    --icon-font-size: 24px !important; /* Tamanho do ícone */
+    width: 40px !important; /* Tamanho do botão */
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background-color 0.3s ease !important;
+    
+    &:hover {
+        --background: var(--button-back-hover) !important; /* Cor ao passar o mouse (azul mais escuro) */
+        --color: black !important; /* Cor do ícone ao passar o mouse (preto) */
+    }
+}
+
+/* Estilo para o conteúdo */
 ion-content {
     --background: #f0f0f0;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 24px;
-    height: 100vh;
-    width: 100vw;
-  }
-  
-  h1 {
+}
+
+h1 {
     font-size: 35px;
     font-weight: bold;
     color: #000;
     text-align: center;
     text-transform: uppercase;
+    width: 100%;
     margin-bottom: 10px;
-  }
-  
-  p {
+}
+
+p {
     font-size: 18px;
     color: #000;
     text-align: center;
+    width: 100%;
     margin-bottom: 10px;
-  }
-  
-  .grid-container {
+}
+
+.grid-container {
     display: grid;
-    gap: 20px;
-    width: 100vw;
-  }
-  
-  @media (max-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    width: 100%;
+}
+
+@media (max-width: 1024px) {
     .grid-container {
-      grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
-  }
-  
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
     .grid-container {
-      grid-template-columns: 1fr;
+        grid-template-columns: 1fr;
     }
-  }
-  
-  ion-label {
+}
+
+ion-label {
     font-weight: bold;
     font-size: 18px;
     color: #000;
     text-transform: uppercase;
+    display: block;
     margin-bottom: 10px;
-    width: 100%;
-  }
-  
-  ion-input,
-  ion-textarea,
-  ion-select {
+    text-align: left;
+}
+
+ion-input,
+ion-textarea,
+ion-select {
     border: 2px solid #cccccc;
     border-radius: 15px;
     padding: 8px 12px;
@@ -61,21 +96,25 @@ ion-content {
     color: #000;
     background: #fff;
     width: 100%;
-    margin-bottom: 20px;
-    min-height: 40px;
-    box-sizing: border-box;
     transition: border-color 0.3s ease;
-  }
-  
-  .fotos-container {
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    min-height: 40px;
+    margin-top: 10px;
+}
+
+.fotos-container {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
     justify-content: flex-start;
+    align-items: center;
     margin-bottom: 20px;
-  }
-  
-  .foto-item {
+    max-width: 100%;
+}
+
+.foto-item {
     position: relative;
     width: 90px;
     height: 90px;
@@ -83,35 +122,36 @@ ion-content {
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.3s ease;
-  }
-  
-  .foto-item:hover {
-    transform: scale(1.05);
-  }
-  
-  .foto-preview {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .remove-icon {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: rgba(255, 0, 0, 0.8);
-    color: white;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .adicionar-foto-btn {
+
+    &:hover {
+        transform: scale(1.05);
+    }
+
+    .foto-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .remove-icon {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(255, 0, 0, 0.8);
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+}
+
+.adicionar-foto-btn {
     width: 100%;
     height: 45px;
     display: flex;
@@ -119,32 +159,28 @@ ion-content {
     justify-content: center;
     border: none;
     border-radius: 30px;
-    background-color: #28a745;
+    background-color: var(--primary-color);
     color: white;
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    text-transform: uppercase;
     margin-top: 20px;
-  }
-  
-  .adicionar-foto-btn:hover {
-    background-color: #218838;
-  }
-  
-  ion-icon {
-    margin-right: 8px;
-    font-size: 20px;
-  }
-  
-  .button-container {
+
+    &:hover {
+        background-color: #218838;
+    }
+
+    ion-icon {
+        margin-right: 8px;
+        font-size: 20px;
+    }
+}
+
+.button-container {
     display: flex;
     justify-content: center;
     margin-top: 20px;
     width: 100%;
-  }
-  
-  ion-header {
-    --background: #f0f0f0;
-  }
-  
+}

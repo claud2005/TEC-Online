@@ -4,8 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, IonicModule } from '@ionic/angular';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { Filesystem, Directory } from '@capacitor/filesystem';
 
 @Component({
   selector: 'app-editar-servicos',
@@ -48,9 +46,7 @@ export class EditarServicosPage {
     if (this.id) {
       this.carregarServico();
     }
-    console.log('Número de fotos ao inicializar:', this.imagens.length);  // Verifique isso
   }
-  
 
   carregarServico() {
     this.http.get(`http://localhost:3000/api/servicos/${this.id}`).subscribe(
@@ -71,7 +67,6 @@ export class EditarServicosPage {
         this.observacoes = data.observacoes;
         this.autorServico = data.autorServico;
         this.imagens = data.imagens || [];
-        console.log('Fotos carregadas. Número de fotos:', this.imagens.length); // Depuração
       },
       (error) => {
         console.error('Erro ao carregar serviço:', error);
@@ -81,38 +76,18 @@ export class EditarServicosPage {
   }
 
   async adicionarFoto() {
-    try {
-      const file = await this.escolherArquivo();
-      if (file) {
-        this.imagens.push(file);
-        console.log('Foto adicionada. Número de fotos:', this.imagens.length); // Depuração
-      }
-    } catch (error) {
-      console.error('Erro ao escolher arquivo:', error);
-    }
-  }
-
-  async escolherArquivo(): Promise<string> {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
     input.click();
 
-    return new Promise((resolve, reject) => {
-      input.onchange = async (event: any) => {
-        const file = event.target.files[0];
-        if (file) {
-          try {
-            const base64 = await this.convertToBase64(file);
-            resolve(base64);
-          } catch (error) {
-            reject(error);
-          }
-        } else {
-          reject('Nenhum arquivo selecionado.');
-        }
-      };
-    });
+    input.onchange = async (event: any) => {
+      const file = event.target.files[0];
+      if (file) {
+        const base64 = await this.convertToBase64(file);
+        this.imagens.push(base64);
+      }
+    };
   }
 
   async convertToBase64(file: File): Promise<string> {
@@ -126,7 +101,6 @@ export class EditarServicosPage {
 
   removerFoto(index: number) {
     this.imagens.splice(index, 1);
-    console.log('Foto removida. Número de fotos:', this.imagens.length); // Depuração
   }
 
   atualizarServico() {
@@ -134,8 +108,6 @@ export class EditarServicosPage {
       alert('Preencha todos os campos obrigatórios.');
       return;
     }
-
-    console.log('Número de fotos:', this.imagens.length); // Depuração
 
     const servicoAtualizado = {
       dataAbertura: this.dataAbertura,
@@ -169,10 +141,6 @@ export class EditarServicosPage {
   }
 
   fecharEAtualizar() {
-    this.navController.back();
-  }
-
-  goBack() {
     this.navController.back();
   }
 
