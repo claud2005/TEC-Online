@@ -85,21 +85,18 @@
       <ion-textarea [(ngModel)]="observacoes"></ion-textarea>
     </div>
 
-    <!-- Parte da Câmera -->
+    <!-- Parte das Fotos -->
     <div class="full-width">
       <ion-label position="stacked">Fotos do Serviço</ion-label>
       <div class="fotos-container">
-        <ion-img *ngFor="let img of imagens; let i = index" [src]="img" class="foto-preview"></ion-img>
-        <ion-button *ngIf="imagens.length < 5" (click)="adicionarFoto()" expand="block">
-          Adicionar Foto
-        </ion-button>
-      </div>
-
-      <div class="fotos-list">
-        <div *ngFor="let img of imagens; let i = index" class="foto-item">
-          <ion-img [src]="img" class="foto-preview"></ion-img>
-          <ion-button color="danger" (click)="removerFoto(i)">Remover</ion-button>
+        <div *ngFor="let img of imagens; let i = index" class="foto-item" (click)="removerFoto(i)">
+          <img [src]="img" class="foto-preview" />
+          <div class="remove-icon">×</div>
         </div>
+        <ion-button (click)="adicionarFoto()" expand="block" class="adicionar-foto-btn">
+          <ion-icon name="add-circle-outline"></ion-icon>
+          Adicionar Foto
+        </ion-button>        
       </div>
     </div>
   </form>

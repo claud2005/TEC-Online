@@ -48,7 +48,9 @@ export class EditarServicosPage {
     if (this.id) {
       this.carregarServico();
     }
+    console.log('Número de fotos ao inicializar:', this.imagens.length);  // Verifique isso
   }
+  
 
   carregarServico() {
     this.http.get(`http://localhost:3000/api/servicos/${this.id}`).subscribe(
@@ -69,6 +71,7 @@ export class EditarServicosPage {
         this.observacoes = data.observacoes;
         this.autorServico = data.autorServico;
         this.imagens = data.imagens || [];
+        console.log('Fotos carregadas. Número de fotos:', this.imagens.length); // Depuração
       },
       (error) => {
         console.error('Erro ao carregar serviço:', error);
@@ -82,6 +85,7 @@ export class EditarServicosPage {
       const file = await this.escolherArquivo();
       if (file) {
         this.imagens.push(file);
+        console.log('Foto adicionada. Número de fotos:', this.imagens.length); // Depuração
       }
     } catch (error) {
       console.error('Erro ao escolher arquivo:', error);
@@ -89,7 +93,6 @@ export class EditarServicosPage {
   }
 
   async escolherArquivo(): Promise<string> {
-    // Abrir o seletor de arquivos nativo
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
@@ -123,6 +126,7 @@ export class EditarServicosPage {
 
   removerFoto(index: number) {
     this.imagens.splice(index, 1);
+    console.log('Foto removida. Número de fotos:', this.imagens.length); // Depuração
   }
 
   atualizarServico() {
@@ -130,6 +134,8 @@ export class EditarServicosPage {
       alert('Preencha todos os campos obrigatórios.');
       return;
     }
+
+    console.log('Número de fotos:', this.imagens.length); // Depuração
 
     const servicoAtualizado = {
       dataAbertura: this.dataAbertura,
@@ -163,7 +169,7 @@ export class EditarServicosPage {
   }
 
   fecharEAtualizar() {
-    this.navController.back(); // Fecha a página e volta
+    this.navController.back();
   }
 
   goBack() {
