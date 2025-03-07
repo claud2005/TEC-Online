@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http'; // Importar para fazer requisições HTTP
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -13,20 +13,19 @@ import { HttpClient } from '@angular/common/http'; // Importar para fazer requis
   imports: [CommonModule, IonicModule, FormsModule]
 })
 export class HomePage {
-  username: string = ''; // Para capturar o nome de usuário
-  password: string = ''; // Para capturar a senha
+  username: string = '';
+  password: string = '';
 
   constructor(private router: Router, private http: HttpClient) {}
 
-  // Função de login
   entrar() {
     const userData = { username: this.username, password: this.password };
 
     this.http.post('http://localhost:3000/api/login', userData).subscribe(
       (response: any) => {
         console.log('Login bem-sucedido', response);
-        localStorage.setItem('token', response.token); // Armazenar o token no localStorage
-        this.router.navigate(['/plano-semanal']); // Redirecionar após login
+        localStorage.setItem('token', response.token);
+        this.router.navigate(['/plano-semanal']);
       },
       (error) => {
         console.error('Erro no login', error);
@@ -35,7 +34,6 @@ export class HomePage {
     );
   }
 
-  // Função de registro
   registrar() {
     this.router.navigate(['/signup']);
   }
