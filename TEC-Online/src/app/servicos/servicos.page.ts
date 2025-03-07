@@ -76,7 +76,7 @@ export class ServicosPage {
   async confirmarExclusao(servico: Servico) {
     const alert = await this.alertController.create({
       header: 'Confirmar Exclusão',
-      message: `Tem certeza de que deseja apagar o serviço <strong>${servico.numero}</strong>?`,
+      message: `Tem certeza de que deseja apagar o serviço ${servico.numero}?`,
       buttons: [
         {
           text: 'Cancelar',

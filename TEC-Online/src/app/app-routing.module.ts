@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { SignupPage } from './signup/signup.page'; // Importe o SignupPage diretamente
+import { SignupPage } from './signup/signup.page';
 
 const routes: Routes = [
   {
@@ -9,7 +9,7 @@ const routes: Routes = [
   },
   {
     path: 'signup',
-    component: SignupPage, // Rota para o componente standalone
+    component: SignupPage,
   },
   {
     path: '',
@@ -34,13 +34,12 @@ const routes: Routes = [
   },
   {
     path: 'editar-perfil',
-    loadChildren: () => import('./editar-perfil/editar-perfil.module').then( m => m.EditarPerfilPageModule)
-  },  {
-    path: 'editar-servicos',
-    loadChildren: () => import('./editar-servicos/editar-servicos.module').then( m => m.EditarServicosPageModule)
+    loadChildren: () => import('./editar-perfil/editar-perfil.module').then(m => m.EditarPerfilPageModule)
   },
-
-
+  {
+    path: 'editar-servicos/:numero', // Adicionado o parâmetro :numero
+    loadChildren: () => import('./editar-servicos/editar-servicos.module').then(m => m.EditarServicosPageModule)
+  }
 ];
 
 @NgModule({
