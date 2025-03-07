@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, IonicModule, FormsModule]
 })
 export class SignupPage {
+  fullName: string = '';           // Propriedade 'fullName' adicionada
   username: string = '';           // Propriedade 'username'
   email: string = '';              // Propriedade 'email'
   password: string = '';           // Propriedade 'password'
@@ -22,7 +23,7 @@ export class SignupPage {
 
   // Método para enviar o formulário
   submitForm() {
-    if (!this.username || !this.password || !this.confirmPassword) {
+    if (!this.fullName || !this.username || !this.password || !this.confirmPassword) {
       alert('Por favor, preencha todos os campos.');
       return;
     }
@@ -33,6 +34,7 @@ export class SignupPage {
     }
 
     const userData = {
+      fullName: this.fullName,       // Adicionando 'fullName' ao objeto userData
       username: this.username,
       email: this.email || `${this.username}@example.com`, // Usa email se disponível, caso contrário, cria um exemplo
       password: this.password

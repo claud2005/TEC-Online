@@ -6,30 +6,42 @@
       <h2>Crie sua conta</h2>
 
       <form #signupForm="ngForm" (ngSubmit)="submitForm()">
+        <!-- Campo para o nome completo -->
+        <ion-item>
+          <ion-label position="floating">Nome Completo</ion-label>
+          <ion-input type="text" [(ngModel)]="fullName" name="fullName" required></ion-input>
+        </ion-item>
+
+        <!-- Campo para o nome de usuário -->
         <ion-item>
           <ion-label position="floating">Usuário</ion-label>
           <ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
         </ion-item>
 
+        <!-- Campo para o e-mail -->
         <ion-item>
           <ion-label position="floating">E-mail</ion-label>
           <ion-input type="email" [(ngModel)]="email" name="email" required email></ion-input>
         </ion-item>
 
+        <!-- Campo para a senha -->
         <ion-item>
           <ion-label position="floating">Senha</ion-label>
           <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
         </ion-item>
 
+        <!-- Campo para confirmar a senha -->
         <ion-item>
           <ion-label position="floating">Confirmar Senha</ion-label>
           <ion-input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required></ion-input>
         </ion-item>
 
+        <!-- Botão de envio do formulário -->
         <ion-button expand="full" fill="solid" class="btn-animate" type="submit">
           Registar
         </ion-button>
 
+        <!-- Botão para voltar -->
         <ion-button expand="full" fill="solid" class="btn-animate" (click)="goBack()">
           Voltar
         </ion-button>
