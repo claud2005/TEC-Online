@@ -7,7 +7,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 dotenv.config();
 
-const User = require('./models/User');  // Importando o modelo User
+// Importando o modelo de usuário e serviço
+const User = require('./models/User');
+const Servico = require('./models/Servico'); // Importando o modelo de serviço
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -58,43 +60,122 @@ app.post('/api/signup', async (req, res) => {
 
 // Rota para login do usuário
 app.post('/api/login', async (req, res) => {
-    try {
-      const { username, password } = req.body;
-  
-      console.log('Username recebido:', username);  // Verificar o que está sendo enviado
-      console.log('Senha recebida:', password);  // Verificar o que está sendo enviado
-  
-      // Encontrar o usuário pelo username
-      const user = await User.findOne({ username });
-      
-      // Logar o usuário encontrado para verificar
-      console.log('Usuário encontrado:', user);  // Adicionando o log aqui
+  try {
+    const { username, password } = req.body;
 
-      if (!user) {
-        console.log('Usuário não encontrado!');
-        return res.status(400).json({ message: 'Usuário não encontrado!' });
-      }
-  
-      // Comparar a senha
-      const isMatch = await user.comparePassword(password);
-      if (!isMatch) {
-        console.log('Senha inválida!');
-        return res.status(400).json({ message: 'Senha inválida!' });
-      }
-  
-      // Gerar o token JWT
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'secret', {
-        expiresIn: '1h',
-      });
-  
-      console.log('Login bem-sucedido!');
-      return res.status(200).json({ message: 'Login bem-sucedido!', token });
-    } catch (error) {
-      console.error('Erro ao fazer login:', error);
-      res.status(500).json({ message: 'Erro interno no servidor', error: error.message });
+    // Encontrar o usuário pelo username
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ message: 'Usuário não encontrado!' });
     }
-  });
-  
+
+    // Comparar a senha
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Senha inválida!' });
+    }
+
+    // Gerar o token JWT
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'secret', {
+      expiresIn: '1h',
+    });
+
+    return res.status(200).json({ message: 'Login bem-sucedido!', token });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro interno no servidor', error: error.message });
+  }
+});
+
+// Rota para criar um novo serviço
+app.post('/api/servicos', async (req, res) => {
+  try {
+    // Aqui estamos verificando se todos os dados obrigatórios foram enviados
+    const {
+      numero,
+      data,
+      status,
+      cliente,
+      descricao,
+      responsavel,
+      observacoes,
+      autorServico,
+      nomeCompletoCliente,
+      codigoPostalCliente,
+      contatoCliente,
+      modeloAparelho,
+      marcaAparelho,
+      corAparelho,
+      problemaRelatado,
+      solucaoInicial,
+      valorTotal
+    } = req.body;
+
+    if (!numero || !data || !status || !cliente || !descricao || !responsavel || !autorServico || !nomeCompletoCliente || !codigoPostalCliente || !contatoCliente || !modeloAparelho || !marcaAparelho || !corAparelho || !problemaRelatado || !solucaoInicial || !valorTotal) {
+      return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
+    }
+
+    const newServico = new Servico(req.body);
+
+    await newServico.save();
+    return res.status(201).json({ message: 'Serviço criado com sucesso!', servico: newServico });
+  } catch (error) {
+    console.error('Erro ao criar serviço:', error);
+    res.status(500).json({ message: 'Erro ao criar serviço', error: error.message });
+  }
+});
+
+// Rota para obter todos os serviços
+app.get('/api/servicos', async (req, res) => {
+  try {
+    const servicos = await Servico.find();
+    return res.status(200).json(servicos);
+  } catch (error) {
+    console.error('Erro ao obter serviços:', error);
+    res.status(500).json({ message: 'Erro ao obter serviços', error: error.message });
+  }
+});
+
+// Rota para obter um serviço por ID
+app.get('/api/servicos/:id', async (req, res) => {
+  try {
+    const servico = await Servico.findById(req.params.id);
+    if (!servico) {
+      return res.status(404).json({ message: 'Serviço não encontrado!' });
+    }
+    return res.status(200).json(servico);
+  } catch (error) {
+    console.error('Erro ao obter serviço:', error);
+    res.status(500).json({ message: 'Erro ao obter serviço', error: error.message });
+  }
+});
+
+// Rota para atualizar um serviço
+app.put('/api/servicos/:id', async (req, res) => {
+  try {
+    const updatedServico = await Servico.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedServico) {
+      return res.status(404).json({ message: 'Serviço não encontrado!' });
+    }
+    return res.status(200).json({ message: 'Serviço atualizado com sucesso!', servico: updatedServico });
+  } catch (error) {
+    console.error('Erro ao atualizar serviço:', error);
+    res.status(500).json({ message: 'Erro ao atualizar serviço', error: error.message });
+  }
+});
+
+// Rota para excluir um serviço
+app.delete('/api/servicos/:id', async (req, res) => {
+  try {
+    const deletedServico = await Servico.findByIdAndDelete(req.params.id);
+    if (!deletedServico) {
+      return res.status(404).json({ message: 'Serviço não encontrado!' });
+    }
+    return res.status(200).json({ message: 'Serviço excluído com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao excluir serviço:', error);
+    res.status(500).json({ message: 'Erro ao excluir serviço', error: error.message });
+  }
+});
 
 // Iniciar o servidor
 app.listen(PORT, () => {

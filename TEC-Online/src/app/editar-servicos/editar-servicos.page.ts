@@ -20,7 +20,7 @@ export class EditarServicosPage {
   id: string | null = null;
   dataAbertura: string = '';
   dataEntrega: string = '';
-  status: string = 'pendente';
+  status: string = 'aberto'; // Valor padrão "Aberto"
   nomeCliente: string = '';
   telefoneContato: string = '';
   cpfCliente: string = '';
@@ -103,6 +103,13 @@ export class EditarServicosPage {
     this.imagens.splice(index, 1);
   }
 
+  validarTelefone(event: any) {
+    const input = event.target as HTMLInputElement;
+    const valor = input.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+    input.value = valor.slice(0, 9); // Limita a 9 dígitos
+    this.telefoneContato = input.value;
+  }
+
   atualizarServico() {
     if (!this.isFormValid()) {
       alert('Preencha todos os campos obrigatórios.');
@@ -146,22 +153,37 @@ export class EditarServicosPage {
 
   isFormValid(): boolean {
     const camposObrigatorios = [
-      this.dataAbertura,
-      this.dataEntrega,
-      this.status,
-      this.nomeCliente,
-      this.telefoneContato,
-      this.cpfCliente,
-      this.modeloAparelho,
-      this.marcaAparelho,
-      this.corAparelho,
-      this.problemaCliente,
-      this.solucaoInicial,
-      this.autorServico,
+      { nome: 'dataAbertura', valor: this.dataAbertura },
+      { nome: 'dataEntrega', valor: this.dataEntrega },
+      { nome: 'status', valor: this.status },
+      { nome: 'nomeCliente', valor: this.nomeCliente },
+      { nome: 'telefoneContato', valor: this.telefoneContato },
+      { nome: 'cpfCliente', valor: this.cpfCliente },
+      { nome: 'modeloAparelho', valor: this.modeloAparelho },
+      { nome: 'marcaAparelho', valor: this.marcaAparelho },
+      { nome: 'corAparelho', valor: this.corAparelho },
+      { nome: 'problemaCliente', valor: this.problemaCliente },
+      { nome: 'solucaoInicial', valor: this.solucaoInicial },
+      { nome: 'autorServico', valor: this.autorServico },
     ];
 
-    return camposObrigatorios.every((campo) => campo && campo.trim() !== '') &&
-      this.valorTotal !== null &&
-      this.valorEntrada !== null;
+    // Verifica se todos os campos obrigatórios estão preenchidos
+    const camposPreenchidos = camposObrigatorios.every((campo) => {
+      const valido = campo.valor && campo.valor.trim() !== '';
+      if (!valido) {
+        console.log(`Campo obrigatório não preenchido: ${campo.nome}`);
+      }
+      return valido;
+    });
+
+    // Verifica se os campos numéricos são válidos
+    const valoresValidos = this.valorTotal !== null && this.valorTotal >= 0 &&
+                          this.valorEntrada !== null && this.valorEntrada >= 0;
+
+    if (!valoresValidos) {
+      console.log('Valores inválidos:', { valorTotal: this.valorTotal, valorEntrada: this.valorEntrada });
+    }
+
+    return camposPreenchidos && valoresValidos;
   }
 }
