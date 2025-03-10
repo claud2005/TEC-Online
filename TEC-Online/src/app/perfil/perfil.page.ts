@@ -56,10 +56,12 @@ export class PerfilPage implements OnInit {
     console.log('📡 Enviando requisição com token:', this.token);
     
     if (!this.token) {
-      console.error('🚨 Erro: Token não encontrado!');
+      console.warn('Token ausente! Redirecionando para login...');
+      localStorage.removeItem('token');
       this.router.navigate(['/home']);
       return;
     }
+    
   
     this.http.get<any>('http://localhost:3000/api/profile', {
       headers: { 

@@ -5,11 +5,10 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { body, validationResult } = require('express-validator'); // Para validação de dados
 dotenv.config();
 
-// Importando o modelo de usuário e serviço
-const User = require('./models/User');
-const Servico = require('./models/Servicos'); // Importando o modelo de serviço
+const User = require('./models/User'); // Importando o modelo User
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,15 +30,44 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/tec-online'
   process.exit(1);
 });
 
+// Middleware para tratamento de erros
+const errorHandler = (err, req, res, next) => {
+  console.error('Erro:', err);
+  res.status(500).json({ message: 'Erro interno no servidor', error: err.message });
+};
+
+app.use(errorHandler);
+
+// Middleware para autenticar o token JWT
+const authenticateToken = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ message: 'Token não fornecido' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET || 'secret', (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ message: 'Token inválido ou expirado' });
+    }
+    req.user = decoded;
+    next();
+  });
+};
+
 // Rota para registrar um novo usuário
-app.post('/api/signup', async (req, res) => {
+app.post('/api/signup', [
+  body('fullName').notEmpty().withMessage('Nome completo é obrigatório'),
+  body('username').notEmpty().withMessage('Nome de usuário é obrigatório'),
+  body('email').isEmail().withMessage('E-mail inválido'),
+  body('password').isLength({ min: 6 }).withMessage('A senha deve ter pelo menos 6 caracteres'),
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
     const { fullName, username, email, password } = req.body;
-
-    // Verificar se todos os campos foram preenchidos
-    if (!fullName || !username || !email || !password) {
-      return res.status(400).json({ message: 'Todos os campos são obrigatórios' });
-    }
 
     // Verificar se o usuário ou o email já estão registrados
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
@@ -53,13 +81,20 @@ app.post('/api/signup', async (req, res) => {
 
     return res.status(201).json({ message: 'Usuário registrado com sucesso!' });
   } catch (error) {
-    console.error('Erro ao registrar o usuário:', error);
-    res.status(500).json({ message: 'Erro interno no servidor', error: error.message });
+    next(error); // Passa o erro para o middleware de tratamento de erros
   }
 });
 
 // Rota para login do usuário
-app.post('/api/login', async (req, res) => {
+app.post('/api/login', [
+  body('username').notEmpty().withMessage('Nome de usuário é obrigatório'),
+  body('password').notEmpty().withMessage('Senha é obrigatória'),
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
     const { username, password } = req.body;
 
@@ -82,98 +117,73 @@ app.post('/api/login', async (req, res) => {
 
     return res.status(200).json({ message: 'Login bem-sucedido!', token });
   } catch (error) {
-    res.status(500).json({ message: 'Erro interno no servidor', error: error.message });
+    next(error); // Passa o erro para o middleware de tratamento de erros
   }
 });
 
-// Rota para criar um novo serviço
-app.post('/api/servicos', async (req, res) => {
+// Rota para obter os dados do perfil do usuário autenticado
+app.get('/api/profile', authenticateToken, async (req, res, next) => {
   try {
-    // Aqui estamos verificando se todos os dados obrigatórios foram enviados
-    const {
-      numero,
-      data,
-      status,
-      cliente,
-      descricao,
-      responsavel,
-      observacoes,
-      autorServico,
-      nomeCompletoCliente,
-      codigoPostalCliente,
-      contatoCliente,
-      modeloAparelho,
-      marcaAparelho,
-      corAparelho,
-      problemaRelatado,
-      solucaoInicial,
-      valorTotal
-    } = req.body;
+    const userId = req.user?.userId;
 
-    if (!numero || !data || !status || !cliente || !descricao || !responsavel || !autorServico || !nomeCompletoCliente || !codigoPostalCliente || !contatoCliente || !modeloAparelho || !marcaAparelho || !corAparelho || !problemaRelatado || !solucaoInicial || !valorTotal) {
-      return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
+    if (!userId) {
+      return res.status(400).json({ message: 'ID do usuário não encontrado no token' });
     }
 
-    const newServico = new Servico(req.body);
+    console.log(`🔍 Buscando perfil do usuário ID: ${userId}`); // Usando o emoji corretamente
 
-    await newServico.save();
-    return res.status(201).json({ message: 'Serviço criado com sucesso!', servico: newServico });
-  } catch (error) {
-    console.error('Erro ao criar serviço:', error);
-    res.status(500).json({ message: 'Erro ao criar serviço', error: error.message });
-  }
-});
+    // Buscar o usuário no banco de dados
+    const user = await User.findById(userId).select('fullName username profilePicture');
 
-// Rota para obter todos os serviços
-app.get('/api/servicos', async (req, res) => {
-  try {
-    const servicos = await Servico.find();
-    return res.status(200).json(servicos);
-  } catch (error) {
-    console.error('Erro ao obter serviços:', error);
-    res.status(500).json({ message: 'Erro ao obter serviços', error: error.message });
-  }
-});
-
-// Rota para obter um serviço por ID
-app.get('/api/servicos/:id', async (req, res) => {
-  try {
-    const servico = await Servico.findById(req.params.id);
-    if (!servico) {
-      return res.status(404).json({ message: 'Serviço não encontrado!' });
+    if (!user) {
+      console.warn(`⚠️ Usuário com ID ${userId} não encontrado.`);
+      return res.status(404).json({ message: 'Usuário não encontrado' });
     }
-    return res.status(200).json(servico);
+
+    console.log(`✅ Perfil do usuário encontrado:`, user);
+    return res.status(200).json(user);
   } catch (error) {
-    console.error('Erro ao obter serviço:', error);
-    res.status(500).json({ message: 'Erro ao obter serviço', error: error.message });
+    console.error('❌ Erro ao buscar perfil:', error);
+    next(error); // Passa o erro para o middleware de tratamento de erros
   }
 });
 
-// Rota para atualizar um serviço
-app.put('/api/servicos/:id', async (req, res) => {
-  try {
-    const updatedServico = await Servico.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updatedServico) {
-      return res.status(404).json({ message: 'Serviço não encontrado!' });
-    }
-    return res.status(200).json({ message: 'Serviço atualizado com sucesso!', servico: updatedServico });
-  } catch (error) {
-    console.error('Erro ao atualizar serviço:', error);
-    res.status(500).json({ message: 'Erro ao atualizar serviço', error: error.message });
-  }
-});
 
-// Rota para excluir um serviço
-app.delete('/api/servicos/:id', async (req, res) => {
+
+// Rota para atualizar os dados do perfil do usuário autenticado
+app.put('/api/profile', authenticateToken, [
+  body('fullName').optional().notEmpty().withMessage('Nome completo não pode estar vazio'),
+  body('username').optional().notEmpty().withMessage('Nome de usuário não pode estar vazio'),
+  body('profilePicture').optional(),
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
-    const deletedServico = await Servico.findByIdAndDelete(req.params.id);
-    if (!deletedServico) {
-      return res.status(404).json({ message: 'Serviço não encontrado!' });
+    const userId = req.user.userId;
+    const { fullName, username, profilePicture } = req.body;
+
+    // Verificar se ao menos um campo foi fornecido para atualização
+    if (!fullName && !username && !profilePicture) {
+      return res.status(400).json({ message: 'Nenhum dado para atualizar' });
     }
-    return res.status(200).json({ message: 'Serviço excluído com sucesso!' });
+
+    // Atualizar os dados do usuário no banco de dados
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { fullName, username, profilePicture },
+      { new: true } // Retorna o documento atualizado
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'Usuário não encontrado para atualizar' });
+    }
+
+    return res.status(200).json({ message: 'Perfil atualizado com sucesso!', user: updatedUser });
   } catch (error) {
-    console.error('Erro ao excluir serviço:', error);
-    res.status(500).json({ message: 'Erro ao excluir serviço', error: error.message });
+    next(error); // Passa o erro para o middleware de tratamento de erros
   }
 });
 
