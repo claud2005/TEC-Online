@@ -174,7 +174,8 @@ export class PerfilPage implements OnInit {
     this.nomeUtilizador = '';
     this.fotoPerfil = 'assets/img/default-profile.png';
     this.router.navigate(['/home']);
-  }  
+  }
+  
 
   editarPerfil() {
     this.router.navigate(['/editar-perfil']);
