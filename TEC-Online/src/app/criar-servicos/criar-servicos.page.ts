@@ -59,43 +59,25 @@ export class CriarServicosPage {
     };
 
     this.http.post('http://localhost:3000/api/servicos', novoServico).subscribe(
-      (response: any) => {
-        console.log('Serviço salvo:', response);
+      () => {
         alert('Serviço criado com sucesso!');
-        this.fecharEAtualizar();
+        this.navController.back();
       },
-      (error) => {
-        console.error('Erro ao salvar serviço:', error);
-        alert('Erro ao criar serviço.');
-      }
+      () => alert('Erro ao criar serviço.')
     );
   }
 
-  fecharEAtualizar() {
-    this.navController.back(); // Fecha a página e volta
+  isFormValid(): boolean {
+    return [
+      this.dataAbertura, this.dataEntrega, this.status, this.nomeCliente,
+      this.telefoneContato, this.cpfCliente, this.modeloAparelho, this.marcaAparelho,
+      this.corAparelho, this.problemaCliente, this.solucaoInicial, this.autorServico
+    ].every(campo => campo && campo.trim() !== '') &&
+      this.valorTotal !== null && this.valorTotal >= 0 &&
+      this.valorEntrada !== null && this.valorEntrada >= 0;
   }
 
   goBack() {
     this.navController.back();
-  }
-
-  isFormValid(): boolean {
-    const camposObrigatorios = [
-      this.dataAbertura,
-      this.dataEntrega,
-      this.status,
-      this.nomeCliente,
-      this.telefoneContato,
-      this.cpfCliente,
-      this.modeloAparelho,
-      this.marcaAparelho,
-      this.corAparelho,
-      this.problemaCliente,
-      this.solucaoInicial,
-      this.autorServico
-    ];
-
-    return camposObrigatorios.every(campo => campo && campo.trim() !== '') &&
-           this.valorTotal !== null && this.valorEntrada !== null;
   }
 }
