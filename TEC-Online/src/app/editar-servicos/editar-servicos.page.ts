@@ -4,8 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, IonicModule } from '@ionic/angular';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { Filesystem, Directory } from '@capacitor/filesystem';
 
 @Component({
   selector: 'app-editar-servicos',
@@ -78,38 +76,18 @@ export class EditarServicosPage {
   }
 
   async adicionarFoto() {
-    try {
-      const file = await this.escolherArquivo();
-      if (file) {
-        this.imagens.push(file);
-      }
-    } catch (error) {
-      console.error('Erro ao escolher arquivo:', error);
-    }
-  }
-
-  async escolherArquivo(): Promise<string> {
-    // Abrir o seletor de arquivos nativo
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
     input.click();
 
-    return new Promise((resolve, reject) => {
-      input.onchange = async (event: any) => {
-        const file = event.target.files[0];
-        if (file) {
-          try {
-            const base64 = await this.convertToBase64(file);
-            resolve(base64);
-          } catch (error) {
-            reject(error);
-          }
-        } else {
-          reject('Nenhum arquivo selecionado.');
-        }
-      };
-    });
+    input.onchange = async (event: any) => {
+      const file = event.target.files[0];
+      if (file) {
+        const base64 = await this.convertToBase64(file);
+        this.imagens.push(base64);
+      }
+    };
   }
 
   async convertToBase64(file: File): Promise<string> {
@@ -163,10 +141,6 @@ export class EditarServicosPage {
   }
 
   fecharEAtualizar() {
-    this.navController.back(); // Fecha a página e volta
-  }
-
-  goBack() {
     this.navController.back();
   }
 

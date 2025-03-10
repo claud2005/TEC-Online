@@ -1,11 +1,42 @@
+/* Remove estilos padrão do Ionic */
+ion-header {
+    background: var(--header-bg-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+ion-toolbar {
+    --background: transparent; /* Remove o fundo padrão */
+    --color: var(--header-text-color);
+    padding: 0 10px;
+}
+
+ion-back-button {
+    --background: var(--button-back-color) !important; /* Cor de fundo (azul) */
+    --color: rgb(98, 182, 250) !important; /* Cor do ícone (preto) */
+    --border-radius: 50% !important; /* Bordas arredondadas */
+    --padding-start: 10px !important;
+    --padding-end: 10px !important;
+    --icon-font-size: 24px !important; /* Tamanho do ícone */
+    width: 40px !important; /* Tamanho do botão */
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background-color 0.3s ease !important;
+    
+    &:hover {
+        --background: var(--button-back-hover) !important; /* Cor ao passar o mouse (azul mais escuro) */
+        --color: black !important; /* Cor do ícone ao passar o mouse (preto) */
+    }
+}
+
+/* Estilo para o conteúdo */
 ion-content {
     --background: #f0f0f0;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 24px;
-    height: 100vh;
-    width: 100vw;
 }
 
 h1 {
@@ -30,8 +61,7 @@ p {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 15px;
-    width: 100vw;
-    align-items: start;
+    width: 100%;
 }
 
 @media (max-width: 1024px) {
@@ -54,7 +84,6 @@ ion-label {
     display: block;
     margin-bottom: 10px;
     text-align: left;
-    width: 100%;
 }
 
 ion-input,
@@ -62,14 +91,14 @@ ion-textarea,
 ion-select {
     border: 2px solid #cccccc;
     border-radius: 15px;
-    padding: 4px 8px;
+    padding: 8px 12px;
     font-size: 16px;
     color: #000;
     background: #fff;
     width: 100%;
     transition: border-color 0.3s ease;
     box-sizing: border-box;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     line-height: 1.2;
     min-height: 40px;
     margin-top: 10px;
@@ -78,45 +107,75 @@ ion-select {
 .fotos-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-}
-
-.foto-preview {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 10px;
-    border: 2px solid #ccc;
-}
-
-.fotos-list {
-    display: flex;
-    flex-wrap: wrap;
     gap: 15px;
-    justify-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 20px;
+    max-width: 100%;
 }
 
 .foto-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    position: relative;
+    width: 90px;
+    height: 90px;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+
+    .foto-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .remove-icon {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(255, 0, 0, 0.8);
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
 }
 
-ion-button {
-    --background: #ffffff;
-    --border-radius: 8px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #000;
-    padding: 14px;
+.adicionar-foto-btn {
     width: 100%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: none;
-}
+    border-radius: 30px;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+    margin-top: 20px;
 
-ion-button:hover {
-    --background: #f0f0f0;
+    &:hover {
+        background-color: #218838;
+    }
+
+    ion-icon {
+        margin-right: 8px;
+        font-size: 20px;
+    }
 }
 
 .button-container {
@@ -124,8 +183,4 @@ ion-button:hover {
     justify-content: center;
     margin-top: 20px;
     width: 100%;
-}
-
-ion-header {
-    --background: #f0f0f0;
 }
