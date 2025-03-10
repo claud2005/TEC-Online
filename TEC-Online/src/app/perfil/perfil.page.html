@@ -1,5 +1,19 @@
 <ion-content>
-  <div class="profile-container">
+  <!-- Indicador de carregamento -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="circular"></ion-spinner>
+    <p>A carregar dados do perfil...</p>
+  </div>
+
+  <!-- Mensagem de erro -->
+  <div *ngIf="erroCarregamento && !isLoading" class="erro-container">
+    <ion-icon name="alert-circle" color="danger"></ion-icon>
+    <p>{{ erroCarregamento }}</p>
+    <ion-button (click)="tentarNovamente()" size="small">Tentar Novamente</ion-button>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <div class="profile-container" *ngIf="!isLoading && !erroCarregamento">
     <h2 class="profile-title">Perfil</h2>
 
     <!-- Foto de Perfil -->

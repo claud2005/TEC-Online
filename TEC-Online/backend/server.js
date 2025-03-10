@@ -9,7 +9,7 @@ dotenv.config();
 
 // Importando o modelo de usuário e serviço
 const User = require('./models/User');
-const Servico = require('./models/Servico'); // Importando o modelo de serviço
+const Servico = require('./models/Servicos'); // Importando o modelo de serviço
 
 const app = express();
 const PORT = process.env.PORT || 3000;

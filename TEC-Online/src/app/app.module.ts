@@ -1,19 +1,17 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http'; // Importe o HttpClientModule
+import { HttpClientModule } from '@angular/common/http'; // ✅ Importado corretamente
 import { IonicModule } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SignupPage } from './signup/signup.page'; // Importe o seu componente
 
 @NgModule({
-  declarations: [AppComponent], // Não declare o SignupPage aqui, pois é standalone
+  declarations: [AppComponent], // ✅ Não incluir standalone components aqui
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
-    HttpClientModule, // Não se esqueça de adicionar o HttpClientModule aqui
-    AppRoutingModule,
-    SignupPage // Importe o SignupPage diretamente aqui
+    HttpClientModule, // ✅ Mantido aqui corretamente
+    AppRoutingModule
   ],
   bootstrap: [AppComponent],
 })
