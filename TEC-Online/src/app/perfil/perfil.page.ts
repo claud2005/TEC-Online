@@ -20,55 +20,79 @@ export class PerfilPage implements OnInit {
   nomeUtilizador: string = '';
   isWeb: boolean;
   token: string | null = null;
+  isLoading: boolean = false;
+  erroCarregamento: string | null = null;
 
   constructor(
     private platform: Platform,
     private router: Router,
     private http: HttpClient,
-    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef
+    private cdr: ChangeDetectorRef
   ) {
     this.isWeb = !this.platform.is('hybrid');
   }
 
   ngOnInit() {
     this.token = localStorage.getItem('token');
-    console.log('Token encontrado:', this.token);
-
+    
+    console.log('Token encontrado no localStorage:', this.token);
+  
     if (!this.token) {
       console.warn('Token não encontrado! Redirecionando para login.');
       this.router.navigate(['/home']);
-    } else {
-      this.carregarDadosPerfil();
+      return;
     }
+  
+    this.carregarDadosPerfil();
   }
+  
 
   carregarDadosPerfil() {
-    console.log('Buscando perfil do usuário...');
+    this.isLoading = true;
+    this.erroCarregamento = null;
+    console.log('🔄 Iniciando carregamento do perfil...');
     
-    this.http.get<any>('http://localhost:3000/api/users/profile', {
-      headers: { Authorization: `Bearer ${this.token}` },
+    // Verifique se o token está presente antes de fazer a requisição
+    console.log('📡 Enviando requisição com token:', this.token);
+    
+    if (!this.token) {
+      console.error('🚨 Erro: Token não encontrado!');
+      this.router.navigate(['/home']);
+      return;
+    }
+  
+    this.http.get<any>('http://localhost:3000/api/profile', {
+      headers: { 
+        'Authorization': `Bearer ${this.token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
     }).subscribe(
       (data) => {
-        console.log('Dados do perfil recebidos:', data);
-
-        if (!data) {
-          console.error('Erro: Nenhum dado recebido.');
-          return;
-        }
-
-        // A resposta deve ter o 'fullName' e 'username'
+        console.log('✅ Dados do perfil recebidos:', data);
+        this.isLoading = false;
         this.nomeCompleto = data.fullName || 'Nome não disponível';
-        this.nomeUtilizador = data.username || 'Usuário não disponível';
+        this.nomeUtilizador = data.username || 'Utilizador não disponível';
         this.fotoPerfil = data.profilePicture || this.fotoPerfil;
-
-        // Forçar a detecção de mudanças
-        this.cdr.detectChanges();
+        this.cdr.detectChanges(); // Força a atualização da tela
       },
       (error) => {
-        console.error('Erro ao carregar perfil:', error);
+        this.isLoading = false;
+        this.erroCarregamento = 'Erro ao carregar dados do perfil.';
+        console.error('❌ Erro ao carregar perfil:', error);
+        console.error('🛑 Status:', error.status);
+        console.error('📢 Mensagem:', error.message);
+        
+        // Tratamento para erro de autenticação
+        if (error.status === 401 || error.status === 403) {
+          console.warn('⚠ Token inválido ou expirado! Redirecionando...');
+          this.logout();
+        }
       }
     );
   }
+  
+  
 
   async alterarFoto() {
     if (this.isWeb) {
@@ -79,7 +103,7 @@ export class PerfilPage implements OnInit {
     try {
       const image = await Camera.getPhoto({
         quality: 90,
-        allowEditing: false,
+        allowEditing: true,
         resultType: CameraResultType.DataUrl,
         source: CameraSource.Prompt,
       });
@@ -106,24 +130,42 @@ export class PerfilPage implements OnInit {
   }
 
   salvarPerfil() {
+    this.isLoading = true;
     const perfilAtualizado = {
       fullName: this.nomeCompleto,
       username: this.nomeUtilizador,
       profilePicture: this.fotoPerfil,
     };
 
-    this.http.put('http://localhost:3000/api/users/profile', perfilAtualizado, {
-      headers: { Authorization: `Bearer ${this.token}` },
+    this.http.put('http://localhost:3000/api/profile', perfilAtualizado, {
+      headers: { 
+        'Authorization': `Bearer ${this.token}`,
+        'Content-Type': 'application/json'
+      }
     }).subscribe(
-      (response) => {
+      (response: any) => {
+        this.isLoading = false;
         console.log('Perfil atualizado com sucesso:', response);
+        // Usar alertController do Ionic em vez de alert do browser
         alert('Perfil atualizado com sucesso!');
       },
       (error) => {
+        this.isLoading = false;
         console.error('Erro ao atualizar perfil:', error);
+        console.error('Status:', error.status);
+        console.error('Mensagem:', error.message);
         alert('Erro ao atualizar perfil. Tente novamente.');
+
+        // Se for erro de autenticação
+        if (error.status === 401 || error.status === 403) {
+          this.logout();
+        }
       }
     );
+  }
+
+  tentarNovamente() {
+    this.carregarDadosPerfil();
   }
 
   logout() {
@@ -132,7 +174,7 @@ export class PerfilPage implements OnInit {
     this.nomeUtilizador = '';
     this.fotoPerfil = 'assets/img/default-profile.png';
     this.router.navigate(['/home']);
-  }
+  }  
 
   editarPerfil() {
     this.router.navigate(['/editar-perfil']);
