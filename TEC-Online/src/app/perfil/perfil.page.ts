@@ -94,7 +94,6 @@ export class PerfilPage implements OnInit {
     );
   }
   
-  
 
   async alterarFoto() {
     if (this.isWeb) {

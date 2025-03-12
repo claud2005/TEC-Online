@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { EditarPerfilPage } from './editar-perfil.page';
+import { RouterModule, Routes } from '@angular/router';
+import { EditarPerfilPage } from './editar-perfil.page'; // Importe o componente standalone aqui
 
 const routes: Routes = [
   {
     path: '',
-    component: EditarPerfilPage
-  }
+    component: EditarPerfilPage,  // Utilize o componente standalone diretamente no roteamento
+  },
 ];
 
 @NgModule({

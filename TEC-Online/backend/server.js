@@ -148,44 +148,42 @@ app.get('/api/profile', authenticateToken, async (req, res, next) => {
   }
 });
 
-
-
-// Rota para atualizar os dados do perfil do usuário autenticado
-app.put('/api/profile', authenticateToken, [
-  body('fullName').optional().notEmpty().withMessage('Nome completo não pode estar vazio'),
-  body('username').optional().notEmpty().withMessage('Nome de usuário não pode estar vazio'),
-  body('profilePicture').optional(),
-], async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
+// Rota para atualizar o perfil do usuário autenticado
+app.put('/api/profile', authenticateToken, async (req, res, next) => {
   try {
-    const userId = req.user.userId;
-    const { fullName, username, profilePicture } = req.body;
+    const userId = req.user?.userId;
 
-    // Verificar se ao menos um campo foi fornecido para atualização
-    if (!fullName && !username && !profilePicture) {
-      return res.status(400).json({ message: 'Nenhum dado para atualizar' });
+    if (!userId) {
+      return res.status(400).json({ message: 'ID do usuário não encontrado no token' });
     }
 
-    // Atualizar os dados do usuário no banco de dados
+    // Dados para atualizar
+    const { fullName, username } = req.body;
+
+    // Validando se os dados foram fornecidos
+    if (!fullName || !username) {
+      return res.status(400).json({ message: 'Nome completo e nome de usuário são obrigatórios' });
+    }
+
+    // Atualizando o perfil no banco de dados
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { fullName, username, profilePicture },
-      { new: true } // Retorna o documento atualizado
-    );
+      { fullName, username },
+      { new: true }  // Retorna o usuário atualizado
+    ).select('fullName username profilePicture');
 
     if (!updatedUser) {
-      return res.status(404).json({ message: 'Usuário não encontrado para atualizar' });
+      return res.status(404).json({ message: 'Usuário não encontrado' });
     }
 
-    return res.status(200).json({ message: 'Perfil atualizado com sucesso!', user: updatedUser });
+    console.log(`✅ Perfil do usuário atualizado:`, updatedUser);
+    return res.status(200).json(updatedUser);
   } catch (error) {
+    console.error('❌ Erro ao atualizar perfil:', error);
     next(error); // Passa o erro para o middleware de tratamento de erros
   }
 });
+
 
 // Iniciar o servidor
 app.listen(PORT, () => {

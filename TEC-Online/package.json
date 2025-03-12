@@ -34,6 +34,7 @@
     "bcryptjs": "^3.0.2",
     "capacitor-file-chooser": "^0.0.1",
     "core-js": "^3.41.0",
+    "express-validator": "^7.2.1",
     "ionicons": "^7.0.0",
     "jsonwebtoken": "^9.0.2",
     "jspdf": "^3.0.0",
