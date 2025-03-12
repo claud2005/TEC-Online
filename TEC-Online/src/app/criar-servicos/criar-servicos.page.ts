@@ -16,67 +16,73 @@ import { NavController, IonicModule } from '@ionic/angular';
   ],
 })
 export class CriarServicosPage {
-  dataAbertura: string = '';
-  dataEntrega: string = '';
-  status: string = 'pendente';
+  // Declaração das variáveis do formulário
+  dataServico: string = '';
+  horaServico: string = '';
+  status: string = 'aberto';
+  autorServico: string = '';
   nomeCliente: string = '';
   telefoneContato: string = '';
-  cpfCliente: string = '';
-  modeloAparelho: string = '';
   marcaAparelho: string = '';
+  modeloAparelho: string = '';
   corAparelho: string = '';
   problemaCliente: string = '';
   solucaoInicial: string = '';
   valorTotal: number | null = null;
-  valorEntrada: number | null = null;
-  observacoes: string = '';
-  autorServico: string = '';
+  observacoes: string = ''; 
 
   constructor(private http: HttpClient, private navController: NavController) {}
 
+  // Função para salvar o serviço
   salvarServico() {
+    // Verifica se o formulário é válido
     if (!this.isFormValid()) {
       alert('Preencha todos os campos obrigatórios.');
       return;
     }
 
+    // Cria um objeto com os dados do novo serviço
     const novoServico = {
-      dataAbertura: this.dataAbertura,
-      dataEntrega: this.dataEntrega,
+      dataServico: this.dataServico.trim(),
+      horaServico: this.horaServico.trim(),
       status: this.status,
-      nomeCliente: this.nomeCliente,
-      telefoneContato: this.telefoneContato,
-      cpfCliente: this.cpfCliente,
-      modeloAparelho: this.modeloAparelho,
-      marcaAparelho: this.marcaAparelho,
-      corAparelho: this.corAparelho,
-      problemaCliente: this.problemaCliente,
-      solucaoInicial: this.solucaoInicial,
+      autorServico: this.autorServico.trim(),
+      nomeCliente: this.nomeCliente.trim(),
+      telefoneContato: this.telefoneContato.trim(),
+      marcaAparelho: this.marcaAparelho.trim(),
+      modeloAparelho: this.modeloAparelho.trim(),
+      corAparelho: this.corAparelho.trim(),
+      problemaCliente: this.problemaCliente.trim(),
+      solucaoInicial: this.solucaoInicial.trim(),
       valorTotal: this.valorTotal ?? 0,
-      valorEntrada: this.valorEntrada ?? 0,
       observacoes: this.observacoes.trim() || 'Sem observações',
-      autorServico: this.autorServico,
     };
 
+    // Realiza a requisição HTTP para salvar o novo serviço
     this.http.post('http://localhost:3000/api/servicos', novoServico).subscribe(
-      () => {
+      (response) => {
+        console.log('Serviço criado:', response);
         alert('Serviço criado com sucesso!');
-        this.navController.back();
+        this.navController.back(); // Volta para a tela anterior após sucesso
       },
-      () => alert('Erro ao criar serviço.')
+      (error) => {
+        console.error('Erro ao criar serviço:', error);
+        alert('Erro ao criar serviço.');
+      }
     );
   }
 
+  // Função para validar o formulário
   isFormValid(): boolean {
     return [
-      this.dataAbertura, this.dataEntrega, this.status, this.nomeCliente,
-      this.telefoneContato, this.cpfCliente, this.modeloAparelho, this.marcaAparelho,
-      this.corAparelho, this.problemaCliente, this.solucaoInicial, this.autorServico
-    ].every(campo => campo && campo.trim() !== '') &&
-      this.valorTotal !== null && this.valorTotal >= 0 &&
-      this.valorEntrada !== null && this.valorEntrada >= 0;
+      this.dataServico, this.horaServico, this.status, this.autorServico,
+      this.nomeCliente, this.telefoneContato, this.marcaAparelho, this.modeloAparelho,
+      this.corAparelho, this.problemaCliente, this.solucaoInicial
+    ].every(campo => campo !== undefined && campo.trim() !== '') && 
+      this.valorTotal !== null && this.valorTotal >= 0;
   }
 
+  // Função para voltar para a tela anterior
   goBack() {
     this.navController.back();
   }

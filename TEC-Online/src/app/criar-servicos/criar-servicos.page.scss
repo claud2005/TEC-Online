@@ -32,17 +32,10 @@ p {
 /* Grid responsivo que ocupa toda a tela */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
     width: 100vw;
     align-items: start;
-}
-
-/* Ajusta para telas médias */
-@media (max-width: 1024px) {
-    .grid-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
 
 /* Ajusta para telas pequenas */
@@ -67,7 +60,8 @@ ion-label {
 /* Inputs e Selects */
 ion-input,
 ion-textarea,
-ion-select {
+ion-select,
+ion-datetime {
     border: 2px solid #cccccc;
     border-radius: 15px;
     padding: 4px 8px;
@@ -78,7 +72,6 @@ ion-select {
     transition: border-color 0.3s ease;
     box-sizing: border-box;
     margin-bottom: 10px;
-    line-height: 1.2;
     min-height: 40px;
     margin-top: 10px;
 }
@@ -91,20 +84,15 @@ ion-textarea {
 /* Efeito de foco */
 ion-input:focus,
 ion-textarea:focus,
-ion-select:focus {
+ion-select:focus,
+ion-datetime:focus {
     border-color: #007bff;
 }
 
 /* Campos que ocupam a linha toda */
 .full-width {
-    grid-column: span 3;
+    grid-column: span 2;
     width: 100%;
-}
-
-@media (max-width: 1024px) {
-    .full-width {
-        grid-column: span 2;
-    }
 }
 
 @media (max-width: 768px) {
@@ -140,7 +128,7 @@ ion-button:hover {
 /* Alinhamento do botão de voltar à esquerda */
 ion-header {
     --background: #f0f0f0;
-    padding-left: 0; /* Remove qualquer espaçamento extra à esquerda */
+    padding-left: 0;
 }
 
 ion-toolbar {
@@ -148,9 +136,9 @@ ion-toolbar {
 }
 
 ion-buttons[slot="start"] {
-    margin-left: 0 !important; /* Garante que o botão de voltar ocupe a posição à esquerda */
+    margin-left: 0 !important;
     position: absolute;
     left: 0;
     top: 50%;
-    transform: translateY(10%); /* Alinha verticalmente */
+    transform: translateY(10%);
 }

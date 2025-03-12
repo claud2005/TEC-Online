@@ -9,6 +9,7 @@ const { body, validationResult } = require('express-validator'); // Para valida�
 dotenv.config();
 
 const User = require('./models/User'); // Importando o modelo User
+const Servico = require('./models/Servicos'); // Importando o modelo Servico
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -40,7 +41,7 @@ app.use(errorHandler);
 
 // Middleware para autenticar o token JWT
 const authenticateToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
+  const token = req.headers.authorization?.split(' ')[1]; // Pega o token do cabeçalho
   if (!token) {
     return res.status(401).json({ message: 'Token não fornecido' });
   }
@@ -49,8 +50,8 @@ const authenticateToken = (req, res, next) => {
     if (err) {
       return res.status(403).json({ message: 'Token inválido ou expirado' });
     }
-    req.user = decoded;
-    next();
+    req.user = decoded; // Decodifica o token e coloca as informações do usuário no objeto req
+    next(); // Permite a execução da rota protegida
   });
 };
 
@@ -88,7 +89,7 @@ app.post('/api/signup', [
 // Rota para login do usuário
 app.post('/api/login', [
   body('username').notEmpty().withMessage('Nome de usuário é obrigatório'),
-  body('password').notEmpty().withMessage('Senha é obrigatória'),
+  body('password').notEmpty().withMessage('Senha é obrigatória'),  
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -148,8 +149,6 @@ app.get('/api/profile', authenticateToken, async (req, res, next) => {
   }
 });
 
-
-
 // Rota para atualizar os dados do perfil do usuário autenticado
 app.put('/api/profile', authenticateToken, [
   body('fullName').optional().notEmpty().withMessage('Nome completo não pode estar vazio'),
@@ -183,6 +182,55 @@ app.put('/api/profile', authenticateToken, [
 
     return res.status(200).json({ message: 'Perfil atualizado com sucesso!', user: updatedUser });
   } catch (error) {
+    next(error); // Passa o erro para o middleware de tratamento de erros
+  }
+});
+
+// Rota para criar um novo serviço
+app.post('/api/servicos', authenticateToken, async (req, res, next) => {
+  try {
+    const {
+      dataServico, horaServico, status, autorServico, nomeCliente, telefoneContato,
+      marcaAparelho, modeloAparelho, corAparelho, problemaCliente, solucaoInicial, valorTotal, observacoes
+    } = req.body;
+
+    console.log('Dados recebidos para criação de serviço:', req.body); // Adiciona o log aqui
+
+    // Validar os campos recebidos
+    if (!dataServico || !horaServico || !status || !autorServico || !nomeCliente || !telefoneContato ||
+        !marcaAparelho || !modeloAparelho || !corAparelho || !problemaCliente || !solucaoInicial || valorTotal === null) {
+      return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
+    }
+
+    // Criar um novo serviço
+    const novoServico = new Servico({
+      numero: new Date().getTime().toString(), // Gerar um número único para o serviço
+      data: dataServico,
+      status: status,
+      cliente: nomeCliente,
+      descricao: problemaCliente,
+      responsavel: autorServico,
+      observacoes: observacoes,
+      autorServico: autorServico,
+      nomeCompletoCliente: nomeCliente,
+      codigoPostalCliente: '', // Deixe vazio ou remova se não for necessário
+      contatoCliente: telefoneContato,
+      modeloAparelho: modeloAparelho,
+      marcaAparelho: marcaAparelho,
+      corAparelho: corAparelho,
+      problemaRelatado: problemaCliente,
+      solucaoInicial: solucaoInicial,
+      valorTotal: valorTotal,
+    });
+
+    console.log('Criando serviço no banco:', novoServico); // Log para verificar o serviço sendo criado
+
+    // Salvar no banco de dados MongoDB
+    await novoServico.save();
+
+    return res.status(201).json({ message: 'Serviço criado com sucesso!', servico: novoServico });
+  } catch (error) {
+    console.error('Erro ao criar serviço:', error);
     next(error); // Passa o erro para o middleware de tratamento de erros
   }
 });

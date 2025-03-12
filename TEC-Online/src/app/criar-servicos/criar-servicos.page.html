@@ -12,13 +12,13 @@
 
   <form class="grid-container">
     <div>
-      <ion-label position="stacked">Data de Abertura *</ion-label>
-      <ion-input name="dataAbertura" type="date" [(ngModel)]="dataAbertura" required></ion-input>
+      <ion-label position="stacked">Data do Serviço *</ion-label>
+      <ion-input name="dataServico" type="text" placeholder="DD/MM/AAAA" [(ngModel)]="dataServico" required></ion-input>
     </div>
 
     <div>
-      <ion-label position="stacked">Data Prevista de Entrega *</ion-label>
-      <ion-input name="dataEntrega" type="date" [(ngModel)]="dataEntrega" required></ion-input>
+      <ion-label position="stacked">Hora do Serviço *</ion-label>
+      <ion-input name="horaServico" type="text" placeholder="HH:MM" [(ngModel)]="horaServico" required></ion-input>
     </div>
 
     <div>
@@ -31,68 +31,58 @@
 
     <div>
       <ion-label position="stacked">Autor do Serviço *</ion-label>
-      <ion-input name="autorServico" type="text" [(ngModel)]="autorServico" placeholder="Nome do responsável" required></ion-input>
+      <ion-input name="autorServico" type="text" placeholder="Nome do responsável" [(ngModel)]="autorServico" required></ion-input>
     </div>
 
     <div>
       <ion-label position="stacked">Nome Completo do Cliente *</ion-label>
-      <ion-input name="nomeCliente" type="text" [(ngModel)]="nomeCliente" placeholder="Ex: João Silva" required></ion-input>
+      <ion-input name="nomeCliente" type="text" placeholder="Ex: João Silva" [(ngModel)]="nomeCliente" required></ion-input>
     </div>
 
     <div>
-      <ion-label position="stacked">Código Postal do Cliente *</ion-label>
-      <ion-input name="cpfCliente" type="text" [(ngModel)]="cpfCliente" placeholder="0000-000" required></ion-input>
-    </div>
-
-    <div>
-      <ion-label position="stacked">Telefone para Contato *</ion-label>
-      <ion-input name="telefoneContato" type="tel" [(ngModel)]="telefoneContato" placeholder="(351) 999999999" required></ion-input>
-    </div>
-
-    <div>
-      <ion-label position="stacked">Modelo do Aparelho *</ion-label>
-      <ion-input name="modeloAparelho" type="text" [(ngModel)]="modeloAparelho" required></ion-input>
+      <ion-label position="stacked">Contato *</ion-label>
+      <ion-input name="telefoneContato" type="tel" placeholder="(351) 999999999" [(ngModel)]="telefoneContato" required></ion-input>
     </div>
 
     <div>
       <ion-label position="stacked">Marca do Aparelho *</ion-label>
-      <ion-input name="marcaAparelho" type="text" [(ngModel)]="marcaAparelho" required></ion-input>
+      <ion-input name="marcaAparelho" type="text" placeholder="Samsung" [(ngModel)]="marcaAparelho" required></ion-input>
+    </div>
+
+    <div>
+      <ion-label position="stacked">Modelo do Aparelho *</ion-label>
+      <ion-input name="modeloAparelho" type="text" placeholder="Galaxy S21" [(ngModel)]="modeloAparelho" required></ion-input>
     </div>
 
     <div>
       <ion-label position="stacked">Cor do Aparelho *</ion-label>
-      <ion-input name="corAparelho" type="text" [(ngModel)]="corAparelho" required></ion-input>
+      <ion-input name="corAparelho" type="text" placeholder="Preto" [(ngModel)]="corAparelho" required></ion-input>
     </div>
 
     <div class="full-width">
       <ion-label position="stacked">Problema Relatado pelo Cliente *</ion-label>
-      <ion-textarea name="problemaCliente" [(ngModel)]="problemaCliente" required></ion-textarea>
+      <ion-textarea name="problemaCliente" placeholder="Descreva o problema..." [(ngModel)]="problemaCliente" required></ion-textarea>
     </div>
 
     <div class="full-width">
-      <ion-label position="stacked">Solução Inicial *</ion-label>
-      <ion-textarea name="solucaoInicial" [(ngModel)]="solucaoInicial" required></ion-textarea>
+      <ion-label position="stacked">Solução *</ion-label>
+      <ion-textarea name="solucaoInicial" placeholder="Descreva a solução inicial..." [(ngModel)]="solucaoInicial" required></ion-textarea>
     </div>
 
     <div>
       <ion-label position="stacked">Valor Total *</ion-label>
-      <ion-input name="valorTotal" type="number" [(ngModel)]="valorTotal" min="0" required></ion-input>
-    </div>
-
-    <div>
-      <ion-label position="stacked">Valor Pago na Entrada *</ion-label>
-      <ion-input name="valorEntrada" type="number" [(ngModel)]="valorEntrada" min="0" required></ion-input>
+      <ion-input name="valorTotal" type="number" placeholder="€ 0,00" [(ngModel)]="valorTotal" min="0" required></ion-input>
     </div>
 
     <div class="full-width">
       <ion-label position="stacked">Observações</ion-label>
-      <ion-textarea name="observacoes" [(ngModel)]="observacoes"></ion-textarea>
+      <ion-textarea name="observacoes" placeholder="Comentários adicionais..." [(ngModel)]="observacoes"></ion-textarea>
     </div>
   </form>
 
   <div class="button-container">
-    <ion-button expand="block" (click)="salvarServico()" [disabled]="!isFormValid()">
+    <ion-button expand="block" (click)="salvarServico()">
       Salvar Ordem de Serviço
-    </ion-button>
+    </ion-button>    
   </div>
 </ion-content>
