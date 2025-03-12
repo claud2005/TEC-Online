@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // Importe HttpHeaders aqui
 import { NavController, IonicModule } from '@ionic/angular';
 
 @Component({
@@ -29,7 +29,7 @@ export class CriarServicosPage {
   problemaCliente: string = '';
   solucaoInicial: string = '';
   valorTotal: number | null = null;
-  observacoes: string = ''; 
+  observacoes: string = '';
 
   constructor(private http: HttpClient, private navController: NavController) {}
 
@@ -58,8 +58,16 @@ export class CriarServicosPage {
       observacoes: this.observacoes.trim() || 'Sem observações',
     };
 
+    console.log('Dados enviados:', novoServico); // Log para verificar os dados enviados
+
+    // Obtenha o token do localStorage
+    const token = localStorage.getItem('token');
+
+    // Adicione o token no cabeçalho da requisição
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
     // Realiza a requisição HTTP para salvar o novo serviço
-    this.http.post('http://localhost:3000/api/servicos', novoServico).subscribe(
+    this.http.post('http://localhost:3000/api/servicos', novoServico, { headers }).subscribe(
       (response) => {
         console.log('Serviço criado:', response);
         alert('Serviço criado com sucesso!');

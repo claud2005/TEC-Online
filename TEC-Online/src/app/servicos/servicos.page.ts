@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // Importe HttpClient e HttpHeaders
 import jsPDF from 'jspdf'; // Importação do jsPDF
 
 interface Servico {
@@ -36,75 +37,42 @@ interface Servico {
   styleUrls: ['./servicos.page.scss'],
 })
 export class ServicosPage {
-  servicos: Servico[] = [
-    {
-      numero: '001',
-      data: '10/01/2024',
-      status: 'ABERTA',
-      cliente: 'João Silva',
-      descricao: 'Manutenção geral',
-      responsavel: 'Técnico A',
-      observacoes: 'Troca de peça',
-      expandido: false,
-      autorServico: 'Técnico A',
-      nomeCompletoCliente: 'João Silva dos Santos',
-      codigoPostalCliente: '2205-649',
-      contatoCliente: '(+351) 999111555',
-      modeloAparelho: 'Modelo XYZ',
-      marcaAparelho: 'Marca ABC',
-      corAparelho: 'Preto',
-      problemaRelatado: 'Aparelho com falha na tela, não liga',
-      solucaoInicial: 'Substituição da tela e verificação de circuito interno',
-      valorTotal: '€ 300,00',
-    },
-    {
-      numero: '002',
-      data: '12/01/2024',
-      status: 'FECHADA',
-      cliente: 'Maria Souza',
-      descricao: 'Troca de tela',
-      responsavel: 'Técnico B',
-      observacoes: 'Finalizado',
-      expandido: false,
-      autorServico: 'Técnico B',
-      nomeCompletoCliente: 'Maria Souza Silva',
-      codigoPostalCliente: '9865-432',
-      contatoCliente: '(+351) 888555333',
-      modeloAparelho: 'Modelo ABC',
-      marcaAparelho: 'Marca XYZ',
-      corAparelho: 'Branco',
-      problemaRelatado: 'Tela rachada e com manchas',
-      solucaoInicial: 'Substituição da tela e calibração de cores',
-      valorTotal: '€ 250,00',
-    },
-    {
-      numero: '003',
-      data: '15/01/2024',
-      status: 'ABERTA',
-      cliente: 'Carlos Pereira',
-      descricao: 'Limpeza e ajuste',
-      responsavel: 'Técnico C',
-      observacoes: 'Peças OK',
-      expandido: false,
-      autorServico: 'Técnico C',
-      nomeCompletoCliente: 'Carlos Pereira Lima',
-      codigoPostalCliente: '6542-123',
-      contatoCliente: '(+351) 222444888',
-      modeloAparelho: 'Modelo 123',
-      marcaAparelho: 'Marca DEF',
-      corAparelho: 'Azul',
-      problemaRelatado: 'Aparelho sujo e com falha de performance',
-      solucaoInicial: 'Limpeza interna e atualização de software',
-      valorTotal: '€ 150,00',
-    },
-  ];
-
+  servicos: Servico[] = []; // Array para armazenar os serviços
   filtroStatus: string = 'todos';
   searchTerm: string = '';
-  servicosFiltrados: Servico[] = [...this.servicos];
+  servicosFiltrados: Servico[] = [];
 
-  constructor(private router: Router, private alertController: AlertController) {
-    this.filtrarServicos();
+  constructor(
+    private router: Router,
+    private alertController: AlertController,
+    private http: HttpClient // Injete o HttpClient
+  ) {}
+
+  // Método para carregar os serviços do backend
+  carregarServicos() {
+    // Obtenha o token do localStorage
+    const token = localStorage.getItem('token');
+
+    // Adicione o token no cabeçalho da requisição
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    // Faz a requisição para obter a lista de serviços
+    this.http.get<Servico[]>('http://localhost:3000/api/servicos', { headers }).subscribe(
+      (response) => {
+        this.servicos = response; // Armazena os serviços no array
+        this.filtrarServicos(); // Filtra os serviços após carregar
+        console.log('Serviços carregados:', this.servicos);
+      },
+      (error) => {
+        console.error('Erro ao carregar serviços:', error);
+        alert('Erro ao carregar serviços.');
+      }
+    );
+  }
+
+  // Método chamado quando a página é carregada
+  ionViewWillEnter() {
+    this.carregarServicos(); // Carrega os serviços ao entrar na página
   }
 
   // Método para filtrar serviços com base no status e no termo de pesquisa
