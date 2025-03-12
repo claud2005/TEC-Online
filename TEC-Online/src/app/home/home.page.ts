@@ -24,8 +24,8 @@ export class HomePage {
     this.http.post('http://localhost:3000/api/login', userData).subscribe(
       (response: any) => {
         console.log('Login bem-sucedido', response);
-        localStorage.setItem('token', response.token);
-        this.router.navigate(['/plano-semanal']);
+        localStorage.setItem('token', response.token); // Armazena o token no localStorage
+        this.router.navigate(['/plano-semanal']); // Redireciona para a página desejada
       },
       (error) => {
         console.error('Erro no login', error);
@@ -35,6 +35,6 @@ export class HomePage {
   }
 
   registrar() {
-    this.router.navigate(['/signup']);
+    this.router.navigate(['/signup']); // Redireciona para a página de registro
   }
 }
