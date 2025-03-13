@@ -18,19 +18,17 @@ import { NavController, IonicModule } from '@ionic/angular';
 })
 export class EditarServicosPage {
   id: string | null = null;
-  dataAbertura: string = '';
-  dataEntrega: string = '';
+  dataServico: string = ''; // Novo campo
+  horaServico: string = ''; // Novo campo
   status: string = 'aberto'; // Valor padrão "Aberto"
   nomeCliente: string = '';
   telefoneContato: string = '';
-  cpfCliente: string = '';
   modeloAparelho: string = '';
   marcaAparelho: string = '';
   corAparelho: string = '';
   problemaCliente: string = '';
   solucaoInicial: string = '';
   valorTotal: number | null = null;
-  valorEntrada: number | null = null;
   observacoes: string = '';
   autorServico: string = '';
   imagens: string[] = [];
@@ -51,19 +49,17 @@ export class EditarServicosPage {
   carregarServico() {
     this.http.get(`http://localhost:3000/api/servicos/${this.id}`).subscribe(
       (data: any) => {
-        this.dataAbertura = data.dataAbertura;
-        this.dataEntrega = data.dataEntrega;
+        this.dataServico = data.dataServico; // Preenche o campo de data
+        this.horaServico = data.horaServico; // Preenche o campo de hora
         this.status = data.status;
         this.nomeCliente = data.nomeCliente;
         this.telefoneContato = data.telefoneContato;
-        this.cpfCliente = data.cpfCliente;
         this.modeloAparelho = data.modeloAparelho;
         this.marcaAparelho = data.marcaAparelho;
         this.corAparelho = data.corAparelho;
         this.problemaCliente = data.problemaCliente;
         this.solucaoInicial = data.solucaoInicial;
         this.valorTotal = data.valorTotal;
-        this.valorEntrada = data.valorEntrada;
         this.observacoes = data.observacoes;
         this.autorServico = data.autorServico;
         this.imagens = data.imagens || [];
@@ -117,19 +113,17 @@ export class EditarServicosPage {
     }
 
     const servicoAtualizado = {
-      dataAbertura: this.dataAbertura,
-      dataEntrega: this.dataEntrega,
+      dataServico: this.dataServico, // Novo campo
+      horaServico: this.horaServico, // Novo campo
       status: this.status,
       nomeCliente: this.nomeCliente,
       telefoneContato: this.telefoneContato,
-      cpfCliente: this.cpfCliente,
       modeloAparelho: this.modeloAparelho,
       marcaAparelho: this.marcaAparelho,
       corAparelho: this.corAparelho,
       problemaCliente: this.problemaCliente,
       solucaoInicial: this.solucaoInicial,
       valorTotal: this.valorTotal ?? 0,
-      valorEntrada: this.valorEntrada ?? 0,
       observacoes: this.observacoes.trim() || 'Sem observações',
       autorServico: this.autorServico,
       imagens: this.imagens,
@@ -153,12 +147,11 @@ export class EditarServicosPage {
 
   isFormValid(): boolean {
     const camposObrigatorios = [
-      { nome: 'dataAbertura', valor: this.dataAbertura },
-      { nome: 'dataEntrega', valor: this.dataEntrega },
+      { nome: 'dataServico', valor: this.dataServico },
+      { nome: 'horaServico', valor: this.horaServico },
       { nome: 'status', valor: this.status },
       { nome: 'nomeCliente', valor: this.nomeCliente },
       { nome: 'telefoneContato', valor: this.telefoneContato },
-      { nome: 'cpfCliente', valor: this.cpfCliente },
       { nome: 'modeloAparelho', valor: this.modeloAparelho },
       { nome: 'marcaAparelho', valor: this.marcaAparelho },
       { nome: 'corAparelho', valor: this.corAparelho },
@@ -176,14 +169,13 @@ export class EditarServicosPage {
       return valido;
     });
 
-    // Verifica se os campos numéricos são válidos
-    const valoresValidos = this.valorTotal !== null && this.valorTotal >= 0 &&
-                          this.valorEntrada !== null && this.valorEntrada >= 0;
+    // Verifica se o campo numérico é válido
+    const valorValido = this.valorTotal !== null && this.valorTotal >= 0;
 
-    if (!valoresValidos) {
-      console.log('Valores inválidos:', { valorTotal: this.valorTotal, valorEntrada: this.valorEntrada });
+    if (!valorValido) {
+      console.log('Valor inválido:', { valorTotal: this.valorTotal });
     }
 
-    return camposPreenchidos && valoresValidos;
+    return camposPreenchidos && valorValido;
   }
 }
