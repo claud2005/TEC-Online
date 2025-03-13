@@ -5,10 +5,11 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { body, validationResult } = require('express-validator'); // Para validação de dados
+const { body, validationResult } = require('express-validator');
 dotenv.config();
 
 const User = require('./models/User'); // Importando o modelo User
+const Servico = require('./models/Servicos'); // Importando o modelo Servico
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -69,26 +70,24 @@ app.post('/api/signup', [
   try {
     const { fullName, username, email, password } = req.body;
 
-    // Verificar se o usuário ou o email já estão registrados
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
       return res.status(400).json({ message: 'Usuário ou e-mail já cadastrados' });
     }
 
-    // Criar um novo usuário e salvar no banco de dados
     const newUser = new User({ fullName, username, email, password });
     await newUser.save();
 
     return res.status(201).json({ message: 'Usuário registrado com sucesso!' });
   } catch (error) {
-    next(error); // Passa o erro para o middleware de tratamento de erros
+    next(error);
   }
 });
 
 // Rota para login do usuário
 app.post('/api/login', [
   body('username').notEmpty().withMessage('Nome de usuário é obrigatório'),
-  body('password').notEmpty().withMessage('Senha é obrigatória'),
+  body('password').notEmpty().withMessage('Senha é obrigatória'),  
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -98,26 +97,23 @@ app.post('/api/login', [
   try {
     const { username, password } = req.body;
 
-    // Encontrar o usuário pelo username
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(400).json({ message: 'Usuário não encontrado!' });
     }
 
-    // Comparar a senha
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Senha inválida!' });
     }
 
-    // Gerar o token JWT
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'secret', {
       expiresIn: '1h',
     });
 
     return res.status(200).json({ message: 'Login bem-sucedido!', token });
   } catch (error) {
-    next(error); // Passa o erro para o middleware de tratamento de erros
+    next(error);
   }
 });
 
@@ -130,21 +126,106 @@ app.get('/api/profile', authenticateToken, async (req, res, next) => {
       return res.status(400).json({ message: 'ID do usuário não encontrado no token' });
     }
 
-    console.log(`🔍 Buscando perfil do usuário ID: ${userId}`); // Usando o emoji corretamente
-
-    // Buscar o usuário no banco de dados
     const user = await User.findById(userId).select('fullName username profilePicture');
 
     if (!user) {
-      console.warn(`⚠️ Usuário com ID ${userId} não encontrado.`);
       return res.status(404).json({ message: 'Usuário não encontrado' });
     }
 
-    console.log(`✅ Perfil do usuário encontrado:`, user);
     return res.status(200).json(user);
   } catch (error) {
-    console.error('❌ Erro ao buscar perfil:', error);
-    next(error); // Passa o erro para o middleware de tratamento de erros
+    next(error);
+  }
+});
+
+// Rota para atualizar os dados do perfil do usuário autenticado
+app.put('/api/profile', authenticateToken, [
+  body('fullName').optional().notEmpty().withMessage('Nome completo não pode estar vazio'),
+  body('username').optional().notEmpty().withMessage('Nome de usuário não pode estar vazio'),
+  body('profilePicture').optional(),
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const userId = req.user.userId;
+    const { fullName, username, profilePicture } = req.body;
+
+    if (!fullName && !username && !profilePicture) {
+      return res.status(400).json({ message: 'Nenhum dado para atualizar' });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { fullName, username, profilePicture },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'Usuário não encontrado para atualizar' });
+    }
+
+    return res.status(200).json({ message: 'Perfil atualizado com sucesso!', user: updatedUser });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Rota para criar um novo serviço
+app.post('/api/servicos', authenticateToken, async (req, res, next) => {
+  try {
+    console.log('Dados recebidos:', req.body); // Log para verificar os dados recebidos
+
+    const {
+      dataServico, horaServico, status, autorServico, nomeCliente, telefoneContato,
+      marcaAparelho, modeloAparelho, corAparelho, problemaCliente, solucaoInicial, valorTotal, observacoes
+    } = req.body;
+
+    if (!dataServico || !horaServico || !status || !autorServico || !nomeCliente || !telefoneContato ||
+        !marcaAparelho || !modeloAparelho || !corAparelho || !problemaCliente || !solucaoInicial || valorTotal === null) {
+      return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
+    }
+
+    const novoServico = new Servico({
+      numero: new Date().getTime().toString(),
+      data: dataServico,
+      status: status,
+      cliente: nomeCliente,
+      descricao: problemaCliente,
+      responsavel: autorServico,
+      observacoes: observacoes,
+      autorServico: autorServico,
+      nomeCompletoCliente: nomeCliente,
+      codigoPostalCliente: '',
+      contatoCliente: telefoneContato,
+      modeloAparelho: modeloAparelho,
+      marcaAparelho: marcaAparelho,
+      corAparelho: corAparelho,
+      problemaRelatado: problemaCliente,
+      solucaoInicial: solucaoInicial,
+      valorTotal: valorTotal,
+    });
+
+    console.log('Serviço a ser salvo:', novoServico); // Log para verificar o serviço antes de salvar
+
+    await novoServico.save();
+
+    return res.status(201).json({ message: 'Serviço criado com sucesso!', servico: novoServico });
+  } catch (error) {
+    console.error('Erro ao criar serviço:', error); // Log detalhado do erro
+    next(error);
+  }
+});
+
+// Rota para listar todos os serviços
+app.get('/api/servicos', authenticateToken, async (req, res, next) => {
+  try {
+    const servicos = await Servico.find();
+    return res.status(200).json(servicos);
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -184,8 +265,7 @@ app.put('/api/profile', authenticateToken, async (req, res, next) => {
   }
 });
 
-
-// Iniciar  servidor
+// Iniciar o servidor
 app.listen(PORT, () => {
   console.log(`✅ Servidor rodando na porta ${PORT}`);
 });
