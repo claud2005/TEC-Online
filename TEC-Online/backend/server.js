@@ -185,7 +185,7 @@ app.put('/api/profile', authenticateToken, async (req, res, next) => {
 });
 
 
-// Iniciar o servidor
+// Iniciar  servidor
 app.listen(PORT, () => {
   console.log(`✅ Servidor rodando na porta ${PORT}`);
 });
