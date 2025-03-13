@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
   },
   profilePicture: {
     type: String,
-    default: '', // Valor padrão para foto de perfil, caso não seja fornecida
+    default: '', // Valor padrão para foto de perfil
   },
   bio: {
     type: String,
