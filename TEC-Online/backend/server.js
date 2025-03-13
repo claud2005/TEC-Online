@@ -10,7 +10,8 @@ const multer = require('multer'); // Importando o multer para manipulação de a
 const path = require('path');
 dotenv.config();
 
-const User = require('./models/User'); // Importando o modelo User
+const User = require('./models/User');
+const Servico = require('./models/Servicos'); // Importando o modelo Servico
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -202,6 +203,62 @@ app.put('/api/profile', authenticateToken, upload.single('profilePicture'), asyn
   } catch (error) {
     console.error('❌ Erro ao atualizar perfil:', error);
     next(error); // Passa o erro para o middleware de tratamento de erros
+  }
+});
+
+// Rota para criar um novo serviço
+app.post('/api/servicos', authenticateToken, async (req, res, next) => {
+  try {
+    console.log('Dados recebidos:', req.body); // Log para verificar os dados recebidos
+
+    const {
+      dataServico, horaServico, status, autorServico, nomeCliente, telefoneContato,
+      marcaAparelho, modeloAparelho, corAparelho, problemaCliente, solucaoInicial, valorTotal, observacoes
+    } = req.body;
+
+    if (!dataServico || !horaServico || !status || !autorServico || !nomeCliente || !telefoneContato ||
+        !marcaAparelho || !modeloAparelho || !corAparelho || !problemaCliente || !solucaoInicial || valorTotal === null) {
+      return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
+    }
+
+    const novoServico = new Servico({
+      numero: new Date().getTime().toString(),
+      data: dataServico,
+      status: status,
+      cliente: nomeCliente,
+      descricao: problemaCliente,
+      responsavel: autorServico,
+      observacoes: observacoes,
+      autorServico: autorServico,
+      nomeCompletoCliente: nomeCliente,
+      codigoPostalCliente: '',
+      contatoCliente: telefoneContato,
+      modeloAparelho: modeloAparelho,
+      marcaAparelho: marcaAparelho,
+      corAparelho: corAparelho,
+      problemaRelatado: problemaCliente,
+      solucaoInicial: solucaoInicial,
+      valorTotal: valorTotal,
+    });
+
+    console.log('Serviço a ser salvo:', novoServico); // Log para verificar o serviço antes de salvar
+
+    await novoServico.save();
+
+    return res.status(201).json({ message: 'Serviço criado com sucesso!', servico: novoServico });
+  } catch (error) {
+    console.error('Erro ao criar serviço:', error); // Log detalhado do erro
+    next(error);
+  }
+});
+
+// Rota para listar todos os serviços
+app.get('/api/servicos', authenticateToken, async (req, res, next) => {
+  try {
+    const servicos = await Servico.find();
+    return res.status(200).json(servicos);
+  } catch (error) {
+    next(error);
   }
 });
 
