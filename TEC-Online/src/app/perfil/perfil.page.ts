@@ -6,6 +6,10 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { HttpHeaders } from '@angular/common/http';
+
+
 
 @Component({
   standalone: true,
@@ -32,9 +36,12 @@ export class PerfilPage implements OnInit {
     this.isWeb = !this.platform.is('hybrid');
   }
 
+
+  
+
   ngOnInit() {
     this.token = localStorage.getItem('token');
-    
+  
     console.log('Token encontrado no localStorage:', this.token);
   
     if (!this.token) {
@@ -45,6 +52,19 @@ export class PerfilPage implements OnInit {
   
     this.carregarDadosPerfil();
   }
+  
+  obterPerfil(): Observable<any> {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      throw new Error('Token não encontrado');
+    }
+  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  
+    return this.http.get<any>('http://localhost:3000/api/profile', { headers });
+  }
+  
   
 
   carregarDadosPerfil() {
@@ -181,4 +201,9 @@ export class PerfilPage implements OnInit {
   editarPerfil() {
     this.router.navigate(['/editar-perfil']);
   }
+
+  voltarParaPlanoSemanal() {
+    this.router.navigate(['/plano-semanal']);
+  }  
+
 }
