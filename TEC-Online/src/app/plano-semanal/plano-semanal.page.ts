@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, IonModal } from '@ionic/angular';
@@ -16,15 +16,41 @@ import { HttpClient } from '@angular/common/http';
     IonicModule,
   ],
 })
-export class PlanoSemanalPage {
+export class PlanoSemanalPage implements OnInit {
   @ViewChild('modal') modal!: IonModal;
   serviceData = { name: '', description: '', location: '' }; // Incluindo "location" para o serviço
   selectedDate: string = ''; // Data selecionada
   servicos: any[] = []; // ✅ Criado array para armazenar serviços
+  utilizadorName: string = 'Utilizador'; // Nome do utilizador logado, alterado para utilizador
 
-  constructor(private router: Router, private http: HttpClient) {
-    this.carregarServicos(); // ✅ Carregar serviços ao iniciar a página
+  constructor(private router: Router, private http: HttpClient) {}
+
+  ngOnInit() {
+    console.log('ngOnInit chamado');
+    this.carregarServicos(); 
+    this.getUtilizadorNameFromAPI(); 
+  }  
+
+  getUtilizadorNameFromAPI() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('❌ Token não encontrado');
+      return;
+    }
+  
+    this.http.get<{ nome: string }>('http://localhost:3000/api/utilizador', {
+      headers: { Authorization: `Bearer ${token}` },
+    }).subscribe(
+      (response) => {
+        console.log('✅ Nome do utilizador recebido:', response.nome); // Verificar o valor da resposta
+        this.utilizadorName = response.nome; // Atualiza o nome do utilizador
+      },
+      (error) => {
+        console.error('❌ Erro ao buscar nome do utilizador:', error);
+      }
+    );
   }
+  
 
   carregarServicos() {
     this.http.get<any[]>('http://localhost:3000/api/servicos').subscribe(
@@ -78,13 +104,13 @@ export class PlanoSemanalPage {
     this.http.post('http://localhost:3000/api/servicos', serviceWithDate) // Criando o serviço
       .subscribe(
         response => {
-          console.log('Servico criado com sucesso:', response);
+          console.log('Serviço criado com sucesso:', response);
           this.serviceData = { name: '', description: '', location: '' }; // Resetando os campos após criar
           this.carregarServicos(); // Atualizando a lista de serviços
           this.closeModal(); // Fechando o modal
         },
         error => {
-          console.error('Erro ao criar servico:', error);
+          console.error('Erro ao criar serviço:', error);
         }
       );
   }

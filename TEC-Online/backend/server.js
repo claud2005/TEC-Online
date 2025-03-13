@@ -262,6 +262,23 @@ app.get('/api/servicos', authenticateToken, async (req, res, next) => {
   }
 });
 
+
+app.get('/api/utilizador', authenticateToken, async (req, res) => {
+  try {
+    const usuarioId = req.user.id; // O ID do utilizador autenticado vem do token JWT
+    const usuario = await Usuario.findById(usuarioId).select('nome'); // Busca apenas o campo 'nome'
+    
+    if (!usuario) {
+      return res.status(404).json({ message: 'Utilizador não encontrado' });
+    }
+
+    res.json({ nome: usuario.nome }); // Retorna o nome do utilizador
+  } catch (error) {
+    console.error('Erro ao buscar utilizador:', error);
+    res.status(500).json({ message: 'Erro interno do servidor' });
+  }
+});
+
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`✅ Servidor rodando na porta ${PORT}`);
