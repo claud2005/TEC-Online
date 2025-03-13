@@ -9,8 +9,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
 
-
-
 @Component({
   standalone: true,
   selector: 'app-perfil',
@@ -36,55 +34,34 @@ export class PerfilPage implements OnInit {
     this.isWeb = !this.platform.is('hybrid');
   }
 
-
-  
-
   ngOnInit() {
     this.token = localStorage.getItem('token');
-  
     console.log('Token encontrado no localStorage:', this.token);
-  
+
     if (!this.token) {
       console.warn('Token não encontrado! Redirecionando para login.');
       this.router.navigate(['/home']);
       return;
     }
-  
+
     this.carregarDadosPerfil();
   }
-  
-  obterPerfil(): Observable<any> {
-    const token = localStorage.getItem('token');
-    
-    if (!token) {
-      throw new Error('Token não encontrado');
-    }
-  
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  
-    return this.http.get<any>('http://localhost:3000/api/profile', { headers });
-  }
-  
-  
 
   carregarDadosPerfil() {
     this.isLoading = true;
     this.erroCarregamento = null;
     console.log('🔄 Iniciando carregamento do perfil...');
-    
-    // Verifique se o token está presente antes de fazer a requisição
     console.log('📡 Enviando requisição com token:', this.token);
-    
+
     if (!this.token) {
       console.warn('Token ausente! Redirecionando para login...');
       localStorage.removeItem('token');
       this.router.navigate(['/home']);
       return;
     }
-    
-  
+
     this.http.get<any>('http://localhost:3000/api/profile', {
-      headers: { 
+      headers: {
         'Authorization': `Bearer ${this.token}`,
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -104,7 +81,7 @@ export class PerfilPage implements OnInit {
         console.error('❌ Erro ao carregar perfil:', error);
         console.error('🛑 Status:', error.status);
         console.error('📢 Mensagem:', error.message);
-        
+
         // Tratamento para erro de autenticação
         if (error.status === 401 || error.status === 403) {
           console.warn('⚠ Token inválido ou expirado! Redirecionando...');
@@ -113,8 +90,8 @@ export class PerfilPage implements OnInit {
       }
     );
   }
-  
 
+  // Método para alterar foto
   async alterarFoto() {
     if (this.isWeb) {
       document.getElementById('fileInput')?.click();
@@ -138,6 +115,7 @@ export class PerfilPage implements OnInit {
     }
   }
 
+  // Método para lidar com o arquivo selecionado na versão web
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -150,34 +128,36 @@ export class PerfilPage implements OnInit {
     }
   }
 
+  // Método para salvar o perfil, incluindo a foto de perfil
   salvarPerfil() {
     this.isLoading = true;
-    const perfilAtualizado = {
-      fullName: this.nomeCompleto,
-      username: this.nomeUtilizador,
-      profilePicture: this.fotoPerfil,
-    };
 
-    this.http.put('http://localhost:3000/api/profile', perfilAtualizado, {
-      headers: { 
+    // Criar um FormData para enviar a imagem e os dados do perfil
+    const formData = new FormData();
+    formData.append('fullName', this.nomeCompleto);
+    formData.append('username', this.nomeUtilizador);
+
+    // Se a foto de perfil foi alterada, adicionar o arquivo da imagem ao FormData
+    if (this.fotoPerfil && typeof this.fotoPerfil !== 'string') {
+      const fotoBlob = this.base64ToBlob(this.fotoPerfil);
+      formData.append('profilePicture', fotoBlob, 'profilePicture.jpg');
+    }
+
+    // Enviar os dados para o servidor via PUT (ou POST, dependendo da sua API)
+    this.http.put('http://localhost:3000/api/profile', formData, {
+      headers: {
         'Authorization': `Bearer ${this.token}`,
-        'Content-Type': 'application/json'
       }
     }).subscribe(
       (response: any) => {
         this.isLoading = false;
         console.log('Perfil atualizado com sucesso:', response);
-        // Usar alertController do Ionic em vez de alert do browser
         alert('Perfil atualizado com sucesso!');
       },
       (error) => {
         this.isLoading = false;
         console.error('Erro ao atualizar perfil:', error);
-        console.error('Status:', error.status);
-        console.error('Mensagem:', error.message);
         alert('Erro ao atualizar perfil. Tente novamente.');
-
-        // Se for erro de autenticação
         if (error.status === 401 || error.status === 403) {
           this.logout();
         }
@@ -185,10 +165,29 @@ export class PerfilPage implements OnInit {
     );
   }
 
+  // Função auxiliar para converter base64 em Blob
+  base64ToBlob(base64: string): Blob {
+    const byteCharacters = atob(base64.split(',')[1]);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+      const slice = byteCharacters.slice(offset, offset + 512);
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      byteArrays.push(new Uint8Array(byteNumbers));
+    }
+
+    return new Blob(byteArrays, { type: 'image/jpeg' });
+  }
+
+  // Função para tentar novamente o carregamento dos dados do perfil
   tentarNovamente() {
     this.carregarDadosPerfil();
   }
 
+  // Função para logout
   logout() {
     localStorage.removeItem('token');
     this.nomeCompleto = '';
@@ -196,14 +195,14 @@ export class PerfilPage implements OnInit {
     this.fotoPerfil = 'assets/img/default-profile.png';
     this.router.navigate(['/home']);
   }
-  
 
+  // Navegar para editar perfil
   editarPerfil() {
     this.router.navigate(['/editar-perfil']);
   }
 
+  // Navegar para o plano semanal
   voltarParaPlanoSemanal() {
     this.router.navigate(['/plano-semanal']);
-  }  
-
+  }
 }

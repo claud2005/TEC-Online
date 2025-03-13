@@ -6,6 +6,8 @@ const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator'); // Para validação de dados
+const multer = require('multer'); // Importando o multer para manipulação de arquivos
+const path = require('path');
 dotenv.config();
 
 const User = require('./models/User'); // Importando o modelo User
@@ -53,6 +55,19 @@ const authenticateToken = (req, res, next) => {
     next();
   });
 };
+
+// Configuração do multer para armazenamento de imagem
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Diretório para armazenar as imagens
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, Date.now() + ext); // Definir um nome único para o arquivo
+  },
+});
+
+const upload = multer({ storage });
 
 // Rota para registrar um novo usuário
 app.post('/api/signup', [
@@ -149,7 +164,7 @@ app.get('/api/profile', authenticateToken, async (req, res, next) => {
 });
 
 // Rota para atualizar o perfil do usuário autenticado
-app.put('/api/profile', authenticateToken, async (req, res, next) => {
+app.put('/api/profile', authenticateToken, upload.single('profilePicture'), async (req, res, next) => {
   try {
     const userId = req.user?.userId;
 
@@ -165,10 +180,16 @@ app.put('/api/profile', authenticateToken, async (req, res, next) => {
       return res.status(400).json({ message: 'Nome completo e nome de usuário são obrigatórios' });
     }
 
+    // Preparar o caminho da imagem
+    let profilePicture = '';
+    if (req.file) {
+      profilePicture = `uploads/${req.file.filename}`; // Caminho do arquivo no servidor
+    }
+
     // Atualizando o perfil no banco de dados
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { fullName, username },
+      { fullName, username, profilePicture },
       { new: true }  // Retorna o usuário atualizado
     ).select('fullName username profilePicture');
 
@@ -184,8 +205,7 @@ app.put('/api/profile', authenticateToken, async (req, res, next) => {
   }
 });
 
-
-// Iniciar  servidor
+// Iniciar servidor
 app.listen(PORT, () => {
   console.log(`✅ Servidor rodando na porta ${PORT}`);
 });
