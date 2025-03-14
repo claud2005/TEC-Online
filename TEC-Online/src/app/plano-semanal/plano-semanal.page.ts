@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, IonModal } from '@ionic/angular';
@@ -23,34 +23,16 @@ export class PlanoSemanalPage implements OnInit {
   servicos: any[] = []; // ✅ Criado array para armazenar serviços
   utilizadorName: string = 'Utilizador'; // Nome do utilizador logado, alterado para utilizador
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef // ✅ Adicionado ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     console.log('ngOnInit chamado');
     this.carregarServicos(); 
-    this.getUtilizadorNameFromAPI(); 
   }  
-
-  getUtilizadorNameFromAPI() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('❌ Token não encontrado');
-      return;
-    }
-  
-    this.http.get<{ nome: string }>('http://localhost:3000/api/utilizador', {
-      headers: { Authorization: `Bearer ${token}` },
-    }).subscribe(
-      (response) => {
-        console.log('✅ Nome do utilizador recebido:', response.nome); // Verificar o valor da resposta
-        this.utilizadorName = response.nome; // Atualiza o nome do utilizador
-      },
-      (error) => {
-        console.error('❌ Erro ao buscar nome do utilizador:', error);
-      }
-    );
-  }
-  
 
   carregarServicos() {
     this.http.get<any[]>('http://localhost:3000/api/servicos').subscribe(
