@@ -193,6 +193,7 @@ export class PerfilPage implements OnInit {
     this.nomeCompleto = '';
     this.nomeUtilizador = '';
     this.fotoPerfil = 'assets/img/default-profile.png';
+    this.cdr.detectChanges(); // 🔄 Força a UI a atualizar
     this.router.navigate(['/home']);
   }
 

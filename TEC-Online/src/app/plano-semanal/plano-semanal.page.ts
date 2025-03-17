@@ -18,21 +18,42 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PlanoSemanalPage implements OnInit {
   @ViewChild('modal') modal!: IonModal;
-  serviceData = { name: '', description: '', location: '' }; // Incluindo "location" para o serviço
-  selectedDate: string = ''; // Data selecionada
-  servicos: any[] = []; // ✅ Criado array para armazenar serviços
-  utilizadorName: string = 'Utilizador'; // Nome do utilizador logado, alterado para utilizador
+  serviceData = { name: '', description: '', location: '' };
+  selectedDate: string = '';
+  servicos: any[] = [];
+  utilizadorName: string = 'Utilizador';
 
   constructor(
     private router: Router,
     private http: HttpClient,
-    private cdr: ChangeDetectorRef // ✅ Adicionado ChangeDetectorRef
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     console.log('ngOnInit chamado');
-    this.carregarServicos(); 
-  }  
+    
+    // Atualizar o nome do utilizador sempre que a página carregar
+    this.atualizarNomeUtilizador();
+    
+    this.carregarServicos();
+
+    // 🔄 Ouvindo mudanças no localStorage para atualizar nome automaticamente
+    window.addEventListener('storage', () => {
+      this.atualizarNomeUtilizador();
+      this.cdr.detectChanges();
+    });
+  }
+
+  // Função para atualizar o nome do utilizador
+  atualizarNomeUtilizador() {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      this.utilizadorName = storedUsername;
+      this.cdr.detectChanges(); // 🔄 Garante que a UI atualiza automaticamente
+    } else {
+      this.utilizadorName = 'Utilizador';
+    }
+  }
 
   carregarServicos() {
     this.http.get<any[]>('http://localhost:3000/api/servicos').subscribe(
@@ -45,51 +66,45 @@ export class PlanoSemanalPage implements OnInit {
     );
   }
 
-  // Método para abrir o modal
   openModal(event: any) {
     const selectedDate = event.detail.value;
-    this.selectedDate = selectedDate; // Armazenando a data selecionada
+    this.selectedDate = selectedDate;
     console.log('Data selecionada:', selectedDate);
-    this.modal.present(); // Apresentando o modal
+    this.modal.present();
   }
 
-  // Método para fechar o modal
   async closeModal() {
     console.log('Fechando o modal...');
-    await this.modal.dismiss(); // Fechando o modal
+    await this.modal.dismiss();
   }
 
-  // Método para navegar para outra página
   async navigateToOtherPage() {
     console.log('Fechando o modal e navegando para /criar-servicos');
-    await this.modal.dismiss(); // Fechando o modal
-    this.router.navigate(['/criar-servicos']); // Navegando para página de criar serviço
+    await this.modal.dismiss();
+    this.router.navigate(['/criar-servicos']);
   }
 
-  // Método para navegar para a página de perfil
   async navigateToPerfil() {
     console.log('Fechando o modal e navegando para /perfil');
-    await this.modal.dismiss(); // Fechando o modal
-    this.router.navigate(['/perfil']); // Navegando para perfil
+    await this.modal.dismiss();
+    this.router.navigate(['/perfil']);
   }
 
-  // Método para navegar para a página de serviços
   async navigateToServicos() {
     console.log('Fechando o modal e navegando para /servicos');
-    await this.modal.dismiss(); // Fechando o modal
-    this.router.navigate(['/servicos']); // Navegando para serviços
+    await this.modal.dismiss();
+    this.router.navigate(['/servicos']);
   }
 
-  // Método para criar um serviço
   createService() {
-    const serviceWithDate = { ...this.serviceData, date: this.selectedDate }; // Incluindo a data no serviço
-    this.http.post('http://localhost:3000/api/servicos', serviceWithDate) // Criando o serviço
+    const serviceWithDate = { ...this.serviceData, date: this.selectedDate };
+    this.http.post('http://localhost:3000/api/servicos', serviceWithDate)
       .subscribe(
         response => {
           console.log('Serviço criado com sucesso:', response);
-          this.serviceData = { name: '', description: '', location: '' }; // Resetando os campos após criar
-          this.carregarServicos(); // Atualizando a lista de serviços
-          this.closeModal(); // Fechando o modal
+          this.serviceData = { name: '', description: '', location: '' };
+          this.carregarServicos();
+          this.closeModal();
         },
         error => {
           console.error('Erro ao criar serviço:', error);
