@@ -1,24 +1,24 @@
 :host {
-  --ion-background-color: #f0f7ff;
+  --ion-background-color: linear-gradient(135deg, #f0f7ff, #e3f2fd);
   --ion-text-color: #048;
 }
 
 .header-container {
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 15px;
   background: #07f;
   color: #fff;
 }
 
 .logo {
-  width: 50px;
+  width: 60px;
   height: auto;
-  margin-right: 10px;
+  margin-right: 15px;
 }
 
 .user-title {
-  font-size: 1.3rem;
+  font-size: 1.8rem; /* Aumentado */
   font-weight: bold;
   color: #fff;
 }
@@ -31,11 +31,11 @@ ion-toolbar {
 }
 
 .top-bar {
-  margin: 15px 0;
+  margin: 20px 0;
 }
 
 ion-label {
-  font-size: 1rem;
+  font-size: 1.3rem; /* Aumentado */
   font-weight: bold;
   color: #048;
 }
@@ -47,8 +47,9 @@ ion-select, ion-searchbar {
   --color: #048;
   --placeholder-color: #6c757d;
   --placeholder-opacity: 0.8;
-  padding: 8px;
+  padding: 12px;
   width: 100%;
+  font-size: 1.3rem; /* Aumentado */
 }
 
 ion-searchbar.searchbar-has-focus {
@@ -58,34 +59,48 @@ ion-searchbar.searchbar-has-focus {
 
 ion-searchbar::part(search-icon) {
   color: #07f;
-  font-size: 1.5rem;
+  font-size: 1.8rem; /* Aumentado */
 }
 
 ion-searchbar::part(searchbar-input) {
-  font-size: 1rem;
+  font-size: 1.3rem; /* Aumentado */
   font-weight: 500;
 }
 
+.task-icon {
+  font-size: 1.8rem; /* Aumentado */
+  color: #048;
+  margin-right: 10px;
+}
+
 h2 {
-  font-size: 1.5rem;
+  font-size: 2rem; /* Aumentado */
   font-weight: bold;
   color: #048;
-  margin-top: 20px;
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
 }
 
 p {
-  font-size: 1rem;
+  font-size: 1.4rem; /* Aumentado */
   color: #6c757d;
+  margin-top: 10px;
 }
 
 ion-datetime {
   width: 100%;
   background: #e3f2fd;
   border-radius: 10px;
-  padding: 10px;
-  font-size: 1rem;
+  padding: 15px;
+  font-size: 1.3rem; /* Aumentado */
   border: 2px solid #07f;
-  margin-top: 15px;
+  margin-top: 20px;
+  transition: box-shadow 0.3s ease;
+}
+
+ion-datetime:hover {
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
 }
 
 ion-footer {
@@ -95,22 +110,28 @@ ion-footer {
 ion-button {
   --background: transparent;
   --color: #048;
-  font-size: 1rem;
+  font-size: 1.4rem; /* Aumentado */
   font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+ion-button:hover {
+  transform: scale(1.05);
 }
 
 ion-button ion-icon {
-  font-size: 1.2rem;
-  margin-right: 5px;
+  font-size: 1.8rem; /* Aumentado */
+  margin-right: 8px;
 }
 
+/* Estilos do Modal */
 ion-modal {
   --background: #f0f7ff;
   --ion-background-color: #f0f7ff;
   --ion-text-color: #048;
-  --width: 60%;
-  --height: 40%;
-  --border-radius: 10px;
+  --width: 80%; /* Aumentei a largura */
+  --height: 60%; /* Aumentei a altura */
+  --border-radius: 15px;
 }
 
 ion-modal ion-header, ion-modal ion-footer {
@@ -118,21 +139,75 @@ ion-modal ion-header, ion-modal ion-footer {
   --color: #fff;
 }
 
+ion-modal ion-toolbar {
+  --background: #07f;
+  --color: #fff;
+  padding: 10px;
+}
+
+ion-modal ion-title {
+  font-size: 1.8rem; /* Aumentei o tamanho do título */
+  font-weight: bold;
+}
+
 ion-modal ion-button {
   --color: #fff;
+  font-size: 1.4rem; /* Aumentei o tamanho da fonte dos botões */
 }
 
 ion-modal ion-button[slot="start"] ion-icon {
-  font-size: 1.5rem;
+  font-size: 2rem; /* Aumentei o tamanho do ícone de voltar */
 }
 
-ion-fab-button {
+ion-modal ion-card {
+  margin: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: #fff;
+}
+
+ion-modal ion-card-header {
+  padding: 20px;
+  background: #07f;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+ion-modal ion-card-title {
+  font-size: 1.8rem; /* Aumentei o tamanho do título do card */
+  font-weight: bold;
+  color: #fff;
+}
+
+ion-modal ion-card-content {
+  padding: 20px;
+  font-size: 1.4rem; /* Aumentei o tamanho da fonte do conteúdo */
+  color: #048;
+}
+
+ion-modal ion-grid {
+  padding: 0;
+}
+
+ion-modal ion-row {
+  margin-bottom: 15px;
+}
+
+ion-modal ion-col {
+  font-size: 1.4rem; /* Aumentei o tamanho da fonte das colunas */
+  color: #048;
+}
+
+ion-modal ion-fab-button {
   --background: #38f;
   --background-activated: #3171e0;
   --color: #fff;
+  width: 70px; /* Aumentei o tamanho do botão flutuante */
+  height: 70px;
+  font-size: 2rem; /* Aumentei o tamanho do ícone do botão flutuante */
 }
 
-ion-fab {
-  margin-bottom: 20px;
-  margin-right: 20px;
+ion-modal ion-fab {
+  margin-bottom: 30px;
+  margin-right: 30px;
 }

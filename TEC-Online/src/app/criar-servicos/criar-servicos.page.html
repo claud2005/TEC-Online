@@ -1,19 +1,20 @@
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="modern-background">
   <ion-header>
     <ion-buttons slot="start">
-      <ion-button (click)="goBack()">
+      <ion-button (click)="goBack()" class="back-button">
         <ion-icon slot="start" name="arrow-back"></ion-icon> Voltar
       </ion-button>
     </ion-buttons>
   </ion-header>
 
-  <h1>Criar Serviço</h1>
-  <p>Preencha os campos abaixo para criar um novo serviço.</p>
+  <div class="content-container">
+    <h1>Criar Serviço</h1>
+    <p>Preencha os campos abaixo para criar um novo serviço.</p>
 
-  <form class="grid-container">
+    <form class="grid-container">
     <div>
       <ion-label position="stacked">Data do Serviço *</ion-label>
-      <ion-input name="dataServico" type="text" placeholder="DD/MM/AAAA" [(ngModel)]="dataServico" required></ion-input>
+      <ion-input name="dataServico" type="text" placeholder="AAAA-MM-DD" [(ngModel)]="dataServico" required></ion-input>
     </div>
 
     <div>
@@ -81,8 +82,9 @@
   </form>
 
   <div class="button-container">
-    <ion-button expand="block" (click)="salvarServico()">
+    <ion-button expand="block" (click)="salvarServico()" class="save-button">
       Salvar Ordem de Serviço
     </ion-button>    
   </div>
+</div>
 </ion-content>

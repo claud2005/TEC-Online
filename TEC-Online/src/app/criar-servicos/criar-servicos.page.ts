@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http'; // Importe HttpHeaders aqui
 import { NavController, IonicModule } from '@ionic/angular';
+import { Router } from '@angular/router'; // Importe o Router para navegação
 
 @Component({
   selector: 'app-criar-servicos',
@@ -31,7 +32,7 @@ export class CriarServicosPage {
   valorTotal: number | null = null;
   observacoes: string = '';
 
-  constructor(private http: HttpClient, private navController: NavController) {}
+  constructor(private http: HttpClient, private navController: NavController, private router: Router) {}
 
   // Função para salvar o serviço
   salvarServico() {
@@ -71,7 +72,8 @@ export class CriarServicosPage {
       (response) => {
         console.log('Serviço criado:', response);
         alert('Serviço criado com sucesso!');
-        this.navController.back(); // Volta para a tela anterior após sucesso
+        // Navega para a página de serviços após o sucesso
+        this.router.navigate(['/servicos']);
       },
       (error) => {
         console.error('Erro ao criar serviço:', error);

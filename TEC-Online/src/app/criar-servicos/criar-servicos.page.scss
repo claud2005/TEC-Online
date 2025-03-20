@@ -1,144 +1,134 @@
 /* Estilo global */
-ion-content {
-    --background: #f0f0f0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 24px;
-    height: 100vh;
-    width: 100vw;
-}
-
-/* Título */
-h1 {
-    font-size: 35px;
-    font-weight: bold;
-    color: #000;
-    text-align: center;
-    text-transform: uppercase;
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-/* Descrição */
-p {
-    font-size: 18px;
-    color: #000;
-    text-align: center;
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-/* Grid responsivo que ocupa toda a tela */
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    width: 100vw;
-    align-items: start;
-}
-
-/* Ajusta para telas pequenas */
-@media (max-width: 768px) {
-    .grid-container {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Labels */
-ion-label {
-    font-weight: bold;
-    font-size: 18px;
-    color: #000;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 10px;
-    text-align: left;
-    width: 100%;
-}
-
-/* Inputs e Selects */
-ion-input,
-ion-textarea,
-ion-select,
-ion-datetime {
-    border: 2px solid #cccccc;
-    border-radius: 15px;
-    padding: 4px 8px;
-    font-size: 16px;
-    color: #000;
-    background: #fff;
-    width: 100%;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-    min-height: 40px;
-    margin-top: 10px;
-}
-
-/* Ajustando a posição do texto no ion-textarea */
-ion-textarea {
-    padding-top: 10px;
-}
-
-/* Efeito de foco */
-ion-input:focus,
-ion-textarea:focus,
-ion-select:focus,
-ion-datetime:focus {
-    border-color: #007bff;
-}
-
-/* Campos que ocupam a linha toda */
-.full-width {
-    grid-column: span 2;
-    width: 100%;
-}
-
-@media (max-width: 768px) {
-    .full-width {
-        grid-column: span 1;
-    }
-}
-
-/* Botão */
-ion-button {
-    --background: #ffffff;
-    --border-radius: 8px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #000;
-    padding: 14px;
-    width: 100%;
-    border: none;
-}
-
-ion-button:hover {
-    --background: #f0f0f0;
-}
-
-/* Centralizar botão */
-.button-container {
+ion-content.modern-background {
+    --background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradiente moderno */
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    align-items: center; /* Centraliza verticalmente */
+    height: 100vh;
+    padding: 20px;
+  }
+  
+  /* Container do conteúdo */
+  .content-container {
+    background: transparent; /* Sem fundo */
+    border-radius: 20px;
+    padding: 20px;
+    width: 90%; /* Ajuste para telas menores */
+    max-width: 800px;
+    margin: auto; /* Centraliza horizontalmente */
+  }
+  
+  /* Título */
+  h1 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #fff; /* Texto branco para contrastar com o gradiente */
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+  }
+  
+  /* Descrição */
+  p {
+    font-size: 18px;
+    color: #fff; /* Texto branco para contrastar com o gradiente */
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  /* Grid responsivo */
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
     width: 100%;
-}
-
-/* Alinhamento do botão de voltar à esquerda */
-ion-header {
-    --background: #f0f0f0;
-    padding-left: 0;
-}
-
-ion-toolbar {
-    --background: #f0f0f0;
-}
-
-ion-buttons[slot="start"] {
-    margin-left: 0 !important;
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(10%);
-}
+  }
+  
+  @media (max-width: 768px) {
+    .grid-container {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* Labels */
+  ion-label {
+    font-weight: bold;
+    font-size: 16px;
+    color: #fff; /* Texto branco para contrastar com o gradiente */
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+  /* Inputs e Selects */
+  ion-input,
+  ion-textarea,
+  ion-select {
+    background: rgba(255, 255, 255, 0.9); /* Fundo branco com transparência */
+    border: 2px solid #ddd; /* Borda suave */
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 16px;
+    color: #333;
+    width: 100%;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  }
+  
+  /* Placeholder dos inputs */
+  ion-input::placeholder,
+  ion-textarea::placeholder {
+    color: #bdc3c7; /* Cor cinza para o placeholder */
+  }
+  
+  /* Efeito de foco */
+  ion-input:focus,
+  ion-textarea:focus,
+  ion-select:focus {
+    border-color: #6a11cb; /* Borda colorida ao focar */
+    box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3); /* Sombra ao focar */
+  }
+  
+  /* Campos que ocupam a linha toda */
+  .full-width {
+    grid-column: span 2;
+  }
+  
+  @media (max-width: 768px) {
+    .full-width {
+      grid-column: span 1;
+    }
+  }
+  
+  /* Botão de voltar */
+  .back-button {
+    --background: transparent;
+    --color: #ffdd57; /* Cor amarela para contraste */
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  /* Botão de salvar */
+  .save-button {
+    --background: #6a11cb; /* Cor roxa */
+    --border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff; /* Texto branco */
+    padding: 16px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 10px rgba(106, 17, 203, 0.3); /* Sombra suave */
+  }
+  
+  .save-button:hover {
+    --background: #2575fc; /* Cor azul ao passar o mouse */
+  }
+  
+  /* Centralizar botão */
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    width: 100%;
+  }

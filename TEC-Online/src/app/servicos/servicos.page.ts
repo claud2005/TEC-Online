@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http'; // Importe HttpClient e HttpHeaders
-import jsPDF from 'jspdf'; // Importação do jsPDF
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import jsPDF from 'jspdf';
 
 interface Servico {
   numero: string;
@@ -15,18 +15,18 @@ interface Servico {
   responsavel: string;
   observacoes: string;
   expandido: boolean;
-  autorServico: string; // Autor do Serviço
-  nomeCompletoCliente: string; // Nome Completo do Cliente
-  codigoPostalCliente: string; // Código Postal do Cliente
-  contatoCliente: string; // Contacto do Cliente
-  modeloAparelho: string; // Modelo do Aparelho
-  marcaAparelho: string; // Marca do Aparelho
-  corAparelho: string; // Cor do Aparelho
-  problemaRelatado: string; // Problema Relatado pelo Cliente
-  solucaoInicial: string; // Solução Inicial
-  valorTotal: string; // Valor Total
-  dataConclusao?: string; // Data de Conclusão
-  custoEstimado?: string; // Custo Estimado
+  autorServico: string;
+  nomeCompletoCliente: string;
+  codigoPostalCliente: string;
+  contatoCliente: string;
+  modeloAparelho: string;
+  marcaAparelho: string;
+  corAparelho: string;
+  problemaRelatado: string;
+  solucaoInicial: string;
+  valorTotal: string;
+  dataConclusao?: string;
+  custoEstimado?: string;
 }
 
 @Component({
@@ -36,8 +36,8 @@ interface Servico {
   templateUrl: './servicos.page.html',
   styleUrls: ['./servicos.page.scss'],
 })
-export class ServicosPage {
-  servicos: Servico[] = []; // Array para armazenar os serviços
+export class ServicosPage implements OnInit {
+  servicos: Servico[] = [];
   filtroStatus: string = 'todos';
   searchTerm: string = '';
   servicosFiltrados: Servico[] = [];
@@ -45,22 +45,50 @@ export class ServicosPage {
   constructor(
     private router: Router,
     private alertController: AlertController,
-    private http: HttpClient // Injete o HttpClient
+    private http: HttpClient
   ) {}
 
-  // Método para carregar os serviços do backend
-  carregarServicos() {
-    // Obtenha o token do localStorage
-    const token = localStorage.getItem('token');
+  ngOnInit() {
+    this.carregarServicos();
+  }
 
-    // Adicione o token no cabeçalho da requisição
+  formatarData(data: string): string {
+    const date = new Date(data);
+    if (isNaN(date.getTime())) {
+      return 'Data inválida';
+    }
+    if (data.includes('T')) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return `${year}-${month}-${day} ${hours}:${minutes}`;
+    } else {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day} 00:00`;
+    }
+  }
+
+  formatarIdServico(id: string): string {
+    return id.padStart(3, '0');
+  }
+
+  carregarServicos() {
+    const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    // Faz a requisição para obter a lista de serviços
     this.http.get<Servico[]>('http://localhost:3000/api/servicos', { headers }).subscribe(
       (response) => {
-        this.servicos = response; // Armazena os serviços no array
-        this.filtrarServicos(); // Filtra os serviços após carregar
+        console.log('Serviços recebidos da API:', response);
+        this.servicos = response.map((servico, index) => ({
+          ...servico,
+          numero: this.formatarIdServico((index + 1).toString()),
+          data: this.formatarData(servico.data)
+        }));
+        this.filtrarServicos();
         console.log('Serviços carregados:', this.servicos);
       },
       (error) => {
@@ -70,12 +98,31 @@ export class ServicosPage {
     );
   }
 
-  // Método chamado quando a página é carregada
-  ionViewWillEnter() {
-    this.carregarServicos(); // Carrega os serviços ao entrar na página
+  gerarPDF(servico: Servico) {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text('Detalhes do Serviço', 10, 10);
+    doc.setFontSize(12);
+
+    doc.text(`Número: ${servico.numero}`, 10, 20);
+    doc.text(`Cliente: ${servico.nomeCompletoCliente}`, 10, 30);
+    doc.text(`Contacto: ${servico.contatoCliente}`, 10, 50);
+    doc.text(`Modelo do Aparelho: ${servico.modeloAparelho}`, 10, 60);
+    doc.text(`Marca do Aparelho: ${servico.marcaAparelho}`, 10, 70);
+    doc.text(`Cor do Aparelho: ${servico.corAparelho}`, 10, 80);
+    doc.text(`Problema Relatado: ${servico.problemaRelatado}`, 10, 90);
+    doc.text(`Solução Inicial: ${servico.solucaoInicial}`, 10, 100);
+    doc.text(`Valor Total: R$ ${parseFloat(servico.valorTotal).toFixed(2)}`, 10, 110);
+    doc.text(`Descrição: ${servico.descricao}`, 10, 120);
+    doc.text(`Responsável: ${servico.responsavel}`, 10, 130);
+    doc.text(`Observações: ${servico.observacoes}`, 10, 140);
+
+    if (servico.dataConclusao) doc.text(`Data de Conclusão: ${servico.dataConclusao}`, 10, 150);
+    if (servico.custoEstimado) doc.text(`Custo Estimado: R$ ${parseFloat(servico.custoEstimado).toFixed(2)}`, 10, 160);
+
+    doc.save(`Servico_${servico.numero}.pdf`);
   }
 
-  // Método para filtrar serviços com base no status e no termo de pesquisa
   filtrarServicos() {
     this.servicosFiltrados = this.servicos.filter(servico => {
       const matchStatus = this.filtroStatus === 'todos' || servico.status === this.filtroStatus;
@@ -85,71 +132,16 @@ export class ServicosPage {
     });
   }
 
-  // Alterna a visualização dos detalhes do serviço
-  toggleDetalhes(servico: Servico) {
-    servico.expandido = !servico.expandido;
-  }
-
-  // Navega para a página do plano semanal
   voltarParaPlanoSemanal() {
     this.router.navigate(['/plano-semanal']);
   }
 
-  // Gera um PDF com todos os detalhes do serviço
-  gerarPDF(servico: Servico) {
-    const doc = new jsPDF();
-    doc.setFontSize(16);
-    doc.text('Detalhes do Serviço', 10, 10);
-    doc.setFontSize(12);
-
-    doc.text(`Número: ${servico.numero}`, 10, 20);
-    doc.text(`Cliente: ${servico.nomeCompletoCliente}`, 10, 30);
-    doc.text(`Código Postal: ${servico.codigoPostalCliente}`, 10, 40);
-    doc.text(`Contacto: ${servico.contatoCliente}`, 10, 50);
-    doc.text(`Modelo do Aparelho: ${servico.modeloAparelho}`, 10, 60);
-    doc.text(`Marca do Aparelho: ${servico.marcaAparelho}`, 10, 70);
-    doc.text(`Cor do Aparelho: ${servico.corAparelho}`, 10, 80);
-    doc.text(`Problema Relatado: ${servico.problemaRelatado}`, 10, 90);
-    doc.text(`Solução Inicial: ${servico.solucaoInicial}`, 10, 100);
-    doc.text(`Valor Total: ${servico.valorTotal}`, 10, 110);
-    doc.text(`Descrição: ${servico.descricao}`, 10, 120);
-    doc.text(`Responsável: ${servico.responsavel}`, 10, 130);
-    doc.text(`Observações: ${servico.observacoes}`, 10, 140);
-
-    if (servico.dataConclusao) doc.text(`Data de Conclusão: ${servico.dataConclusao}`, 10, 150);
-    if (servico.custoEstimado) doc.text(`Custo Estimado: ${servico.custoEstimado}`, 10, 160);
-
-    doc.save(`Servico_${servico.numero}.pdf`);
+  toggleDetalhes(servico: Servico) {
+    servico.expandido = !servico.expandido;
   }
 
-  // Exibe um alerta para confirmar a exclusão de um serviço
-  async confirmarExclusao(servico: Servico) {
-    const alert = await this.alertController.create({
-      header: 'Confirmar Exclusão',
-      message: `Tem a certeza de que deseja apagar o serviço ${servico.numero}?`,
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-        },
-        {
-          text: 'Confirmar',
-          handler: () => this.apagarServico(servico),
-        },
-      ],
-    });
-
-    await alert.present();
-  }
-
-  // Apaga o serviço da lista e atualiza os serviços filtrados
-  apagarServico(servico: Servico) {
-    this.servicos = this.servicos.filter(s => s !== servico);
-    this.filtrarServicos();
-  }
-
-  // Navega para a página de edição de serviço
-  editarServico(servico: Servico) {
-    this.router.navigate(['/editar-servicos', servico.numero]); // Passando o número como parâmetro
+  editarServico(servico: any) {
+    console.log("ID do serviço sendo passado:", servico.numero);
+    this.router.navigate(['/editar-servicos', servico.numero]);
   }
 }

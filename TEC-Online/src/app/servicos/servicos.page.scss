@@ -46,7 +46,7 @@ ion-toolbar {
   }
   
   ion-segment-button.ion-activated {
-    background: #007aff;
+    background: #007aff; /* Cor azul para o botão ativo */
     color: white;
     border-radius: 8px;
     transition: background 0.3s ease-in-out;

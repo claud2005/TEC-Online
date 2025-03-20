@@ -23,11 +23,11 @@ const routes: Routes = [
   },
   {
     path: 'criar-servicos',
-    loadChildren: () => import('./criar-servicos/criar-servicos.module').then(m => m.CriarServicosPageModule),
+    loadChildren: () => import('./criar-servicos/criar-servicos.module').then(m => m.CriarServicosPageModule), // Carregamento do módulo de criação de serviços
   },
   {
     path: 'servicos',
-    loadChildren: () => import('./servicos/servicos.module').then(m => m.ServicosPageModule),
+    loadChildren: () => import('./servicos/servicos.module').then(m => m.ServicosPageModule), // Carregamento do módulo de serviços
   },
   {
     path: 'plano-semanal',
@@ -38,7 +38,7 @@ const routes: Routes = [
     loadChildren: () => import('./editar-perfil/editar-perfil.module').then(m => m.EditarPerfilPageModule),
   },
   {
-    path: 'editar-servicos/:numero', // Adicionado o parâmetro :numero
+    path: 'editar-servicos/:numero', // Rota para editar serviços, com o parâmetro :numero
     loadChildren: () => import('./editar-servicos/editar-servicos.module').then(m => m.EditarServicosPageModule),
   },
 ];

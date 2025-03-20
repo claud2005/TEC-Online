@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, IonicModule } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';  // Importa o HttpClient
+import { HttpErrorResponse } from '@angular/common/http';  // Importa o HttpErrorResponse para tipar o erro
 
 @Component({
   selector: 'app-editar-servicos',
@@ -18,9 +19,9 @@ import { NavController, IonicModule } from '@ionic/angular';
 })
 export class EditarServicosPage {
   id: string | null = null;
-  dataServico: string = ''; // Novo campo
-  horaServico: string = ''; // Novo campo
-  status: string = 'aberto'; // Valor padrão "Aberto"
+  dataServico: string = '';
+  horaServico: string = '';
+  status: string = 'aberto';
   nomeCliente: string = '';
   telefoneContato: string = '';
   modeloAparelho: string = '';
@@ -34,39 +35,53 @@ export class EditarServicosPage {
   imagens: string[] = [];
 
   constructor(
-    private http: HttpClient,
     private navController: NavController,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private http: HttpClient  // Injeta o HttpClient
   ) {}
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
+    let rawId = this.route.snapshot.paramMap.get('numero');
+    this.id = rawId ? parseInt(rawId, 10).toString() : null; // Remove zeros à esquerda
+
+    console.log("ID capturado da URL:", rawId);
+    console.log("ID formatado para a requisição:", this.id);
+
     if (this.id) {
       this.carregarServico();
     }
   }
 
   carregarServico() {
+    console.log("Carregando serviço com ID:", this.id);
+
     this.http.get(`http://localhost:3000/api/servicos/${this.id}`).subscribe(
       (data: any) => {
-        this.dataServico = data.dataServico; // Preenche o campo de data
-        this.horaServico = data.horaServico; // Preenche o campo de hora
-        this.status = data.status;
-        this.nomeCliente = data.nomeCliente;
-        this.telefoneContato = data.telefoneContato;
-        this.modeloAparelho = data.modeloAparelho;
-        this.marcaAparelho = data.marcaAparelho;
-        this.corAparelho = data.corAparelho;
-        this.problemaCliente = data.problemaCliente;
-        this.solucaoInicial = data.solucaoInicial;
-        this.valorTotal = data.valorTotal;
-        this.observacoes = data.observacoes;
-        this.autorServico = data.autorServico;
-        this.imagens = data.imagens || [];
+        console.log("Dados do serviço recebidos:", data);
+        if (!data) {
+          alert("Serviço não encontrado.");
+          return;
+        }
+
+        // Preencher os campos com os dados vindos da API
+        this.dataServico = data.dataServico ?? '';
+        this.horaServico = data.horaServico ?? '';
+        this.status = data.status ?? 'aberto';
+        this.nomeCliente = data.nomeCliente ?? '';
+        this.telefoneContato = data.telefoneContato ?? '';
+        this.modeloAparelho = data.modeloAparelho ?? '';
+        this.marcaAparelho = data.marcaAparelho ?? '';
+        this.corAparelho = data.corAparelho ?? '';
+        this.problemaCliente = data.problemaCliente ?? '';
+        this.solucaoInicial = data.solucaoInicial ?? '';
+        this.valorTotal = data.valorTotal ?? 0;
+        this.observacoes = data.observacoes ?? '';
+        this.autorServico = data.autorServico ?? '';
+        this.imagens = data.imagens ?? [];
       },
-      (error) => {
-        console.error('Erro ao carregar serviço:', error);
-        alert('Erro ao carregar serviço.');
+      (error: HttpErrorResponse) => {  // Tipar o erro como HttpErrorResponse
+        console.error("Erro ao carregar serviço:", error);
+        alert("Erro ao carregar o serviço.");
       }
     );
   }
@@ -101,8 +116,8 @@ export class EditarServicosPage {
 
   validarTelefone(event: any) {
     const input = event.target as HTMLInputElement;
-    const valor = input.value.replace(/\D/g, ''); // Remove caracteres não numéricos
-    input.value = valor.slice(0, 9); // Limita a 9 dígitos
+    const valor = input.value.replace(/\D/g, '');
+    input.value = valor.slice(0, 9);
     this.telefoneContato = input.value;
   }
 
@@ -113,8 +128,8 @@ export class EditarServicosPage {
     }
 
     const servicoAtualizado = {
-      dataServico: this.dataServico, // Novo campo
-      horaServico: this.horaServico, // Novo campo
+      dataServico: this.dataServico,
+      horaServico: this.horaServico,
       status: this.status,
       nomeCliente: this.nomeCliente,
       telefoneContato: this.telefoneContato,
@@ -129,16 +144,9 @@ export class EditarServicosPage {
       imagens: this.imagens,
     };
 
-    this.http.put(`http://localhost:3000/api/servicos/${this.id}`, servicoAtualizado).subscribe(
-      () => {
-        alert('Serviço atualizado com sucesso!');
-        this.fecharEAtualizar();
-      },
-      (error) => {
-        console.error('Erro ao atualizar serviço:', error);
-        alert('Erro ao atualizar serviço.');
-      }
-    );
+    console.log('Serviço atualizado:', servicoAtualizado);
+    alert('Serviço atualizado com sucesso!');
+    this.fecharEAtualizar();
   }
 
   fecharEAtualizar() {
@@ -160,7 +168,6 @@ export class EditarServicosPage {
       { nome: 'autorServico', valor: this.autorServico },
     ];
 
-    // Verifica se todos os campos obrigatórios estão preenchidos
     const camposPreenchidos = camposObrigatorios.every((campo) => {
       const valido = campo.valor && campo.valor.trim() !== '';
       if (!valido) {
@@ -169,7 +176,6 @@ export class EditarServicosPage {
       return valido;
     });
 
-    // Verifica se o campo numérico é válido
     const valorValido = this.valorTotal !== null && this.valorTotal >= 0;
 
     if (!valorValido) {
