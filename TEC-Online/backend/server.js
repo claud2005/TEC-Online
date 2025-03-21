@@ -213,11 +213,11 @@ app.post('/api/servicos', authenticateToken, async (req, res, next) => {
 
     const {
       dataServico, horaServico, status, autorServico, nomeCliente, telefoneContato,
-      marcaAparelho, modeloAparelho, corAparelho, problemaCliente, solucaoInicial, valorTotal, observacoes
+      marcaAparelho, modeloAparelho, problemaCliente, solucaoInicial, valorTotal, observacoes
     } = req.body;
 
     if (!dataServico || !horaServico || !status || !autorServico || !nomeCliente || !telefoneContato ||
-        !marcaAparelho || !modeloAparelho || !corAparelho || !problemaCliente || !solucaoInicial || valorTotal === null) {
+        !marcaAparelho || !modeloAparelho || !problemaCliente || !solucaoInicial || valorTotal === null) {
       return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
     }
 
@@ -231,11 +231,9 @@ app.post('/api/servicos', authenticateToken, async (req, res, next) => {
       observacoes: observacoes,
       autorServico: autorServico,
       nomeCompletoCliente: nomeCliente,
-      codigoPostalCliente: '',
       contatoCliente: telefoneContato,
       modeloAparelho: modeloAparelho,
       marcaAparelho: marcaAparelho,
-      corAparelho: corAparelho,
       problemaRelatado: problemaCliente,
       solucaoInicial: solucaoInicial,
       valorTotal: valorTotal,

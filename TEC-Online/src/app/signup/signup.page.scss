@@ -1,5 +1,5 @@
 :host {
-  --ion-background-color: #1a1a1a; /* Fundo escuro para contraste */
+  --ion-background-color: #1a1a1a;
 }
 
 .center-content {
@@ -9,7 +9,7 @@
   justify-content: center;
   height: 100vh;
   padding: 20px;
-  background: linear-gradient(135deg, #2c3e50, #3498db); /* Gradiente moderno */
+  background: linear-gradient(135deg, #2c3e50, #3498db);
   overflow: hidden;
 }
 
@@ -23,7 +23,7 @@
   height: 120px;
   border-radius: 50%;
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
-  animation: float 3s ease-in-out infinite; /* Animação flutuante */
+  animation: float 3s ease-in-out infinite;
 }
 
 .logo-shadow {
@@ -36,7 +36,7 @@
   background: rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   filter: blur(10px);
-  animation: shadow 3s ease-in-out infinite; /* Animação da sombra */
+  animation: shadow 3s ease-in-out infinite;
 }
 
 @keyframes float {
@@ -58,11 +58,11 @@
 }
 
 h2 {
-  font-size: 24px; /* Tamanho maior para o título */
+  font-size: 2rem;
   margin-bottom: 20px;
   color: white;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  animation: fadeIn 1.5s ease-in-out; /* Animação de entrada */
+  animation: fadeIn 1.5s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -77,7 +77,7 @@ h2 {
 }
 
 .input-item {
-  --background: rgba(255, 255, 255, 0.1); /* Fundo semi-transparente */
+  --background: rgba(255, 255, 255, 0.1);
   --border-color: rgba(255, 255, 255, 0.3);
   --color: white;
   --padding-start: 16px;
@@ -86,6 +86,7 @@ h2 {
   margin-bottom: 20px;
   border-radius: 12px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-size: 1.4rem;
 }
 
 .input-item:hover {
@@ -94,74 +95,71 @@ h2 {
 }
 
 .input-icon {
-  color: rgba(255, 255, 255, 0.8); /* Cor dos ícones */
+  color: rgba(255, 255, 255, 0.8);
   margin-right: 10px;
-  font-size: 1.4rem; /* Tamanho maior para os ícones */
+  font-size: 1.6rem;
   transition: color 0.3s ease;
 }
 
 .input-item:hover .input-icon {
-  color: white; /* Cor dos ícones ao passar o mouse */
+  color: white;
 }
 
 ion-label {
-  font-size: 1.2rem; /* Tamanho maior para os labels */
+  font-size: 1.4rem;
   font-weight: bold;
-  color: rgba(255, 255, 255, 0.8); /* Cor do label */
+  color: rgba(255, 255, 255, 0.8);
   transition: color 0.3s ease;
 }
 
 .input-item:hover ion-label {
-  color: white; /* Cor do label ao passar o mouse */
+  color: white;
 }
 
 ion-input {
-  --color: white; /* Cor do texto digitado */
-  --placeholder-color: rgba(255, 255, 255, 0.5); /* Cor do placeholder */
+  --color: white;
+  --placeholder-color: rgba(255, 255, 255, 0.5);
   --placeholder-opacity: 1;
-  font-size: 1.2rem; /* Tamanho maior para o texto */
+  font-size: 1.4rem;
   --padding-start: 0;
   --padding-end: 0;
   --padding-top: 8px;
   --padding-bottom: 8px;
 }
 
-/* Efeito de foco no input */
-.input-item.item-has-focus {
-  --background: rgba(255, 255, 255, 0.15); /* Fundo mais claro ao focar */
-  --border-color: rgba(255, 255, 255, 0.5); /* Borda mais visível ao focar */
-}
-
-.input-item.item-has-focus .input-icon {
-  color: white; /* Cor dos ícones ao focar */
-}
-
-.input-item.item-has-focus ion-label {
-  color: white; /* Cor do label ao focar */
-}
-
 .btn-animate {
   width: 100%;
   margin-top: 20px;
-  font-size: 1.2rem; /* Tamanho maior para o texto dos botões */
+  font-size: 1.4rem;
   font-weight: bold;
   border-radius: 25px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.btn-animate:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
 .btn-register {
-  --background: #3498db; /* Azul vibrante */
+  --background: #3498db;
   --background-activated: #2980b9;
   --color: white;
 }
 
-.btn-back {
-  --background: #e74c3c; /* Vermelho vibrante */
-  --background-activated: #c0392b;
-  --color: white;
+.login-text {
+  margin-top: 20px;
+  text-align: center;
+  color: white;
+  font-size: 1.4rem;
+}
+
+.login-text a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease, font-size 0.3s ease;
+  font-size: 1.4rem;
+}
+
+.login-text a:hover {
+  color: #e74c3c;
+  text-decoration: underline;
+  font-size: 1.5rem;
 }

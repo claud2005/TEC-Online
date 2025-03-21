@@ -1,134 +1,141 @@
 /* Estilo global */
 ion-content.modern-background {
-    --background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradiente moderno */
-    display: flex;
-    justify-content: center;
-    align-items: center; /* Centraliza verticalmente */
-    height: 100vh;
-    padding: 20px;
-  }
-  
-  /* Container do conteúdo */
-  .content-container {
-    background: transparent; /* Sem fundo */
-    border-radius: 20px;
-    padding: 20px;
-    width: 90%; /* Ajuste para telas menores */
-    max-width: 800px;
-    margin: auto; /* Centraliza horizontalmente */
-  }
-  
-  /* Título */
-  h1 {
-    font-size: 36px;
-    font-weight: bold;
-    color: #fff; /* Texto branco para contrastar com o gradiente */
-    text-align: center;
-    text-transform: uppercase;
-    margin-bottom: 15px;
-  }
-  
-  /* Descrição */
-  p {
-    font-size: 18px;
-    color: #fff; /* Texto branco para contrastar com o gradiente */
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
-  /* Grid responsivo */
+  --background: #f5f7fa; /* Fundo branco suave */
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center; /* Centraliza verticalmente */
+  height: 100vh; /* Garante que ocupe a altura total da tela */
+}
+
+/* Container do formulário */
+.form-container {
+  width: 90%; /* Largura responsiva */
+  max-width: 800px; /* Largura máxima */
+  padding: 20px;
+  margin: auto; /* Centraliza horizontalmente */
+}
+
+/* Título */
+h1 {
+  font-size: 48px; /* Título grande */
+  font-weight: 700;
+  color: #2575fc; /* Azul */
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Descrição */
+p {
+  font-size: 20px; /* Texto maior */
+  color: #666; /* Texto cinza */
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Grid responsivo */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
   .grid-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    width: 100%;
+    grid-template-columns: 1fr;
   }
-  
-  @media (max-width: 768px) {
-    .grid-container {
-      grid-template-columns: 1fr;
-    }
-  }
-  
-  /* Labels */
-  ion-label {
-    font-weight: bold;
-    font-size: 16px;
-    color: #fff; /* Texto branco para contrastar com o gradiente */
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 8px;
-  }
-  
-  /* Inputs e Selects */
-  ion-input,
-  ion-textarea,
-  ion-select {
-    background: rgba(255, 255, 255, 0.9); /* Fundo branco com transparência */
-    border: 2px solid #ddd; /* Borda suave */
-    border-radius: 12px;
-    padding: 12px;
-    font-size: 16px;
-    color: #333;
-    width: 100%;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
-  }
-  
-  /* Placeholder dos inputs */
-  ion-input::placeholder,
-  ion-textarea::placeholder {
-    color: #bdc3c7; /* Cor cinza para o placeholder */
-  }
-  
-  /* Efeito de foco */
-  ion-input:focus,
-  ion-textarea:focus,
-  ion-select:focus {
-    border-color: #6a11cb; /* Borda colorida ao focar */
-    box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3); /* Sombra ao focar */
-  }
-  
-  /* Campos que ocupam a linha toda */
+}
+
+/* Grupos de formulário */
+.form-group {
+  margin-bottom: 25px;
+}
+
+/* Labels */
+ion-label {
+  font-weight: 600;
+  font-size: 18px; /* Labels maiores */
+  color: #2575fc; /* Azul */
+  margin-bottom: 8px;
+}
+
+/* Inputs e Selects */
+ion-input,
+ion-textarea,
+ion-select {
+  background: #fff; /* Fundo branco */
+  border: 2px solid #e0e0e0; /* Borda suave */
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 18px; /* Texto maior */
+  color: #333;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+/* Placeholder dos inputs */
+ion-input::placeholder,
+ion-textarea::placeholder {
+  color: #aaa; /* Placeholder cinza */
+}
+
+/* Efeito de foco */
+ion-input:focus,
+ion-textarea:focus,
+ion-select:focus {
+  border-color: #2575fc; /* Borda azul ao focar */
+  box-shadow: 0 0 8px rgba(37, 117, 252, 0.2); /* Sombra azul */
+}
+
+/* Campos que ocupam a linha toda */
+.full-width {
+  grid-column: span 2;
+}
+
+@media (max-width: 768px) {
   .full-width {
-    grid-column: span 2;
+    grid-column: span 1;
   }
-  
-  @media (max-width: 768px) {
-    .full-width {
-      grid-column: span 1;
-    }
-  }
-  
-  /* Botão de voltar */
-  .back-button {
-    --background: transparent;
-    --color: #ffdd57; /* Cor amarela para contraste */
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
-  /* Botão de salvar */
-  .save-button {
-    --background: #6a11cb; /* Cor roxa */
-    --border-radius: 12px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #fff; /* Texto branco */
-    padding: 16px;
-    width: 100%;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 4px 10px rgba(106, 17, 203, 0.3); /* Sombra suave */
-  }
-  
-  .save-button:hover {
-    --background: #2575fc; /* Cor azul ao passar o mouse */
-  }
-  
-  /* Centralizar botão */
-  .button-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-    width: 100%;
-  }
+}
+
+/* Botão de voltar */
+.back-button {
+  --background: transparent;
+  --color: #2575fc; /* Azul */
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.back-icon {
+  font-size: 32px; /* Ícone maior */
+  color: #2575fc; /* Azul */
+  transition: transform 0.3s ease;
+}
+
+.back-button:hover .back-icon {
+  transform: translateX(-5px); /* Efeito de movimento ao passar o mouse */
+}
+
+/* Botão de salvar */
+.save-button {
+  --background: #2575fc; /* Azul */
+  --border-radius: 12px;
+  font-size: 20px; /* Texto maior */
+  font-weight: 600;
+  color: #fff;
+  padding: 18px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+  --background: #1a5bbf; /* Azul mais escuro ao passar o mouse */
+}
+
+/* Centralizar botão */
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  width: 100%;
+}

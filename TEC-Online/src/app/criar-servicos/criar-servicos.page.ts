@@ -26,7 +26,6 @@ export class CriarServicosPage {
   telefoneContato: string = '';
   marcaAparelho: string = '';
   modeloAparelho: string = '';
-  corAparelho: string = '';
   problemaCliente: string = '';
   solucaoInicial: string = '';
   valorTotal: number | null = null;
@@ -52,7 +51,6 @@ export class CriarServicosPage {
       telefoneContato: this.telefoneContato.trim(),
       marcaAparelho: this.marcaAparelho.trim(),
       modeloAparelho: this.modeloAparelho.trim(),
-      corAparelho: this.corAparelho.trim(),
       problemaCliente: this.problemaCliente.trim(),
       solucaoInicial: this.solucaoInicial.trim(),
       valorTotal: this.valorTotal ?? 0,
@@ -87,7 +85,7 @@ export class CriarServicosPage {
     return [
       this.dataServico, this.horaServico, this.status, this.autorServico,
       this.nomeCliente, this.telefoneContato, this.marcaAparelho, this.modeloAparelho,
-      this.corAparelho, this.problemaCliente, this.solucaoInicial
+      this.problemaCliente, this.solucaoInicial
     ].every(campo => campo !== undefined && campo.trim() !== '') && 
       this.valorTotal !== null && this.valorTotal >= 0;
   }

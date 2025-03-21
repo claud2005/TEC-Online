@@ -47,11 +47,11 @@
       <ion-button expand="full" fill="solid" class="btn-animate btn-register" type="submit">
         Registar
       </ion-button>
-
-      <!-- Botão para voltar -->
-      <ion-button expand="full" fill="solid" class="btn-animate btn-back" (click)="goBack()">
-        Voltar
-      </ion-button>
     </form>
+
+    <!-- Texto para redirecionar para o login -->
+    <div class="login-text">
+      <p>Já tens uma conta? <a (click)="goToLogin()">Faz login aqui</a>.</p>
+    </div>
   </div>
 </ion-content>

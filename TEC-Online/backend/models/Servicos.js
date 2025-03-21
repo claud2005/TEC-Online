@@ -55,10 +55,6 @@ const servicoSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
-  corAparelho: { 
-    type: String, 
-    required: true 
-  },
   problemaRelatado: { 
     type: String, 
     required: true 

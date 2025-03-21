@@ -53,7 +53,7 @@ export class SignupPage {
   }
 
   // Método para voltar
-  goBack() {
-    this.router.navigate(['/home']);
+  goToLogin() {
+    this.router.navigate(['/home']); // Redireciona para a página de login
   }
 }

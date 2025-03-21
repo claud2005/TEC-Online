@@ -17,11 +17,9 @@ interface Servico {
   expandido: boolean;
   autorServico: string;
   nomeCompletoCliente: string;
-  codigoPostalCliente: string;
   contatoCliente: string;
   modeloAparelho: string;
   marcaAparelho: string;
-  corAparelho: string;
   problemaRelatado: string;
   solucaoInicial: string;
   valorTotal: string;
@@ -109,7 +107,6 @@ export class ServicosPage implements OnInit {
     doc.text(`Contacto: ${servico.contatoCliente}`, 10, 50);
     doc.text(`Modelo do Aparelho: ${servico.modeloAparelho}`, 10, 60);
     doc.text(`Marca do Aparelho: ${servico.marcaAparelho}`, 10, 70);
-    doc.text(`Cor do Aparelho: ${servico.corAparelho}`, 10, 80);
     doc.text(`Problema Relatado: ${servico.problemaRelatado}`, 10, 90);
     doc.text(`Solução Inicial: ${servico.solucaoInicial}`, 10, 100);
     doc.text(`Valor Total: R$ ${parseFloat(servico.valorTotal).toFixed(2)}`, 10, 110);

@@ -26,7 +26,6 @@ export class EditarServicosPage {
   telefoneContato: string = '';
   modeloAparelho: string = '';
   marcaAparelho: string = '';
-  corAparelho: string = '';
   problemaCliente: string = '';
   solucaoInicial: string = '';
   valorTotal: number | null = null;
@@ -71,7 +70,6 @@ export class EditarServicosPage {
         this.telefoneContato = data.telefoneContato ?? '';
         this.modeloAparelho = data.modeloAparelho ?? '';
         this.marcaAparelho = data.marcaAparelho ?? '';
-        this.corAparelho = data.corAparelho ?? '';
         this.problemaCliente = data.problemaCliente ?? '';
         this.solucaoInicial = data.solucaoInicial ?? '';
         this.valorTotal = data.valorTotal ?? 0;
@@ -135,7 +133,6 @@ export class EditarServicosPage {
       telefoneContato: this.telefoneContato,
       modeloAparelho: this.modeloAparelho,
       marcaAparelho: this.marcaAparelho,
-      corAparelho: this.corAparelho,
       problemaCliente: this.problemaCliente,
       solucaoInicial: this.solucaoInicial,
       valorTotal: this.valorTotal ?? 0,
@@ -162,7 +159,6 @@ export class EditarServicosPage {
       { nome: 'telefoneContato', valor: this.telefoneContato },
       { nome: 'modeloAparelho', valor: this.modeloAparelho },
       { nome: 'marcaAparelho', valor: this.marcaAparelho },
-      { nome: 'corAparelho', valor: this.corAparelho },
       { nome: 'problemaCliente', valor: this.problemaCliente },
       { nome: 'solucaoInicial', valor: this.solucaoInicial },
       { nome: 'autorServico', valor: this.autorServico },

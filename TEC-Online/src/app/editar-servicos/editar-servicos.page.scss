@@ -1,121 +1,169 @@
-/* Remove estilos padrão do Ionic */
-ion-header {
-    background: var(--header-bg-color);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
-}
-
-ion-toolbar {
-    --background: transparent; /* Remove o fundo padrão */
-    --color: var(--header-text-color);
-    padding: 0 10px;
-}
-
-ion-back-button {
-    --background: var(--button-back-color) !important; /* Cor de fundo (azul) */
-    --color: rgb(98, 182, 250) !important; /* Cor do ícone (preto) */
-    --border-radius: 50% !important; /* Bordas arredondadas */
-    --padding-start: 10px !important;
-    --padding-end: 10px !important;
-    --icon-font-size: 24px !important; /* Tamanho do ícone */
-    width: 40px !important; /* Tamanho do botão */
-    height: 40px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    transition: background-color 0.3s ease !important;
-    
-    &:hover {
-        --background: var(--button-back-hover) !important; /* Cor ao passar o mouse (azul mais escuro) */
-        --color: black !important; /* Cor do ícone ao passar o mouse (preto) */
-    }
-}
-
-/* Estilo para o conteúdo */
-ion-content {
-    --background: #f0f0f0;
+/* Estilo global */
+ion-content.modern-background {
+    --background: #f0f4f8; /* Fundo azul claro suave */
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 24px;
-}
-
-h1 {
-    font-size: 35px;
-    font-weight: bold;
-    color: #000;
+    height: 100vh;
+    padding: 20px;
+  }
+  
+  /* Container do formulário */
+  .form-container {
+    width: 90%;
+    max-width: 800px;
+    padding: 20px;
+    margin: auto;
+  }
+  
+  /* Seção do cabeçalho */
+  .header-section {
     text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  /* Título */
+  h1 {
+    font-size: 50px; /* Aumentado de 48px para 50px */
+    font-weight: 700;
+    color: #2575fc; /* Azul */
+    margin-bottom: 10px;
     text-transform: uppercase;
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-p {
-    font-size: 18px;
-    color: #000;
-    text-align: center;
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.grid-container {
+    letter-spacing: 1.5px;
+  }
+  
+  /* Descrição */
+  p {
+    font-size: 24px; /* Aumentado de 22px para 24px */
+    color: #666; /* Texto cinza */
+    margin-bottom: 30px;
+  }
+  
+  /* Grid responsivo */
+  .grid-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
     width: 100%;
-}
-
-@media (max-width: 1024px) {
+  }
+  
+  @media (max-width: 768px) {
     .grid-container {
-        grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr;
     }
-}
-
-@media (max-width: 768px) {
-    .grid-container {
-        grid-template-columns: 1fr;
-    }
-}
-
-ion-label {
-    font-weight: bold;
-    font-size: 18px;
-    color: #000;
-    text-transform: uppercase;
+  }
+  
+  /* Grupos de formulário */
+  .form-group {
+    margin-bottom: 25px;
+  }
+  
+  /* Labels */
+  ion-label {
+    font-weight: 600;
+    font-size: 22px; /* Aumentado de 20px para 22px */
+    color: #2575fc; /* Azul */
+    margin-bottom: 8px;
     display: block;
-    margin-bottom: 10px;
-    text-align: left;
-}
-
-ion-input,
-ion-textarea,
-ion-select {
-    border: 2px solid #cccccc;
-    border-radius: 15px;
-    padding: 8px 12px;
-    font-size: 16px;
-    color: #000;
-    background: #fff;
+    transform: translateY(-10px); /* Sobe o label */
+  }
+  
+  /* Inputs e Selects */
+  ion-input,
+  ion-textarea,
+  ion-select {
+    background: #fff; /* Fundo branco */
+    border: 2px solid #e0e0e0; /* Borda suave */
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 22px; /* Aumentado de 20px para 22px */
+    color: #333;
     width: 100%;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-    line-height: 1.2;
-    min-height: 40px;
-    margin-top: 10px;
-}
-
-.fotos-container {
+    transition: all 0.3s ease;
+    margin-top: 10px; /* Espaçamento acima do input */
+  }
+  
+  /* Placeholder dos inputs */
+  ion-input::placeholder,
+  ion-textarea::placeholder {
+    color: #aaa; /* Placeholder cinza */
+    font-size: 20px; /* Aumentado de 18px para 20px */
+  }
+  
+  /* Efeito de foco */
+  ion-input:focus,
+  ion-textarea:focus,
+  ion-select:focus {
+    border-color: #2575fc; /* Borda azul ao focar */
+    box-shadow: 0 0 8px rgba(37, 117, 252, 0.2); /* Sombra azul */
+  }
+  
+  /* Campos que ocupam a linha toda */
+  .full-width {
+    grid-column: span 2;
+  }
+  
+  @media (max-width: 768px) {
+    .full-width {
+      grid-column: span 1;
+    }
+  }
+  
+  /* Botão de voltar */
+  .back-button {
+    --background: transparent;
+    --color: #2575fc; /* Azul */
+    --padding-start: 0;
+    --padding-end: 0;
+  }
+  
+  .back-icon {
+    font-size: 38px; /* Aumentado de 36px para 38px */
+    color: #2575fc; /* Azul */
+    transition: transform 0.3s ease;
+  }
+  
+  .back-button:hover .back-icon {
+    transform: translateX(-5px); /* Efeito de movimento ao passar o mouse */
+  }
+  
+  /* Botão de salvar */
+  .save-button {
+    --background: #2575fc; /* Azul */
+    --border-radius: 12px;
+    font-size: 24px; /* Aumentado de 22px para 24px */
+    font-weight: 600;
+    color: #fff;
+    padding: 18px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .save-button:hover {
+    --background: #1a5bbf; /* Azul mais escuro ao passar o mouse */
+  }
+  
+  /* Centralizar botão */
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px; /* Reduzido para quase juntar os botões */
+    width: 100%;
+  }
+  
+  /* Estilo para as fotos */
+  .fotos-container {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
     justify-content: flex-start;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* Reduzido para quase juntar os botões */
     max-width: 100%;
-    margin-top: 10px; /* Adicionado para espaçamento acima das fotos */
-}
-
-.foto-item {
+    margin-top: 20px; /* Adicionado para espaçamento acima das fotos */
+  }
+  
+  .foto-item {
     position: relative;
     width: 90px;
     height: 90px;
@@ -123,65 +171,58 @@ ion-select {
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.3s ease;
-
+  
     &:hover {
-        transform: scale(1.05);
+      transform: scale(1.05);
     }
-
+  
     .foto-preview {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
-
+  
     .remove-icon {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        background: rgba(255, 0, 0, 0.8);
-        color: white;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(255, 0, 0, 0.8);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
     }
-}
-
-.adicionar-foto-btn {
+  }
+  
+  .adicionar-foto-btn {
     width: 100%;
-    height: 45px;
+    height: 50px; /* Botão maior */
     display: flex;
     align-items: center;
     justify-content: center;
     border: none;
     border-radius: 30px;
-    background-color: var(--primary-color);
+    background-color: #2575fc; /* Azul */
     color: white;
-    font-size: 16px;
+    font-size: 22px; /* Aumentado de 20px para 22px */
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s ease;
     text-transform: uppercase;
-    margin-top: 20px;
-
+    margin-top: 20px; /* Reduzido para quase juntar os botões */
+  
     &:hover {
-        background-color: #218838;
+      background-color: #1a5bbf; /* Azul mais escuro ao passar o mouse */
     }
-
+  
     ion-icon {
-        margin-right: 8px;
-        font-size: 20px;
+      margin-right: 8px;
+      font-size: 26px; /* Aumentado de 24px para 26px */
     }
-}
-
-.button-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    width: 100%;
-}
+  }

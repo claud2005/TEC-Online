@@ -1,98 +1,98 @@
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="modern-background">
   <ion-header>
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-back-button defaultHref="/"></ion-back-button>
+        <ion-back-button defaultHref="/" class="back-button"></ion-back-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
 
-  <h1>Editar Serviço</h1>
-  <p>Atualize os campos abaixo para editar o serviço.</p>
-
-  <form class="grid-container">
-    <div>
-      <ion-label position="stacked">Data do Serviço *</ion-label>
-      <ion-input name="dataServico" [(ngModel)]="dataServico" required></ion-input>
-    </div>
-    
-    <div>
-      <ion-label position="stacked">Hora do Serviço *</ion-label>
-      <ion-input name="horaServico" [(ngModel)]="horaServico" required></ion-input>
-    </div>
-    
-    <div>
-      <ion-label position="stacked">Status do Serviço *</ion-label>
-      <ion-select name="status" [(ngModel)]="status" required>
-        <ion-select-option value="aberto">Aberto</ion-select-option>
-        <ion-select-option value="fechado">Fechado</ion-select-option>
-      </ion-select>
-    </div>
-    
-    <div>
-      <ion-label position="stacked">Nome Completo do Cliente *</ion-label>
-      <ion-input name="nomeCliente" [(ngModel)]="nomeCliente" required></ion-input>
-    </div>
-    
-    <div>
-      <ion-label position="stacked">Contato *</ion-label>
-      <ion-input name="telefoneContato" [(ngModel)]="telefoneContato" required></ion-input>
-    </div>
-    
-    <div>
-      <ion-label position="stacked">Marca do Aparelho *</ion-label>
-      <ion-input name="marcaAparelho" [(ngModel)]="marcaAparelho" required></ion-input>
-    </div>
-    
-    <div>
-      <ion-label position="stacked">Modelo do Aparelho *</ion-label>
-      <ion-input name="modeloAparelho" [(ngModel)]="modeloAparelho" required></ion-input>
-    </div>
-    
-    <div>
-      <ion-label position="stacked">Cor do Aparelho *</ion-label>
-      <ion-input name="corAparelho" [(ngModel)]="corAparelho" required></ion-input>
-    </div>
-    
-    <div class="full-width">
-      <ion-label position="stacked">Problema Relatado pelo Cliente *</ion-label>
-      <ion-textarea name="problemaCliente" [(ngModel)]="problemaCliente" required></ion-textarea>
-    </div>
-    
-    <div class="full-width">
-      <ion-label position="stacked">Solução *</ion-label>
-      <ion-textarea name="solucaoInicial" [(ngModel)]="solucaoInicial" required></ion-textarea>
-    </div>
-    
-    <div>
-      <ion-label position="stacked">Valor Total *</ion-label>
-      <ion-input name="valorTotal" type="number" [(ngModel)]="valorTotal" min="0" required></ion-input>
-    </div>
-    
-    <div class="full-width">
-      <ion-label position="stacked">Observações</ion-label>
-      <ion-textarea name="observacoes" [(ngModel)]="observacoes"></ion-textarea>
+  <div class="form-container">
+    <div class="header-section">
+      <h1>Editar Serviço</h1>
+      <p>Atualize os campos abaixo para editar o serviço.</p>
     </div>
 
-    <!-- Parte das Fotos -->
-    <div class="full-width">
-      <ion-label position="stacked">Fotos do Serviço</ion-label>
-      <div class="fotos-container">
-        <div *ngFor="let img of imagens; let i = index" class="foto-item" (click)="removerFoto(i)">
-          <img [src]="img" class="foto-preview" />
-          <div class="remove-icon">×</div>
-        </div>
-        <ion-button (click)="adicionarFoto()" expand="block" class="adicionar-foto-btn">
-          <ion-icon name="add-circle-outline"></ion-icon>
-          Adicionar Foto
-        </ion-button>        
+    <form class="grid-container">
+      <!-- Campos do formulário -->
+      <div class="form-group">
+        <ion-label position="stacked">Data do Serviço *</ion-label>
+        <ion-input name="dataServico" [(ngModel)]="dataServico" required></ion-input>
       </div>
-    </div>
-  </form>
 
-  <div class="button-container">
-    <ion-button expand="block" (click)="atualizarServico()">
-      Atualizar Serviço
-    </ion-button>
+      <div class="form-group">
+        <ion-label position="stacked">Hora do Serviço *</ion-label>
+        <ion-input name="horaServico" [(ngModel)]="horaServico" required></ion-input>
+      </div>
+
+      <div class="form-group">
+        <ion-label position="stacked">Status do Serviço *</ion-label>
+        <ion-select name="status" [(ngModel)]="status" required>
+          <ion-select-option value="aberto">Aberto</ion-select-option>
+          <ion-select-option value="fechado">Fechado</ion-select-option>
+        </ion-select>
+      </div>
+
+      <div class="form-group">
+        <ion-label position="stacked">Nome Completo do Cliente *</ion-label>
+        <ion-input name="nomeCliente" [(ngModel)]="nomeCliente" required></ion-input>
+      </div>
+
+      <div class="form-group">
+        <ion-label position="stacked">Contato *</ion-label>
+        <ion-input name="telefoneContato" [(ngModel)]="telefoneContato" required></ion-input>
+      </div>
+
+      <div class="form-group">
+        <ion-label position="stacked">Marca do Aparelho *</ion-label>
+        <ion-input name="marcaAparelho" [(ngModel)]="marcaAparelho" required></ion-input>
+      </div>
+
+      <div class="form-group">
+        <ion-label position="stacked">Modelo do Aparelho *</ion-label>
+        <ion-input name="modeloAparelho" [(ngModel)]="modeloAparelho" required></ion-input>
+      </div>
+
+      <div class="form-group full-width">
+        <ion-label position="stacked">Problema Relatado pelo Cliente *</ion-label>
+        <ion-textarea name="problemaCliente" [(ngModel)]="problemaCliente" required></ion-textarea>
+      </div>
+
+      <div class="form-group full-width">
+        <ion-label position="stacked">Solução *</ion-label>
+        <ion-textarea name="solucaoInicial" [(ngModel)]="solucaoInicial" required></ion-textarea>
+      </div>
+
+      <div class="form-group">
+        <ion-label position="stacked">Valor Total *</ion-label>
+        <ion-input name="valorTotal" type="number" [(ngModel)]="valorTotal" min="0" required></ion-input>
+      </div>
+
+      <div class="form-group full-width">
+        <ion-label position="stacked">Observações</ion-label>
+        <ion-textarea name="observacoes" [(ngModel)]="observacoes"></ion-textarea>
+      </div>
+
+      <!-- Parte das Fotos -->
+      <div class="form-group full-width">
+        <ion-label position="stacked">Fotos do Serviço</ion-label>
+        <div class="fotos-container">
+          <div *ngFor="let img of imagens; let i = index" class="foto-item" (click)="removerFoto(i)">
+            <img [src]="img" class="foto-preview" />
+            <div class="remove-icon">×</div>
+          </div>
+          <ion-button (click)="adicionarFoto()" expand="block" class="adicionar-foto-btn">
+            <ion-icon name="add-circle-outline"></ion-icon>
+            Adicionar Foto
+          </ion-button>        
+        </div>
+      </div>
+    </form>
+
+    <div class="button-container">
+      <ion-button expand="block" (click)="atualizarServico()" class="save-button">
+        Atualizar Serviço
+      </ion-button>
+    </div>
   </div>
 </ion-content>
