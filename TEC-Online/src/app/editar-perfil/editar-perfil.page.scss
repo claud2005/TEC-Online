@@ -1,62 +1,90 @@
 ion-content {
   --background: #810773; /* Cor de fundo roxa */
-  position: relative; /* Necessário para usar o position absolute no formulário */
-  height: 100vh; /* Cobrir toda a altura da tela */
-  width: 100%;  /* Cobrir toda a largura da tela */
-  margin: 0; /* Remove margens padrão */
-  padding: 0; /* Remove paddings padrão */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
 }
 
 form {
-  position: absolute;  /* Usando position absolute para centralizar */
-  top: 50%;            /* Posiciona o topo do formulário no meio da tela */
-  left: 50%;           /* Posiciona a esquerda do formulário no meio da tela */
-  transform: translate(-50%, -50%);  /* Ajuste para garantir que o formulário esteja centralizado */
-  width: 90%;           /* Largura relativa para telas menores */
-  max-width: 400px;     /* Largura máxima do formulário */
-  padding: 24px;
-  background: rgba(255, 255, 255, 0.1); /* Fundo semi-transparente */
-  border-radius: 16px;
-  backdrop-filter: blur(10px); /* Efeito de desfoque */
-  border: 1px solid rgba(255, 255, 255, 0.2); /* Borda sutil */
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* Sombra */
+  width: 100%;
+  max-width: 500px; /* Formulário maior */
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
-  align-items: center; /* Alinha os elementos dentro do formulário ao centro */
+  align-items: center;
+  justify-content: center; /* Centralizando o conteúdo dentro do formulário */
+  gap: 24px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centralizando na tela */
 }
 
 ion-item {
   --background: transparent;
-  --border-radius: 8px;
-  width: 100%; /* Garantir que ocupe toda a largura disponível */
-  margin-bottom: 16px;
+  width: 100%;
 }
 
 ion-label {
   font-weight: bold;
   color: #fff;
+  font-size: 26px; /* Letras maiores */
 }
 
 ion-input {
-  --padding-start: 10px;
-  font-size: 16px;
+  font-size: 22px; /* Texto digitado maior */
   color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 12px;
 }
 
 ion-button {
   --background: #ffcc00;
-  --border-radius: 8px;
-  margin-top: 20px;
-  font-size: 18px;
+  --border-radius: 12px;
+  font-size: 22px;
   font-weight: bold;
   text-transform: uppercase;
   width: 100%;
+  padding: 18px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-ion-note {
-  display: block;
-  margin-top: -10px;
-  margin-bottom: 16px;
-  font-size: 14px;
-  color: #ff6b6b; /* Cor de erro mais vibrante */
+ion-button::before {
+  content: ""; /* Removendo o ícone decorativo */
+}
+
+
+.profile-picture {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-picture:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.profile-picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

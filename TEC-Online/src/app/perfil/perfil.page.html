@@ -6,9 +6,7 @@
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content>
-
   <!-- Indicador de carregamento -->
   <div *ngIf="isLoading" class="loading-container">
     <ion-spinner name="circular"></ion-spinner>
@@ -27,23 +25,9 @@
     <h2 class="profile-title">Perfil</h2>
 
     <!-- Foto de Perfil -->
-    <div class="profile-picture" (click)="alterarFoto()">
+    <div class="profile-picture">
       <img [src]="fotoPerfil || 'assets/img/default-profile.png'" alt="Foto de Perfil" />
     </div>
-
-    <!-- Botão de Alterar Foto -->
-    <ion-button expand="block" class="small-button" (click)="alterarFoto()" aria-label="Alterar Foto">
-      Alterar Foto
-    </ion-button>
-
-    <!-- Input escondido para escolher arquivo na web -->
-    <input 
-      type="file" 
-      id="fileInput" 
-      accept="image/*" 
-      (change)="onFileSelected($event)" 
-      hidden
-    />
 
     <!-- Informações do Usuário -->
     <div class="user-info">

@@ -7,8 +7,8 @@ const { isEmail } = require('validator'); // Para validação de e-mail
 const userSchema = new mongoose.Schema({
   fullName: {
     type: String,
-    required: [true, 'Nome completo é obrigatório'], // Mensagem de erro personalizada
-    trim: true, // Remove espaços em branco no início e no final
+    required: [true, 'Nome completo é obrigatório'],
+    trim: true,
   },
   username: {
     type: String,
@@ -17,15 +17,15 @@ const userSchema = new mongoose.Schema({
     trim: true,
     minlength: [3, 'Nome de usuário deve ter pelo menos 3 caracteres'],
     maxlength: [20, 'Nome de usuário não pode ter mais de 20 caracteres'],
-    match: [/^[a-zA-Z0-9_]+$/, 'Nome de usuário pode conter apenas letras, números e underscores'], // Regex para validar o username
+    match: [/^[a-zA-Z0-9_]+$/, 'Nome de usuário pode conter apenas letras, números e underscores'],
   },
   email: {
     type: String,
     required: [true, 'E-mail é obrigatório'],
     unique: true,
     trim: true,
-    lowercase: true, // Converte o e-mail para minúsculas
-    validate: [isEmail, 'E-mail inválido'], // Validação de e-mail usando o validator
+    lowercase: true,
+    validate: [isEmail, 'E-mail inválido'],
   },
   password: {
     type: String,
@@ -34,16 +34,16 @@ const userSchema = new mongoose.Schema({
   },
   profilePicture: {
     type: String,
-    default: '', // Valor padrão para foto de perfil
+    default: '',
   },
   bio: {
     type: String,
-    default: '', // Valor padrão para biografia
+    default: '',
     maxlength: [150, 'Biografia não pode ter mais de 150 caracteres'],
   },
   createdAt: {
     type: Date,
-    default: Date.now, // Data de criação do usuário
+    default: Date.now,
   },
 });
 
@@ -52,8 +52,8 @@ userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
 
   try {
-    const salt = await bcrypt.genSalt(10); // Gera um salt
-    this.password = await bcrypt.hash(this.password, salt); // Criptografa a senha
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
     next();
   } catch (err) {
     next(err);
@@ -73,11 +73,35 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
 // Método para gerar um token JWT
 userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign(
-    { userId: this._id }, // Payload do token
-    process.env.JWT_SECRET || 'secret', // Chave secreta
-    { expiresIn: '1h' } // Tempo de expiração do token
+    { userId: this._id },
+    process.env.JWT_SECRET || 'secret',
+    { expiresIn: '1h' }
   );
   return token;
+};
+
+// Método para atualizar os dados do perfil
+userSchema.methods.updateProfile = async function (updatedData) {
+  // Atualiza os dados do usuário com os novos valores
+  if (updatedData.fullName) {
+    this.fullName = updatedData.fullName;
+  }
+
+  if (updatedData.username) {
+    this.username = updatedData.username;
+  }
+
+  if (updatedData.bio) {
+    this.bio = updatedData.bio;
+  }
+
+  if (updatedData.profilePicture) {
+    this.profilePicture = updatedData.profilePicture;
+  }
+
+  // Salve as alterações
+  await this.save();
+  return this;
 };
 
 // Criar o modelo de Usuário

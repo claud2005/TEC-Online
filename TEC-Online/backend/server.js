@@ -175,8 +175,8 @@ app.put('/api/profile', authenticateToken, upload.single('profilePicture'), asyn
 
     // Dados para atualizar
     const { fullName, username } = req.body;
+    console.log('Dados recebidos:', { fullName, username, profilePicture: req.file?.filename });  // Log para depuração
 
-    // Validando se os dados foram fornecidos
     if (!fullName || !username) {
       return res.status(400).json({ message: 'Nome completo e nome de usuário são obrigatórios' });
     }
@@ -184,25 +184,24 @@ app.put('/api/profile', authenticateToken, upload.single('profilePicture'), asyn
     // Preparar o caminho da imagem
     let profilePicture = '';
     if (req.file) {
-      profilePicture = `uploads/${req.file.filename}`; // Caminho do arquivo no servidor
+      profilePicture = `uploads/${req.file.filename}`;
     }
 
-    // Atualizando o perfil no banco de dados
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { fullName, username, profilePicture },
-      { new: true }  // Retorna o usuário atualizado
+      { new: true }
     ).select('fullName username profilePicture');
 
     if (!updatedUser) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
     }
 
-    console.log(`✅ Perfil do usuário atualizado:`, updatedUser);
+    console.log('Usuário atualizado:', updatedUser);  // Verifica os dados atualizados
     return res.status(200).json(updatedUser);
   } catch (error) {
-    console.error('❌ Erro ao atualizar perfil:', error);
-    next(error); // Passa o erro para o middleware de tratamento de erros
+    console.error('Erro ao atualizar perfil:', error);
+    next(error);
   }
 });
 

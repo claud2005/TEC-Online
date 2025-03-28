@@ -3,12 +3,31 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/perfil"></ion-back-button>
     </ion-buttons>
-    <ion-title>Editar Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <form #form="ngForm" (ngSubmit)="salvarPerfil()">
+
+    <!-- Foto de Perfil -->
+    <div class="profile-picture" (click)="alterarFoto()">
+      <img [src]="perfil.profilePicture || 'assets/img/default-profile.png'" alt="Foto de Perfil" />
+    </div>
+
+    <!-- Botão de Alterar Foto -->
+    <ion-button expand="block" class="alterar-foto" (click)="alterarFoto()" aria-label="Alterar Foto">
+      Alterar Foto
+    </ion-button>
+
+    <!-- Input escondido para escolher arquivo -->
+    <input 
+      type="file" 
+      id="fileInput" 
+      accept="image/*" 
+      (change)="onFileSelected($event)" 
+      hidden
+    />
+
     <!-- Nome Completo -->
     <ion-item>
       <ion-label position="floating">Nome Completo:</ion-label>
@@ -41,7 +60,6 @@
 
     <!-- Botão de Salvar -->
     <ion-button expand="full" type="submit">
-      <ion-icon name="save-outline" slot="start"></ion-icon>
       Salvar
     </ion-button>
   </form>
