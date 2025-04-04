@@ -44,14 +44,14 @@ export class PerfilPage implements OnInit {
     this.isLoading = true;
     this.erroCarregamento = null;
     console.log('🔄 Iniciando carregamento do perfil...');
-
+  
     if (!this.token) {
       console.warn('Token ausente! Redirecionando para login...');
       localStorage.removeItem('token');
       this.router.navigate(['/home']);
       return;
     }
-
+  
     this.http.get<any>('http://localhost:3000/api/profile', {
       headers: {
         'Authorization': `Bearer ${this.token}`,
@@ -64,20 +64,21 @@ export class PerfilPage implements OnInit {
         this.nomeCompleto = data.fullName || 'Nome não disponível';
         this.nomeUtilizador = data.username || 'Utilizador não disponível';
         this.fotoPerfil = data.profilePicture || null; // Atualizando fotoPerfil
+        console.log('Foto de perfil recebida da API:', this.fotoPerfil); // Logando o valor de fotoPerfil
         this.cdr.detectChanges(); // Força a atualização da tela
       },
       (error) => {
         this.isLoading = false;
         this.erroCarregamento = 'Erro ao carregar dados do perfil.';
         console.error('❌ Erro ao carregar perfil:', error);
-
+  
         if (error.status === 401 || error.status === 403) {
           console.warn('⚠ Token inválido ou expirado! Redirecionando...');
           this.logout();
         }
       }
     );
-  }
+  }  
 
   salvarPerfil() {
     this.isLoading = true;
