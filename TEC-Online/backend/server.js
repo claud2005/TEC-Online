@@ -14,6 +14,9 @@ const User = require('./models/User');
 const Servico = require('./models/Servicos'); // Importando o modelo Servico
 
 const app = express();
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 const PORT = process.env.PORT || 3000;
 
 // Middleware
