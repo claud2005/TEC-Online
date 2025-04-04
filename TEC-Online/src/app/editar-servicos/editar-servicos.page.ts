@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, IonicModule } from '@ionic/angular';
-import { HttpClient } from '@angular/common/http';  // Importa o HttpClient
+import { HttpClient, HttpHeaders } from '@angular/common/http';  // Importa o HttpClient
 import { HttpErrorResponse } from '@angular/common/http';  // Importa o HttpErrorResponse para tipar o erro
 
 @Component({
@@ -41,10 +41,12 @@ export class EditarServicosPage {
 
   ngOnInit() {
     let rawId = this.route.snapshot.paramMap.get('numero');
-    this.id = rawId ? parseInt(rawId, 10).toString() : null; // Remove zeros à esquerda
+   // this.id = rawId ? parseInt(rawId, 10).toString() : null; // Remove zeros à esquerda
+    this.id = rawId
 
     console.log("ID capturado da URL:", rawId);
     console.log("ID formatado para a requisição:", this.id);
+
 
     if (this.id) {
       this.carregarServico();
@@ -52,9 +54,11 @@ export class EditarServicosPage {
   }
 
   carregarServico() {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     console.log("Carregando serviço com ID:", this.id);
 
-    this.http.get(`http://localhost:3000/api/servicos/${this.id}`).subscribe(
+    this.http.get(`http://localhost:3000/api/servicos/${this.id}`,{headers}).subscribe(
       (data: any) => {
         console.log("Dados do serviço recebidos:", data);
         if (!data) {

@@ -17,7 +17,6 @@ import { Router } from '@angular/router'; // Importe o Router para navegação
   ],
 })
 export class CriarServicosPage {
-  // Declaração das variáveis do formulário
   dataServico: string = '';
   horaServico: string = '';
   status: string = 'aberto';
@@ -33,15 +32,12 @@ export class CriarServicosPage {
 
   constructor(private http: HttpClient, private navController: NavController, private router: Router) {}
 
-  // Função para salvar o serviço
+
   salvarServico() {
-    // Verifica se o formulário é válido
     if (!this.isFormValid()) {
       alert('Preencha todos os campos obrigatórios.');
       return;
     }
-
-    // Cria um objeto com os dados do novo serviço
     const novoServico = {
       dataServico: this.dataServico.trim(),
       horaServico: this.horaServico.trim(),
@@ -57,21 +53,18 @@ export class CriarServicosPage {
       observacoes: this.observacoes.trim() || 'Sem observações',
     };
 
-    console.log('Dados enviados:', novoServico); // Log para verificar os dados enviados
+    console.log('Dados enviados:', novoServico); 
 
-    // Obtenha o token do localStorage
     const token = localStorage.getItem('token');
 
-    // Adicione o token no cabeçalho da requisição
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    // Realiza a requisição HTTP para salvar o novo serviço
     this.http.post('http://localhost:3000/api/servicos', novoServico, { headers }).subscribe(
       (response) => {
         console.log('Serviço criado:', response);
         alert('Serviço criado com sucesso!');
-        // Navega para a página de serviços após o sucesso
         this.router.navigate(['/servicos']);
+        this.router.navigate(['/plano-semanal']);
       },
       (error) => {
         console.error('Erro ao criar serviço:', error);
@@ -80,7 +73,6 @@ export class CriarServicosPage {
     );
   }
 
-  // Função para validar o formulário
   isFormValid(): boolean {
     return [
       this.dataServico, this.horaServico, this.status, this.autorServico,
@@ -90,7 +82,6 @@ export class CriarServicosPage {
       this.valorTotal !== null && this.valorTotal >= 0;
   }
 
-  // Função para voltar para a tela anterior
   goBack() {
     this.navController.back();
   }

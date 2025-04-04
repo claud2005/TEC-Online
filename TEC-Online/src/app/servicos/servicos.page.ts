@@ -109,7 +109,7 @@ export class ServicosPage implements OnInit {
     doc.text(`Marca do Aparelho: ${servico.marcaAparelho}`, 10, 70);
     doc.text(`Problema Relatado: ${servico.problemaRelatado}`, 10, 90);
     doc.text(`Solução Inicial: ${servico.solucaoInicial}`, 10, 100);
-    doc.text(`Valor Total: R$ ${parseFloat(servico.valorTotal).toFixed(2)}`, 10, 110);
+    doc.text(`Valor Total: € ${parseFloat(servico.valorTotal).toFixed(2)}`, 10, 110);
     doc.text(`Descrição: ${servico.descricao}`, 10, 120);
     doc.text(`Responsável: ${servico.responsavel}`, 10, 130);
     doc.text(`Observações: ${servico.observacoes}`, 10, 140);
@@ -138,7 +138,7 @@ export class ServicosPage implements OnInit {
   }
 
   editarServico(servico: any) {
-    console.log("ID do serviço sendo passado:", servico.numero);
-    this.router.navigate(['/editar-servicos', servico.numero]);
+    console.log("ID do serviço sendo passado:", servico._id);
+    this.router.navigate(['/editar-servicos', servico._id]);
   }
 }

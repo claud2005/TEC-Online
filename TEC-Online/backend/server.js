@@ -259,6 +259,16 @@ app.get('/api/servicos', authenticateToken, async (req, res, next) => {
   }
 });
 
+
+app.get('/api/servicos/:id', authenticateToken, async (req, res, next) => {
+  try {
+    const servicos = await Servico.findOne({ _id: req.params.id });
+    return res.status(200).json(servicos);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`✅ Servidor rodando na porta ${PORT}`);

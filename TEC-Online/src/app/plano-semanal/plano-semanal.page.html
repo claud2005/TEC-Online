@@ -17,11 +17,9 @@
   <ion-grid>
     <ion-row class="top-bar">
       <ion-col size="12">
-        <!-- Barra de pesquisa -->
         <ion-searchbar placeholder="Procurar Tarefa"></ion-searchbar>
       </ion-col>
       <ion-col size="12">
-        <!-- Seletor de cronograma -->
         <ion-label class="label-title">Cronograma</ion-label>
         <ion-select interface="popover">
           <ion-select-option value="5">Próximos 5 dias</ion-select-option>
@@ -32,18 +30,45 @@
       </ion-col>
     </ion-row>
 
-    <!-- Lista de Tarefas -->
     <ion-row>
       <ion-col>
         <h2>
           <ion-icon name="list-circle" class="task-icon"></ion-icon>
           Tarefas
         </h2>
-        <p>Adicione suas tarefas aqui.</p>
+        
+        <div *ngIf="servicos.length === 0" class="empty-message">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <p>Nenhum serviço agendado</p>
+        </div>
+        
+        <ion-list *ngIf="servicos.length > 0" lines="full" class="service-list">
+          <ion-item *ngFor="let servico of servicos" class="service-item" (click)="openServiceDetails(servico)">
+            <ion-label class="service-content">
+              <h3 class="service-title">{{ servico.nomeCliente || 'Cliente não informado' }}</h3>
+              <div class="service-details">
+                <p>
+                  <ion-icon name="calendar" class="detail-icon"></ion-icon> 
+                  {{ servico.dataServico ? (formatDate(servico.dataServico) + ' às ' + (servico.horaServico || '')) : 'Data não agendada' }}
+                </p>
+                <p>
+                  <ion-icon name="phone-portrait" class="detail-icon"></ion-icon> 
+                  {{ servico.marcaAparelho || 'Marca não informada' }} {{ servico.modeloAparelho || '' }}
+                </p>
+                <p>
+                  <ion-icon name="alert-circle" class="detail-icon"></ion-icon> 
+                  {{ servico.problemaCliente || 'Problema não descrito' }}
+                </p>
+              </div>
+            </ion-label>
+            <ion-badge slot="end" [color]="getStatusColor(servico.status)">
+              {{ servico.status || 'Sem status' }}
+            </ion-badge>
+          </ion-item>
+        </ion-list>
       </ion-col>
     </ion-row>
 
-    <!-- Calendário -->
     <ion-row>
       <ion-col>
         <ion-datetime presentation="date" (ionChange)="openModal($event)"></ion-datetime>
@@ -52,7 +77,6 @@
   </ion-grid>
 </ion-content>
 
-<!-- Modal (com as informações do serviço) -->
 <ion-modal #modal>
   <ng-template>
     <ion-header>
@@ -62,41 +86,32 @@
             <ion-icon name="arrow-back"></ion-icon>
           </ion-button>
         </ion-buttons>
-        <ion-title>Detalhes do Dia</ion-title>
+        <ion-title>Detalhes do Serviço</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content>
-      <!-- Informações do Serviço dentro do Modal -->
+    <ion-content *ngIf="selectedService">
       <ion-card>
         <ion-card-header>
-          <ion-card-title>Informações do Serviço</ion-card-title>
+          <ion-card-title>{{ selectedService.nomeCliente || 'Cliente não informado' }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <ion-grid>
             <ion-row>
-              <ion-col size="6">
-                <strong>Hora:</strong> {{ selectedDate }}
-              </ion-col>
-              <ion-col size="6">
-                <strong>Nome do Serviço:</strong> {{ serviceData.name }}
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col size="6">
-                <strong>Local:</strong> {{ serviceData.location || 'Não informado' }}
-              </ion-col>
-              <ion-col size="6">
-                <strong>Descrição:</strong> {{ serviceData.description }}
+              <ion-col size="12">
+                <p><strong>Data:</strong> {{ formatDate(selectedService.dataServico) || 'Não informada' }}</p>
+                <p><strong>Hora:</strong> {{ selectedService.horaServico || 'Não informada' }}</p>
+                <p><strong>Aparelho:</strong> {{ selectedService.marcaAparelho || 'Não informada' }} {{ selectedService.modeloAparelho || '' }}</p>
+                <p><strong>Problema:</strong> {{ selectedService.problemaCliente || 'Não descrito' }}</p>
+                <p><strong>Observações:</strong> {{ selectedService.observacoes || 'Nenhuma observação' }}</p>
               </ion-col>
             </ion-row>
           </ion-grid>
         </ion-card-content>
       </ion-card>
 
-      <!-- Botão de + dentro do Modal -->
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button (click)="navigateToOtherPage()">
-          <ion-icon name="add-circle"></ion-icon>
+          <ion-icon name="add"></ion-icon>
         </ion-fab-button>
       </ion-fab>
     </ion-content>
