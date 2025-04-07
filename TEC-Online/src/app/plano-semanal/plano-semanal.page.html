@@ -23,6 +23,7 @@
       <ion-col size="12">
         <ion-label class="label-title">Cronograma</ion-label>
         <ion-select [(ngModel)]="selectedDays" interface="popover" (ionChange)="filterByDays()">
+          <ion-select-option value="0">Nenhuma opção selecionada</ion-select-option>
           <ion-select-option value="5">Próximos 5 dias</ion-select-option>
           <ion-select-option value="7">Próximos 7 dias</ion-select-option>
           <ion-select-option value="15">Próximos 15 dias</ion-select-option>
