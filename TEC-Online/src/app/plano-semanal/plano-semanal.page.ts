@@ -124,22 +124,26 @@ export class PlanoSemanalPage implements OnInit {
     this.modal.present();
   }
 
-  // Filtra a lista de serviços com base na pesquisa
   filterServices() {
-    this.filteredServices = this.servicos.filter(servico =>
-      servico.nomeCliente.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-      servico.problemaCliente.toLowerCase().includes(this.searchQuery.toLowerCase())
-    );
-    this.filterByDays(); // Aplica o filtro de dias após a pesquisa
+    // Filtra os serviços baseados no nome do cliente
+    this.filteredServices = this.servicos.filter(servico => {
+      // Verifica se o nome do cliente existe e é uma string válida
+      const nomeCliente = servico.nomeCliente ? servico.nomeCliente.trim().toLowerCase() : '';
+      const query = this.searchQuery.trim().toLowerCase();
+  
+      return nomeCliente.includes(query);
+    });
+  
+    // Aplica o filtro de dias após a pesquisa
+    this.filterByDays();
   }
-
-  // Filtra os serviços com base no número de dias selecionado
+  
   filterByDays() {
     if (this.selectedDays === 0) {
       this.filteredServices = [...this.servicos]; // Exibe todos os serviços
     } else {
       const now = new Date();
-      const filteredByDate = this.servicos.filter(servico => {
+      const filteredByDate = this.filteredServices.filter(servico => {
         const dataServico = new Date(servico.dataServico);
         const diffTime = dataServico.getTime() - now.getTime();
         const diffDays = diffTime / (1000 * 3600 * 24); // Diferença em dias
@@ -148,6 +152,7 @@ export class PlanoSemanalPage implements OnInit {
       this.filteredServices = filteredByDate;
     }
   }
+  
 
   openServiceDetails(servico: any) {
     this.selectedService = servico;

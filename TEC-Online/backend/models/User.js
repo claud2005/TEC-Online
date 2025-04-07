@@ -36,11 +36,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
-  bio: {
-    type: String,
-    default: '',
-    maxlength: [150, 'Biografia não pode ter mais de 150 caracteres'],
-  },
   createdAt: {
     type: Date,
     default: Date.now,

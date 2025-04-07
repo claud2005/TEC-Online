@@ -16,20 +16,22 @@
 <ion-content>
   <ion-grid>
     <!-- Barra de pesquisa -->
-    <ion-row class="top-bar">
-      <ion-col size="12">
-        <ion-searchbar [(ngModel)]="searchQuery" placeholder="Procurar Tarefa" (ionInput)="filterServices()"></ion-searchbar>
-      </ion-col>
-      <ion-col size="12">
-        <ion-label class="label-title">Cronograma</ion-label>
-        <ion-select [(ngModel)]="selectedDays" interface="popover" (ionChange)="filterByDays()">
-          <ion-select-option value="5">Próximos 5 dias</ion-select-option>
-          <ion-select-option value="7">Próximos 7 dias</ion-select-option>
-          <ion-select-option value="15">Próximos 15 dias</ion-select-option>
-          <ion-select-option value="30">Próximos 30 dias</ion-select-option>
-        </ion-select>
-      </ion-col>
-    </ion-row>
+<ion-row class="top-bar">
+  <ion-col size="12">
+    <ion-searchbar [(ngModel)]="searchQuery" placeholder="Procurar Tarefa" (ionInput)="filterServices()"></ion-searchbar>
+  </ion-col>
+  
+  <ion-col size="12">
+    <ion-label class="label-title">Cronograma</ion-label>
+    <ion-select [(ngModel)]="selectedDays" interface="popover" (ionChange)="filterByDays()">
+      <ion-select-option value="5">Próximos 5 dias</ion-select-option>
+      <ion-select-option value="7">Próximos 7 dias</ion-select-option>
+      <ion-select-option value="15">Próximos 15 dias</ion-select-option>
+      <ion-select-option value="30">Próximos 30 dias</ion-select-option>
+    </ion-select>
+  </ion-col>
+</ion-row>
+
 
     <!-- Lista de tarefas -->
     <ion-row>
