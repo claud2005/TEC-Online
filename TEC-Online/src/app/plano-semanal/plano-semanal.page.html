@@ -7,7 +7,7 @@
       <ion-col>
         <ion-title class="user-title">
           Olá, {{ utilizadorName || 'Carregando...' }}
-        </ion-title>              
+        </ion-title>
       </ion-col>
     </ion-row>
   </ion-toolbar>
@@ -15,13 +15,14 @@
 
 <ion-content>
   <ion-grid>
+    <!-- Barra de pesquisa -->
     <ion-row class="top-bar">
       <ion-col size="12">
-        <ion-searchbar placeholder="Procurar Tarefa"></ion-searchbar>
+        <ion-searchbar [(ngModel)]="searchQuery" placeholder="Procurar Tarefa" (ionInput)="filterServices()"></ion-searchbar>
       </ion-col>
       <ion-col size="12">
         <ion-label class="label-title">Cronograma</ion-label>
-        <ion-select interface="popover">
+        <ion-select [(ngModel)]="selectedDays" interface="popover" (ionChange)="filterByDays()">
           <ion-select-option value="5">Próximos 5 dias</ion-select-option>
           <ion-select-option value="7">Próximos 7 dias</ion-select-option>
           <ion-select-option value="15">Próximos 15 dias</ion-select-option>
@@ -30,6 +31,7 @@
       </ion-col>
     </ion-row>
 
+    <!-- Lista de tarefas -->
     <ion-row>
       <ion-col>
         <h2>
@@ -37,19 +39,19 @@
           Tarefas
         </h2>
         
-        <div *ngIf="servicos.length === 0" class="empty-message">
+        <div *ngIf="filteredServices.length === 0" class="empty-message">
           <ion-icon name="alert-circle-outline"></ion-icon>
-          <p>Nenhum serviço agendado</p>
+          <p>Nenhuma tarefa encontrada</p>
         </div>
         
-        <ion-list *ngIf="servicos.length > 0" lines="full" class="service-list">
-          <ion-item *ngFor="let servico of servicos" class="service-item" (click)="openServiceDetails(servico)">
+        <ion-list *ngIf="filteredServices.length > 0" lines="full" class="service-list">
+          <ion-item *ngFor="let servico of filteredServices" class="service-item">
             <ion-label class="service-content">
               <h3 class="service-title">{{ servico.nomeCliente || 'Cliente não informado' }}</h3>
               <div class="service-details">
                 <p>
                   <ion-icon name="calendar" class="detail-icon"></ion-icon> 
-                  {{ servico.dataServico ? (formatDate(servico.dataServico) + ' às ' + (servico.horaServico || '')) : 'Data não agendada' }}
+                  {{ servico.dataServico ? formatDate(servico.dataServico) : 'Data não agendada' }}
                 </p>
                 <p>
                   <ion-icon name="phone-portrait" class="detail-icon"></ion-icon> 

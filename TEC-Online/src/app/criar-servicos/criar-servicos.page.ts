@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http'; // Importe HttpHeaders aqui
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NavController, IonicModule } from '@ionic/angular';
-import { Router } from '@angular/router'; // Importe o Router para navegação
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-criar-servicos',
@@ -16,7 +16,7 @@ import { Router } from '@angular/router'; // Importe o Router para navegação
     IonicModule,
   ],
 })
-export class CriarServicosPage {
+export class CriarServicosPage implements OnInit {
   dataServico: string = '';
   horaServico: string = '';
   status: string = 'aberto';
@@ -32,12 +32,20 @@ export class CriarServicosPage {
 
   constructor(private http: HttpClient, private navController: NavController, private router: Router) {}
 
+  ngOnInit() {
+    const hoje = new Date();
+    this.dataServico = hoje.toISOString().split('T')[0];
+
+    const nomeUsuario = localStorage.getItem('username');
+    this.autorServico = nomeUsuario || '';
+  }
 
   salvarServico() {
     if (!this.isFormValid()) {
       alert('Preencha todos os campos obrigatórios.');
       return;
     }
+
     const novoServico = {
       dataServico: this.dataServico.trim(),
       horaServico: this.horaServico.trim(),
@@ -53,17 +61,12 @@ export class CriarServicosPage {
       observacoes: this.observacoes.trim() || 'Sem observações',
     };
 
-    console.log('Dados enviados:', novoServico); 
-
     const token = localStorage.getItem('token');
-
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     this.http.post('http://localhost:3000/api/servicos', novoServico, { headers }).subscribe(
       (response) => {
-        console.log('Serviço criado:', response);
         alert('Serviço criado com sucesso!');
-        this.router.navigate(['/servicos']);
         this.router.navigate(['/plano-semanal']);
       },
       (error) => {
@@ -78,7 +81,7 @@ export class CriarServicosPage {
       this.dataServico, this.horaServico, this.status, this.autorServico,
       this.nomeCliente, this.telefoneContato, this.marcaAparelho, this.modeloAparelho,
       this.problemaCliente, this.solucaoInicial
-    ].every(campo => campo !== undefined && campo.trim() !== '') && 
+    ].every(campo => campo !== undefined && campo.trim() !== '') &&
       this.valorTotal !== null && this.valorTotal >= 0;
   }
 

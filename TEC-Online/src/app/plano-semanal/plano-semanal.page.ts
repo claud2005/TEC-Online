@@ -20,7 +20,10 @@ export class PlanoSemanalPage implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
   selectedService: any = null;
   servicos: any[] = [];
+  filteredServices: any[] = []; // Lista de serviços filtrados
   utilizadorName: string = 'Utilizador';
+  searchQuery: string = ''; // Variável para armazenar a pesquisa
+  selectedDays: number = 7; // Valor padrão para os próximos 7 dias
 
   constructor(
     private router: Router,
@@ -40,15 +43,32 @@ export class PlanoSemanalPage implements OnInit {
   carregarServicos() {
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
-    
+
     this.http.get<any[]>('http://localhost:3000/api/servicos', { headers }).subscribe({
       next: (data) => {
-        this.servicos = data;
+        this.servicos = data.map(servico => ({
+          nomeCliente: servico.cliente || 'Cliente não informado',
+          dataServico: servico.data || 'Data não agendada',
+          problemaCliente: servico.descricao || 'Problema não descrito',
+          horaServico: servico.horaServico ? servico.horaServico : 'Horário não definido',
+          status: servico.status || '',
+          autorServico: servico.autorServico || '',
+          observacoes: servico.observacoes || '',
+          modeloAparelho: servico.modeloAparelho || '',
+          marcaAparelho: servico.marcaAparelho || '',
+        }));
+
         this.servicos.sort((a, b) => {
           const dateA = a.dataServico ? new Date(a.dataServico).getTime() : 0;
           const dateB = b.dataServico ? new Date(b.dataServico).getTime() : 0;
           return dateA - dateB;
         });
+
+        // Inicialmente, exibe todos os serviços
+        this.filteredServices = [...this.servicos];
+
+        this.filterServices(); // Aplica filtro de pesquisa
+        this.filterByDays(); // Aplica filtro de dias (com todos os serviços inicialmente)
       },
       error: (error) => {
         console.error('Erro ao carregar serviços:', error);
@@ -80,12 +100,58 @@ export class PlanoSemanalPage implements OnInit {
   }
 
   openModal(event: any) {
+    const selectedDate = new Date(event.detail.value).toDateString();
+
+    const servicoEncontrado = this.servicos.find(servico => {
+      const dataServico = new Date(servico.dataServico).toDateString();
+      return dataServico === selectedDate;
+    });
+
+    if (servicoEncontrado) {
+      this.selectedService = servicoEncontrado;
+    } else {
+      this.selectedService = {
+        nomeCliente: '',
+        dataServico: selectedDate,
+        horaServico: '',
+        marcaAparelho: '',
+        modeloAparelho: '',
+        problemaCliente: '',
+        observacoes: ''
+      };
+    }
+
     this.modal.present();
+  }
+
+  // Filtra a lista de serviços com base na pesquisa
+  filterServices() {
+    this.filteredServices = this.servicos.filter(servico =>
+      servico.nomeCliente.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+      servico.problemaCliente.toLowerCase().includes(this.searchQuery.toLowerCase())
+    );
+    this.filterByDays(); // Aplica o filtro de dias após a pesquisa
+  }
+
+  // Filtra os serviços com base no número de dias selecionado
+  filterByDays() {
+    if (this.selectedDays === 0) {
+      this.filteredServices = [...this.servicos]; // Exibe todos os serviços
+    } else {
+      const now = new Date();
+      const filteredByDate = this.servicos.filter(servico => {
+        const dataServico = new Date(servico.dataServico);
+        const diffTime = dataServico.getTime() - now.getTime();
+        const diffDays = diffTime / (1000 * 3600 * 24); // Diferença em dias
+        return diffDays <= this.selectedDays;
+      });
+      this.filteredServices = filteredByDate;
+    }
   }
 
   openServiceDetails(servico: any) {
     this.selectedService = servico;
-    this.modal.present();
+    this.modal.present(); // Agora abre o modal quando clica em uma tarefa
   }
 
   closeModal() {
