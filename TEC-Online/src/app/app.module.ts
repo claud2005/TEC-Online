@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http'; // ✅ Importado corret
 import { IonicModule } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ReactiveFormsModule } from '@angular/forms'; // ✅ Importando o ReactiveFormsModule
 
 @NgModule({
   declarations: [AppComponent], // ✅ Não incluir standalone components aqui
@@ -11,7 +12,8 @@ import { AppComponent } from './app.component';
     BrowserModule,
     IonicModule.forRoot(),
     HttpClientModule, // ✅ Mantido aqui corretamente
-    AppRoutingModule
+    ReactiveFormsModule, // ✅ Adicionando o ReactiveFormsModule
+    AppRoutingModule,
   ],
   bootstrap: [AppComponent],
 })

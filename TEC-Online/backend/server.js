@@ -372,6 +372,46 @@ app.post('/reset-password', async (req, res) => {
   }
 });
 
+app.get('/reset-password/:token', async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).send('Token inválido ou expirado');
+    }
+
+    // 🔁 Se tiver frontend, redireciona:
+    // res.redirect(`http://localhost:5173/reset-password/${token}`);
+
+    // ou simplesmente envia uma confirmação:
+    res.send('Token válido. Pode mostrar o formulário.');
+  } catch (error) {
+    res.status(500).send('Erro ao verificar o token');
+  }
+});
+
+app.get('/verify-token/:token', async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    const user = await User.findOne({ resetPasswordToken: token });
+
+    if (!user || user.resetPasswordExpires < Date.now()) {
+      return res.status(400).json({ message: 'Token inválido ou expirado' });
+    }
+
+    res.status(200).json({ message: 'Token válido' });
+  } catch (err) {
+    res.status(500).json({ message: 'Erro ao verificar token', error: err });
+  }
+});
+
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
