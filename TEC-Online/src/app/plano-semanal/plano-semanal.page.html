@@ -124,12 +124,23 @@
 
 <ion-footer>
   <ion-toolbar>
+    <!-- Botões de Clientes à esquerda -->
     <ion-buttons slot="start">
+      <ion-button (click)="navigateToClientes()">
+        <ion-icon name="people"></ion-icon>
+        Clientes
+      </ion-button>
+    </ion-buttons>
+
+    <!-- Botão de Serviços centralizado -->
+    <ion-buttons slot="primary">
       <ion-button (click)="navigateToServicos()">
         <ion-icon name="checkmark-circle"></ion-icon>
         Serviços
       </ion-button>
     </ion-buttons>
+
+    <!-- Botões de Perfil à direita -->
     <ion-buttons slot="end">
       <ion-button (click)="navigateToPerfil()">
         <ion-icon name="person"></ion-icon>
@@ -138,3 +149,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-footer>
+
+
+
+

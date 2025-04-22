@@ -1,14 +1,13 @@
 const mongoose = require('mongoose');
 
-// Definindo o esquema do serviço
 const servicoSchema = new mongoose.Schema({
   numero: { 
     type: String, 
     required: true, 
-    unique: true // Garantir que o número do serviço seja único
+    unique: true 
   },
   data: { 
-    type: Date, // Usar o tipo Date para armazenar a data corretamente
+    type: Date, 
     required: true 
   },
   status: { 
@@ -41,7 +40,7 @@ const servicoSchema = new mongoose.Schema({
   },
   codigoPostalCliente: { 
     type: String, 
-    required: false
+    required: false 
   },
   contatoCliente: { 
     type: String, 
@@ -64,12 +63,14 @@ const servicoSchema = new mongoose.Schema({
     required: true 
   },
   valorTotal: { 
-    type: Number, // Usar Number para valores monetários
+    type: Number, 
     required: true 
   },
+  imagens: {
+    type: [String], // Armazena nomes/paths das imagens
+    default: []
+  }
 });
 
-// Criando o modelo Servico a partir do esquema
 const Servico = mongoose.model('Servico', servicoSchema);
-
 module.exports = Servico;

@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator'); // Para validação de dados
 const multer = require('multer'); // Importando o multer para manipulação de arquivos
 const path = require('path');
+const fs = require('fs'); // Importando o fs para verificar e criar a pasta
 dotenv.config();
 
 const User = require('./models/User');
@@ -271,6 +272,20 @@ app.get('/api/servicos/:id', authenticateToken, async (req, res, next) => {
     next(error);
   }
 });
+
+
+
+// Verificando e criando a pasta 'img-servicos' caso não exista
+const imgServicosPath = path.join(__dirname, 'img-servicos');
+if (!fs.existsSync(imgServicosPath)) {
+  fs.mkdirSync(imgServicosPath);
+  console.log('Pasta "img-servicos" criada com sucesso!');
+} else {
+  console.log('A pasta "img-servicos" já existe.');
+}
+
+app.use('/img-servicos', express.static(imgServicosPath)); // Tornando a pasta acessível via URL
+
 
 // Iniciar servidor
 app.listen(PORT, () => {

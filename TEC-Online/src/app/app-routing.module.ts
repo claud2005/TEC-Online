@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { SignupPage } from './signup/signup.page';
 import { PerfilPage } from './perfil/perfil.page'; // Importando o PerfilPage standalone
+import { GestorClientesPage } from './gestor-clientes/gestor-clientes.page'; // Importando o GestorClientesPage standalone
 
 const routes: Routes = [
   {
@@ -23,11 +24,11 @@ const routes: Routes = [
   },
   {
     path: 'criar-servicos',
-    loadChildren: () => import('./criar-servicos/criar-servicos.module').then(m => m.CriarServicosPageModule), // Carregamento do módulo de criação de serviços
+    loadChildren: () => import('./criar-servicos/criar-servicos.module').then(m => m.CriarServicosPageModule),
   },
   {
     path: 'servicos',
-    loadChildren: () => import('./servicos/servicos.module').then(m => m.ServicosPageModule), // Carregamento do módulo de serviços
+    loadChildren: () => import('./servicos/servicos.module').then(m => m.ServicosPageModule),
   },
   {
     path: 'plano-semanal',
@@ -38,9 +39,14 @@ const routes: Routes = [
     loadChildren: () => import('./editar-perfil/editar-perfil.module').then(m => m.EditarPerfilPageModule),
   },
   {
-    path: 'editar-servicos/:numero', // Rota para editar serviços, com o parâmetro :numero
+    path: 'editar-servicos/:numero',
     loadChildren: () => import('./editar-servicos/editar-servicos.module').then(m => m.EditarServicosPageModule),
   },
+  {
+    path: 'gestor-clientes',
+    component: GestorClientesPage, // Usando o GestorClientesPage diretamente como componente standalone
+  },
+
 ];
 
 @NgModule({

@@ -166,22 +166,42 @@ ion-datetime {
 
 /* Rodapé */
 ion-footer {
-  border-top: 2px solid #e1e8ed;
-  background: #fff;
+  display: flex;
+  justify-content: space-between; /* Garante que os botões das extremidades fiquem nas laterais */
+  align-items: center; /* Alinha todos os botões verticalmente */
+  background: #07f; /* Define o fundo do rodapé como azul */
+  padding: 0; /* Remove o padding para que o rodapé ocupe toda a largura */
+  width: 100%; /* Garante que o rodapé ocupe 100% da largura */
+  border-top: none; /* Remove a borda superior, caso não queira a linha */
+}
+
+ion-buttons[slot="start"],
+ion-buttons[slot="end"] {
+  flex: 0; /* Não faz os botões das extremidades crescerem */
+}
+
+ion-buttons[slot="primary"] {
+  display: flex;
+  justify-content: center; /* Centraliza o conteúdo do botão 'Serviços' */
+  align-items: center;
+  position: absolute; /* Faz o botão 'Serviços' ocupar o centro */
+  left: 50%; /* Centraliza o botão */
+  transform: translateX(-50%); /* Corrige o alinhamento exato do centro */
 }
 
 ion-button {
   --background: transparent;
-  --color: #048;
+  --color: #fff; /* Deixa o texto e ícone branco */
   font-size: 1.4rem;
   font-weight: bold;
-  --ripple-color: #07f;
-  
-  ion-icon {
-    font-size: 1.8rem;
-    margin-right: 8px;
-  }
+  --ripple-color: #fff; /* Altera a cor do ripple para branco */
 }
+
+ion-icon {
+  font-size: 1.8rem;
+  margin-right: 8px;
+}
+
 
 /* Modal */
 ion-modal {

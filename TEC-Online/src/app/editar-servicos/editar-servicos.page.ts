@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, IonicModule } from '@ionic/angular';
-import { HttpClient, HttpHeaders } from '@angular/common/http';  // Importa o HttpClient
-import { HttpErrorResponse } from '@angular/common/http';  // Importa o HttpErrorResponse para tipar o erro
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-editar-servicos',
@@ -36,37 +36,30 @@ export class EditarServicosPage {
   constructor(
     private navController: NavController,
     private route: ActivatedRoute,
-    private http: HttpClient  // Injeta o HttpClient
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
     let rawId = this.route.snapshot.paramMap.get('numero');
-   // this.id = rawId ? parseInt(rawId, 10).toString() : null; // Remove zeros à esquerda
-    this.id = rawId
+    this.id = rawId;
 
     console.log("ID capturado da URL:", rawId);
-    console.log("ID formatado para a requisição:", this.id);
-
-
     if (this.id) {
       this.carregarServico();
     }
   }
 
   carregarServico() {
-        const token = localStorage.getItem('token');
-        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    console.log("Carregando serviço com ID:", this.id);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.get(`http://localhost:3000/api/servicos/${this.id}`,{headers}).subscribe(
+    this.http.get(`http://localhost:3000/api/servicos/${this.id}`, { headers }).subscribe(
       (data: any) => {
-        console.log("Dados do serviço recebidos:", data);
         if (!data) {
           alert("Serviço não encontrado.");
           return;
         }
 
-        // Preencher os campos com os dados vindos da API
         this.dataServico = data.dataServico ?? '';
         this.horaServico = data.horaServico ?? '';
         this.status = data.status ?? 'aberto';
@@ -81,7 +74,7 @@ export class EditarServicosPage {
         this.autorServico = data.autorServico ?? '';
         this.imagens = data.imagens ?? [];
       },
-      (error: HttpErrorResponse) => {  // Tipar o erro como HttpErrorResponse
+      (error: HttpErrorResponse) => {
         console.error("Erro ao carregar serviço:", error);
         alert("Erro ao carregar o serviço.");
       }
@@ -93,10 +86,15 @@ export class EditarServicosPage {
     input.type = 'file';
     input.accept = 'image/*';
     input.click();
-
+  
     input.onchange = async (event: any) => {
       const file = event.target.files[0];
       if (file) {
+        if (!file.type.startsWith('image/')) {
+          alert('Por favor, selecione uma imagem válida.');
+          return;
+        }
+
         const base64 = await this.convertToBase64(file);
         this.imagens.push(base64);
       }
@@ -129,25 +127,39 @@ export class EditarServicosPage {
       return;
     }
 
-    const servicoAtualizado = {
-      dataServico: this.dataServico,
-      horaServico: this.horaServico,
-      status: this.status,
-      nomeCliente: this.nomeCliente,
-      telefoneContato: this.telefoneContato,
-      modeloAparelho: this.modeloAparelho,
-      marcaAparelho: this.marcaAparelho,
-      problemaCliente: this.problemaCliente,
-      solucaoInicial: this.solucaoInicial,
-      valorTotal: this.valorTotal ?? 0,
-      observacoes: this.observacoes.trim() || 'Sem observações',
-      autorServico: this.autorServico,
-      imagens: this.imagens,
-    };
+    const formData = new FormData();
+    formData.append('dataServico', this.dataServico);
+    formData.append('horaServico', this.horaServico);
+    formData.append('status', this.status);
+    formData.append('nomeCliente', this.nomeCliente);
+    formData.append('telefoneContato', this.telefoneContato);
+    formData.append('modeloAparelho', this.modeloAparelho);
+    formData.append('marcaAparelho', this.marcaAparelho);
+    formData.append('problemaCliente', this.problemaCliente);
+    formData.append('solucaoInicial', this.solucaoInicial);
+    formData.append('valorTotal', this.valorTotal?.toString() ?? '0');
+    formData.append('observacoes', this.observacoes.trim() || 'Sem observações');
+    formData.append('autorServico', this.autorServico);
 
-    console.log('Serviço atualizado:', servicoAtualizado);
-    alert('Serviço atualizado com sucesso!');
-    this.fecharEAtualizar();
+    this.imagens.forEach((base64) => {
+      formData.append('imagens', base64);
+    });
+
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    this.http.put(`http://localhost:3000/api/servicos/${this.id}`, formData, { headers }).subscribe(
+      () => {
+        alert('Serviço atualizado com sucesso!');
+        this.fecharEAtualizar();
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Erro ao atualizar o serviço:', error);
+        alert('Erro ao atualizar o serviço.');
+      }
+    );
   }
 
   fecharEAtualizar() {
@@ -177,11 +189,15 @@ export class EditarServicosPage {
     });
 
     const valorValido = this.valorTotal !== null && this.valorTotal >= 0;
-
     if (!valorValido) {
       console.log('Valor inválido:', { valorTotal: this.valorTotal });
     }
 
-    return camposPreenchidos && valorValido;
+    const imagensValidas = this.imagens.length > 0;
+    if (!imagensValidas) {
+      console.log('Nenhuma imagem foi adicionada.');
+    }
+
+    return camposPreenchidos && valorValido && imagensValidas;
   }
 }
