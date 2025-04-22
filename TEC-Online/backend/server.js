@@ -9,6 +9,8 @@ const { body, validationResult } = require('express-validator'); // Para valida�
 const multer = require('multer'); // Importando o multer para manipulação de arquivos
 const path = require('path');
 const fs = require('fs'); // Importando o fs para verificar e criar a pasta
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 dotenv.config();
 
 const User = require('./models/User');
@@ -286,6 +288,97 @@ if (!fs.existsSync(imgServicosPath)) {
 
 app.use('/img-servicos', express.static(imgServicosPath)); // Tornando a pasta acessível via URL
 
+// Rota para "Esqueceu a senha"
+app.post('/api/esqueceu-password', [
+  body('email').isEmail().withMessage('E-mail inválido')
+], async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { email } = req.body;
+
+  try {
+    console.log('Processando solicitação de recuperação de senha para e-mail:', email); // Log de depuração
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      console.log('Usuário não encontrado com o e-mail:', email); // Log de erro
+      return res.status(404).json({ message: 'Usuário com este e-mail não foi encontrado.' });
+    }
+
+    // Gerar o token de reset
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    console.log('Token de redefinição gerado:', resetToken); // Log de token gerado
+
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
+
+    await user.save();
+
+    const resetLink = `http://localhost:3000/reset-password/${resetToken}`;
+    console.log('Link de redefinição gerado:', resetLink); // Log do link de reset
+
+    // Envio de e-mail
+    await transporter.sendMail({
+      to: user.email,
+      subject: 'Redefinição de Senha - Tec Online',
+      html: `
+        <h3>Olá, ${user.fullName}</h3>
+        <p>Você solicitou a redefinição de sua senha.</p>
+        <p>Clique no link abaixo para criar uma nova senha:</p>
+        <a href="${resetLink}">${resetLink}</a>
+        <p>Se você não solicitou isso, ignore este e-mail.</p>
+      `,
+    });
+
+    return res.status(200).json({
+      message: 'Link de redefinição de senha enviado por e-mail com sucesso.',
+    });
+  } catch (error) {
+    console.error('Erro ao tentar redefinir senha:', error); // Log de erro detalhado
+    res.status(500).json({
+      message: 'Ocorreu um erro interno ao processar a solicitação.',
+      error: error.message,
+    });
+  }
+});
+
+// Rota para redefinir a senha
+app.post('/reset-password', async (req, res) => {
+  const { token, novaSenha } = req.body;
+
+  try {
+    if (!novaSenha || novaSenha.length < 6) {
+      return res.status(400).json({ message: 'A nova senha deve ter pelo menos 6 caracteres.' });
+    }
+
+    const user = await User.findOne({ resetPasswordToken: token });
+
+    if (!user || !user.isResetPasswordTokenValid(token)) {
+      return res.status(400).json({ message: 'Token inválido ou expirado.' });
+    }
+
+    user.password = novaSenha;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+
+    await user.save();
+    return res.status(200).json({ message: 'Senha redefinida com sucesso!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao redefinir a senha.', error });
+  }
+});
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,  // Seu e-mail do Gmail
+    pass: process.env.EMAIL_PASS   // A senha de aplicativo gerada
+  }
+});
 
 // Iniciar servidor
 app.listen(PORT, () => {

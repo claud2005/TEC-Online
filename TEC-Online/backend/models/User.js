@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { isEmail } = require('validator'); // Para validação de e-mail
+const { isEmail } = require('validator');
+const crypto = require('crypto');  // Necessário para gerar tokens seguros
 
 // Esquema do Usuário
 const userSchema = new mongoose.Schema({
@@ -36,10 +37,16 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  bio: {  // Adicionando o campo bio, se necessário
+    type: String,
+    default: '',
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
 });
 
 // Criptografar senha antes de salvar no banco de dados
@@ -77,7 +84,6 @@ userSchema.methods.generateAuthToken = function () {
 
 // Método para atualizar os dados do perfil
 userSchema.methods.updateProfile = async function (updatedData) {
-  // Atualiza os dados do usuário com os novos valores
   if (updatedData.fullName) {
     this.fullName = updatedData.fullName;
   }
@@ -94,12 +100,23 @@ userSchema.methods.updateProfile = async function (updatedData) {
     this.profilePicture = updatedData.profilePicture;
   }
 
-  // Salve as alterações
   await this.save();
   return this;
 };
 
-// Criar o modelo de Usuário
+// Método para gerar o token de redefinição de senha
+userSchema.methods.generateResetPasswordToken = function () {
+  const resetToken = crypto.randomBytes(32).toString('hex'); // Gera um token de reset único
+  this.resetPasswordToken = resetToken;
+  this.resetPasswordExpires = Date.now() + 3600000; // Expira em 1 hora
+  return resetToken;
+};
+
+// Método para verificar se o token de redefinição de senha ainda é válido
+userSchema.methods.isResetPasswordTokenValid = function (token) {
+  return this.resetPasswordToken === token && this.resetPasswordExpires > Date.now();
+};
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

@@ -43,9 +43,22 @@ const routes: Routes = [
     loadChildren: () => import('./editar-servicos/editar-servicos.module').then(m => m.EditarServicosPageModule),
   },
   {
-    path: 'gestor-clientes',
-    component: GestorClientesPage, // Usando o GestorClientesPage diretamente como componente standalone
+  path: 'gestor-clientes',
+  component: GestorClientesPage, // Usando o GestorClientesPage diretamente como componente standalone
   },
+  {
+    path: 'esqueceu-password',
+    loadChildren: () => import('./esqueceu-password/esqueceu-password.module').then( m => m.EsqueceuPasswordPageModule)
+  },
+  {
+    path: 'reset-password',
+    loadChildren: () => import('./reset-password/reset-password.module').then( m => m.ResetPasswordPageModule)
+  },
+
+  {
+    path: 'reset-password/:token',
+      loadComponent: () => import('./reset-password/reset-password.page').then(m => m.ResetPasswordPage)
+  }
 
 ];
 
