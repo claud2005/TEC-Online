@@ -1,5 +1,5 @@
 {
-  "name": "TEC-Online",
+  "name": "tec-online",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
@@ -32,13 +32,17 @@
     "@ionic/angular": "^8.4.3",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
+    "body-parser": "^2.2.0",
     "capacitor-file-chooser": "^0.0.1",
     "core-js": "^3.41.0",
+    "cors": "^2.8.5",
     "date-fns": "^4.1.0",
+    "express": "^5.1.0",
     "express-validator": "^7.2.1",
     "ionicons": "^7.0.0",
     "jsonwebtoken": "^9.0.2",
     "jspdf": "^3.0.0",
+    "mongoose": "^8.13.2",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.10.1",
     "rxjs": "~7.8.0",
@@ -75,5 +79,8 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "^5.7.3"
   },
-  "description": "An Ionic project"
+  "description": "An Ionic project",
+  "main": "karma.conf.js",
+  "keywords": [],
+  "license": "ISC"
 }

@@ -1,0 +1,67 @@
+/* estilo da página */
+ion-header {
+    --background: #3880ff; /* Cor de fundo do cabeçalho */
+    --color: white; /* Cor do texto do título */
+  }
+  
+  ion-toolbar {
+    --padding-start: 10px;
+    --padding-end: 10px;
+  }
+  
+  ion-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  
+  ion-buttons {
+    padding: 5px;
+  }
+  
+  ion-button {
+    font-weight: bold;
+    padding: 5px 10px;
+  }
+  
+  /* Estilo da barra de pesquisa */
+  ion-searchbar {
+    margin: 15px 0;
+  }
+  
+  /* Estilo para a tabela de clientes */
+  ion-grid {
+    margin-top: 20px;
+  }
+  
+  /* Cabeçalho da tabela */
+  .table-header {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  /* Linhas da tabela */
+  ion-col {
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+  
+  ion-col strong {
+    color: #555;
+  }
+  
+  /* Botões de ação */
+  ion-button {
+    margin: 0 5px;
+  }
+  
+  /* Espacamento entre linhas */
+  ion-row {
+    margin-bottom: 10px;
+  }
+  
+  ion-content {
+    background-color: #f9f9f9;
+    padding: 20px;
+  }
+  

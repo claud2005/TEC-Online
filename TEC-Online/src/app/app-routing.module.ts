@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { SignupPage } from './signup/signup.page';
 import { PerfilPage } from './perfil/perfil.page'; // Importando o PerfilPage standalone
-import { GestorClientesPage } from './gestor-clientes/gestor-clientes.page'; // Importando o GestorClientesPage standalone
+import { GestorClientesPage } from './gestor-clientes/gestor-clientes.page';
+
+
 
 const routes: Routes = [
   {
