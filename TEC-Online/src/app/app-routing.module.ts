@@ -4,8 +4,6 @@ import { SignupPage } from './signup/signup.page';
 import { PerfilPage } from './perfil/perfil.page'; // Importando o PerfilPage standalone
 import { GestorClientesPage } from './gestor-clientes/gestor-clientes.page';
 
-
-
 const routes: Routes = [
   {
     path: 'home',
@@ -45,18 +43,21 @@ const routes: Routes = [
     loadChildren: () => import('./editar-servicos/editar-servicos.module').then(m => m.EditarServicosPageModule),
   },
   {
-  path: 'gestor-clientes',
-  component: GestorClientesPage, // Usando o GestorClientesPage diretamente como componente standalone
+    path: 'gestor-clientes',
+    component: GestorClientesPage, // Usando o GestorClientesPage diretamente como componente standalone
   },
   {
     path: 'esqueceu-password',
-    loadChildren: () => import('./esqueceu-password/esqueceu-password.module').then( m => m.EsqueceuPasswordPageModule)
+    loadChildren: () => import('./esqueceu-password/esqueceu-password.module').then(m => m.EsqueceuPasswordPageModule),
   },
   {
     path: 'reset-password/:token',
-      loadComponent: () => import('./reset-password/reset-password.page').then(m => m.ResetPasswordPage)
-  }
-
+    loadComponent: () => import('./reset-password/reset-password.page').then(m => m.ResetPasswordPage),
+  },
+  {
+    path: 'adicionar-cliente',
+    loadChildren: () => import('./adicionar-cliente/adicionar-cliente.module').then(m => m.AdicionarClientePageModule),
+  },
 ];
 
 @NgModule({

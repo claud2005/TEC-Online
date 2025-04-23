@@ -1,6 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Gestor de Clientes</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="voltar()">
+        <ion-icon name="arrow-back-outline" class="back-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="center-title">Gestor de Clientes</ion-title>
     <ion-buttons slot="end">
       <ion-button color="success" (click)="adicionarCliente()">
         <ion-icon name="add-outline"></ion-icon>
@@ -10,7 +15,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding conteudo-branco">
   <!-- Barra de pesquisa -->
   <ion-searchbar [(ngModel)]="filtro" placeholder="Pesquisar..." (ionInput)="filtrarClientes()"></ion-searchbar>
 

@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';  // Importando o IonicModule
 import { CommonModule } from '@angular/common';  // Importando o CommonModule
 import { FormsModule } from '@angular/forms';    // Importando o FormsModule
 import { AlertController } from '@ionic/angular';  // Para mostrar o alerta de confirmação de exclusão
+import { NavController } from '@ionic/angular'; // Importando o NavController para navegação
 
 @Component({
   selector: 'app-gestor-clientes',
@@ -16,7 +17,7 @@ export class GestorClientesPage implements OnInit {
   clientes: any[] = [];  // Lista de clientes (aqui você pode carregar os dados de uma API ou serviço)
   clientesFiltrados: any[] = [];  // Clientes após o filtro aplicado
 
-  constructor(private alertController: AlertController) {}
+  constructor(private alertController: AlertController, private navCtrl: NavController) {}
 
   ngOnInit() {
     this.carregarClientes();  // Carregar os clientes ao inicializar
@@ -34,8 +35,8 @@ export class GestorClientesPage implements OnInit {
 
   // Função para adicionar um cliente
   adicionarCliente() {
-    console.log('Adicionar cliente');
-    // Aqui você pode implementar a navegação para a página de cadastro ou abrir um modal
+    // Navegar para a página de Adicionar Cliente
+    this.navCtrl.navigateForward('/adicionar-cliente');
   }
 
   // Função para filtrar os clientes com base no termo de pesquisa
@@ -81,5 +82,10 @@ export class GestorClientesPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  // Função para voltar à página anterior
+  voltar() {
+    this.navCtrl.back();  // Volta para a página anterior
   }
 }

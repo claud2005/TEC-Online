@@ -1,67 +1,138 @@
-/* estilo da página */
+/* Forçar modo claro na aplicação */
+:root {
+  color-scheme: light;
+  --ion-background-color: white;
+  --ion-text-color: #333;
+  --ion-color-step-50: #fff;
+  --ion-color-step-100: #f2f2f2;
+  --ion-color-step-150: #e6e6e6;
+  --ion-color-step-200: #d9d9d9;
+}
+
+/* Cabeçalho */
 ion-header {
-    --background: #3880ff; /* Cor de fundo do cabeçalho */
-    --color: white; /* Cor do texto do título */
-  }
-  
-  ion-toolbar {
-    --padding-start: 10px;
-    --padding-end: 10px;
-  }
-  
-  ion-title {
-    font-weight: bold;
-    font-size: 1.5rem;
-  }
-  
-  ion-buttons {
-    padding: 5px;
-  }
-  
-  ion-button {
-    font-weight: bold;
-    padding: 5px 10px;
-  }
-  
-  /* Estilo da barra de pesquisa */
-  ion-searchbar {
-    margin: 15px 0;
-  }
-  
-  /* Estilo para a tabela de clientes */
-  ion-grid {
-    margin-top: 20px;
-  }
-  
-  /* Cabeçalho da tabela */
-  .table-header {
-    background-color: #f4f4f4;
-    font-weight: bold;
-  }
-  
-  /* Linhas da tabela */
-  ion-col {
-    text-align: center;
-    padding: 8px;
-    border: 1px solid #ddd;
-  }
-  
-  ion-col strong {
-    color: #555;
-  }
-  
-  /* Botões de ação */
-  ion-button {
-    margin: 0 5px;
-  }
-  
-  /* Espacamento entre linhas */
-  ion-row {
-    margin-bottom: 10px;
-  }
-  
-  ion-content {
-    background-color: #f9f9f9;
-    padding: 20px;
-  }
-  
+  --background: #3880ff;
+  --color: white;
+}
+
+ion-toolbar {
+  --padding-start: 10px;
+  --padding-end: 10px;
+}
+
+ion-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-align: center; /* Centralizando o título */
+}
+
+/* Botões */
+ion-buttons {
+  padding: 5px;
+}
+
+ion-button {
+  font-weight: bold;
+  padding: 5px 10px;
+}
+
+/* Barra de pesquisa customizada */
+ion-searchbar {
+  margin: 15px 0;
+  --background: #e0f0ff; /* Azul claro */
+  --icon-color: #3880ff;
+  --placeholder-color: #5a5a5a;
+  --color: #333;
+  --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+}
+
+/* Tabela com fundo azulado */
+ion-grid {
+  margin-top: 20px;
+  background-color: #f0f8ff; /* azul claro */
+  border-radius: 10px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Cabeçalho da tabela */
+.table-header {
+  background-color: #d0e7ff;
+  font-weight: bold;
+  color: #1a3d7c;
+  text-align: center;  /* Centralizando o texto no cabeçalho da tabela */
+}
+
+/* Células */
+ion-col {
+  text-align: center;
+  padding: 12px;
+  border-bottom: 1px solid #c0dfff;
+  background-color: #f9fbff;
+  color: #2c3e50;
+}
+
+ion-col strong {
+  color: #1f4e7a;
+}
+
+/* Ações */
+ion-button[color="primary"] {
+  --background: #3dc2ff;
+  color: white;
+}
+
+ion-button[color="danger"] {
+  --background: #ff4d4d;
+  color: white;
+}
+
+ion-icon {
+  font-size: 18px;
+}
+
+/* Espaçamento de linhas */
+ion-row {
+  margin-bottom: 0;
+}
+
+/* Fundo da página */
+ion-content {
+  --padding-top: 16px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  background-color: white !important;
+  color: #333;
+}
+
+/* Fundo global */
+html, body {
+  background-color: white !important;
+  color: #333;
+}
+
+/* Garantir fundo branco mesmo em modo escuro */
+.conteudo-branco {
+  --background: white !important;
+  background: white !important;
+  color: #333;
+}
+
+/* Seta de Voltar - Personalizando tamanho e alinhamento */
+ion-buttons[slot="start"] {
+  margin-left: 0; /* Garante que o botão de voltar fique à esquerda */
+}
+
+.back-icon {
+  font-size: 32px;  /* Aumenta o tamanho da seta */
+}
+
+/* Ajuste do botão de adicionar cliente */
+ion-buttons[slot="end"] {
+  margin-right: 0;
+}
+
+/* Personalização do ícone no botão */
+ion-icon {
+  font-size: 22px;  /* Ajuste de tamanho do ícone */
+}
