@@ -347,9 +347,8 @@ app.post('/api/esqueceu-password', [
 });
 
 // Rota para redefinir a senha
-app.post('/reset-password', async (req, res) => {
+app.post('/reset-password', async (req, res, next) => {
   const { token, novaSenha } = req.body;
-
   try {
     if (!novaSenha || novaSenha.length < 6) {
       return res.status(400).json({ message: 'A nova senha deve ter pelo menos 6 caracteres.' });
@@ -368,30 +367,7 @@ app.post('/reset-password', async (req, res) => {
     await user.save();
     return res.status(200).json({ message: 'Senha redefinida com sucesso!' });
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao redefinir a senha.', error });
-  }
-});
-
-app.get('/reset-password/:token', async (req, res) => {
-  const { token } = req.params;
-
-  try {
-    const user = await User.findOne({
-      resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() },
-    });
-
-    if (!user) {
-      return res.status(400).send('Token inválido ou expirado');
-    }
-
-    // 🔁 Se tiver frontend, redireciona:
-    // res.redirect(`http://localhost:5173/reset-password/${token}`);
-
-    // ou simplesmente envia uma confirmação:
-    res.send('Token válido. Pode mostrar o formulário.');
-  } catch (error) {
-    res.status(500).send('Erro ao verificar o token');
+    next(error);
   }
 });
 
