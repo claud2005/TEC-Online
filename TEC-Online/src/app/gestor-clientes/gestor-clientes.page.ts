@@ -1,45 +1,44 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';  // Importando o IonicModule
-import { CommonModule } from '@angular/common';  // Importando o CommonModule
-import { FormsModule } from '@angular/forms';    // Importando o FormsModule
-import { AlertController } from '@ionic/angular';  // Para mostrar o alerta de confirmação de exclusão
-import { NavController } from '@ionic/angular'; // Importando o NavController para navegação
+import { IonicModule } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AlertController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-gestor-clientes',
   templateUrl: './gestor-clientes.page.html',
   styleUrls: ['./gestor-clientes.page.scss'],
-  standalone: true,   // Definindo que este é um componente standalone
-  imports: [IonicModule, CommonModule, FormsModule]  // Importando o CommonModule e FormsModule para funcionar com ngFor e ngModel
+  standalone: true,
+  imports: [IonicModule, CommonModule, FormsModule]
 })
 export class GestorClientesPage implements OnInit {
-  filtro: string = '';  // Filtro para a barra de pesquisa
-  clientes: any[] = [];  // Lista de clientes (aqui você pode carregar os dados de uma API ou serviço)
-  clientesFiltrados: any[] = [];  // Clientes após o filtro aplicado
+  filtro: string = '';
+  clientes: any[] = [];
+  clientesFiltrados: any[] = [];
 
-  constructor(private alertController: AlertController, private navCtrl: NavController) {}
+  constructor(
+    private alertController: AlertController,
+    private navCtrl: NavController
+  ) {}
 
   ngOnInit() {
-    this.carregarClientes();  // Carregar os clientes ao inicializar
+    this.carregarClientes();
   }
 
-  // Função para carregar os clientes (aqui você pode substituir pelo seu serviço HTTP)
+  // Carrega clientes localmente (pode simular dados fixos aqui se quiser)
   carregarClientes() {
-    // Exemplo de dados
+    // Simulando clientes locais
     this.clientes = [
-      { id: 1, nome: 'João Silva', telefone: '123456789', email: 'joao@email.com', endereco: 'Rua A', data: '2022-01-01' },
-      { id: 2, nome: 'Maria Oliveira', telefone: '987654321', email: 'maria@email.com', endereco: 'Rua B', data: '2022-02-01' }
+      { id: 1, nome: 'Cliente 1', email: 'cliente1@email.com' },
+      { id: 2, nome: 'Cliente 2', email: 'cliente2@email.com' }
     ];
-    this.clientesFiltrados = this.clientes;  // Inicializa os clientes filtrados com todos
+    this.clientesFiltrados = this.clientes;
   }
 
-  // Função para adicionar um cliente
   adicionarCliente() {
-    // Navegar para a página de Adicionar Cliente
     this.navCtrl.navigateForward('/adicionar-cliente');
   }
 
-  // Função para filtrar os clientes com base no termo de pesquisa
   filtrarClientes() {
     const termo = this.filtro.toLowerCase();
     this.clientesFiltrados = this.clientes.filter(cliente =>
@@ -49,18 +48,15 @@ export class GestorClientesPage implements OnInit {
     );
   }
 
-  // Função para editar um cliente
   editarCliente(cliente: any) {
     console.log('Editar cliente:', cliente);
-    // Lógica para editar o cliente (pode ser uma navegação ou abrir um modal)
+    this.navCtrl.navigateForward(`/editar-cliente/${cliente.id}`);
   }
 
-  // Função para excluir um cliente
   excluirCliente(cliente: any) {
     this.confirmarExclusao(cliente);
   }
 
-  // Função para confirmar a exclusão de um cliente
   async confirmarExclusao(cliente: any) {
     const alert = await this.alertController.create({
       header: 'Confirmar Exclusão',
@@ -73,9 +69,9 @@ export class GestorClientesPage implements OnInit {
         {
           text: 'Excluir',
           handler: () => {
-            this.clientes = this.clientes.filter(c => c.id !== cliente.id);  // Excluindo o cliente
-            this.clientesFiltrados = this.clientes;  // Recarregando a lista de clientes
-            console.log('Cliente excluído');
+            this.clientes = this.clientes.filter(c => c.id !== cliente.id);
+            this.clientesFiltrados = this.clientes;
+            this.showAlert('Sucesso', 'Cliente excluído com sucesso!');
           },
         },
       ],
@@ -84,8 +80,16 @@ export class GestorClientesPage implements OnInit {
     await alert.present();
   }
 
-  // Função para voltar à página anterior
+  private async showAlert(header: string, message: string) {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: ['OK'],
+    });
+    await alert.present();
+  }
+
   voltar() {
-    this.navCtrl.back();  // Volta para a página anterior
+    this.navCtrl.back();
   }
 }

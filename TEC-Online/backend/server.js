@@ -15,6 +15,7 @@ dotenv.config();
 
 const User = require('./models/User');
 const Servico = require('./models/Servicos'); // Importando o modelo Servico
+const Cliente = require('./models/Cliente'); // Importando o modelo do cliente
 
 const app = express();
 
@@ -27,10 +28,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Conexão com o MongoDB
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/tec-online', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/tec-online')
 .then(() => {
   console.log('✅ Conectado ao MongoDB');
 })
@@ -47,21 +45,24 @@ const errorHandler = (err, req, res, next) => {
 
 app.use(errorHandler);
 
-// Middleware para autenticar o token JWT
-const authenticateToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) {
-    return res.status(401).json({ message: 'Token não fornecido' });
-  }
 
-  jwt.verify(token, process.env.JWT_SECRET || 'secret', (err, decoded) => {
+function authenticateToken(req, res, next) {
+  const token = req.header('Authorization') && req.header('Authorization').split(' ')[1]; // "Bearer token"
+  if (!token) {
+    return res.status(401).json({ message: 'Acesso não autorizado. Token não fornecido.' });
+  }
+  
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
-      return res.status(403).json({ message: 'Token inválido ou expirado' });
+      return res.status(403).json({ message: 'Token inválido.' });
     }
-    req.user = decoded;
+    req.user = user;
     next();
   });
-};
+}
+
+module.exports = authenticateToken;
+
 
 // Configuração do multer para armazenamento de imagem
 const storage = multer.diskStorage({
@@ -75,6 +76,9 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
+
+// REGISTRO
 
 // Rota para registrar um novo usuário
 app.post('/api/signup', [
@@ -106,6 +110,10 @@ app.post('/api/signup', [
     next(error); // Passa o erro para o middleware de tratamento de erros
   }
 });
+
+
+//LOGIN
+
 
 // Rota para login do usuário
 app.post('/api/login', [
@@ -142,6 +150,12 @@ app.post('/api/login', [
     next(error); // Passa o erro para o middleware de tratamento de erros
   }
 });
+
+
+
+
+//PERFIL
+
 
 // Rota para obter os dados do perfil do usuário autenticado
 app.get('/api/profile', authenticateToken, async (req, res, next) => {
@@ -211,6 +225,12 @@ app.put('/api/profile', authenticateToken, upload.single('profilePicture'), asyn
   }
 });
 
+
+
+
+//SERVIÇO
+
+
 // Rota para criar um novo serviço
 app.post('/api/servicos', authenticateToken, async (req, res, next) => {
   try {
@@ -277,16 +297,9 @@ app.get('/api/servicos/:id', authenticateToken, async (req, res, next) => {
 
 
 
-// Verificando e criando a pasta 'img-servicos' caso não exista
-const imgServicosPath = path.join(__dirname, 'img-servicos');
-if (!fs.existsSync(imgServicosPath)) {
-  fs.mkdirSync(imgServicosPath);
-  console.log('Pasta "img-servicos" criada com sucesso!');
-} else {
-  console.log('A pasta "img-servicos" já existe.');
-}
 
-app.use('/img-servicos', express.static(imgServicosPath)); // Tornando a pasta acessível via URL
+//PASS-Word
+
 
 // Rota para "Esqueceu a senha"
 app.post('/api/esqueceu-password', [
@@ -345,6 +358,8 @@ app.post('/api/esqueceu-password', [
     });
   }
 });
+
+
 
 // Rota para redefinir a senha
 app.post('/reset-password', async (req, res) => {

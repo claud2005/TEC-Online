@@ -1,110 +1,114 @@
-
 /* Fundo branco suave */
 .conteudo-branco {
   --background: #fafafa;
   color: #000;
+  font-size: 1.05rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
 }
 
-
-/* Estilo para o formulário agrupado */
+/* Caixa branca */
 .form-card {
-    background: #fff;
-    border-radius: 18px;
-    padding: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    margin-bottom: 32px;
-    color: #000;
-  }
-  
-  .form-card ion-card-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #1a3d7c;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-
+  background: #ffffff; /* Fundo branco */
+  border-radius: 16px;  /* Bordas mais suaves */
+  padding: 24px;
+  box-shadow: none; /* Removendo a sombra */
+  margin-bottom: 28px;
+}
 
 /* Cartão de introdução */
 .info-card {
-  background: linear-gradient(135deg, #e3f2fd, #f9f9f9);
+  background: linear-gradient(135deg, #ffffff, #ffffff);
   border-left: 5px solid #3880ff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  border-radius: 14px;
-  margin-bottom: 24px;
-  color: #000;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 28px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.info-card:hover {
+  transform: scale(1.02);
 }
 
 ion-card-title {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: #1a3d7c;
 }
 
 ion-card-content {
-  color: #222;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  color: #333;
+  font-size: 1.1rem;
+  line-height: 1.75;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
-/* Estilo caixa de chat */
+/* Estilo dos inputs */
 ion-item {
   --background: #fff;
-  border-radius: 20px;
-  padding: 10px 14px;
-  margin-bottom: 12px;
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 18px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   color: #000;
   --inner-padding-start: 0;
+  transition: box-shadow 0.3s ease-in-out;
 }
 
 ion-item.ion-focused {
-  box-shadow: 0 0 0 2px #3880ff33;
+  box-shadow: 0 0 0 2px #3880ff;
 }
 
 ion-label {
-  color: #111;
+  color: #222;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 1.25rem; /* Aumentando o tamanho do texto da label */
   padding-left: 4px;
 }
 
 ion-input,
 ion-textarea,
 ion-select {
-  font-size: 1rem;
+  font-size: 1.25rem; /* Aumentando o tamanho da fonte dentro dos inputs */
   color: #000;
   --padding-start: 0;
   --padding-end: 0;
+  border-radius: 12px;
+  transition: border 0.2s ease, box-shadow 0.3s ease-in-out;
+  height: 60px; /* Tamanho padronizado para todos os inputs */
 }
 
-ion-textarea {
-  min-height: 60px;
-  border-radius: 16px;
-  resize: none;
+/* Estilo específico para o campo de "Observações" */
+ion-textarea#observacoes {
+  min-height: 200px; /* Aumentando o tamanho da caixa de texto de Observações */
+  font-size: 1.3rem; /* Aumentando o tamanho da fonte */
+}
+
+/* Estilo específico para o campo de "Endereço" */
+ion-textarea#endereco {
+  min-height: 60px; /* Garantindo o mesmo tamanho do Endereço */
+  font-size: 1.1rem; /* Ajustando o tamanho da fonte */
+  resize: none; /* Impede redimensionamento */
 }
 
 /* Botões */
-ion-grid {
-  padding: 0;
-}
-
-ion-col {
-  padding: 0 4px;
-}
-
 ion-button {
-  height: 48px;
+  height: 54px;
   font-weight: 600;
-  font-size: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(56, 128, 255, 0.2);
-  color: #000;
+  font-size: 1.2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(56, 128, 255, 0.18);
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease-in-out;
+}
+
+ion-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(56, 128, 255, 0.25);
 }
 
 ion-button[color="success"] {
@@ -115,17 +119,52 @@ ion-button[color="success"] {
 }
 
 ion-button[color="medium"] {
-  --background: #dcdcdc;
+  --background: #f0f0f0;
+  --background-hover: #e5e5e5;
   --color: #111;
 }
 
 /* Responsivo */
 @media screen and (max-width: 600px) {
   ion-card-title {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
   }
 
   ion-button {
-    font-size: 0.95rem;
+    font-size: 1.1rem;
+    height: 48px;
+  }
+
+  ion-label {
+    font-size: 1.15rem; /* Ajustando o tamanho das labels no mobile */
+  }
+
+  ion-col {
+    padding: 0 5px;
+  }
+
+  .form-card, .info-card {
+    padding: 16px;
+  }
+
+  ion-item {
+    padding: 12px 16px;
+  }
+
+  /* Diminuir o tamanho das caixas de texto no mobile */
+  ion-input,
+  ion-textarea {
+    font-size: 1.2rem; /* Ajuste para o tamanho das fontes no mobile */
+    height: 50px; /* Diminuindo a altura dos inputs no mobile */
+  }
+
+  /* Ajustar a caixa de Observações no mobile */
+  ion-textarea#observacoes {
+    min-height: 150px; /* Ajustando a altura da caixa de Observações no mobile */
+  }
+
+  /* Garantir o tamanho consistente de Endereço no mobile */
+  ion-textarea#endereco {
+    min-height: 50px; /* Mesmo tamanho que os outros campos */
   }
 }
