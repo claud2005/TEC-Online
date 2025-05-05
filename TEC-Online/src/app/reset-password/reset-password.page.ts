@@ -35,9 +35,15 @@ export class ResetPasswordPage implements OnInit {
         (res: any) => {
           this.isTokenValid = true;
         },
-        (err) => {
+        async (err) => {
           console.error('Erro ao validar o token:', err);
           this.isTokenValid = false;
+          const alert = await this.alertController.create({
+            header: 'Erro',
+            message: 'O token de redefinição de senha é inválido ou expirou. Tente novamente.',
+            buttons: ['OK']
+          });
+          await alert.present();
         }
       );
     } else {
@@ -82,8 +88,14 @@ export class ResetPasswordPage implements OnInit {
 
         await alert.present();
       },
-      (err) => {
+      async (err) => {
         console.error('Erro ao alterar senha:', err);
+        const alert = await this.alertController.create({
+          header: 'Erro',
+          message: 'Ocorreu um erro ao tentar alterar sua senha. Tente novamente mais tarde.',
+          buttons: ['OK']
+        });
+        await alert.present();
       }
     );
   }
