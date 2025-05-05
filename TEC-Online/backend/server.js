@@ -288,6 +288,14 @@ if (!fs.existsSync(imgServicosPath)) {
 
 app.use('/img-servicos', express.static(imgServicosPath)); // Tornando a pasta acessível via URL
 
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
 // Rota para "Esqueceu a senha"
 app.post('/api/esqueceu-password', [
   body('email').isEmail().withMessage('E-mail inválido')
@@ -318,7 +326,7 @@ app.post('/api/esqueceu-password', [
 
     await user.save();
 
-    const resetLink = `http://localhost:3000/reset-password/${resetToken}`;
+    const resetLink = `http://localhost:8100/reset-password/${resetToken}`;
     console.log('Link de redefinição gerado:', resetLink); // Log do link de reset
 
     // Envio de e-mail
@@ -346,55 +354,82 @@ app.post('/api/esqueceu-password', [
   }
 });
 
-// Rota para redefinir a senha
-app.post('/reset-password', async (req, res) => {
+// Rota para redefinir a senha (versão corrigida)
+app.post('/api/reset-password', async (req, res) => {
   const { token, novaSenha } = req.body;
 
   try {
-    if (!novaSenha || novaSenha.length < 6) {
-      return res.status(400).json({ message: 'A nova senha deve ter pelo menos 6 caracteres.' });
+    // Validação básica
+    if (!token || !novaSenha) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'Token e nova senha são obrigatórios' 
+      });
     }
 
-    const user = await User.findOne({ resetPasswordToken: token });
+    // Encontrar usuário pelo token válido
+    const user = await User.findOne({ 
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
 
-    if (!user || !user.isResetPasswordTokenValid(token)) {
-      return res.status(400).json({ message: 'Token inválido ou expirado.' });
+    if (!user) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'Token inválido ou expirado' 
+      });
     }
 
-    // Criptografando a nova senha antes de salvar
-    user.password = await bcrypt.hash(novaSenha, 10);
+    // Atualizar senha
+    user.password = novaSenha; // O pre('save') fará o hash automaticamente
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
 
     await user.save();
-    return res.status(200).json({ message: 'Senha redefinida com sucesso!' });
+
+    return res.status(200).json({ 
+      success: true,
+      message: 'Senha redefinida com sucesso!' 
+    });
+
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao redefinir a senha.', error });
+    console.error('Erro no reset de senha:', error);
+    res.status(500).json({ 
+      success: false,
+      message: 'Erro ao redefinir senha',
+      error: error.message 
+    });
   }
 });
 
-// Verificando o token de redefinição de senha
-app.get('/verify-token/:token', async (req, res) => {
+// Rota para verificar token (corrigida)
+app.get('/api/verify-token/:token', async (req, res) => {
   const { token } = req.params;
 
   try {
-    const user = await User.findOne({ resetPasswordToken: token });
+    const user = await User.findOne({ 
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
 
-    if (!user || user.resetPasswordExpires < Date.now()) {
-      return res.status(400).json({ message: 'Token inválido ou expirado' });
+    if (!user) {
+      return res.status(400).json({ 
+        valid: false,
+        message: 'Token inválido ou expirado' 
+      });
     }
 
-    res.status(200).json({ message: 'Token válido' });
+    res.status(200).json({ 
+      valid: true,
+      message: 'Token válido',
+      email: user.email // Opcional: retornar email associado
+    });
   } catch (err) {
-    res.status(500).json({ message: 'Erro ao verificar token', error: err });
-  }
-});
-
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,  // Seu e-mail do Gmail
-    pass: process.env.EMAIL_PASS   // A senha de aplicativo gerada
+    res.status(500).json({ 
+      valid: false,
+      message: 'Erro ao verificar token',
+      error: err.message 
+    });
   }
 });
 

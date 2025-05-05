@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { IonicModule, AlertController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { lastValueFrom } from 'rxjs'; // Importação adicionada
 
 @Component({
   standalone: true,
@@ -31,7 +32,7 @@ export class ResetPasswordPage implements OnInit {
     this.token = this.route.snapshot.paramMap.get('token') || '';
 
     if (this.token) {
-      this.http.get(`http://localhost:3000/verify-token/${this.token}`).subscribe(
+      this.http.get(`http://localhost:3000/api/verify-token/${this.token}`).subscribe(
         (res: any) => {
           this.isTokenValid = true;
         },
@@ -54,49 +55,91 @@ export class ResetPasswordPage implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
     });
+
+    this.resetForm.get('password')?.valueChanges.subscribe(() => {
+      // Força a atualização da UI da força da senha
+    });
+  }
+
+  getPasswordStrengthClass(): string {
+    const password = this.resetForm.get('password')?.value;
+    if (!password || password.length === 0) return '';
+    
+    const strength = this.calculatePasswordStrength(password);
+    if (strength < 40) return 'weak';
+    if (strength < 70) return 'medium';
+    return 'strong';
+  }
+
+  getPasswordStrengthText(): string {
+    const password = this.resetForm.get('password')?.value;
+    if (!password || password.length === 0) return '';
+    
+    const strength = this.calculatePasswordStrength(password);
+    if (strength < 40) return 'Fraca';
+    if (strength < 70) return 'Média';
+    return 'Forte';
+  }
+
+  private calculatePasswordStrength(password: string): number {
+    let strength = 0;
+    
+    strength += Math.min(password.length * 5, 40);
+    if (/[A-Z]/.test(password)) strength += 15;
+    if (/[0-9]/.test(password)) strength += 15;
+    if (/[^A-Za-z0-9]/.test(password)) strength += 20;
+    if (password.length > 10) strength += 10;
+    
+    return Math.min(strength, 100);
   }
 
   async onSubmit() {
     const password = this.resetForm.value.password;
     const confirmPassword = this.resetForm.value.confirmPassword;
-
+  
     if (password !== confirmPassword) {
       this.passwordsDoNotMatch = true;
       return;
     }
-
+  
     this.passwordsDoNotMatch = false;
-
-    this.http.post('http://localhost:3000/reset-password', {
-      token: this.token,
-      novaSenha: password,
-    }).subscribe(
-      async (res) => {
-        console.log('Senha alterada com sucesso!', res);
-
+  
+    try {
+      const response = await lastValueFrom(
+        this.http.post<any>('http://localhost:3000/api/reset-password', {
+          token: this.token,
+          novaSenha: password
+        })
+      );
+  
+      if (response.success) {
         const alert = await this.alertController.create({
           header: 'Sucesso',
-          message: 'Sua senha foi alterada com sucesso!',
+          message: response.message,
           buttons: [{
             text: 'OK',
             handler: () => {
-              // Redireciona para a página de login após clicar em OK
               this.router.navigate(['/login']);
             }
           }]
         });
-
         await alert.present();
-      },
-      async (err) => {
-        console.error('Erro ao alterar senha:', err);
+      } else {
         const alert = await this.alertController.create({
           header: 'Erro',
-          message: 'Ocorreu um erro ao tentar alterar sua senha. Tente novamente mais tarde.',
+          message: response.message,
           buttons: ['OK']
         });
         await alert.present();
       }
-    );
+    } catch (error: any) {
+      console.error('Erro ao alterar senha:', error);
+      const alert = await this.alertController.create({
+        header: 'Erro',
+        message: error.error?.message || 'Erro desconhecido',
+        buttons: ['OK']
+      });
+      await alert.present();
+    }
   }
 }
