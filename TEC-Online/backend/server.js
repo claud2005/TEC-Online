@@ -15,10 +15,6 @@ dotenv.config();
 
 const User = require('./models/User');
 const Servico = require('./models/Servicos'); // Importando o modelo Servico
-<<<<<<< Updated upstream
-=======
-const Cliente = require('./models/Cliente'); // O modelo do Cliente
->>>>>>> Stashed changes
 
 const app = express();
 
@@ -291,7 +287,6 @@ if (!fs.existsSync(imgServicosPath)) {
 }
 
 app.use('/img-servicos', express.static(imgServicosPath)); // Tornando a pasta acessível via URL
-<<<<<<< Updated upstream
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -300,8 +295,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS
   }
 });
-=======
->>>>>>> Stashed changes
 
 // Rota para "Esqueceu a senha"
 app.post('/api/esqueceu-password', [
@@ -361,13 +354,8 @@ app.post('/api/esqueceu-password', [
   }
 });
 
-<<<<<<< Updated upstream
 // Rota para redefinir a senha (versão corrigida)
 app.post('/api/reset-password', async (req, res) => {
-=======
-// Rota para redefinir a senha
-app.post('/reset-password', async (req, res) => {
->>>>>>> Stashed changes
   const { token, novaSenha } = req.body;
 
   try {
@@ -405,16 +393,12 @@ app.post('/reset-password', async (req, res) => {
     });
 
   } catch (error) {
-<<<<<<< Updated upstream
     console.error('Erro no reset de senha:', error);
     res.status(500).json({ 
       success: false,
       message: 'Erro ao redefinir senha',
       error: error.message 
     });
-=======
-    res.status(500).json({ message: 'Erro ao redefinir a senha.', error });
->>>>>>> Stashed changes
   }
 });
 
@@ -449,39 +433,7 @@ app.get('/api/verify-token/:token', async (req, res) => {
   }
 });
 
-<<<<<<< Updated upstream
 
-// Rota para criação de cliente
-app.post('/api/clientes', authenticateToken, async (req, res) => {
-  try {
-    const { nome, morada, codigoPostal, contacto, email, contribuinte, codigoCliente, numeroCliente } = req.body;
-
-    if (!nome || !morada || !codigoPostal || !contacto || !email || !contribuinte || !codigoCliente || !numeroCliente) {
-      return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
-    }
-
-    const novoCliente = new Cliente({
-      nome, morada, codigoPostal, contacto, email, contribuinte, codigoCliente, numeroCliente
-    });
-
-    await novoCliente.save();
-    res.status(201).json({ message: 'Cliente criado com sucesso!', cliente: novoCliente });
-  } catch (error) {
-    res.status(500).json({ message: 'Erro ao criar cliente', error: error.message });
-=======
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,  // Seu e-mail do Gmail
-    pass: process.env.EMAIL_PASS   // A senha de aplicativo gerada
->>>>>>> Stashed changes
-  }
-});
-
-
-
-<<<<<<< Updated upstream
-=======
 // Rota para criação de cliente
 app.post('/api/clientes', authenticateToken, async (req, res) => {
   try {
@@ -504,8 +456,6 @@ app.post('/api/clientes', authenticateToken, async (req, res) => {
 
 
 
-// Rota para obter todos os clientes
->>>>>>> Stashed changes
 app.get('/api/clientes', authenticateToken, async (req, res) => {
   try {
     const clientes = await Cliente.find();
@@ -516,11 +466,6 @@ app.get('/api/clientes', authenticateToken, async (req, res) => {
 });
 
 
-<<<<<<< Updated upstream
-=======
-
-
->>>>>>> Stashed changes
 // Rota para editar um cliente
 app.put('/api/clientes/:id', authenticateToken, async (req, res) => {
   try {
@@ -548,10 +493,7 @@ app.put('/api/clientes/:id', authenticateToken, async (req, res) => {
   }
 });
 
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 // Rota para deletar um cliente
 app.delete('/api/clientes/:id', authenticateToken, async (req, res) => {
   try {
@@ -587,10 +529,7 @@ app.get('/api/clientes/:id', authenticateToken, async (req, res) => {
   }
 });
 
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 // Rota para buscar clientes por nome ou e-mail
 app.get('/api/clientes/busca', authenticateToken, async (req, res) => {
   try {
@@ -618,11 +557,6 @@ app.get('/api/clientes/busca', authenticateToken, async (req, res) => {
 });
 
 
-<<<<<<< Updated upstream
-=======
-
-
->>>>>>> Stashed changes
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`✅ Servidor rodando na porta ${PORT}`);
