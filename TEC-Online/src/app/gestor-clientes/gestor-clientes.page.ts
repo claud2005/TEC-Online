@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController, NavController } from '@ionic/angular';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AlertController, NavController } from '@ionic/angular';
+import { ClienteService } from '../services/cliente.service';
 
 @Component({
   selector: 'app-gestor-clientes',
   templateUrl: './gestor-clientes.page.html',
   styleUrls: ['./gestor-clientes.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule],
 })
 export class GestorClientesPage implements OnInit {
   filtro: string = '';
@@ -18,25 +19,46 @@ export class GestorClientesPage implements OnInit {
 
   constructor(
     private alertController: AlertController,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private clienteService: ClienteService
   ) {}
 
   ngOnInit() {
     this.carregarClientes();
   }
 
-  // Carrega clientes localmente (pode simular dados fixos aqui se quiser)
   carregarClientes() {
-    // Simulando clientes locais
-    this.clientes = [
-      { id: 1, nome: 'Cliente 1', email: 'cliente1@email.com' },
-      { id: 2, nome: 'Cliente 2', email: 'cliente2@email.com' }
-    ];
-    this.clientesFiltrados = this.clientes;
+    const token = localStorage.getItem('token');
+    console.log('🔐 Token JWT encontrado:', token);
+
+    if (!token || token === 'null' || token === 'undefined') {
+      this.showAlert('Erro de autenticação', 'Você precisa estar autenticado para visualizar os clientes.');
+      return;
+    }
+
+    console.log('📡 Tentando carregar clientes do backend...');
+    this.clienteService.obterClientes().subscribe({
+      next: (dados) => {
+        console.log('✅ Clientes recebidos do backend:', dados);
+        this.clientes = dados;
+        this.clientesFiltrados = [...this.clientes];
+      },
+      error: (erro) => {
+        console.error('❌ Erro ao carregar clientes:', erro);
+        console.error('➡️ Status:', erro.status);
+        console.error('📨 Corpo do erro:', erro.error);
+        const mensagem = erro?.error?.message || erro.message || 'Erro desconhecido ao buscar clientes.';
+        this.showAlert('Erro', `Não foi possível carregar os clientes. ${mensagem}`);
+      }
+    });
   }
 
   adicionarCliente() {
     this.navCtrl.navigateForward('/adicionar-cliente');
+  }
+
+  voltar() {
+    this.navCtrl.back();
   }
 
   filtrarClientes() {
@@ -49,7 +71,6 @@ export class GestorClientesPage implements OnInit {
   }
 
   editarCliente(cliente: any) {
-    console.log('Editar cliente:', cliente);
     this.navCtrl.navigateForward(`/editar-cliente/${cliente.id}`);
   }
 
@@ -70,7 +91,7 @@ export class GestorClientesPage implements OnInit {
           text: 'Excluir',
           handler: () => {
             this.clientes = this.clientes.filter(c => c.id !== cliente.id);
-            this.clientesFiltrados = this.clientes;
+            this.filtrarClientes();
             this.showAlert('Sucesso', 'Cliente excluído com sucesso!');
           },
         },
@@ -87,9 +108,5 @@ export class GestorClientesPage implements OnInit {
       buttons: ['OK'],
     });
     await alert.present();
-  }
-
-  voltar() {
-    this.navCtrl.back();
   }
 }

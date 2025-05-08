@@ -1,13 +1,13 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="voltar()">
+      <ion-button (click)="voltar()" type="button">
         <ion-icon name="arrow-back-outline" class="back-icon"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title class="center-title">Gestor de Clientes</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="success" (click)="adicionarCliente()">
+      <ion-button color="success" (click)="adicionarCliente()" type="button">
         <ion-icon name="add-outline"></ion-icon>
         Adicionar Cliente
       </ion-button>
@@ -16,35 +16,32 @@
 </ion-header>
 
 <ion-content class="ion-padding conteudo-branco">
-  <!-- Barra de pesquisa -->
-  <ion-searchbar [(ngModel)]="filtro" placeholder="Pesquisar..." (ionInput)="filtrarClientes()"></ion-searchbar>
+  <ion-searchbar [(ngModel)]="filtro" placeholder="Pesquisar..." (ionInput)="filtrarClientes()" debounce="300"></ion-searchbar>
 
-  <!-- Tabela de clientes -->
   <ion-grid>
     <ion-row class="table-header">
-      <ion-col><strong>Data</strong></ion-col>
-      <ion-col><strong>Nome</strong></ion-col>
-      <ion-col><strong>Telefone</strong></ion-col>
-      <ion-col><strong>Email</strong></ion-col>
-      <ion-col><strong>Endereço</strong></ion-col>
-      <ion-col><strong>Ações</strong></ion-col>
+      <ion-col size="2"><strong>Codigo</strong></ion-col>
+      <ion-col size="2"><strong>Nome</strong></ion-col>
+      <ion-col size="2"><strong>Contacto</strong></ion-col>
+      <ion-col size="2"><strong>Email</strong></ion-col>
+      <ion-col size="2"><strong>Morada</strong></ion-col>
+      <ion-col size="2"><strong>Ações</strong></ion-col>
     </ion-row>
 
-    <!-- Iterando sobre os clientes filtrados -->
     <ion-row *ngFor="let cliente of clientesFiltrados">
-      <ion-col>{{ cliente.data }}</ion-col>
-      <ion-col>{{ cliente.nome }}</ion-col>
-      <ion-col>{{ cliente.telefone }}</ion-col>
-      <ion-col>{{ cliente.email }}</ion-col>
-      <ion-col>{{ cliente.endereco }}</ion-col>
-      <ion-col>
-        <ion-button color="primary" size="small" (click)="editarCliente(cliente)">
+      <ion-col size="2">{{ cliente.codigoCliente }}</ion-col>
+      <ion-col size="2">{{ cliente.nome }}</ion-col>
+      <ion-col size="2">{{ cliente.contacto }}</ion-col>
+      <ion-col size="2">{{ cliente.email }}</ion-col>
+      <ion-col size="2">{{ cliente.morada }}</ion-col>
+      <ion-col size="2">
+        <ion-button color="primary" size="small" fill="clear" type="button" (click)="editarCliente(cliente)">
           <ion-icon name="create-outline"></ion-icon>
         </ion-button>
-        <ion-button color="danger" size="small" (click)="excluirCliente(cliente)">
+        <ion-button color="danger" size="small" fill="clear" type="button" (click)="excluirCliente(cliente)">
           <ion-icon name="trash-outline"></ion-icon>
         </ion-button>
       </ion-col>
-    </ion-row>
+    </ion-row>    
   </ion-grid>
 </ion-content>

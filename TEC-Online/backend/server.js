@@ -433,6 +433,130 @@ app.get('/api/verify-token/:token', async (req, res) => {
   }
 });
 
+
+// Rota para criação de cliente
+app.post('/api/clientes', authenticateToken, async (req, res) => {
+  try {
+    const { nome, morada, codigoPostal, contacto, email, contribuinte, codigoCliente, numeroCliente } = req.body;
+
+    if (!nome || !morada || !codigoPostal || !contacto || !email || !contribuinte || !codigoCliente || !numeroCliente) {
+      return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
+    }
+
+    const novoCliente = new Cliente({
+      nome, morada, codigoPostal, contacto, email, contribuinte, codigoCliente, numeroCliente
+    });
+
+    await novoCliente.save();
+    res.status(201).json({ message: 'Cliente criado com sucesso!', cliente: novoCliente });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao criar cliente', error: error.message });
+  }
+});
+
+
+
+app.get('/api/clientes', authenticateToken, async (req, res) => {
+  try {
+    const clientes = await Cliente.find();
+    res.json(clientes);
+  } catch (err) {
+    res.status(500).json({ message: 'Erro ao buscar clientes', error: err.message });
+  }
+});
+
+
+// Rota para editar um cliente
+app.put('/api/clientes/:id', authenticateToken, async (req, res) => {
+  try {
+    const { nome, morada, codigoPostal, contacto, email, contribuinte, codigoCliente, numeroCliente } = req.body;
+    const clienteId = req.params.id;
+
+    if (!nome || !morada || !codigoPostal || !contacto || !email || !contribuinte || !codigoCliente || !numeroCliente) {
+      return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
+    }
+
+    // Atualizar os dados do cliente
+    const clienteAtualizado = await Cliente.findByIdAndUpdate(
+      clienteId, 
+      { nome, morada, codigoPostal, contacto, email, contribuinte, codigoCliente, numeroCliente },
+      { new: true }
+    );
+
+    if (!clienteAtualizado) {
+      return res.status(404).json({ message: 'Cliente não encontrado!' });
+    }
+
+    res.status(200).json({ message: 'Cliente atualizado com sucesso!', cliente: clienteAtualizado });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao atualizar cliente', error: error.message });
+  }
+});
+
+
+// Rota para deletar um cliente
+app.delete('/api/clientes/:id', authenticateToken, async (req, res) => {
+  try {
+    const clienteId = req.params.id;
+
+    const clienteDeletado = await Cliente.findByIdAndDelete(clienteId);
+
+    if (!clienteDeletado) {
+      return res.status(404).json({ message: 'Cliente não encontrado!' });
+    }
+
+    res.status(200).json({ message: 'Cliente deletado com sucesso!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao deletar cliente', error: error.message });
+  }
+});
+
+
+// Rota para buscar um cliente específico
+app.get('/api/clientes/:id', authenticateToken, async (req, res) => {
+  try {
+    const clienteId = req.params.id;
+
+    const cliente = await Cliente.findById(clienteId);
+
+    if (!cliente) {
+      return res.status(404).json({ message: 'Cliente não encontrado!' });
+    }
+
+    res.status(200).json(cliente);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar cliente', error: error.message });
+  }
+});
+
+
+// Rota para buscar clientes por nome ou e-mail
+app.get('/api/clientes/busca', authenticateToken, async (req, res) => {
+  try {
+    const { nome, email } = req.query;
+    let filtro = {};
+
+    if (nome) {
+      filtro.nome = new RegExp(nome, 'i'); // Filtra pelo nome, ignorando maiúsculas/minúsculas
+    }
+
+    if (email) {
+      filtro.email = new RegExp(email, 'i'); // Filtra pelo e-mail, ignorando maiúsculas/minúsculas
+    }
+
+    const clientes = await Cliente.find(filtro);
+
+    if (clientes.length === 0) {
+      return res.status(404).json({ message: 'Nenhum cliente encontrado com esses critérios.' });
+    }
+
+    res.status(200).json(clientes);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar clientes', error: error.message });
+  }
+});
+
+
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`✅ Servidor rodando na porta ${PORT}`);

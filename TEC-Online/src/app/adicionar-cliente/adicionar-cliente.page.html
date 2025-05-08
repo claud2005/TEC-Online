@@ -1,13 +1,9 @@
 <ion-content class="ion-padding conteudo-branco">
-  <!-- Caixa principal -->
   <ion-card class="form-card">
-
-    <!-- Título principal -->
     <div style="margin-bottom: 12px;">
       <h1 style="font-size: 1.75rem; font-weight: 700; color: #1a3d7c;">Adicionar Cliente</h1>
     </div>
 
-    <!-- Cartão de introdução -->
     <ion-card class="info-card">
       <ion-card-header>
         <ion-card-title>
@@ -21,9 +17,7 @@
       </ion-card-content>
     </ion-card>
 
-    <form (ngSubmit)="salvarCliente()">
-
-      <!-- Seção: Identificação -->
+    <form [formGroup]="clienteForm" (ngSubmit)="salvarCliente()">
       <ion-card class="form-card">
         <ion-card-header>
           <ion-card-title>
@@ -37,96 +31,14 @@
               <ion-col size="6">
                 <ion-item>
                   <ion-label position="floating">Nome</ion-label>
-                  <ion-input [(ngModel)]="cliente.nome" name="nome" required></ion-input>
+                  <ion-input formControlName="nome" required></ion-input>
                 </ion-item>
               </ion-col>
-              <ion-col size="6">
-                <ion-item>
-                  <ion-label position="floating">Tipo de Pessoa</ion-label>
-                  <ion-select [(ngModel)]="cliente.tipoPessoa" name="tipoPessoa" required>
-                    <ion-select-option value="Física">Física</ion-select-option>
-                    <ion-select-option value="Jurídica">Jurídica</ion-select-option>
-                  </ion-select>
-                </ion-item>
-              </ion-col>
-            </ion-row>
 
-            <ion-row>
-              <ion-col size="6">
-                <ion-item>
-                  <ion-label position="floating">NIF</ion-label>
-                  <ion-input [(ngModel)]="cliente.nif" name="nif" type="number" required></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="6">
-                <ion-item>
-                  <ion-label position="floating">Número de Cliente</ion-label>
-                  <ion-input [(ngModel)]="cliente.numeroCliente" name="numeroCliente" [readonly]="true" type="number"></ion-input>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-card-content>
-      </ion-card>
-
-      <!-- Seção: Contato -->
-      <ion-card class="form-card">
-        <ion-card-header>
-          <ion-card-title>
-            <ion-icon name="call-outline" slot="start"></ion-icon>
-            Contato
-          </ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-grid>
-            <ion-row>
-              <ion-col size="6">
-                <ion-item>
-                  <ion-label position="floating">Contato</ion-label>
-                  <ion-input [(ngModel)]="cliente.contato" name="contato" type="tel"></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="6">
-                <ion-item>
-                  <ion-label position="floating">Nome do Contato</ion-label>
-                  <ion-input [(ngModel)]="cliente.nomeContato" name="nomeContato"></ion-input>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-
-            <ion-row>
-              <ion-col size="6">
-                <ion-item>
-                  <ion-label position="floating">Email</ion-label>
-                  <ion-input [(ngModel)]="cliente.email" name="email" type="email"></ion-input>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-card-content>
-      </ion-card>
-
-      <!-- Seção: Endereço -->
-      <ion-card class="form-card">
-        <ion-card-header>
-          <ion-card-title>
-            <ion-icon name="location-outline" slot="start"></ion-icon>
-            Endereço
-          </ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-grid>
-            <ion-row>
               <ion-col size="6">
                 <ion-item>
                   <ion-label position="floating">Código Postal</ion-label>
-                  <ion-input [(ngModel)]="cliente.codigoPostal" name="codigoPostal" type="text"></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="6">
-                <ion-item>
-                  <ion-label position="floating">Cidade</ion-label>
-                  <ion-input [(ngModel)]="cliente.cidade" name="cidade"></ion-input>
+                  <ion-input formControlName="codigoPostal" required></ion-input>
                 </ion-item>
               </ion-col>
             </ion-row>
@@ -134,8 +46,41 @@
             <ion-row>
               <ion-col size="6">
                 <ion-item>
-                  <ion-label position="floating">Endereço</ion-label>
-                  <ion-textarea id="endereco" [(ngModel)]="cliente.endereco" name="endereco" class="endereco-textarea"></ion-textarea>
+                  <ion-label position="floating">Morada</ion-label>
+                  <ion-input formControlName="morada" type="text" required></ion-input>
+                </ion-item>
+              </ion-col>
+
+              <ion-col size="6">
+                <ion-item>
+                  <ion-label position="floating">Email</ion-label>
+                  <ion-input formControlName="email" type="email" required></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="6">
+                <ion-item>
+                  <ion-label position="floating">Contacto</ion-label>
+                  <ion-input formControlName="contacto" type="tel" required></ion-input>
+                </ion-item>
+              </ion-col>
+
+              <ion-col size="6">
+                <ion-item>
+                  <ion-label position="floating">Contribuinte</ion-label>
+                  <ion-input formControlName="contribuinte" type="number" required></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+
+            <!-- Novo campo para o código do cliente -->
+            <ion-row>
+              <ion-col size="6">
+                <ion-item>
+                  <ion-label position="floating">Código do Cliente</ion-label>
+                  <ion-input formControlName="codigoCliente" required></ion-input>
                 </ion-item>
               </ion-col>
             </ion-row>
@@ -143,23 +88,6 @@
         </ion-card-content>
       </ion-card>
 
-      <!-- Seção: Observações -->
-      <ion-card class="form-card">
-        <ion-card-header>
-          <ion-card-title>
-            <ion-icon name="chatbubble-ellipses-outline" slot="start"></ion-icon>
-            Observações
-          </ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-item>
-            <ion-label position="floating"></ion-label>
-            <ion-textarea id="observacoes" [(ngModel)]="cliente.observacoes" name="observacoes" class="observacoes-textarea"></ion-textarea>
-          </ion-item>
-        </ion-card-content>
-      </ion-card>
-
-      <!-- Botões -->
       <ion-grid class="ion-margin-top">
         <ion-row>
           <ion-col>

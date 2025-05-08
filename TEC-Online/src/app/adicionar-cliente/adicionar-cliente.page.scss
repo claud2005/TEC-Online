@@ -1,170 +1,95 @@
-/* Fundo branco suave */
+/* Fundo geral da página */
 .conteudo-branco {
-  --background: #fafafa;
-  color: #000;
-  font-size: 1.05rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.6;
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+  color: #000; /* Texto padrão em preto */
 }
 
-/* Caixa branca */
+/* Cartões com leve separação */
 .form-card {
-  background: #ffffff; /* Fundo branco */
-  border-radius: 16px;  /* Bordas mais suaves */
-  padding: 24px;
-  box-shadow: none; /* Removendo a sombra */
-  margin-bottom: 28px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
-/* Cartão de introdução */
+/* Cartão informativo com fundo distinto */
 .info-card {
-  background: linear-gradient(135deg, #ffffff, #ffffff);
-  border-left: 5px solid #3880ff;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 28px;
-  transition: transform 0.2s ease-in-out;
+  background-color: #f1f1f1;
+  border-left: 4px solid #aaa;
+  padding: 12px;
+  margin-bottom: 16px;
+  color: #000; /* Texto em preto */
 }
 
-.info-card:hover {
-  transform: scale(1.02);
-}
-
+/* Títulos dos cartões */
 ion-card-title {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000; /* Texto preto nos títulos */
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: #1a3d7c;
+  gap: 6px;
+  padding: 8px 0;
 }
 
-ion-card-content {
-  color: #333;
-  font-size: 1.1rem;
-  line-height: 1.75;
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-
-/* Estilo dos inputs */
+/* Estilo básico para itens de formulário */
 ion-item {
-  --background: #fff;
-  border-radius: 16px;
-  padding: 16px 20px;
-  margin-bottom: 18px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  color: #000;
-  --inner-padding-start: 0;
-  transition: box-shadow 0.3s ease-in-out;
-}
-
-ion-item.ion-focused {
-  box-shadow: 0 0 0 2px #3880ff;
-}
-
-ion-label {
-  color: #222;
-  font-weight: 600;
-  font-size: 1.25rem; /* Aumentando o tamanho do texto da label */
-  padding-left: 4px;
-}
-
-ion-input,
-ion-textarea,
-ion-select {
-  font-size: 1.25rem; /* Aumentando o tamanho da fonte dentro dos inputs */
-  color: #000;
+  --background: transparent;
+  border-bottom: 1px solid #ccc;
+  padding-left: 0;
+  padding-right: 0;
   --padding-start: 0;
-  --padding-end: 0;
-  border-radius: 12px;
-  transition: border 0.2s ease, box-shadow 0.3s ease-in-out;
-  height: 60px; /* Tamanho padronizado para todos os inputs */
+  --inner-padding-end: 0;
+  --inner-padding-start: 0;
+  --highlight-color-focused: #666;
+  color: #000; /* Texto em preto */
 }
 
-/* Estilo específico para o campo de "Observações" */
-ion-textarea#observacoes {
-  min-height: 200px; /* Aumentando o tamanho da caixa de texto de Observações */
-  font-size: 1.3rem; /* Aumentando o tamanho da fonte */
+/* Inputs readonly com leve distinção */
+ion-input[readonly] {
+  background-color: #f5f5f5;
+  color: #000; /* Texto em preto */
 }
 
-/* Estilo específico para o campo de "Endereço" */
-ion-textarea#endereco {
-  min-height: 60px; /* Garantindo o mesmo tamanho do Endereço */
-  font-size: 1.1rem; /* Ajustando o tamanho da fonte */
-  resize: none; /* Impede redimensionamento */
+/* Textareas com altura mínima */
+.endereco-textarea,
+.observacoes-textarea {
+  min-height: 60px;
+  font-size: 0.95rem;
+  color: #000; /* Texto em preto */
 }
 
-/* Botões */
+/* Labels simples */
+ion-label {
+  color: #000; /* Texto em preto */
+  font-weight: normal;
+}
+
+/* Botões padrão */
 ion-button {
-  height: 54px;
-  font-weight: 600;
-  font-size: 1.2rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(56, 128, 255, 0.18);
-  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease-in-out;
+  font-weight: normal;
+  --border-radius: 4px;
+  box-shadow: none;
+  color: #000; /* Texto em preto */
 }
 
-ion-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(56, 128, 255, 0.25);
+/* Ícones nos botões com espaçamento */
+ion-button ion-icon {
+  margin-right: 4px;
 }
 
-ion-button[color="success"] {
-  --background: #2dd36f;
-  --background-hover: #28ba62;
-  --background-activated: #23a455;
-  --color: #fff;
+/* Responsivo para telas pequenas */
+@media screen and (max-width: 768px) {
+  ion-col[size="6"] {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
 
-ion-button[color="medium"] {
-  --background: #f0f0f0;
-  --background-hover: #e5e5e5;
-  --color: #111;
-}
-
-/* Responsivo */
-@media screen and (max-width: 600px) {
-  ion-card-title {
-    font-size: 1.3rem;
-  }
-
-  ion-button {
-    font-size: 1.1rem;
-    height: 48px;
-  }
-
-  ion-label {
-    font-size: 1.15rem; /* Ajustando o tamanho das labels no mobile */
-  }
-
-  ion-col {
-    padding: 0 5px;
-  }
-
-  .form-card, .info-card {
-    padding: 16px;
-  }
-
-  ion-item {
-    padding: 12px 16px;
-  }
-
-  /* Diminuir o tamanho das caixas de texto no mobile */
-  ion-input,
-  ion-textarea {
-    font-size: 1.2rem; /* Ajuste para o tamanho das fontes no mobile */
-    height: 50px; /* Diminuindo a altura dos inputs no mobile */
-  }
-
-  /* Ajustar a caixa de Observações no mobile */
-  ion-textarea#observacoes {
-    min-height: 150px; /* Ajustando a altura da caixa de Observações no mobile */
-  }
-
-  /* Garantir o tamanho consistente de Endereço no mobile */
-  ion-textarea#endereco {
-    min-height: 50px; /* Mesmo tamanho que os outros campos */
-  }
+/* Ajuste da linha da morada */
+ion-item.morada-item {
+  padding-top: -20px; /* Reduz o espaço superior da linha */
+  border-bottom: 1px solid #ccc; /* Mantém a linha abaixo */
 }
