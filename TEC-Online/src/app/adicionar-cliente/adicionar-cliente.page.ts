@@ -38,16 +38,25 @@ export class AdicionarClientePage {
   salvarCliente() {
     if (this.clienteForm.valid) {
       const cliente = this.clienteForm.value;
+<<<<<<< Updated upstream
       cliente.numeroCliente = this.numeroClienteAutomatico;
 
       console.log('Dados do cliente:', cliente);  // Logando os dados para verificar antes de enviar
 
       // Chamada ao serviço para criar o cliente no backend
+=======
+      cliente.numeroCliente = this.numeroClienteAutomatico; // Incrementa número de cliente
+  
+>>>>>>> Stashed changes
       this.clienteService.criarCliente(cliente).subscribe({
         next: (res) => {
           console.log('Cliente salvo no backend:', res);
           alert('Cliente salvo com sucesso!');
+<<<<<<< Updated upstream
           this.numeroClienteAutomatico++; // Incrementa o número do próximo cliente
+=======
+          this.numeroClienteAutomatico++; // Incrementa para o próximo cliente
+>>>>>>> Stashed changes
           this.voltar(); // Volta para a página anterior
         },
         error: (err) => {
@@ -59,7 +68,11 @@ export class AdicionarClientePage {
       console.log('Erro no formulário:', this.clienteForm.errors); // Exibindo erros do formulário
       alert('Por favor, preencha todos os campos corretamente.');
     }
+<<<<<<< Updated upstream
   }
+=======
+  }  
+>>>>>>> Stashed changes
 
   // Função para voltar à página anterior
   voltar() {

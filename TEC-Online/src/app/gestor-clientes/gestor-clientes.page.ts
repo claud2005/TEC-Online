@@ -101,6 +101,7 @@ export class GestorClientesPage implements OnInit {
     await alert.present();
   }
 
+  // Adicione o método showAlert aqui
   private async showAlert(header: string, message: string) {
     const alert = await this.alertController.create({
       header,

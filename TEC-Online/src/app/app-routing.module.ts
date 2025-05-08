@@ -58,6 +58,8 @@ const routes: Routes = [
     path: 'adicionar-cliente',
     loadChildren: () => import('./adicionar-cliente/adicionar-cliente.module').then(m => m.AdicionarClientePageModule),
   },
+
+
 ];
 
 @NgModule({
