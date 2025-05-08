@@ -58,7 +58,12 @@ const routes: Routes = [
     path: 'adicionar-cliente',
     loadChildren: () => import('./adicionar-cliente/adicionar-cliente.module').then(m => m.AdicionarClientePageModule),
   },
-
+  {
+    path: 'editar-cliente/:id',
+    loadComponent: () => import('./editar-cliente/editar-cliente.page').then(m => m.EditarClientePage)
+  }
+  
+  
 
 ];
 

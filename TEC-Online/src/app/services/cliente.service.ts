@@ -11,6 +11,7 @@ export class ClienteService {
 
   constructor(private http: HttpClient) {}
 
+  // Método para obter os cabeçalhos de autenticação
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -23,6 +24,7 @@ export class ClienteService {
     });
   }
 
+  // Método para criar um cliente
   criarCliente(cliente: any): Observable<any> {
     try {
       const headers = this.getAuthHeaders();
@@ -38,6 +40,7 @@ export class ClienteService {
     }
   }
 
+  // Método para obter todos os clientes
   obterClientes(): Observable<any[]> {
     try {
       const headers = this.getAuthHeaders();
@@ -53,6 +56,39 @@ export class ClienteService {
     }
   }
 
+  // Método para obter um cliente específico por ID
+  obterClientePorId(clienteId: string): Observable<any> {
+    try {
+      const headers = this.getAuthHeaders();
+      return this.http.get<any>(`${this.apiUrl}/${clienteId}`, { headers }).pipe(
+        catchError(error => {
+          console.error('Erro ao obter cliente por ID:', error);
+          const mensagem = error?.error?.message || 'Erro ao obter cliente.';
+          return throwError(() => new Error(mensagem));
+        })
+      );
+    } catch (err) {
+      return throwError(() => err);
+    }
+  }
+
+  // Método para atualizar um cliente
+  atualizarCliente(clienteId: string, clienteData: any): Observable<any> {
+    try {
+      const headers = this.getAuthHeaders();
+      return this.http.put<any>(`${this.apiUrl}/${clienteId}`, clienteData, { headers }).pipe(
+        catchError(error => {
+          console.error('Erro ao atualizar cliente:', error);
+          const mensagem = error?.error?.message || 'Erro ao atualizar cliente.';
+          return throwError(() => new Error(mensagem));
+        })
+      );
+    } catch (err) {
+      return throwError(() => err);
+    }
+  }
+
+  // Método para deletar um cliente
   deletarCliente(clienteId: string): Observable<any> {
     try {
       const headers = this.getAuthHeaders();

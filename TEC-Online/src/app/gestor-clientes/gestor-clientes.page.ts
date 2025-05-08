@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, NavController } from '@ionic/angular';
-import { IonicModule } from '@ionic/angular';
+import { AlertController, NavController, IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClienteService } from '../services/cliente.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-gestor-clientes',
@@ -20,7 +20,8 @@ export class GestorClientesPage implements OnInit {
   constructor(
     private alertController: AlertController,
     private navCtrl: NavController,
-    private clienteService: ClienteService
+    private clienteService: ClienteService,
+    private router: Router // ✅ Adicionado para permitir navegação com Router
   ) {}
 
   ngOnInit() {
@@ -45,8 +46,6 @@ export class GestorClientesPage implements OnInit {
       },
       error: (erro) => {
         console.error('❌ Erro ao carregar clientes:', erro);
-        console.error('➡️ Status:', erro.status);
-        console.error('📨 Corpo do erro:', erro.error);
         const mensagem = erro?.error?.message || erro.message || 'Erro desconhecido ao buscar clientes.';
         this.showAlert('Erro', `Não foi possível carregar os clientes. ${mensagem}`);
       }
@@ -71,7 +70,7 @@ export class GestorClientesPage implements OnInit {
   }
 
   editarCliente(cliente: any) {
-    this.navCtrl.navigateForward(`/editar-cliente/${cliente.id}`);
+    this.router.navigate(['/editar-cliente', cliente.id]);
   }
 
   excluirCliente(cliente: any) {
@@ -101,7 +100,6 @@ export class GestorClientesPage implements OnInit {
     await alert.present();
   }
 
-  // Adicione o método showAlert aqui
   private async showAlert(header: string, message: string) {
     const alert = await this.alertController.create({
       header,
