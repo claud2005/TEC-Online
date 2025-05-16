@@ -19,6 +19,7 @@ const Servico = require('./models/Servicos'); // Importando o modelo Servico
 const app = express();
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/img-servicos', express.static('img-servicos'));
 
 const PORT = process.env.PORT || 3000;
 
@@ -276,17 +277,47 @@ app.get('/api/servicos/:id', authenticateToken, async (req, res, next) => {
 });
 
 
+app.put('/api/servicos/:id', authenticateToken, upload.array('imagens'), async (req, res, next) => {
+  try {
+    const {
+      dataServico, horaServico, status, nomeCliente, telefoneContato,
+      modeloAparelho, marcaAparelho, problemaCliente, solucaoInicial,
+      valorTotal, observacoes, autorServico
+    } = req.body;
 
-// Verificando e criando a pasta 'img-servicos' caso não exista
-const imgServicosPath = path.join(__dirname, 'img-servicos');
-if (!fs.existsSync(imgServicosPath)) {
-  fs.mkdirSync(imgServicosPath);
-  console.log('Pasta "img-servicos" criada com sucesso!');
-} else {
-  console.log('A pasta "img-servicos" já existe.');
-}
+    // pega nomes dos arquivos enviados
+    const imagens = req.files.map(file => file.filename); // ou file.path se quiser o caminho completo
 
-app.use('/img-servicos', express.static(imgServicosPath)); // Tornando a pasta acessível via URL
+    const updateData = {
+      dataServico,
+      horaServico,
+      status,
+      nomeCliente,
+      telefoneContato,
+      modeloAparelho,
+      marcaAparelho,
+      problemaCliente,
+      solucaoInicial,
+      valorTotal: parseFloat(valorTotal),
+      observacoes,
+      autorServico,
+      imagens,
+    };
+
+    const servicoAtualizado = await Servico.findByIdAndUpdate(req.params.id, updateData, { new: true });
+
+    if (!servicoAtualizado) {
+      return res.status(404).json({ message: 'Serviço não encontrado!' });
+    }
+
+    res.status(200).json({ message: 'Serviço atualizado com sucesso!', servico: servicoAtualizado });
+  } catch (error) {
+    console.error('Erro ao atualizar serviço:', error);
+    next(error);
+  }
+});
+
+
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -466,6 +497,7 @@ app.get('/api/clientes', authenticateToken, async (req, res) => {
 });
 
 
+
 // Rota para editar um cliente
 app.put('/api/clientes/:id', authenticateToken, async (req, res) => {
   try {
@@ -493,7 +525,6 @@ app.put('/api/clientes/:id', authenticateToken, async (req, res) => {
   }
 });
 
-
 // Rota para deletar um cliente
 app.delete('/api/clientes/:id', authenticateToken, async (req, res) => {
   try {
@@ -511,7 +542,6 @@ app.delete('/api/clientes/:id', authenticateToken, async (req, res) => {
   }
 });
 
-
 // Rota para buscar um cliente específico
 app.get('/api/clientes/:id', authenticateToken, async (req, res) => {
   try {
@@ -528,7 +558,6 @@ app.get('/api/clientes/:id', authenticateToken, async (req, res) => {
     res.status(500).json({ message: 'Erro ao buscar cliente', error: error.message });
   }
 });
-
 
 // Rota para buscar clientes por nome ou e-mail
 app.get('/api/clientes/busca', authenticateToken, async (req, res) => {

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, NavController, IonicModule } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
+// Importa o serviço
 import { ClienteService } from '../services/cliente.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-gestor-clientes',
@@ -20,8 +22,7 @@ export class GestorClientesPage implements OnInit {
   constructor(
     private alertController: AlertController,
     private navCtrl: NavController,
-    private clienteService: ClienteService,
-    private router: Router // ✅ Adicionado para permitir navegação com Router
+    private clienteService: ClienteService
   ) {}
 
   ngOnInit() {
@@ -29,27 +30,16 @@ export class GestorClientesPage implements OnInit {
   }
 
   carregarClientes() {
-    const token = localStorage.getItem('token');
-    console.log('🔐 Token JWT encontrado:', token);
-
-    if (!token || token === 'null' || token === 'undefined') {
-      this.showAlert('Erro de autenticação', 'Você precisa estar autenticado para visualizar os clientes.');
-      return;
-    }
-
-    console.log('📡 Tentando carregar clientes do backend...');
-    this.clienteService.obterClientes().subscribe({
-      next: (dados) => {
-        console.log('✅ Clientes recebidos do backend:', dados);
-        this.clientes = dados;
-        this.clientesFiltrados = [...this.clientes];
+    this.clienteService.obterClientes().subscribe(
+      (data: any[]) => {
+        this.clientes = data;
+        this.clientesFiltrados = data;
       },
-      error: (erro) => {
-        console.error('❌ Erro ao carregar clientes:', erro);
-        const mensagem = erro?.error?.message || erro.message || 'Erro desconhecido ao buscar clientes.';
-        this.showAlert('Erro', `Não foi possível carregar os clientes. ${mensagem}`);
+      (error: any) => {
+        this.showAlert('Erro', 'Não foi possível carregar os clientes.');
+        console.error(error);
       }
-    });
+    );
   }
 
   adicionarCliente() {
@@ -70,7 +60,7 @@ export class GestorClientesPage implements OnInit {
   }
 
   editarCliente(cliente: any) {
-    this.router.navigate(['/editar-cliente', cliente.id]);
+    this.navCtrl.navigateForward(`/editar-cliente/${cliente._id}`);
   }
 
   excluirCliente(cliente: any) {
@@ -89,9 +79,18 @@ export class GestorClientesPage implements OnInit {
         {
           text: 'Excluir',
           handler: () => {
-            this.clientes = this.clientes.filter(c => c.id !== cliente.id);
-            this.filtrarClientes();
-            this.showAlert('Sucesso', 'Cliente excluído com sucesso!');
+            // Aqui pode ser interessante chamar o serviço para excluir no backend também
+            this.clienteService.deletarCliente(cliente._id).subscribe({
+              next: () => {
+                this.clientes = this.clientes.filter(c => c._id !== cliente._id);
+                this.filtrarClientes();
+                this.showAlert('Sucesso', 'Cliente excluído com sucesso!');
+              },
+              error: (err) => {
+                this.showAlert('Erro', 'Falha ao excluir o cliente.');
+                console.error(err);
+              }
+            });
           },
         },
       ],

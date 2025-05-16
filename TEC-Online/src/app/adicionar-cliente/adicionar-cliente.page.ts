@@ -34,32 +34,45 @@ export class AdicionarClientePage {
     });
   }
 
-  // Função para salvar cliente
-  salvarCliente() {
-    if (this.clienteForm.valid) {
-      const cliente = this.clienteForm.value;
-      cliente.numeroCliente = this.numeroClienteAutomatico;
+ salvarCliente() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error('Token JWT ausente');
+    alert('Usuário não autenticado. Por favor faça login novamente.');
+    return; // Sai da função para evitar continuar sem token
+  } else {
+    console.log('Token JWT:', token);
+  }
 
-      console.log('Dados do cliente:', cliente);  // Logando os dados para verificar antes de enviar
+  if (this.clienteForm.valid) {
+    const cliente = this.clienteForm.value;
+    cliente.numeroCliente = this.numeroClienteAutomatico;
 
-      // Chamada ao serviço para criar o cliente no backend
-      this.clienteService.criarCliente(cliente).subscribe({
-        next: (res) => {
-          console.log('Cliente salvo no backend:', res);
-          alert('Cliente salvo com sucesso!');
-          this.numeroClienteAutomatico++; // Incrementa o número do próximo cliente
-          this.voltar(); // Volta para a página anterior
-        },
-        error: (err) => {
-          console.error('Erro ao salvar cliente:', err);
+    console.log('Dados para enviar:', cliente);
+
+    this.clienteService.criarCliente(cliente).subscribe({
+      next: (res) => {
+        console.log('Cliente salvo no backend:', res);
+        alert('Cliente salvo com sucesso!');
+        this.numeroClienteAutomatico++;
+        this.voltar();
+      },
+      error: (err) => {
+        console.error('Erro ao salvar cliente:', err);
+        if (err.message) {
+          alert('Erro do servidor: ' + err.message);
+        } else {
           alert('Erro ao salvar cliente. Verifique os dados e tente novamente.');
         }
-      });
-    } else {
-      console.log('Erro no formulário:', this.clienteForm.errors); // Exibindo erros do formulário
-      alert('Por favor, preencha todos os campos corretamente.');
-    }
+      }
+    });
+  } else {
+    console.log('Formulário inválido:', this.clienteForm.errors);
+    this.clienteForm.markAllAsTouched();
+    alert('Por favor, preencha todos os campos corretamente.');
   }
+}
+
 
   // Função para voltar à página anterior
   voltar() {

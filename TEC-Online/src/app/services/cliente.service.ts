@@ -26,34 +26,50 @@ export class ClienteService {
 
   // Método para criar um cliente
   criarCliente(cliente: any): Observable<any> {
-    try {
-      const headers = this.getAuthHeaders();
-      return this.http.post(this.apiUrl, cliente, { headers }).pipe(
-        catchError(error => {
-          console.error('Erro ao criar cliente:', error);
-          const mensagem = error?.error?.message || 'Erro ao enviar dados.';
-          return throwError(() => new Error(mensagem));
-        })
-      );
-    } catch (err) {
-      return throwError(() => err);
-    }
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    console.error('Token JWT ausente');
+    return throwError(() => new Error('Token JWT ausente. Usuário não autenticado.'));
+  } else {
+    console.log('Token JWT:', token);
   }
+
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  console.log('Enviando cliente para o backend:', cliente);
+
+  return this.http.post(this.apiUrl, cliente, { headers }).pipe(
+    catchError(error => {
+      console.error('Erro ao criar cliente:', error);
+      return throwError(() => new Error(error?.error?.message || 'Erro ao enviar dados.'));
+    })
+  );
+}
 
   // Método para obter todos os clientes
   obterClientes(): Observable<any[]> {
-    try {
-      const headers = this.getAuthHeaders();
-      return this.http.get<any[]>(this.apiUrl, { headers }).pipe(
-        catchError(error => {
-          console.error('Erro ao obter clientes:', error);
-          const mensagem = error?.error?.message || 'Erro ao obter clientes.';
-          return throwError(() => new Error(mensagem));
-        })
-      );
-    } catch (err) {
-      return throwError(() => err);
+    console.log('📞 Chamando API para obter clientes...');
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('🚫 Token JWT ausente');
+      return throwError(() => new Error('Token JWT ausente. Usuário não autenticado.'));
     }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get<any[]>(this.apiUrl, { headers }).pipe(
+      catchError(error => {
+        console.error('❌ Erro HTTP:', error);
+        return throwError(() => new Error(error?.error?.message || 'Erro desconhecido.'));
+      })
+    );
   }
 
   // Método para obter um cliente específico por ID
