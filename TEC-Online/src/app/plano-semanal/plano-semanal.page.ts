@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, IonModal } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-plano-semanal',
@@ -44,7 +45,7 @@ export class PlanoSemanalPage implements OnInit {
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
 
-    this.http.get<any[]>('http://localhost:3000/api/servicos', { headers }).subscribe({
+    this.http.get<any[]>(`${environment.api_url}/api/servicos`, { headers }).subscribe({
       next: (data) => {
         this.servicos = data.map(servico => ({
           nomeCliente: servico.cliente || 'Cliente não informado',

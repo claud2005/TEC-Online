@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms'; 
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-signup',
@@ -40,7 +41,7 @@ export class SignupPage {
       password: this.password
     };
 
-    this.http.post('http://localhost:3000/api/signup', userData).subscribe(
+    this.http.post(`${environment.api_url}/api/signup`, userData).subscribe(
       (response: any) => {
         console.log('Usuário registrado com sucesso', response);
         this.router.navigate(['/home']); // Redireciona após o registro

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NavController, IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-criar-servicos',
@@ -64,7 +65,7 @@ export class CriarServicosPage implements OnInit {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.post('https://tec-online-api.vercel.app/api/servicos', novoServico, { headers }).subscribe(
+    this.http.post(`${environment.api_url}/api/servicos/`, novoServico, { headers }).subscribe(
       (response) => {
         alert('Serviço criado com sucesso!');
         this.router.navigate(['/plano-semanal']);

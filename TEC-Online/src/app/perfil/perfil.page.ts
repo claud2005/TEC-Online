@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   standalone: true,
@@ -52,7 +53,7 @@ export class PerfilPage implements OnInit {
       return;
     }
   
-    this.http.get<any>('http://localhost:3000/api/profile', {
+    this.http.get<any>(`${environment.api_url}/api/profile`, {
       headers: {
         'Authorization': `Bearer ${this.token}`,
         'Content-Type': 'application/json',
@@ -87,7 +88,7 @@ export class PerfilPage implements OnInit {
     formData.append('fullName', this.nomeCompleto);
     formData.append('username', this.nomeUtilizador);
 
-    this.http.put('http://localhost:3000/api/profile', formData, {
+    this.http.put(`${environment.api_url}/api/profile`, formData, {
       headers: {
         'Authorization': `Bearer ${this.token}`,
       }

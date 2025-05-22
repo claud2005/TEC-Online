@@ -6,6 +6,7 @@ import { IonicModule, AlertController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { lastValueFrom } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Component({
   standalone: true,
@@ -32,7 +33,7 @@ export class ResetPasswordPage implements OnInit {
     this.token = this.route.snapshot.paramMap.get('token') || '';
 
     if (this.token) {
-      this.http.get(`http://localhost:3000/api/verify-token/${this.token}`).subscribe(
+      this.http.get(`${environment.api_url}/api/verify-token/${this.token}`).subscribe(
         () => {
           this.isTokenValid = true;
         },
@@ -105,7 +106,7 @@ export class ResetPasswordPage implements OnInit {
 
     try {
       const response = await lastValueFrom(
-        this.http.post<any>('http://localhost:3000/api/reset-password', {
+        this.http.post<any>(`${environment.api_url}/api/reset-password`, {
           token: this.token,
           novaSenha: password
         })

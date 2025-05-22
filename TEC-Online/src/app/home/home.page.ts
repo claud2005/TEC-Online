@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,7 @@ export class HomePage {
   entrar() {
     const userData = { username: this.username, password: this.password };
   
-    this.http.post('http://localhost:3000/api/login', userData).subscribe(
+    this.http.post(`${environment.api_url}/api/login`, userData).subscribe(
       (response: any) => {
         console.log('Login bem-sucedido', response);
         localStorage.setItem('token', response.token);

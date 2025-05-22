@@ -5,6 +5,7 @@ import { IonicModule, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import jsPDF from 'jspdf';
+import { environment } from 'src/environments/environment';
 
 interface Servico {
   numero: string;
@@ -78,7 +79,7 @@ export class ServicosPage implements OnInit {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.get<Servico[]>('http://localhost:3000/api/servicos', { headers }).subscribe(
+    this.http.get<Servico[]>(`${environment.api_url}/api/servicos`, { headers }).subscribe(
       (response) => {
         console.log('Serviços recebidos da API:', response);
         this.servicos = response.map((servico, index) => ({

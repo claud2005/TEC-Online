@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-editar-perfil',
@@ -38,8 +39,7 @@ export class EditarPerfilPage {
   // Função para carregar o perfil do usuário
   carregarPerfil() {
     this.isLoading = true;
-
-    this.http.get<any>('http://localhost:3000/api/profile', {
+    this.http.get<any>(`${environment.api_url}/api/profile`, {
       headers: { Authorization: `Bearer ${this.token}` },
     }).subscribe(
       (data) => {
@@ -93,7 +93,7 @@ export class EditarPerfilPage {
     console.log('Enviando perfil:', formData);
 
     // Fazendo a requisição PUT para salvar o perfil
-    this.http.put<any>('http://localhost:3000/api/profile', formData, {
+    this.http.put<any>(`${environment.api_url}/api/profile`, formData, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe(
       (response) => {
@@ -102,7 +102,7 @@ export class EditarPerfilPage {
         
         // Atualizando a imagem de perfil com a URL retornada
         if (response.profilePicture) {
-          this.perfil.profilePicture = 'http://localhost:3000/' + response.profilePicture;  // Atualiza a URL da imagem no perfil
+          this.perfil.profilePicture = `${environment.api_url}/` + response.profilePicture;  // Atualiza a URL da imagem no perfil
         }
 
         // Atualizando as informações de perfil no localStorage

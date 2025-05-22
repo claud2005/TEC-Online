@@ -3,6 +3,7 @@ import { IonicModule, AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http'; // Importando HttpClient para fazer requisições HTTP
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-esqueceu-password',
@@ -21,7 +22,7 @@ export class EsqueceuPasswordPage {
     if (this.email) {
       console.log('Tentando recuperar senha para o e-mail:', this.email);
 
-      this.http.post('http://localhost:3000/api/esqueceu-password', { email: this.email }).subscribe(
+      this.http.post(`${environment.api_url}/api/esqueceu-password`, { email: this.email }).subscribe(
         async (response: any) => {
           const alert = await this.alertController.create({
             header: 'Sucesso!',

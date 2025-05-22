@@ -151,7 +151,7 @@ export class EditarServicosPage {
       Authorization: `Bearer ${token}`,
     });
 
-    this.http.put(`http://localhost:3000/api/servicos/${this.id}`, formData, { headers }).subscribe(
+    this.http.put(`${environment.api_url}/api/servicos/${this.id}`, formData, { headers }).subscribe(
       () => {
         alert('Serviço atualizado com sucesso!');
         this.fecharEAtualizar();
