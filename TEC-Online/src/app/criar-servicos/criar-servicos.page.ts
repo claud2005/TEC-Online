@@ -64,7 +64,7 @@ export class CriarServicosPage implements OnInit {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.post('http://localhost:3000/api/servicos', novoServico, { headers }).subscribe(
+    this.http.post('https://tec-online-api.vercel.app/api/servicos', novoServico, { headers }).subscribe(
       (response) => {
         alert('Serviço criado com sucesso!');
         this.router.navigate(['/plano-semanal']);

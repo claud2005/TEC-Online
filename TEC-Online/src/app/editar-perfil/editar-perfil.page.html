@@ -6,61 +6,63 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <form #form="ngForm" (ngSubmit)="salvarPerfil()">
+<ion-content class="ion-padding">
+  <div class="center-container">
+    <form #form="ngForm" (ngSubmit)="salvarPerfil()">
 
-    <!-- Foto de Perfil -->
-    <div class="profile-picture" (click)="alterarFoto()">
-      <img [src]="perfil.profilePicture || 'assets/img/default-profile.png'" alt="Foto de Perfil" />
-    </div>
+      <!-- Foto de Perfil -->
+      <div class="profile-picture" (click)="alterarFoto()">
+        <img [src]="perfil.profilePicture || 'assets/img/default-profile.png'" alt="Foto de Perfil" />
+      </div>
 
-    <!-- Botão de Alterar Foto -->
-    <ion-button expand="block" class="alterar-foto" (click)="alterarFoto()" aria-label="Alterar Foto">
-      Alterar Foto
-    </ion-button>
+      <!-- Botão de Alterar Foto -->
+      <ion-button expand="block" class="alterar-foto" (click)="alterarFoto()" aria-label="Alterar Foto">
+        Alterar Foto
+      </ion-button>
 
-    <!-- Input escondido para escolher arquivo -->
-    <input 
-      type="file" 
-      id="fileInput" 
-      accept="image/*" 
-      (change)="onFileSelected($event)" 
-      hidden
-    />
+      <!-- Input escondido para escolher arquivo -->
+      <input 
+        type="file" 
+        id="fileInput" 
+        accept="image/*" 
+        (change)="onFileSelected($event)" 
+        hidden
+      />
 
-    <!-- Nome Completo -->
-    <ion-item>
-      <ion-label position="floating">Nome Completo:</ion-label>
-      <ion-input
-        [(ngModel)]="perfil.fullName"
-        name="fullName"
-        aria-label="Nome Completo"
-        required
-        minlength="3"
-      ></ion-input>
-    </ion-item>
-    <ion-note *ngIf="!perfil.fullName && form.submitted" color="danger">
-      O nome completo é obrigatório.
-    </ion-note>
+      <!-- Nome Completo -->
+      <ion-item>
+        <ion-label position="floating">Nome Completo:</ion-label>
+        <ion-input
+          [(ngModel)]="perfil.fullName"
+          name="fullName"
+          aria-label="Nome Completo"
+          required
+          minlength="3"
+        ></ion-input>
+      </ion-item>
+      <ion-note *ngIf="!perfil.fullName && form.submitted" color="danger">
+        O nome completo é obrigatório.
+      </ion-note>
 
-    <!-- Nome de Utilizador -->
-    <ion-item>
-      <ion-label position="floating">Nome de Utilizador:</ion-label>
-      <ion-input
-        [(ngModel)]="perfil.username"
-        name="username"
-        aria-label="Nome de Utilizador"
-        required
-        minlength="3"
-      ></ion-input>
-    </ion-item>
-    <ion-note *ngIf="!perfil.username && form.submitted" color="danger">
-      O nome de utilizador é obrigatório.
-    </ion-note>
+      <!-- Nome de Utilizador -->
+      <ion-item>
+        <ion-label position="floating">Nome de Utilizador:</ion-label>
+        <ion-input
+          [(ngModel)]="perfil.username"
+          name="username"
+          aria-label="Nome de Utilizador"
+          required
+          minlength="3"
+        ></ion-input>
+      </ion-item>
+      <ion-note *ngIf="!perfil.username && form.submitted" color="danger">
+        O nome de utilizador é obrigatório.
+      </ion-note>
 
-    <!-- Botão de Salvar -->
-    <ion-button expand="full" type="submit">
-      Salvar
-    </ion-button>
-  </form>
+      <!-- Botão de Salvar -->
+      <ion-button expand="full" type="submit">
+        Salvar
+      </ion-button>
+    </form>
+  </div>
 </ion-content>

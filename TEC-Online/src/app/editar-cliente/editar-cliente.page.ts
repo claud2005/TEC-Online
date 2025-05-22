@@ -34,8 +34,14 @@ export class EditarClientePage implements OnInit {
       codigoPostal: ['', Validators.required],
       morada: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      contacto: ['', [Validators.required, Validators.pattern('^[0-9]{9,15}$')]],
-      contribuinte: ['', [Validators.required, Validators.pattern('^[0-9]{9}$')]],
+      contacto: [
+        '',
+        [Validators.required, Validators.pattern('^[0-9]{9}$')]
+      ],
+      contribuinte: [
+        '',
+        [Validators.required, Validators.pattern('^[0-9]{9}$')]
+      ],
       codigoCliente: ['', Validators.required]
     });
   }
@@ -53,7 +59,16 @@ export class EditarClientePage implements OnInit {
   carregarCliente() {
     this.clienteService.obterClientePorId(this.clienteId).subscribe({
       next: (cliente: any) => {
-        this.clienteForm.patchValue(cliente);
+        // Certifique-se de que todos os campos existem antes de preencher
+        this.clienteForm.patchValue({
+          nome: cliente.nome || '',
+          codigoPostal: cliente.codigoPostal || '',
+          morada: cliente.morada || '',
+          email: cliente.email || '',
+          contacto: cliente.contacto || '',
+          contribuinte: cliente.contribuinte || '',
+          codigoCliente: cliente.codigoCliente || ''
+        });
       },
       error: (err) => {
         console.error('Erro ao carregar cliente:', err);
@@ -63,24 +78,27 @@ export class EditarClientePage implements OnInit {
     });
   }
 
-  editarCliente() {
-    if (this.clienteForm.invalid) {
-      this.showAlert('Erro', 'Por favor, preencha todos os campos corretamente.');
-      return;
-    }
-
-    this.clienteService.atualizarCliente(this.clienteId, this.clienteForm.value).subscribe({
-      next: () => {
-        this.showAlert('Sucesso', 'Cliente atualizado com sucesso!');
-        this.navCtrl.navigateBack('/gestor-clientes');
-      },
-      error: (erro: any) => {
-        console.error('Erro ao atualizar cliente:', erro);
-        const mensagem = erro?.message || 'Erro inesperado ao atualizar cliente.';
-        this.showAlert('Erro', mensagem);
-      }
-    });
+editarCliente() {
+  if (this.clienteForm.invalid) {
+    this.showAlert('Erro', 'Por favor, preencha todos os campos corretamente.');
+    return;
   }
+
+  const dados = this.clienteForm.value;
+  console.log('Dados enviados para o backend:', dados);  // <- Aqui
+
+  this.clienteService.atualizarCliente(this.clienteId, dados).subscribe({
+    next: () => {
+      this.showAlert('Sucesso', 'Cliente atualizado com sucesso!');
+      this.navCtrl.navigateBack('/gestor-clientes');
+    },
+    error: (erro: any) => {
+      console.error('Erro ao atualizar cliente:', erro);
+      const mensagem = erro?.error?.message || erro?.message || 'Erro inesperado ao atualizar cliente.';
+      this.showAlert('Erro', mensagem);
+    }
+  });
+}
 
   voltar() {
     this.navCtrl.back();

@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IonicModule, NavController } from '@ionic/angular';
+import { IonicModule, NavController, ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-
-// ✅ Importação do serviço
-import { ClienteService } from '../services/cliente.service'; // Ajuste o caminho se necessário
+import { ClienteService } from '../services/cliente.service';
 
 @Component({
   selector: 'app-adicionar-cliente',
@@ -15,66 +13,119 @@ import { ClienteService } from '../services/cliente.service'; // Ajuste o caminh
 })
 export class AdicionarClientePage {
   clienteForm: FormGroup;
-  numeroClienteAutomatico = 12345;  // Número inicial para o cliente
+  ultimoCodigoCliente = 0;
 
   constructor(
     private navCtrl: NavController,
     private formBuilder: FormBuilder,
-    private clienteService: ClienteService // ✅ Serviço injetado para enviar os dados
+    private clienteService: ClienteService,
+    private toastController: ToastController
   ) {
-    // Inicializando o formulário com validação para cada campo
     this.clienteForm = this.formBuilder.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
       morada: ['', [Validators.required]],
-      codigoPostal: ['', [Validators.required, Validators.pattern('^[0-9]{4}-[0-9]{3}$')]], // Formato para código postal
-      contacto: ['', [Validators.required, Validators.pattern('^[0-9]{9}$')]], // Validação para número de telefone
-      email: ['', [Validators.required, Validators.email]], // Validação de email
-      contribuinte: ['', [Validators.required, Validators.pattern('^[0-9]{9}$')]], // Validação para o NIF
-      codigoCliente: ['', [Validators.required]] // Código do cliente
+      codigoPostal: ['', [Validators.required, Validators.pattern('^[0-9]{4}-[0-9]{3}$')]],
+      contacto: ['', [Validators.required, Validators.pattern('^[0-9]{9}$')]],
+      email: ['', [Validators.required, Validators.email]],
+      contribuinte: ['', [Validators.required, Validators.pattern('^[0-9]{9}$')]]
     });
+
+    this.carregarUltimoCodigo();
   }
 
- salvarCliente() {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    console.error('Token JWT ausente');
-    alert('Usuário não autenticado. Por favor faça login novamente.');
-    return; // Sai da função para evitar continuar sem token
-  } else {
-    console.log('Token JWT:', token);
+  async carregarUltimoCodigo() {
+    try {
+      // Se você tiver um endpoint para pegar o último código
+      // const resposta = await this.clienteService.obterUltimoCodigo().toPromise();
+      // this.ultimoCodigoCliente = resposta.ultimoCodigo || 0;
+      
+      // Ou usar localStorage como fallback
+      const ultimoCodigo = localStorage.getItem('ultimoCodigoCliente');
+      this.ultimoCodigoCliente = ultimoCodigo ? parseInt(ultimoCodigo, 10) : 0;
+    } catch (error) {
+      console.error('Erro ao carregar último código:', error);
+      this.ultimoCodigoCliente = 0;
+    }
   }
 
-  if (this.clienteForm.valid) {
-    const cliente = this.clienteForm.value;
-    cliente.numeroCliente = this.numeroClienteAutomatico;
+  async salvarCliente() {
+    // Validação do token
+    const token = localStorage.getItem('token');
+    if (!token) {
+      await this.mostrarToast('Usuário não autenticado. Por favor faça login novamente.', 'danger');
+      return;
+    }
 
-    console.log('Dados para enviar:', cliente);
+    // Validação do formulário
+    if (this.clienteForm.invalid) {
+      this.marcarCamposInvalidos();
+      await this.mostrarToast('Por favor, preencha todos os campos corretamente.', 'warning');
+      return;
+    }
 
-    this.clienteService.criarCliente(cliente).subscribe({
-      next: (res) => {
-        console.log('Cliente salvo no backend:', res);
-        alert('Cliente salvo com sucesso!');
-        this.numeroClienteAutomatico++;
-        this.voltar();
-      },
-      error: (err) => {
-        console.error('Erro ao salvar cliente:', err);
-        if (err.message) {
-          alert('Erro do servidor: ' + err.message);
-        } else {
-          alert('Erro ao salvar cliente. Verifique os dados e tente novamente.');
-        }
+    try {
+      // Gerar código do cliente
+      this.ultimoCodigoCliente++;
+      const codigoFormatado = this.formatarCodigoCliente(this.ultimoCodigoCliente);
+      
+      // Preparar dados
+      const clienteData = {
+        ...this.clienteForm.value,
+        codigoCliente: codigoFormatado,
+        token: token // Se necessário para o backend
+      };
+
+      console.log('Enviando dados:', clienteData);
+
+      // Enviar para o serviço
+      const resposta = await this.clienteService.criarCliente(clienteData).toPromise();
+      
+      // Salvar código e mostrar feedback
+      localStorage.setItem('ultimoCodigoCliente', this.ultimoCodigoCliente.toString());
+      await this.mostrarToast(`Cliente ${codigoFormatado} salvo com sucesso!`, 'success');
+      
+      // Redirecionar ou limpar formulário
+      this.clienteForm.reset();
+      this.ultimoCodigoCliente = 0; // Ou manter para próxima inserção
+      
+    } catch (error: any) {
+      console.error('Erro ao salvar cliente:', error);
+      this.ultimoCodigoCliente--; // Reverter incremento
+
+      let mensagemErro = 'Erro ao salvar cliente';
+      if (error.error?.message) {
+        mensagemErro += `: ${error.error.message}`;
+      } else if (error.status === 400) {
+        mensagemErro = 'Dados inválidos. Verifique os campos.';
+      }
+
+      await this.mostrarToast(mensagemErro, 'danger');
+    }
+  }
+
+  private formatarCodigoCliente(numero: number): string {
+    return numero.toString().padStart(2, '0'); // Formata como "01", "02", etc.
+  }
+
+  private marcarCamposInvalidos() {
+    Object.values(this.clienteForm.controls).forEach(control => {
+      if (control.invalid) {
+        control.markAsTouched();
+        control.updateValueAndValidity();
       }
     });
-  } else {
-    console.log('Formulário inválido:', this.clienteForm.errors);
-    this.clienteForm.markAllAsTouched();
-    alert('Por favor, preencha todos os campos corretamente.');
   }
-}
 
+  private async mostrarToast(mensagem: string, cor: string = 'primary') {
+    const toast = await this.toastController.create({
+      message: mensagem,
+      duration: 3000,
+      color: cor,
+      position: 'top'
+    });
+    await toast.present();
+  }
 
-  // Função para voltar à página anterior
   voltar() {
     this.navCtrl.back();
   }

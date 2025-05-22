@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NavController, IonicModule } from '@ionic/angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpErrorResponse } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-editar-servicos',
@@ -53,7 +54,7 @@ export class EditarServicosPage {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.get(`http://localhost:3000/api/servicos/${this.id}`, { headers }).subscribe(
+    this.http.get(`${environment.api_url}/api/servicos/${this.id}`, { headers }).subscribe(
       (data: any) => {
         if (!data) {
           alert("Serviço não encontrado.");

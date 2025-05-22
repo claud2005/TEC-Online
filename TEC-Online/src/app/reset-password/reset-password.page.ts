@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { IonicModule, AlertController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { lastValueFrom } from 'rxjs'; // Importação adicionada
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -33,7 +33,7 @@ export class ResetPasswordPage implements OnInit {
 
     if (this.token) {
       this.http.get(`http://localhost:3000/api/verify-token/${this.token}`).subscribe(
-        (res: any) => {
+        () => {
           this.isTokenValid = true;
         },
         async (err) => {
@@ -54,17 +54,24 @@ export class ResetPasswordPage implements OnInit {
     this.resetForm = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
-    });
+    }, { validators: this.passwordMatchValidator });
 
-    this.resetForm.get('password')?.valueChanges.subscribe(() => {
-      // Força a atualização da UI da força da senha
+    this.resetForm.valueChanges.subscribe(() => {
+      this.passwordsDoNotMatch =
+        this.resetForm.get('password')?.value !== this.resetForm.get('confirmPassword')?.value;
     });
   }
+
+  passwordMatchValidator: ValidatorFn = (group: AbstractControl): {[key: string]: any} | null => {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { mismatch: true };
+  };
 
   getPasswordStrengthClass(): string {
     const password = this.resetForm.get('password')?.value;
     if (!password || password.length === 0) return '';
-    
+
     const strength = this.calculatePasswordStrength(password);
     if (strength < 40) return 'weak';
     if (strength < 70) return 'medium';
@@ -74,36 +81,28 @@ export class ResetPasswordPage implements OnInit {
   getPasswordStrengthText(): string {
     const password = this.resetForm.get('password')?.value;
     if (!password || password.length === 0) return '';
-    
+
     const strength = this.calculatePasswordStrength(password);
-    if (strength < 40) return 'Fraca';
-    if (strength < 70) return 'Média';
-    return 'Forte';
+    if (strength < 40) return '🔴 Fraca';
+    if (strength < 70) return '🟡 Média';
+    return '🟢 Forte';
   }
 
   private calculatePasswordStrength(password: string): number {
     let strength = 0;
-    
     strength += Math.min(password.length * 5, 40);
     if (/[A-Z]/.test(password)) strength += 15;
     if (/[0-9]/.test(password)) strength += 15;
     if (/[^A-Za-z0-9]/.test(password)) strength += 20;
     if (password.length > 10) strength += 10;
-    
     return Math.min(strength, 100);
   }
 
   async onSubmit() {
+    if (this.resetForm.invalid) return;
+
     const password = this.resetForm.value.password;
-    const confirmPassword = this.resetForm.value.confirmPassword;
-  
-    if (password !== confirmPassword) {
-      this.passwordsDoNotMatch = true;
-      return;
-    }
-  
-    this.passwordsDoNotMatch = false;
-  
+
     try {
       const response = await lastValueFrom(
         this.http.post<any>('http://localhost:3000/api/reset-password', {
@@ -111,27 +110,20 @@ export class ResetPasswordPage implements OnInit {
           novaSenha: password
         })
       );
-  
-      if (response.success) {
-        const alert = await this.alertController.create({
-          header: 'Sucesso',
-          message: response.message,
-          buttons: [{
-            text: 'OK',
-            handler: () => {
+
+      const alert = await this.alertController.create({
+        header: response.success ? 'Sucesso' : 'Erro',
+        message: response.message,
+        buttons: [{
+          text: 'OK',
+          handler: () => {
+            if (response.success) {
               this.router.navigate(['/login']);
             }
-          }]
-        });
-        await alert.present();
-      } else {
-        const alert = await this.alertController.create({
-          header: 'Erro',
-          message: response.message,
-          buttons: ['OK']
-        });
-        await alert.present();
-      }
+          }
+        }]
+      });
+      await alert.present();
     } catch (error: any) {
       console.error('Erro ao alterar senha:', error);
       const alert = await this.alertController.create({
@@ -142,4 +134,14 @@ export class ResetPasswordPage implements OnInit {
       await alert.present();
     }
   }
+  showPassword: boolean = false;
+showConfirmPassword: boolean = false;
+
+togglePasswordVisibility() {
+  this.showPassword = !this.showPassword;
+}
+
+toggleConfirmPasswordVisibility() {
+  this.showConfirmPassword = !this.showConfirmPassword;
+}
 }
