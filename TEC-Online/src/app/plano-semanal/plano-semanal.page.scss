@@ -3,6 +3,7 @@
   --ion-text-color: #048;
 }
 
+/* Header */
 .header-container {
   display: flex;
   align-items: center;
@@ -40,7 +41,8 @@ ion-label {
   color: #048;
 }
 
-ion-select, ion-searchbar {
+ion-select,
+ion-searchbar {
   --background: #fff;
   --border-radius: 25px;
   --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -84,10 +86,10 @@ ion-searchbar::part(searchbar-input) {
   border: 1px solid #e1e8ed;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  
-  &:active {
-    transform: scale(0.98);
-  }
+}
+
+.service-item:active {
+  transform: scale(0.98);
 }
 
 .service-content {
@@ -102,15 +104,13 @@ ion-searchbar::part(searchbar-input) {
   font-size: 1.5rem;
 }
 
-.service-details {
-  p {
-    display: flex;
-    align-items: center;
-    margin: 6px 0;
-    color: #4a5568;
-    font-size: 1.1rem;
-    line-height: 1.5;
-  }
+.service-details p {
+  display: flex;
+  align-items: center;
+  margin: 6px 0;
+  color: #4a5568;
+  font-size: 1.1rem;
+  line-height: 1.5;
 }
 
 .detail-icon {
@@ -126,30 +126,32 @@ ion-badge {
   padding: 8px 12px;
 }
 
+/* Sem tarefas */
 .no-tasks {
   text-align: center;
   padding: 30px;
   color: #6c757d;
-  
-  .empty-icon {
-    font-size: 3.5rem;
-    color: #cbd5e0;
-    margin-bottom: 20px;
-  }
-  
-  p {
-    margin-bottom: 25px;
-    font-size: 1.4rem;
-  }
 }
 
+.no-tasks .empty-icon {
+  font-size: 3.5rem;
+  color: #cbd5e0;
+  margin-bottom: 20px;
+}
+
+.no-tasks p {
+  margin-bottom: 25px;
+  font-size: 1.4rem;
+}
+
+/* Botão Adicionar */
 .add-button {
   --color: #07f;
   font-size: 1.4rem;
-  
-  ion-icon {
-    font-size: 1.8rem;
-  }
+}
+
+.add-button ion-icon {
+  font-size: 1.8rem;
 }
 
 /* Calendário */
@@ -167,41 +169,40 @@ ion-datetime {
 /* Rodapé */
 ion-footer {
   display: flex;
-  justify-content: space-between; /* Garante que os botões das extremidades fiquem nas laterais */
-  align-items: center; /* Alinha todos os botões verticalmente */
-  background: #07f; /* Define o fundo do rodapé como azul */
-  padding: 0; /* Remove o padding para que o rodapé ocupe toda a largura */
-  width: 100%; /* Garante que o rodapé ocupe 100% da largura */
-  border-top: none; /* Remove a borda superior, caso não queira a linha */
+  justify-content: space-between;
+  align-items: center;
+  background: #07f;
+  padding: 0;
+  width: 100%;
+  border-top: none;
 }
 
 ion-buttons[slot="start"],
 ion-buttons[slot="end"] {
-  flex: 0; /* Não faz os botões das extremidades crescerem */
+  flex: 0;
 }
 
 ion-buttons[slot="primary"] {
   display: flex;
-  justify-content: center; /* Centraliza o conteúdo do botão 'Serviços' */
+  justify-content: center;
   align-items: center;
-  position: absolute; /* Faz o botão 'Serviços' ocupar o centro */
-  left: 50%; /* Centraliza o botão */
-  transform: translateX(-50%); /* Corrige o alinhamento exato do centro */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 ion-button {
   --background: transparent;
-  --color: #fff; /* Deixa o texto e ícone branco */
+  --color: #fff;
   font-size: 1.4rem;
   font-weight: bold;
-  --ripple-color: #fff; /* Altera a cor do ripple para branco */
+  --ripple-color: #fff;
 }
 
 ion-icon {
   font-size: 1.8rem;
   margin-right: 8px;
 }
-
 
 /* Modal */
 ion-modal {
@@ -215,7 +216,8 @@ ion-modal::part(backdrop) {
   background: rgba(0, 85, 179, 0.3);
 }
 
-ion-modal ion-header, ion-modal ion-footer {
+ion-modal ion-header,
+ion-modal ion-footer {
   --background: #07f;
   --color: #fff;
 }
@@ -269,10 +271,10 @@ ion-modal ion-col {
   font-size: 1.4rem;
   color: #2d3748;
   line-height: 1.6;
-  
-  strong {
-    color: #048;
-  }
+}
+
+ion-modal ion-col strong {
+  color: #048;
 }
 
 ion-modal ion-fab-button {
@@ -281,8 +283,8 @@ ion-modal ion-fab-button {
   --color: #fff;
   width: 60px;
   height: 60px;
-  
-  ion-icon {
-    font-size: 2rem;
-  }
+}
+
+ion-modal ion-fab-button ion-icon {
+  font-size: 2rem;
 }
