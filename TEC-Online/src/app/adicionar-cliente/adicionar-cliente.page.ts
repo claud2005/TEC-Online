@@ -69,7 +69,7 @@ async salvarCliente() {
 
     const resposta = await this.clienteService.criarCliente(clienteData).toPromise();
 
-    await this.mostrarToast(`Cliente salvo com sucesso!`, 'success');
+    await this.mostrarToast(`Cliente salvo com sucesso`, 'success');
     this.clienteForm.reset();
   } catch (error: any) {
     console.error('Erro ao salvar cliente:', error);
