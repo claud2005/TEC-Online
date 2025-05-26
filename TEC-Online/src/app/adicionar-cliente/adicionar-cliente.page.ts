@@ -48,60 +48,40 @@ export class AdicionarClientePage {
     }
   }
 
-  async salvarCliente() {
-    // Validação do token
-    const token = localStorage.getItem('token');
-    if (!token) {
-      await this.mostrarToast('Usuário não autenticado. Por favor faça login novamente.', 'danger');
-      return;
-    }
-
-    // Validação do formulário
-    if (this.clienteForm.invalid) {
-      this.marcarCamposInvalidos();
-      await this.mostrarToast('Por favor, preencha todos os campos corretamente.', 'warning');
-      return;
-    }
-
-    try {
-      // Gerar código do cliente
-      this.ultimoCodigoCliente++;
-      const codigoFormatado = this.formatarCodigoCliente(this.ultimoCodigoCliente);
-      
-      // Preparar dados
-      const clienteData = {
-        ...this.clienteForm.value,
-        codigoCliente: codigoFormatado,
-        token: token // Se necessário para o backend
-      };
-
-      console.log('Enviando dados:', clienteData);
-
-      // Enviar para o serviço
-      const resposta = await this.clienteService.criarCliente(clienteData).toPromise();
-      
-      // Salvar código e mostrar feedback
-      localStorage.setItem('ultimoCodigoCliente', this.ultimoCodigoCliente.toString());
-      await this.mostrarToast(`Cliente ${codigoFormatado} salvo com sucesso!`, 'success');
-      
-      // Redirecionar ou limpar formulário
-      this.clienteForm.reset();
-      this.ultimoCodigoCliente = 0; // Ou manter para próxima inserção
-      
-    } catch (error: any) {
-      console.error('Erro ao salvar cliente:', error);
-      this.ultimoCodigoCliente--; // Reverter incremento
-
-      let mensagemErro = 'Erro ao salvar cliente';
-      if (error.error?.message) {
-        mensagemErro += `: ${error.error.message}`;
-      } else if (error.status === 400) {
-        mensagemErro = 'Dados inválidos. Verifique os campos.';
-      }
-
-      await this.mostrarToast(mensagemErro, 'danger');
-    }
+async salvarCliente() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    await this.mostrarToast('Usuário não autenticado. Por favor faça login novamente.', 'danger');
+    return;
   }
+
+  if (this.clienteForm.invalid) {
+    this.marcarCamposInvalidos();
+    await this.mostrarToast('Por favor, preencha todos os campos corretamente.', 'warning');
+    return;
+  }
+
+  try {
+    const clienteData = {
+      ...this.clienteForm.value,
+      token: token
+    };
+
+    const resposta = await this.clienteService.criarCliente(clienteData).toPromise();
+
+    await this.mostrarToast(`Cliente salvo com sucesso!`, 'success');
+    this.clienteForm.reset();
+  } catch (error: any) {
+    console.error('Erro ao salvar cliente:', error);
+    let mensagemErro = 'Erro ao salvar cliente';
+    if (error.error?.message) {
+      mensagemErro += `: ${error.error.message}`;
+    } else if (error.status === 400) {
+      mensagemErro = 'Dados inválidos. Verifique os campos.';
+    }
+    await this.mostrarToast(mensagemErro, 'danger');
+  }
+}
 
   private formatarCodigoCliente(numero: number): string {
     return numero.toString().padStart(2, '0'); // Formata como "01", "02", etc.
