@@ -136,3 +136,55 @@ ion-buttons[slot="end"] {
 ion-icon {
   font-size: 22px;  /* Ajuste de tamanho do ícone */
 }
+
+
+/* Responsividade: mostrar layout certo consoante o tamanho do ecrã */
+.desktop-view {
+  display: block;
+}
+
+.mobile-view {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .desktop-view {
+    display: none !important;
+  }
+
+  .mobile-view {
+    display: block !important;
+  }
+
+  ion-card {
+    margin-bottom: 16px;
+    background-color: #f0f8ff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+  }
+
+  ion-card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #1a3d7c;
+  }
+
+  ion-card-subtitle {
+    color: #3d3d3d;
+    font-size: 0.9rem;
+  }
+
+  ion-card-content p {
+    font-size: 0.95rem;
+    margin: 4px 0;
+  }
+
+  ion-button {
+    margin-right: 6px;
+    font-size: 0.8rem;
+  }
+
+  ion-icon {
+    font-size: 18px;
+  }
+}

@@ -18,7 +18,8 @@
 <ion-content class="ion-padding conteudo-branco">
   <ion-searchbar [(ngModel)]="filtro" placeholder="Pesquisar..." (ionInput)="filtrarClientes()" debounce="300"></ion-searchbar>
 
-  <ion-grid>
+  <!-- Para telas grandes -->
+  <ion-grid class="desktop-view">
     <ion-row class="table-header">
       <ion-col size="2"><strong>Codigo</strong></ion-col>
       <ion-col size="2"><strong>Nome</strong></ion-col>
@@ -35,13 +36,34 @@
       <ion-col size="2">{{ cliente.email }}</ion-col>
       <ion-col size="2">{{ cliente.morada }}</ion-col>
       <ion-col size="2">
-        <ion-button color="primary" size="small" fill="clear" type="button" (click)="editarCliente(cliente)">
+        <ion-button color="primary" size="small" fill="clear" (click)="editarCliente(cliente)">
           <ion-icon name="create-outline"></ion-icon>
         </ion-button>
-        <ion-button color="danger" size="small" fill="clear" type="button" (click)="excluirCliente(cliente)">
+        <ion-button color="danger" size="small" fill="clear" (click)="excluirCliente(cliente)">
           <ion-icon name="trash-outline"></ion-icon>
         </ion-button>
       </ion-col>
-    </ion-row>    
+    </ion-row>
   </ion-grid>
+
+  <!-- Para telas pequenas -->
+  <div class="mobile-view">
+    <ion-card *ngFor="let cliente of clientesFiltrados">
+      <ion-card-header>
+        <ion-card-title>{{ cliente.nome }}</ion-card-title>
+        <ion-card-subtitle>{{ cliente.codigoCliente }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Contacto:</strong> {{ cliente.contacto }}</p>
+        <p><strong>Email:</strong> {{ cliente.email }}</p>
+        <p><strong>Morada:</strong> {{ cliente.morada }}</p>
+        <ion-button color="primary" size="small" fill="clear" (click)="editarCliente(cliente)">
+          <ion-icon name="create-outline"></ion-icon>
+        </ion-button>
+        <ion-button color="danger" size="small" fill="clear" (click)="excluirCliente(cliente)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
