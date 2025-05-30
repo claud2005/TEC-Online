@@ -1,5 +1,10 @@
 {
   "dependencies": {
+    "@angular/router": "^19.2.13",
+    "@ionic/angular": "^8.5.7",
     "capacitor-file-chooser": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^5.1.8"
   }
 }

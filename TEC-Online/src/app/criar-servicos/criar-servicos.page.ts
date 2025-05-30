@@ -57,8 +57,8 @@ export class CriarServicosPage implements OnInit {
       marcaAparelho: this.marcaAparelho.trim(),
       modeloAparelho: this.modeloAparelho.trim(),
       problemaCliente: this.problemaCliente.trim(),
-      solucaoInicial: this.solucaoInicial.trim(),
-      valorTotal: this.valorTotal ?? 0,
+      solucaoInicial: this.solucaoInicial?.trim() || '',
+      valorTotal: this.valorTotal ?? null,
       observacoes: this.observacoes.trim() || 'Sem observações',
     };
 
@@ -81,9 +81,9 @@ export class CriarServicosPage implements OnInit {
     return [
       this.dataServico, this.horaServico, this.status, this.autorServico,
       this.nomeCliente, this.telefoneContato, this.marcaAparelho, this.modeloAparelho,
-      this.problemaCliente, this.solucaoInicial
+      this.problemaCliente
     ].every(campo => campo !== undefined && campo.trim() !== '') &&
-      this.valorTotal !== null && this.valorTotal >= 0;
+      (this.valorTotal === null || this.valorTotal >= 0);
   }
 
   goBack() {
