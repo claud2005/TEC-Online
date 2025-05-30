@@ -26,8 +26,8 @@
   <!-- Barra de Pesquisa -->
   <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filtrarServicos()" debounce="500" placeholder="Buscar serviço..." animated></ion-searchbar>
 
-  <!-- Lista de Serviços -->
-  <div class="tabela-wrapper">
+  <!-- Layout Desktop -->
+  <div class="desktop-view">
     <ion-grid class="tabela-servicos">
       <ion-row class="tabela-header">
         <ion-col class="header-item">Nº Serviço</ion-col>
@@ -38,7 +38,6 @@
         <ion-col class="header-item">Detalhes</ion-col>
       </ion-row>
 
-      <!-- Iterando sobre os serviços filtrados -->
       <ng-container *ngFor="let servico of servicosFiltrados">
         <ion-row class="tabela-row">
           <ion-col>{{ servico.numero }}</ion-col>
@@ -54,8 +53,7 @@
             </ion-button>
           </ion-col>
         </ion-row>
-      
-        <!-- Detalhes Expandidos -->
+
         <ion-row *ngIf="servico.expandido" class="detalhes">
           <ion-col>
             <div class="detalhes-container">
@@ -68,11 +66,8 @@
               <p><strong>Solução Inicial:</strong> {{ servico.solucaoInicial }}</p>
               <p><strong>Valor Total:</strong> {{ servico.valorTotal }}</p>
               <p><strong>Observações:</strong> {{ servico.observacoes }}</p>
-      
-              <!-- Botão para Gerar PDF -->
+
               <ion-button expand="full" fill="solid" color="tertiary" (click)="gerarPDF(servico)">Gerar PDF</ion-button>
-      
-              <!-- Linha para botões de edição -->
               <ion-row>
                 <ion-col size="12">
                   <ion-button expand="full" fill="solid" color="warning" (click)="editarServico(servico)">
@@ -85,5 +80,35 @@
         </ion-row>
       </ng-container>
     </ion-grid>
+  </div>
+
+  <!-- Layout Mobile -->
+  <div class="mobile-view">
+    <ion-card *ngFor="let servico of servicosFiltrados">
+      <ion-card-header>
+        <ion-card-title>Serviço Nº {{ servico.numero }}</ion-card-title>
+        <ion-card-subtitle>Status: 
+          <ion-badge [color]="servico.status === 'ABERTA' ? 'warning' : 'success'">{{ servico.status }}</ion-badge>
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Data:</strong> {{ servico.data }}</p>
+        <p><strong>Cliente:</strong> {{ servico.cliente }}</p>
+        <p><strong>Responsável:</strong> {{ servico.responsavel }}</p>
+
+        <p><strong>Autor do Serviço:</strong> {{ servico.autorServico }}</p>
+        <p><strong>Nome Completo do Cliente:</strong> {{ servico.nomeCompletoCliente }}</p>
+        <p><strong>Contato:</strong> {{ servico.contatoCliente }}</p>
+        <p><strong>Modelo do Aparelho:</strong> {{ servico.modeloAparelho }}</p>
+        <p><strong>Marca do Aparelho:</strong> {{ servico.marcaAparelho }}</p>
+        <p><strong>Problema Relatado:</strong> {{ servico.problemaRelatado }}</p>
+        <p><strong>Solução Inicial:</strong> {{ servico.solucaoInicial }}</p>
+        <p><strong>Valor Total:</strong> {{ servico.valorTotal }}</p>
+        <p><strong>Observações:</strong> {{ servico.observacoes }}</p>
+
+        <ion-button expand="full" fill="solid" color="tertiary" (click)="gerarPDF(servico)">Gerar PDF</ion-button>
+        <ion-button expand="full" fill="solid" color="warning" (click)="editarServico(servico)">Editar Serviço</ion-button>
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>
