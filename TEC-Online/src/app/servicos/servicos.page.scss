@@ -197,3 +197,23 @@ ion-badge[color="success"] {
     margin-top: 8px;
   }
 }
+
+/* ======= Layout Responsivo ======= */
+.desktop-view {
+  display: block;
+}
+
+.mobile-view {
+  display: none;
+}
+
+/* Em telas pequenas (até 768px), esconde a tabela e mostra os cards */
+@media screen and (max-width: 768px) {
+  .desktop-view {
+    display: none;
+  }
+
+  .mobile-view {
+    display: block;
+  }
+}
