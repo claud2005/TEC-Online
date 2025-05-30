@@ -18,10 +18,10 @@
 <ion-content class="ion-padding conteudo-branco">
   <ion-searchbar [(ngModel)]="filtro" placeholder="Pesquisar..." (ionInput)="filtrarClientes()" debounce="300"></ion-searchbar>
 
-  <!-- Para telas grandes -->
+  <!-- Layout para ecrãs grandes -->
   <ion-grid class="desktop-view">
     <ion-row class="table-header">
-      <ion-col size="2"><strong>Codigo</strong></ion-col>
+      <ion-col size="2"><strong>Código</strong></ion-col>
       <ion-col size="2"><strong>Nome</strong></ion-col>
       <ion-col size="2"><strong>Contacto</strong></ion-col>
       <ion-col size="2"><strong>Email</strong></ion-col>
@@ -46,24 +46,25 @@
     </ion-row>
   </ion-grid>
 
-  <!-- Para telas pequenas -->
-  <div class="mobile-view">
-    <ion-card *ngFor="let cliente of clientesFiltrados">
-      <ion-card-header>
-        <ion-card-title>{{ cliente.nome }}</ion-card-title>
-        <ion-card-subtitle>{{ cliente.codigoCliente }}</ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content>
-        <p><strong>Contacto:</strong> {{ cliente.contacto }}</p>
-        <p><strong>Email:</strong> {{ cliente.email }}</p>
-        <p><strong>Morada:</strong> {{ cliente.morada }}</p>
-        <ion-button color="primary" size="small" fill="clear" (click)="editarCliente(cliente)">
-          <ion-icon name="create-outline"></ion-icon>
-        </ion-button>
-        <ion-button color="danger" size="small" fill="clear" (click)="excluirCliente(cliente)">
-          <ion-icon name="trash-outline"></ion-icon>
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
-  </div>
+  <!-- Layout para ecrãs pequenos -->
+<div class="mobile-view">
+  <ion-card *ngFor="let cliente of clientesFiltrados">
+    <ion-card-header>
+      <ion-card-title>{{ cliente.nome }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Código:</strong> {{ cliente.codigoCliente }}</p>
+      <p><strong>Contacto:</strong> {{ cliente.contacto }}</p>
+      <p><strong>Email:</strong> {{ cliente.email }}</p>
+      <p><strong>Morada:</strong> {{ cliente.morada }}</p>
+      <ion-button color="primary" size="small" fill="clear" (click)="editarCliente(cliente)">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
+      <ion-button color="danger" size="small" fill="clear" (click)="excluirCliente(cliente)">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</div>
+
 </ion-content>
