@@ -1,161 +1,199 @@
 /* ======= Estilização Geral ======= */
 ion-toolbar {
-    --background: #ef0f0f;
-    --color: white;
-    font-weight: bold;
-    font-size: 18px;
-    padding: 14px 0;
-    box-shadow: 0px 2px 10px rgba(255, 255, 255, 0.4);
+  --background: #ef0f0f;
+  --color: white;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 14px 0;
+  box-shadow: 0px 2px 10px rgba(255, 255, 255, 0.4);
+}
+
+/* ======= Centraliza o Título ======= */
+.titulo-centralizado {
+  text-align: center;
+  flex: 1;
+}
+
+/* ======= Estilo do Ícone de Voltar (Seta) ======= */
+ion-buttons ion-button {
+  --background: transparent;
+  --color: white;
+}
+
+ion-buttons ion-button ion-icon {
+  font-size: 24px;
+}
+
+/* ======= Fundo Branco da Página ======= */
+ion-content {
+  --background: white;
+  --color: black;
+}
+
+/* ======= Segmento de Filtros (Status) ======= */
+ion-segment {
+  background: white;
+  margin: 16px;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+ion-segment-button {
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+ion-segment-button.ion-activated {
+  background: #007aff;
+  color: white;
+  border-radius: 8px;
+  transition: background 0.3s ease-in-out;
+}
+
+/* ======= Barra de Pesquisa ======= */
+ion-searchbar {
+  margin: 16px;
+  --background: white;
+  --border-radius: 12px;
+  --box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  --color: black;
+  --icon-color: black;
+  --placeholder-color: black;
+  position: static !important;
+  top: auto !important;
+  z-index: auto !important;
+}
+
+/* ======= Tabela de Serviços ======= */
+.tabela-wrapper {
+  overflow-x: auto;
+  padding: 0 16px;
+}
+
+.tabela-servicos {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  min-width: 600px;
+}
+
+.tabela-header {
+  font-weight: bold;
+  background: #007aff;
+  color: white;
+  padding: 16px 0;
+  border-radius: 12px 12px 0 0;
+  text-align: center;
+  font-size: 18px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tabela-row {
+  background: #ffffff;
+  border-bottom: 2px solid #e0e0e0;
+  text-align: center;
+  transition: background 0.2s ease-in-out;
+  font-size: 16px;
+  color: black;
+}
+
+.tabela-row:hover {
+  background: #f0f0f0;
+}
+
+.tabela-row:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.tabela-row:last-child {
+  border-bottom: none;
+}
+
+.tabela-row ion-col {
+  padding: 14px;
+  border-right: 1px solid #d1d1d1;
+  font-size: 16px;
+  font-weight: 500;
+  color: black;
+}
+
+.tabela-row ion-col:last-child {
+  border-right: none;
+}
+
+/* ======= Cores para status (Badges) ======= */
+ion-badge {
+  font-size: 16px;
+  padding: 6px 14px;
+  border-radius: 15px;
+  font-weight: bold;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+  color: black;
+}
+
+ion-badge[color="danger"] {
+  background-color: #ff3b30;
+  color: white;
+}
+
+ion-badge[color="success"] {
+  background-color: #28a745;
+  color: white;
+}
+
+/* ======= Layout Responsivo ======= */
+.desktop-view {
+  display: block;
+}
+
+.mobile-view {
+  display: none;
+}
+
+/* Em telas pequenas (mobile) */
+@media screen and (max-width: 768px) {
+  .desktop-view {
+    display: none;
   }
-  
-  /* ======= Centraliza o Título ======= */
-  .titulo-centralizado {
-    text-align: center;
-    flex: 1;
+
+  .mobile-view {
+    display: block;
   }
-  
-  /* ======= Estilo do Ícone de Voltar (Seta) ======= */
-  ion-buttons ion-button {
-    --background: transparent; /* Fundo transparente */
-    --color: white; /* Cor do ícone branco */
-  }
-  
-  ion-buttons ion-button ion-icon {
-    font-size: 24px; /* Tamanho maior para a seta */
-  }
-  
-  /* ======= Fundo Branco da Página ======= */
-  ion-content {
-    --background: white;
-    --color: black; /* Texto preto */
-  }
-  
-  /* ======= Segmento de Filtros (Status) ======= */
-  ion-segment {
-    background: white;
-    margin: 16px;
-    border-radius: 12px;
-    padding: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-  }
-  
-  ion-segment-button {
-    color: black; /* Texto preto */
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
-  ion-segment-button.ion-activated {
-    background: #007aff; /* Cor azul para o botão ativo */
-    color: white;
-    border-radius: 8px;
-    transition: background 0.3s ease-in-out;
-  }
-  
-  /* ======= Barra de Pesquisa ======= */
+
   ion-searchbar {
-    margin: 16px;
-    --background: white;
-    --border-radius: 12px;
-    --box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    font-size: 16px;
-    
-    /* Texto digitado preto */
-    --color: black;
-  
-    /* Ícone da lupa e do "X" preto */
-    --icon-color: black;
-  
-    /* Placeholder preto */
-    --placeholder-color: black;
+    margin: 0 10px;
+    position: static !important;
+    top: auto !important;
+    z-index: auto !important;
   }
-  
-  /* ======= Tabela de Serviços ======= */
-  .tabela-wrapper {
-    overflow-x: auto;
-    padding: 0 16px;
-  }
-  
-  .tabela-servicos {
-    background: white;
-    border-radius: 12px;
+
+  ion-card {
+    margin: 12px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
-    padding: 16px;
-    min-width: 600px;
   }
-  
-  /* Cabeçalho da tabela */
-  .tabela-header {
-    font-weight: bold;
-    background: #007aff;
-    color: white;
-    padding: 16px 0;
-    border-radius: 12px 12px 0 0;
-    text-align: center;
+
+  ion-card-title {
     font-size: 18px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  
-  /* Linhas da tabela */
-  .tabela-row {
-    background: #ffffff;
-    border-bottom: 2px solid #e0e0e0;
-    text-align: center;
-    transition: background 0.2s ease-in-out;
-    font-size: 16px;
-    color: black; /* Texto preto */
-  }
-  
-  /* Efeito hover */
-  .tabela-row:hover {
-    background: #f0f0f0;
-  }
-  
-  /* Linhas alternadas */
-  .tabela-row:nth-child(even) {
-    background: #f9f9f9;
-  }
-  
-  /* Última linha sem borda inferior */
-  .tabela-row:last-child {
-    border-bottom: none;
-  }
-  
-  /* Colunas */
-  .tabela-row ion-col {
-    padding: 14px;
-    border-right: 1px solid #d1d1d1;
-    font-size: 16px;
-    font-weight: 500;
-    color: black; /* Texto preto */
-  }
-  
-  /* Remove a borda da última coluna */
-  .tabela-row ion-col:last-child {
-    border-right: none;
-  }
-  
-  /* ======= Cores para status (Badges) ======= */
-  ion-badge {
-    font-size: 16px;
-    padding: 6px 14px;
-    border-radius: 15px;
     font-weight: bold;
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
-    color: black; /* Texto preto */
   }
-  
-  /* Status ABERTA (vermelho) */
-  ion-badge[color="danger"] {
-    background-color: #ff3b30;
-    color: white;
+
+  ion-card-subtitle {
+    font-size: 16px;
+    color: #666;
   }
-  
-  /* Status FECHADA (verde) */
-  ion-badge[color="success"] {
-    background-color: #28a745;
-    color: white;
+
+  ion-card-content p {
+    font-size: 15px;
+    margin: 4px 0;
   }
-  
+
+  ion-button {
+    margin-top: 8px;
+  }
+}
