@@ -38,10 +38,9 @@ ion-content {
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(-40%);
   }
 }
-
 
 .profile-container:hover {
   transform: translateY(-40%) scale(1.03);
@@ -295,5 +294,6 @@ ion-button.footer-button {
     font-size: 20px;
   }
 }
+
 
 
