@@ -1,26 +1,23 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonicModule, NavController, ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-adicionar-cliente',
   templateUrl: './adicionar-cliente.page.html',
   styleUrls: ['./adicionar-cliente.page.scss'],
   standalone: true,
-  imports: [IonicModule, FormsModule, ReactiveFormsModule, CommonModule, HttpClientModule]
+  imports: [IonicModule, FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class AdicionarClientePage {
   clienteForm: FormGroup;
   ultimoCodigoCliente = 0;
-  private apiUrl = 'https://tec-online-api.vercel.app/api/clientes';
 
   constructor(
     private navCtrl: NavController,
     private formBuilder: FormBuilder,
-    private toastController: ToastController,
-    private http: HttpClient
+    private toastController: ToastController
   ) {
     this.clienteForm = this.formBuilder.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
@@ -35,19 +32,15 @@ export class AdicionarClientePage {
   }
 
   async carregarUltimoCodigo() {
-    try {
-      const ultimoCodigo = localStorage.getItem('ultimoCodigoCliente');
-      this.ultimoCodigoCliente = ultimoCodigo ? parseInt(ultimoCodigo, 10) : 0;
-    } catch (error) {
-      console.error('Erro ao carregar último código:', error);
-      this.ultimoCodigoCliente = 0;
-    }
+    const ultimoCodigo = localStorage.getItem('ultimoCodigoCliente');
+    this.ultimoCodigoCliente = ultimoCodigo ? parseInt(ultimoCodigo, 10) : 0;
   }
 
   async salvarCliente() {
     const token = localStorage.getItem('token');
+
     if (!token) {
-      await this.mostrarToast('Usuário não autenticado. Por favor faça login novamente.', 'danger');
+      await this.mostrarToast('Usuário não autenticado. Faça login novamente.', 'danger');
       return;
     }
 
@@ -57,26 +50,35 @@ export class AdicionarClientePage {
       return;
     }
 
-    try {
-      const clienteData = this.clienteForm.value;
+    const clienteData = this.clienteForm.value;
 
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
+    try {
+      const resposta = await fetch('https://tec-online-api.vercel.app/api/clientes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(clienteData)
       });
 
-      await this.http.post(this.apiUrl, clienteData, { headers }).toPromise();
+      const resultado = await resposta.json();
 
-      await this.mostrarToast(`Cliente salvo com sucesso`, 'success');
+      if (!resposta.ok) {
+        throw resultado;
+      }
+
+      await this.mostrarToast('Cliente salvo com sucesso!', 'success');
       this.clienteForm.reset();
+
     } catch (error: any) {
       console.error('Erro ao salvar cliente:', error);
       let mensagemErro = 'Erro ao salvar cliente';
-      if (error.error?.message) {
-        mensagemErro += `: ${error.error.message}`;
-      } else if (error.status === 400) {
-        mensagemErro = 'Dados inválidos. Verifique os campos.';
+
+      if (error?.message) {
+        mensagemErro += `: ${error.message}`;
       }
+
       await this.mostrarToast(mensagemErro, 'danger');
     }
   }
