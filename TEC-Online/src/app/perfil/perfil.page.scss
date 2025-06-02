@@ -10,6 +10,7 @@ ion-content {
   text-align: center;
   color: white;
 }
+
 /* 📌 Centralizar conteúdo */
 .profile-container {
   display: flex;
@@ -17,17 +18,31 @@ ion-content {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 40px;  /* Aumentei o padding para melhor espaçamento */
-  background: rgba(0, 0, 0, 0.3);
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.08); /* Glassmorphism */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
   border-radius: 20px;
   box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.5);
   width: 100%;
-  max-width: 600px; /* Aumentei a largura máxima do container */
+  max-width: 600px;
   position: relative;
-  margin: auto; /* Centraliza horizontalmente */
-  top: 40%;  /* Mudei de 50% para 40% para mover para cima */
-  transform: translateY(-40%); /* Mudei de -50% para -40% para mover para cima */
+  margin: auto;
+  top: 40%;
+  transform: translateY(-40%);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-40%);
+  }
 }
 
 .profile-container:hover {
@@ -37,15 +52,15 @@ ion-content {
 
 /* 🔠 Nome e Usuário */
 .profile-title {
-  font-size: 36px; /* Aumentei o tamanho da fonte para o nome completo */
+  font-size: 36px;
   font-weight: bold;
   color: #ffffff;
-  margin-bottom: 30px; /* Aumentei a margem para um maior espaçamento */
+  margin-bottom: 30px;
   text-transform: uppercase;
 }
 
 .user-info p {
-  font-size: 24px; /* Aumentei o tamanho da fonte do nome de usuário */
+  font-size: 24px;
   color: #dbeafe;
   margin: 12px 0;
   display: flex;
@@ -107,7 +122,6 @@ ion-button {
   gap: 15px;
 }
 
-/* Efeito ao passar o mouse nos botões */
 ion-button:hover {
   transform: scale(1.05);
   filter: brightness(1.2);
@@ -116,7 +130,7 @@ ion-button:hover {
 
 /* Botão de Editar */
 .edit-button {
-  --background: linear-gradient(135deg, #ff9800, #f57c00); /* Cor laranja */
+  --background: linear-gradient(135deg, #ff9800, #f57c00);
   --color: white;
   font-size: 20px;
   padding: 15px;
@@ -125,7 +139,7 @@ ion-button:hover {
 }
 
 .edit-button:hover {
-  --background: linear-gradient(135deg, #ff8c00, #f57c00); /* Efeito de Hover mais escuro */
+  --background: linear-gradient(135deg, #ff8c00, #f57c00);
 }
 
 .edit-button ion-icon {
@@ -163,8 +177,6 @@ ion-button.footer-button:hover {
   --background: rgba(255, 255, 255, 0.1);
   filter: brightness(1.1);
 }
-
-
 
 /* 🔻 Cabeçalho */
 ion-header {
@@ -212,4 +224,24 @@ ion-button.footer-button {
   --background: transparent;
   --color: white;
   font-size: 16px;
+}
+
+/* 🔙 Botão de Voltar personalizado */
+.back-button {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  background: transparent;
+  color: white;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.3s ease;
+}
+
+.back-button:hover {
+  opacity: 0.7;
 }
