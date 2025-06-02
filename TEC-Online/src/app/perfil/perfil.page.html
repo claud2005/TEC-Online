@@ -1,8 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/plano-semanal"></ion-back-button>
+      <ion-back-button defaultHref="/plano-semanal" text="Voltar"></ion-back-button>
     </ion-buttons>
+    <ion-title>Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -26,7 +27,6 @@
 
     <!-- Foto de Perfil -->
     <div class="profile-picture">
-      <!-- A URL da foto é formada dinamicamente -->
       <img [src]="fotoPerfil ? 'http://localhost:3000/' + fotoPerfil : 'assets/img/default-profile.png'" alt="Foto de Perfil" />
     </div>
 
@@ -38,10 +38,12 @@
 
     <!-- Botões de ação -->
     <div class="button-group">
-      <ion-button expand="block" fill="outline" class="small-button" (click)="editarPerfil()" aria-label="Editar Perfil">
+      <ion-button expand="block" fill="outline" class="edit-button" (click)="editarPerfil()">
+        <ion-icon name="create-outline" slot="start"></ion-icon>
         Editar Perfil
       </ion-button>
-      <ion-button expand="block" color="danger" class="small-button" (click)="logout()" aria-label="Logout">
+      <ion-button expand="block" color="danger" class="logout-button" (click)="logout()">
+        <ion-icon name="log-out-outline" slot="start"></ion-icon>
         Logout
       </ion-button>
     </div>

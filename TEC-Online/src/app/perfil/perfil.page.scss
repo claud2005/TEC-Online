@@ -245,3 +245,55 @@ ion-button.footer-button {
 .back-button:hover {
   opacity: 0.7;
 }
+
+
+/* 📱 Responsividade */
+@media (max-width: 600px) {
+  .profile-container {
+    padding: 20px;
+    width: 90%;
+    transform: none;
+    top: auto;
+    margin-top: 40px;
+  }
+
+  .profile-title {
+    font-size: 28px;
+  }
+
+  .user-info p {
+    font-size: 18px;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .profile-picture {
+    width: 140px;
+    height: 140px;
+  }
+
+  ion-button {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .edit-button,
+  .logout-button {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  ion-header {
+    height: auto;
+  }
+
+  ion-toolbar {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 10px;
+  }
+
+  ion-title {
+    font-size: 20px;
+  }
+}
