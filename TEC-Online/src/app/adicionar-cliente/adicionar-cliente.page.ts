@@ -1,25 +1,26 @@
 import { Component } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, NavController, ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { ClienteService } from '../services/cliente.service';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-adicionar-cliente',
   templateUrl: './adicionar-cliente.page.html',
   styleUrls: ['./adicionar-cliente.page.scss'],
   standalone: true,
-  imports: [IonicModule, FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [IonicModule, FormsModule, ReactiveFormsModule, CommonModule, HttpClientModule]
 })
 export class AdicionarClientePage {
   clienteForm: FormGroup;
   ultimoCodigoCliente = 0;
+  private apiUrl = 'https://tec-online-api.vercel.app/api/clientes';
 
   constructor(
     private navCtrl: NavController,
     private formBuilder: FormBuilder,
-    private clienteService: ClienteService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private http: HttpClient
   ) {
     this.clienteForm = this.formBuilder.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
@@ -35,11 +36,6 @@ export class AdicionarClientePage {
 
   async carregarUltimoCodigo() {
     try {
-      // Se você tiver um endpoint para pegar o último código
-      // const resposta = await this.clienteService.obterUltimoCodigo().toPromise();
-      // this.ultimoCodigoCliente = resposta.ultimoCodigo || 0;
-      
-      // Ou usar localStorage como fallback
       const ultimoCodigo = localStorage.getItem('ultimoCodigoCliente');
       this.ultimoCodigoCliente = ultimoCodigo ? parseInt(ultimoCodigo, 10) : 0;
     } catch (error) {
@@ -48,43 +44,41 @@ export class AdicionarClientePage {
     }
   }
 
-async salvarCliente() {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    await this.mostrarToast('Usuário não autenticado. Por favor faça login novamente.', 'danger');
-    return;
-  }
-
-  if (this.clienteForm.invalid) {
-    this.marcarCamposInvalidos();
-    await this.mostrarToast('Por favor, preencha todos os campos corretamente.', 'warning');
-    return;
-  }
-
-  try {
-    const clienteData = {
-      ...this.clienteForm.value,
-      token: token
-    };
-
-    const resposta = await this.clienteService.criarCliente(clienteData).toPromise();
-
-    await this.mostrarToast(`Cliente salvo com sucesso`, 'success');
-    this.clienteForm.reset();
-  } catch (error: any) {
-    console.error('Erro ao salvar cliente:', error);
-    let mensagemErro = 'Erro ao salvar cliente';
-    if (error.error?.message) {
-      mensagemErro += `: ${error.error.message}`;
-    } else if (error.status === 400) {
-      mensagemErro = 'Dados inválidos. Verifique os campos.';
+  async salvarCliente() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      await this.mostrarToast('Usuário não autenticado. Por favor faça login novamente.', 'danger');
+      return;
     }
-    await this.mostrarToast(mensagemErro, 'danger');
-  }
-}
 
-  private formatarCodigoCliente(numero: number): string {
-    return numero.toString().padStart(2, '0'); // Formata como "01", "02", etc.
+    if (this.clienteForm.invalid) {
+      this.marcarCamposInvalidos();
+      await this.mostrarToast('Por favor, preencha todos os campos corretamente.', 'warning');
+      return;
+    }
+
+    try {
+      const clienteData = this.clienteForm.value;
+
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      });
+
+      await this.http.post(this.apiUrl, clienteData, { headers }).toPromise();
+
+      await this.mostrarToast(`Cliente salvo com sucesso`, 'success');
+      this.clienteForm.reset();
+    } catch (error: any) {
+      console.error('Erro ao salvar cliente:', error);
+      let mensagemErro = 'Erro ao salvar cliente';
+      if (error.error?.message) {
+        mensagemErro += `: ${error.error.message}`;
+      } else if (error.status === 400) {
+        mensagemErro = 'Dados inválidos. Verifique os campos.';
+      }
+      await this.mostrarToast(mensagemErro, 'danger');
+    }
   }
 
   private marcarCamposInvalidos() {
