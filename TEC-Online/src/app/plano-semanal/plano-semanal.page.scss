@@ -166,16 +166,20 @@ ion-datetime {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Rodapé */
-ion-footer {
-  position: relative; /* Adicionado para centralização correta */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #07f;
-  padding: 0;
-  width: 100%;
-  border-top: none;
+ion-menu {
+  --ion-background-color: #f0f7ff;
+  --ion-text-color: #048;
+  width: 250px;
+}
+
+ion-menu ion-toolbar {
+  --background: #07f;
+  --color: #fff;
+}
+
+ion-menu-button {
+  color: #fff;
+  font-size: 1.8rem;
 }
 
 ion-buttons[slot="start"],
