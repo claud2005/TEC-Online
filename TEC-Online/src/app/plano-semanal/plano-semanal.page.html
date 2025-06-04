@@ -1,23 +1,37 @@
-<!-- MENU LATERAL -->
-<ion-menu contentId="main-content" type="overlay">
+<!-- MENU LATERAL - DIREITA, PERSONALIZADO, COM BOTÃO DE FECHAR -->
+<ion-menu contentId="main-content" side="end" type="overlay" class="custom-menu">
   <ion-header>
-    <ion-toolbar color="primary">
+    <ion-toolbar color="tertiary">
       <ion-title>Menu</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="closeMenu()">
+          <ion-icon name="close-circle-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  <ion-content>
+  <ion-content class="menu-content">
+    <div class="menu-user-info">
+      <img src="assets/icon/user-default.png" alt="User" class="user-avatar" />
+      <h2 class="user-name">{{ utilizadorName || 'Usuário' }}</h2>
+    </div>
+
     <ion-list>
       <ion-item button (click)="navigateToClientes()">
         <ion-icon slot="start" name="people"></ion-icon>
         <ion-label>Clientes</ion-label>
       </ion-item>
       <ion-item button (click)="navigateToServicos()">
-        <ion-icon slot="start" name="checkmark-circle"></ion-icon>
+        <ion-icon slot="start" name="construct"></ion-icon>
         <ion-label>Serviços</ion-label>
       </ion-item>
       <ion-item button (click)="navigateToPerfil()">
-        <ion-icon slot="start" name="person"></ion-icon>
+        <ion-icon slot="start" name="person-circle"></ion-icon>
         <ion-label>Perfil</ion-label>
+      </ion-item>
+      <ion-item button (click)="logout()">
+        <ion-icon slot="start" name="log-out"></ion-icon>
+        <ion-label>Sair</ion-label>
       </ion-item>
     </ion-list>
   </ion-content>
@@ -27,18 +41,18 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-menu-button autoHide="false"></ion-menu-button>
+      <ion-menu-button autoHide="false" menu="end"></ion-menu-button>
     </ion-buttons>
-    <ion-row class="header-container">
-      <ion-col size="auto">
-        <img src="assets/icon/logotipo.png" alt="Logo" class="logo" />
-      </ion-col>
-      <ion-col>
-        <ion-title class="user-title">
-          Olá, {{ utilizadorName || 'Carregando...' }}
-        </ion-title>
-      </ion-col>
-    </ion-row>
+    <ion-title>
+      <ion-row class="header-container">
+        <ion-col size="auto">
+          <img src="assets/icon/logotipo.png" alt="Logo" class="logo" />
+        </ion-col>
+        <ion-col>
+          <span class="user-title">Olá, {{ utilizadorName || 'Carregando...' }}</span>
+        </ion-col>
+      </ion-row>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 

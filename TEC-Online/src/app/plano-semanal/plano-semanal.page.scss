@@ -166,20 +166,44 @@ ion-datetime {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-ion-menu {
-  --ion-background-color: #f0f7ff;
-  --ion-text-color: #048;
-  width: 250px;
-}
+/* Personalização do menu lateral direito */
+ion-menu.custom-menu {
+  --width: 280px;
+  .menu-content {
+    padding: 20px;
+    background: #f2f2f2;
+  }
 
-ion-menu ion-toolbar {
-  --background: #07f;
-  --color: #fff;
-}
+  .menu-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 25px;
 
-ion-menu-button {
-  color: #fff;
-  font-size: 1.8rem;
+    .user-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    .user-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+  }
+
+  ion-item {
+    --background: transparent;
+    --color: #333;
+    --border-radius: 10px;
+    margin: 8px 0;
+  }
+
+  ion-icon {
+    color: var(--ion-color-primary);
+  }
 }
 
 ion-buttons[slot="start"],
