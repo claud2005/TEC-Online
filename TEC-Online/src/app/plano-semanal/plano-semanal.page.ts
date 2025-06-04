@@ -1,7 +1,7 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, IonModal } from '@ionic/angular';
+import { IonicModule, IonModal, MenuController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -21,19 +21,24 @@ export class PlanoSemanalPage implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
   selectedService: any = null;
   servicos: any[] = [];
-  filteredServices: any[] = []; // Lista de serviços filtrados
+  filteredServices: any[] = [];
   utilizadorName: string = 'Utilizador';
-  searchQuery: string = ''; // Variável para armazenar a pesquisa
-  selectedDays: number = 7; // Valor padrão para os próximos 7 dias
+  searchQuery: string = '';
+  selectedDays: number = 7;
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private menuCtrl: MenuController
   ) {}
 
   ngOnInit() {
     this.atualizarNomeUtilizador();
     this.carregarServicos();
+  }
+
+  closeMenu() {
+    this.menuCtrl.close();
   }
 
   atualizarNomeUtilizador() {
@@ -51,7 +56,7 @@ export class PlanoSemanalPage implements OnInit {
           nomeCliente: servico.cliente || 'Cliente não informado',
           dataServico: servico.data || 'Data não agendada',
           problemaCliente: servico.descricao || 'Problema não descrito',
-          horaServico: servico.horaServico ? servico.horaServico : 'Horário não definido',
+          horaServico: servico.horaServico || 'Horário não definido',
           status: servico.status || '',
           autorServico: servico.autorServico || '',
           observacoes: servico.observacoes || '',
@@ -60,16 +65,14 @@ export class PlanoSemanalPage implements OnInit {
         }));
 
         this.servicos.sort((a, b) => {
-          const dateA = a.dataServico ? new Date(a.dataServico).getTime() : 0;
-          const dateB = b.dataServico ? new Date(b.dataServico).getTime() : 0;
+          const dateA = new Date(a.dataServico).getTime();
+          const dateB = new Date(b.dataServico).getTime();
           return dateA - dateB;
         });
 
-        // Inicialmente, exibe todos os serviços
         this.filteredServices = [...this.servicos];
-
-        this.filterServices(); // Aplica filtro de pesquisa
-        this.filterByDays(); // Aplica filtro de dias (com todos os serviços inicialmente)
+        this.filterServices();
+        this.filterByDays();
       },
       error: (error) => {
         console.error('Erro ao carregar serviços:', error);
@@ -81,17 +84,14 @@ export class PlanoSemanalPage implements OnInit {
     if (!dateString) return 'Data não informada';
     try {
       const date = new Date(dateString);
-      if (isNaN(date.getTime())) return 'Data inválida';
-      return date.toLocaleDateString('pt-BR');
-    } catch (e) {
-      console.error('Erro ao formatar data:', e);
+      return isNaN(date.getTime()) ? 'Data inválida' : date.toLocaleDateString('pt-BR');
+    } catch {
       return 'Data inválida';
     }
   }
 
   getStatusColor(status: string): string {
-    if (!status) return 'medium';
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case 'aberto': return 'warning';
       case 'em andamento': return 'primary';
       case 'concluído': return 'success';
@@ -108,56 +108,38 @@ export class PlanoSemanalPage implements OnInit {
       return dataServico === selectedDate;
     });
 
-    if (servicoEncontrado) {
-      this.selectedService = servicoEncontrado;
-    } else {
-      this.selectedService = {
-        nomeCliente: '',
-        dataServico: selectedDate,
-        horaServico: '',
-        marcaAparelho: '',
-        modeloAparelho: '',
-        problemaCliente: '',
-        observacoes: ''
-      };
-    }
+    this.selectedService = servicoEncontrado || {
+      nomeCliente: '',
+      dataServico: selectedDate,
+      horaServico: '',
+      marcaAparelho: '',
+      modeloAparelho: '',
+      problemaCliente: '',
+      observacoes: ''
+    };
 
     this.modal.present();
   }
 
   filterServices() {
-    // Filtra os serviços baseados no nome do cliente
-    this.filteredServices = this.servicos.filter(servico => {
-      // Verifica se o nome do cliente existe e é uma string válida
-      const nomeCliente = servico.nomeCliente ? servico.nomeCliente.trim().toLowerCase() : '';
-      const query = this.searchQuery.trim().toLowerCase();
-  
-      return nomeCliente.includes(query);
-    });
-  
-    // Aplica o filtro de dias após a pesquisa
+    const query = this.searchQuery.trim().toLowerCase();
+    this.filteredServices = this.servicos.filter(servico =>
+      servico.nomeCliente?.toLowerCase().includes(query)
+    );
     this.filterByDays();
   }
-  
+
   filterByDays() {
     if (this.selectedDays === 0) {
-      this.filteredServices = [...this.servicos]; // Exibe todos os serviços
+      this.filteredServices = [...this.servicos];
     } else {
       const now = new Date();
-      const filteredByDate = this.filteredServices.filter(servico => {
+      this.filteredServices = this.filteredServices.filter(servico => {
         const dataServico = new Date(servico.dataServico);
-        const diffTime = dataServico.getTime() - now.getTime();
-        const diffDays = diffTime / (1000 * 3600 * 24); // Diferença em dias
+        const diffDays = (dataServico.getTime() - now.getTime()) / (1000 * 3600 * 24);
         return diffDays <= this.selectedDays;
       });
-      this.filteredServices = filteredByDate;
     }
-  }
-  
-
-  openServiceDetails(servico: any) {
-    this.selectedService = servico;
-    this.modal.present(); // Agora abre o modal quando clica em uma tarefa
   }
 
   closeModal() {
@@ -180,6 +162,5 @@ export class PlanoSemanalPage implements OnInit {
 
   navigateToClientes() {
     this.router.navigate(['/gestor-clientes']);
-  }  
-
+  }
 }
