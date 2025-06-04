@@ -20,13 +20,17 @@ export class AdicionarClientePage {
     private toastController: ToastController
   ) {
     this.clienteForm = this.formBuilder.group({
-      nome: ['', [Validators.required, Validators.minLength(3)]],
-      morada: ['', [Validators.required]],
-      codigoPostal: ['', [Validators.required, Validators.pattern('^[0-9]{4}-[0-9]{3}$')]],
-      contacto: ['', [Validators.required, Validators.pattern('^[0-9]{9}$')]],
-      email: ['', [Validators.required, Validators.email]],
-      contribuinte: ['', [Validators.required, Validators.pattern('^[0-9]{9}$')]]
-    });
+  nome: ['', [Validators.required, Validators.minLength(3)]],
+  morada: ['', [Validators.required]],
+  codigoPostal: ['', [Validators.required, Validators.pattern('^[0-9]{4}-[0-9]{3}$')]],
+  contacto: ['', [Validators.required, Validators.pattern('^[0-9]{9}$')]],
+  email: ['', [Validators.required, Validators.email]],
+  contribuinte: ['', [Validators.required, Validators.pattern('^[0-9]{9}$')]],
+  codigoCliente: [''],  // Novo campo
+  numeroCliente: ['']   // Novo campo
+});
+
+   
 
     this.carregarUltimoCodigo();
   }
@@ -37,51 +41,62 @@ export class AdicionarClientePage {
   }
 
   async salvarCliente() {
-    const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token');
 
-    if (!token) {
-      await this.mostrarToast('Usuário não autenticado. Faça login novamente.', 'danger');
-      return;
-    }
-
-    if (this.clienteForm.invalid) {
-      this.marcarCamposInvalidos();
-      await this.mostrarToast('Por favor, preencha todos os campos corretamente.', 'warning');
-      return;
-    }
-
-    const clienteData = this.clienteForm.value;
-
-    try {
-      const resposta = await fetch('https://tec-online-api.vercel.app/api/clientes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(clienteData)
-      });
-
-      const resultado = await resposta.json();
-
-      if (!resposta.ok) {
-        throw resultado;
-      }
-
-      await this.mostrarToast('Cliente salvo com sucesso!', 'success');
-      this.clienteForm.reset();
-
-    } catch (error: any) {
-      console.error('Erro ao salvar cliente:', error);
-      let mensagemErro = 'Erro ao salvar cliente';
-
-      if (error?.message) {
-        mensagemErro += `: ${error.message}`;
-      }
-
-      await this.mostrarToast(mensagemErro, 'danger');
-    }
+  if (!token) {
+    await this.mostrarToast('Usuário não autenticado. Faça login novamente.', 'danger');
+    return;
   }
+
+  if (this.clienteForm.invalid) {
+    this.marcarCamposInvalidos();
+    await this.mostrarToast('Por favor, preencha todos os campos corretamente.', 'warning');
+    return;
+  }
+
+  // Gerar próximo código e número
+  const proximoNumero = this.ultimoCodigoCliente + 1;
+  const codigoFormatado = proximoNumero.toString().padStart(2, '0');
+
+  const clienteData = {
+    ...this.clienteForm.value,
+    codigoCliente: codigoFormatado,
+    numeroCliente: proximoNumero
+  };
+
+  try {
+    const resposta = await fetch('https://tec-online-api.vercel.app/api/clientes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(clienteData)
+    });
+
+    const resultado = await resposta.json();
+
+    if (!resposta.ok) {
+      throw resultado;
+    }
+
+    this.ultimoCodigoCliente = proximoNumero;
+    localStorage.setItem('ultimoCodigoCliente', String(this.ultimoCodigoCliente));
+
+    await this.mostrarToast('Cliente salvo com sucesso!', 'success');
+    this.clienteForm.reset();
+
+  } catch (error: any) {
+    console.error('Erro ao salvar cliente:', error);
+    let mensagemErro = 'Erro ao salvar cliente';
+
+    if (error?.message) {
+      mensagemErro += `: ${error.message}`;
+    }
+
+    await this.mostrarToast(mensagemErro, 'danger');
+  }
+}
 
   private marcarCamposInvalidos() {
     Object.values(this.clienteForm.controls).forEach(control => {

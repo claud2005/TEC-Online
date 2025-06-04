@@ -61,10 +61,10 @@ export class EditarServicosPage {
           return;
         }
 
-        this.dataServico = data.dataServico ?? '';
+        this.dataServico = data.data ?? '';
         this.horaServico = data.horaServico ?? '';
         this.status = data.status ?? 'aberto';
-        this.nomeCliente = data.nomeCliente ?? '';
+        this.nomeCliente = data.nomeCompletoCliente ?? '';
         this.telefoneContato = data.telefoneContato ?? '';
         this.modeloAparelho = data.modeloAparelho ?? '';
         this.marcaAparelho = data.marcaAparelho ?? '';
