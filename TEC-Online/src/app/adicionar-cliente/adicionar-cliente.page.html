@@ -25,66 +25,69 @@
             Identificação
           </ion-card-title>
         </ion-card-header>
+
         <ion-card-content>
           <ion-grid>
+            <!-- Linha 1 -->
             <ion-row>
               <ion-col size="6">
                 <ion-item>
-                  <ion-label position="floating">Nome</ion-label>
-                  <ion-input formControlName="nome" required></ion-input>
+                  <ion-label color="primary">Nome</ion-label>
+                  <ion-input formControlName="nome" type="text" required></ion-input>
                 </ion-item>
               </ion-col>
 
               <ion-col size="6">
                 <ion-item>
-                  <ion-label position="floating">Código Postal</ion-label>
-                  <ion-input formControlName="codigoPostal" required></ion-input>
+                  <ion-label color="primary">Código Postal</ion-label>
+                  <ion-input formControlName="codigoPostal" type="text" required></ion-input>
                 </ion-item>
               </ion-col>
             </ion-row>
 
+            <!-- Linha 2 -->
             <ion-row>
               <ion-col size="6">
                 <ion-item>
-                  <ion-label position="floating">Morada</ion-label>
+                  <ion-label color="primary">Morada</ion-label>
                   <ion-input formControlName="morada" type="text" required></ion-input>
                 </ion-item>
               </ion-col>
 
               <ion-col size="6">
                 <ion-item>
-                  <ion-label position="floating">Email</ion-label>
+                  <ion-label color="primary">Email</ion-label>
                   <ion-input formControlName="email" type="email" required></ion-input>
                 </ion-item>
               </ion-col>
             </ion-row>
 
+            <!-- Linha 3 -->
             <ion-row>
               <ion-col size="6">
                 <ion-item>
-                  <ion-label position="floating">Contacto</ion-label>
+                  <ion-label color="primary">Contacto</ion-label>
                   <ion-input formControlName="contacto" type="tel" maxlength="9" required></ion-input>
                 </ion-item>
               </ion-col>
 
               <ion-col size="6">
                 <ion-item>
-                  <ion-label position="floating">Contribuinte</ion-label>
+                  <ion-label color="primary">Contribuinte</ion-label>
                   <ion-input formControlName="contribuinte" type="tel" maxlength="9" required></ion-input>
                 </ion-item>
               </ion-col>
             </ion-row>
 
-            <!-- CÓDIGO CLIENTE -->
+            <!-- Linha 4 - Código Cliente -->
             <ion-row>
               <ion-col size="6">
                 <ion-item>
-                  <ion-label position="floating">Código Cliente</ion-label>
-                  <ion-input formControlName="codigoCliente" readonly></ion-input>
+                  <ion-label color="primary">Código Cliente</ion-label>
+                  <ion-input formControlName="codigoCliente" [readonly]="true" type="text"></ion-input>
                 </ion-item>
               </ion-col>
             </ion-row>
-
           </ion-grid>
         </ion-card-content>
       </ion-card>
