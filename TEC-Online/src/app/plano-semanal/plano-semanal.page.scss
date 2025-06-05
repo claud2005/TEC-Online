@@ -317,3 +317,11 @@ ion-modal ion-fab-button {
 ion-modal ion-fab-button ion-icon {
   font-size: 2rem;
 }
+ion-buttons[slot="primary"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}

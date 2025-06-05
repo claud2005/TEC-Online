@@ -11,11 +11,6 @@
     </ion-toolbar>
   </ion-header>
   <ion-content class="menu-content">
-    <div class="menu-user-info">
-      <img src="assets/icon/user-default.png" alt="User" class="user-avatar" />
-      <h2 class="user-name">{{ utilizadorName || 'Usuário' }}</h2>
-    </div>
-
     <ion-list>
       <ion-item button (click)="navigateToClientes()">
         <ion-icon slot="start" name="people"></ion-icon>
@@ -28,7 +23,7 @@
       <ion-item button (click)="navigateToPerfil()">
         <ion-icon slot="start" name="person-circle"></ion-icon>
         <ion-label>Perfil</ion-label>
-      </ion-item> <!-- <- CORRIGIDO -->
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>
@@ -36,19 +31,26 @@
 <!-- TOPO -->
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-buttons slot="start">
+
+    <!-- Título centralizado -->
+    <ion-buttons slot="primary">
+      <ion-title>
+        <ion-row class="header-container">
+          <ion-col size="auto">
+            <img src="assets/icon/logotipo.png" alt="Logo" class="logo" />
+          </ion-col>
+          <ion-col>
+            <span class="user-title">Olá, {{ utilizadorName || 'Carregando...' }}</span>
+          </ion-col>
+        </ion-row>
+      </ion-title>
+    </ion-buttons>
+
+    <!-- Botão do menu à direita -->
+    <ion-buttons slot="end">
       <ion-menu-button autoHide="false" menu="end"></ion-menu-button>
     </ion-buttons>
-    <ion-title>
-      <ion-row class="header-container">
-        <ion-col size="auto">
-          <img src="assets/icon/logotipo.png" alt="Logo" class="logo" />
-        </ion-col>
-        <ion-col>
-          <span class="user-title">Olá, {{ utilizadorName || 'Carregando...' }}</span>
-        </ion-col>
-      </ion-row>
-    </ion-title>
+
   </ion-toolbar>
 </ion-header>
 
@@ -91,15 +93,15 @@
               <h3 class="service-title">{{ servico.nomeCliente || 'Cliente não informado' }}</h3>
               <div class="service-details">
                 <p>
-                  <ion-icon name="calendar" class="detail-icon"></ion-icon> 
+                  <ion-icon name="calendar" class="detail-icon"></ion-icon>
                   {{ servico.dataServico ? formatDate(servico.dataServico) : 'Data não agendada' }}
                 </p>
                 <p>
-                  <ion-icon name="phone-portrait" class="detail-icon"></ion-icon> 
+                  <ion-icon name="phone-portrait" class="detail-icon"></ion-icon>
                   {{ servico.marcaAparelho || 'Marca não informada' }} {{ servico.modeloAparelho || '' }}
                 </p>
                 <p>
-                  <ion-icon name="alert-circle" class="detail-icon"></ion-icon> 
+                  <ion-icon name="alert-circle" class="detail-icon"></ion-icon>
                   {{ servico.problemaCliente || 'Problema não descrito' }}
                 </p>
               </div>
