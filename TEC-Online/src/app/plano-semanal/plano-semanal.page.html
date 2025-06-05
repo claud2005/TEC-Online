@@ -11,11 +11,6 @@
     </ion-toolbar>
   </ion-header>
   <ion-content class="menu-content">
-    <div class="menu-user-info">
-      <img src="assets/icon/user-default.png" alt="User" class="user-avatar" />
-      <h2 class="user-name">{{ utilizadorName || 'Usuário' }}</h2>
-    </div>
-
     <ion-list>
       <ion-item button (click)="navigateToClientes()">
         <ion-icon slot="start" name="people"></ion-icon>
@@ -28,34 +23,39 @@
       <ion-item button (click)="navigateToPerfil()">
         <ion-icon slot="start" name="person-circle"></ion-icon>
         <ion-label>Perfil</ion-label>
-      </ion-item> <!-- <- CORRIGIDO -->
+      </ion-item>
+      <ion-item button (click)="navigateToCriarServicos()">
+        <ion-icon slot="start" name="add-circle"></ion-icon>
+        <ion-label>Criar Serviço</ion-label>
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>
 
-<!-- TOPO -->
+<!-- TOPO OTIMIZADO PARA MOBILE -->
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="primary" class="custom-toolbar">
+    <!-- Logotipo à esquerda -->
     <ion-buttons slot="start">
-      <ion-menu-button autoHide="false" menu="end"></ion-menu-button>
+      <img src="assets/icon/logotipo.png" alt="Logo" class="header-logo" />
     </ion-buttons>
-    <ion-title>
-      <ion-row class="header-container">
-        <ion-col size="auto">
-          <img src="assets/icon/logotipo.png" alt="Logo" class="logo" />
-        </ion-col>
-        <ion-col>
-          <span class="user-title">Olá, {{ utilizadorName || 'Carregando...' }}</span>
-        </ion-col>
-      </ion-row>
-    </ion-title>
+
+    <!-- Nome centralizado -->
+    <div class="header-title-container">
+      <span class="header-title">Olá, {{ utilizadorName || 'Carregando...' }}</span>
+    </div>
+
+    <!-- Menu à direita -->
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false" menu="end" class="menu-button"></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <!-- CONTEÚDO PRINCIPAL -->
 <ion-content id="main-content">
+  <!-- [O restante do seu conteúdo permanece igual] -->
   <ion-grid>
-
     <!-- Barra de pesquisa -->
     <ion-row class="top-bar">
       <ion-col size="12">
@@ -91,15 +91,15 @@
               <h3 class="service-title">{{ servico.nomeCliente || 'Cliente não informado' }}</h3>
               <div class="service-details">
                 <p>
-                  <ion-icon name="calendar" class="detail-icon"></ion-icon> 
+                  <ion-icon name="calendar" class="detail-icon"></ion-icon>
                   {{ servico.dataServico ? formatDate(servico.dataServico) : 'Data não agendada' }}
                 </p>
                 <p>
-                  <ion-icon name="phone-portrait" class="detail-icon"></ion-icon> 
+                  <ion-icon name="phone-portrait" class="detail-icon"></ion-icon>
                   {{ servico.marcaAparelho || 'Marca não informada' }} {{ servico.modeloAparelho || '' }}
                 </p>
                 <p>
-                  <ion-icon name="alert-circle" class="detail-icon"></ion-icon> 
+                  <ion-icon name="alert-circle" class="detail-icon"></ion-icon>
                   {{ servico.problemaCliente || 'Problema não descrito' }}
                 </p>
               </div>

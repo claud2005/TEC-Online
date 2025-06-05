@@ -163,4 +163,7 @@ export class PlanoSemanalPage implements OnInit {
   navigateToClientes() {
     this.router.navigate(['/gestor-clientes']);
   }
+  navigateToCriarServicos() {
+  this.router.navigate(['/criar-servicos']);
+}
 }
