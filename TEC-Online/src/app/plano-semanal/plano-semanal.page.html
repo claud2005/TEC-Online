@@ -11,20 +11,25 @@
     </ion-toolbar>
   </ion-header>
   <ion-content class="menu-content">
-    <ion-list>
-      <ion-item button (click)="navigateToClientes()">
-        <ion-icon slot="start" name="people"></ion-icon>
-        <ion-label>Clientes</ion-label>
-      </ion-item>
-      <ion-item button (click)="navigateToServicos()">
-        <ion-icon slot="start" name="construct"></ion-icon>
-        <ion-label>Serviços</ion-label>
-      </ion-item>
-      <ion-item button (click)="navigateToPerfil()">
-        <ion-icon slot="start" name="person-circle"></ion-icon>
-        <ion-label>Perfil</ion-label>
-      </ion-item>
-    </ion-list>
+<ion-list>
+  <ion-item button (click)="navigateToClientes()">
+    <ion-icon slot="start" name="people"></ion-icon>
+    <ion-label>Clientes</ion-label>
+  </ion-item>
+  <ion-item button (click)="navigateToServicos()">
+    <ion-icon slot="start" name="construct"></ion-icon>
+    <ion-label>Serviços</ion-label>
+  </ion-item>
+  <ion-item button (click)="navigateToPerfil()">
+    <ion-icon slot="start" name="person-circle"></ion-icon>
+    <ion-label>Perfil</ion-label>
+  </ion-item>
+  <!-- Novo botão para criar serviço -->
+  <ion-item button (click)="navigateToCriarServicos()">
+    <ion-icon slot="start" name="add-circle"></ion-icon>
+    <ion-label>Criar Serviço</ion-label>
+  </ion-item>
+</ion-list>
   </ion-content>
 </ion-menu>
 
