@@ -3,13 +3,14 @@
   --ion-text-color: #048;
 }
 
-/* Header */
+/* Header - Adjusted Section */
 .header-container {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 25px 20px;
   background: #07f;
   color: #fff;
+  min-height: 80px;
 }
 
 ion-toolbar {
@@ -17,32 +18,33 @@ ion-toolbar {
   --color: #fff;
   text-align: center;
   border-bottom: 3px solid #0056b3;
+  --min-height: 80px;
 }
 
-/* LOGO + TÍTULO CENTRAL*/
 .custom-toolbar {
   position: relative;
-  height: 64px;
-  --min-height: 64px;
+  height: 80px;
+  --min-height: 80px;
   display: flex;
   align-items: center;
 }
 
-/* LOGO À ESQUERDA */
 .header-logo {
   height: 100px;
   width: auto;
   margin-left: 100px;
+  position: relative;
+  top: -10px;
 }
 
-/* TÍTULO CENTRALIZADO */
 .header-title-container {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   z-index: 1;
+  top: 50%;
 }
 
 .header-title {
@@ -52,17 +54,19 @@ ion-toolbar {
   white-space: nowrap;
 }
 
-/* BOTÃO À DIREITA */
 .header-action-button {
   --color: #fff;
   font-size: 1.5rem;
   margin-right: 10px;
+  position: relative;
+  top: 0;
 }
 
 .header-action-button ion-icon {
   font-size: 1.8rem;
 }
 
+/* Rest of the CSS remains unchanged */
 .top-bar {
   margin: 20px 0;
 }
@@ -101,7 +105,6 @@ ion-searchbar::part(searchbar-input) {
   font-weight: 500;
 }
 
-/* Lista de Serviços */
 .service-list {
   background: transparent;
   padding: 0;
@@ -158,7 +161,6 @@ ion-badge {
   padding: 8px 12px;
 }
 
-/* Sem tarefas */
 .no-tasks {
   text-align: center;
   padding: 30px;
@@ -176,7 +178,6 @@ ion-badge {
   font-size: 1.4rem;
 }
 
-/* Botão Adicionar */
 .add-button {
   --color: #07f;
   font-size: 1.4rem;
@@ -186,7 +187,6 @@ ion-badge {
   font-size: 1.8rem;
 }
 
-/* Calendário */
 ion-datetime {
   width: 100%;
   background: #fff;
@@ -198,78 +198,78 @@ ion-datetime {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Menu lateral direito */
 ion-menu.custom-menu {
   --width: 280px;
-
-  ion-header {
-    --background: linear-gradient(135deg, #07f, #0056b3);
-    ion-title {
-      color: #fff;
-      font-weight: bold;
-    }
-    ion-icon {
-      color: #fff;
-    }
-  }
-
-  .menu-content {
-    background: #f9fafe;
-    height: 100%;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-
-  ion-list {
-    margin-top: 10px;
-  }
-
-  ion-item {
-    --background: #fff;
-    --color: #0056b3;
-    border-radius: 10px;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    font-size: 1.2rem;
-    font-weight: 500;
-    --padding-start: 15px;
-  }
-
-  ion-item:hover {
-    --background: #e6f0ff;
-  }
-
-  ion-icon {
-    color: #07f;
-    font-size: 1.6rem;
-    margin-right: 8px;
-  }
-
-  ion-label {
-    color: #0056b3;
-    font-size: 1.2rem;
-  }
-
-  ion-button {
-    --color: #fff;
-    font-size: 1.5rem;
-  }
-
-  ion-item {
-    --background: transparent;
-    --color: #333;
-    --border-radius: 10px;
-    margin: 8px 0;
-  }
-
-  ion-icon {
-    color: var(--ion-color-primary);
-  }
 }
 
-/* Botões slots */
+ion-menu.custom-menu ion-header {
+  --background: linear-gradient(135deg, #07f, #0056b3);
+}
+
+ion-menu.custom-menu ion-header ion-title {
+  color: #fff;
+  font-weight: bold;
+}
+
+ion-menu.custom-menu ion-header ion-icon {
+  color: #fff;
+}
+
+ion-menu.custom-menu .menu-content {
+  background: #f9fafe;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+ion-menu.custom-menu ion-list {
+  margin-top: 10px;
+}
+
+ion-menu.custom-menu ion-item {
+  --background: #fff;
+  --color: #0056b3;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-size: 1.2rem;
+  font-weight: 500;
+  --padding-start: 15px;
+}
+
+ion-menu.custom-menu ion-item:hover {
+  --background: #e6f0ff;
+}
+
+ion-menu.custom-menu ion-icon {
+  color: #07f;
+  font-size: 1.6rem;
+  margin-right: 8px;
+}
+
+ion-menu.custom-menu ion-label {
+  color: #0056b3;
+  font-size: 1.2rem;
+}
+
+ion-menu.custom-menu ion-button {
+  --color: #fff;
+  font-size: 1.5rem;
+}
+
+ion-menu.custom-menu ion-item {
+  --background: transparent;
+  --color: #333;
+  --border-radius: 10px;
+  margin: 8px 0;
+}
+
+ion-menu.custom-menu ion-icon {
+  color: var(--ion-color-primary);
+}
+
 ion-buttons[slot="start"],
 ion-buttons[slot="end"] {
   flex: 0;
@@ -297,7 +297,6 @@ ion-icon {
   margin-right: 8px;
 }
 
-/* Modal */
 ion-modal {
   --background: rgba(240, 247, 255, 0.95);
   --width: 85%;
