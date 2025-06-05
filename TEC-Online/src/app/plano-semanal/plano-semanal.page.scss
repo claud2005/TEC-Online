@@ -3,11 +3,11 @@
   --ion-text-color: #048;
 }
 
-/* Header - Adjusted Section */
+/* Cabeçalho Ajustado */
 .header-container {
   display: flex;
   align-items: center;
-  padding: 25px 20px;
+  padding: 15px 20px;
   background: #07f;
   color: #fff;
   min-height: 80px;
@@ -29,12 +29,13 @@ ion-toolbar {
   align-items: center;
 }
 
+/* LOGO REDIMENSIONADO */
 .header-logo {
-  height: 100px;
+  height: 70px; /* Tamanho reduzido */
   width: auto;
-  margin-left: 100px;
+  margin-left: 20px; /* Margem reduzida */
   position: relative;
-  top: -10px;
+  top: 0;
 }
 
 .header-title-container {
@@ -48,11 +49,12 @@ ion-toolbar {
 }
 
 .header-title {
-  font-size: 2.2rem;
+  font-size: 2rem; /* Ligeiramente reduzido */
   font-weight: bold;
   color: white;
   white-space: nowrap;
 }
+
 
 .header-action-button {
   --color: #fff;
