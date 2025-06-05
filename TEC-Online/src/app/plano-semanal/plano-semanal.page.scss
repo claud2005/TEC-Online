@@ -12,17 +12,55 @@
   color: #fff;
 }
 
-.header-title {
-  font-size: 2.2rem;
-  font-weight: bold;
-  color: #fff;
-}
-
 ion-toolbar {
   --background: #07f;
   --color: #fff;
   text-align: center;
   border-bottom: 3px solid #0056b3;
+}
+
+/* LOGO + TÍTULO CENTRAL + BOTÃO */
+.custom-toolbar {
+  position: relative;
+  height: 64px;
+  --min-height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+/* LOGO À ESQUERDA */
+.header-logo {
+  height: 40px;
+  width: auto;
+  margin-left: 12px;
+}
+
+/* TÍTULO CENTRALIZADO */
+.header-title-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+.header-title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: white;
+  white-space: nowrap;
+}
+
+/* BOTÃO À DIREITA */
+.header-action-button {
+  --color: #fff;
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+.header-action-button ion-icon {
+  font-size: 1.8rem;
 }
 
 .top-bar {
@@ -160,7 +198,7 @@ ion-datetime {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Personalização do menu lateral direito */
+/* Menu lateral direito */
 ion-menu.custom-menu {
   --width: 280px;
 
@@ -231,6 +269,7 @@ ion-menu.custom-menu {
   }
 }
 
+/* Botões slots */
 ion-buttons[slot="start"],
 ion-buttons[slot="end"] {
   flex: 0;
@@ -341,42 +380,4 @@ ion-modal ion-fab-button {
 
 ion-modal ion-fab-button ion-icon {
   font-size: 2rem;
-}
-
-/* NAVBAR COMPLETA */
-.custom-toolbar {
-  position: relative;
-  height: 64px;
-  --min-height: 64px;
-  display: flex;
-  align-items: center;
-}
-
-/* LOGO À ESQUERDA */
-.header-logo {
-  height: 100px;
-  width: auto;
-  margin-left: 15px;
-}
-
-/* CONTAINER CENTRALIZADO ABSOLUTO */
-.header-title-container {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-}
-
-/* TÍTULO CENTRALIZADO */
-.header-title {
-  font-size: 2.2rem;
-  font-weight: bold;
-  color: white;
-  white-space: nowrap;
-}
-
-/* MENU BUTTON À DIREITA */
-.menu-button {
-  margin-right: 8px;
 }

@@ -45,8 +45,13 @@
       <span class="header-title">Olá, {{ utilizadorName || 'Carregando...' }}</span>
     </div>
 
-    <!-- Menu à direita -->
+    <!-- Botões à direita -->
     <ion-buttons slot="end">
+      <!-- Botão para criar serviço -->
+      <ion-button fill="clear" (click)="navigateToCriarServicos()" class="header-action-button">
+        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+      </ion-button>
+      <!-- Botão menu -->
       <ion-menu-button autoHide="false" menu="end" class="menu-button"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
@@ -54,7 +59,6 @@
 
 <!-- CONTEÚDO PRINCIPAL -->
 <ion-content id="main-content">
-  <!-- [O restante do seu conteúdo permanece igual] -->
   <ion-grid>
     <!-- Barra de pesquisa -->
     <ion-row class="top-bar">
@@ -118,7 +122,6 @@
         <ion-datetime presentation="date" (ionChange)="openModal($event)"></ion-datetime>
       </ion-col>
     </ion-row>
-
   </ion-grid>
 </ion-content>
 
