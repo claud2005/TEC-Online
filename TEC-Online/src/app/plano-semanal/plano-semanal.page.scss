@@ -348,4 +348,35 @@ ion-modal ion-fab-button {
 ion-modal ion-fab-button ion-icon {
   font-size: 2rem;
 }
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;
+  pointer-events: none; /* evita bloquear os botões laterais */
+}
 
+.header-logo {
+  width: 38px;
+  height: auto;
+  margin-right: 10px;
+}
+
+.header-title {
+  font-size: 1.4rem;
+  color: #fff;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.menu-button {
+  z-index: 10;
+}
+
+.invisible-button {
+  visibility: hidden;
+  width: 40px;
+}

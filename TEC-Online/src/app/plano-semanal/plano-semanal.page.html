@@ -35,18 +35,19 @@
 <!-- TOPO OTIMIZADO PARA MOBILE -->
 <ion-header>
   <ion-toolbar color="primary">
-    <!-- Conteúdo centralizado -->
+    <ion-buttons slot="start" class="invisible-button"></ion-buttons> <!-- espaço para centralizar -->
+
     <div class="header-content">
       <img src="assets/icon/logotipo.png" alt="Logo" class="header-logo" />
       <span class="header-title">Olá, {{ utilizadorName || 'Carregando...' }}</span>
     </div>
 
-    <!-- Botão do menu à direita -->
     <ion-buttons slot="end">
       <ion-menu-button autoHide="false" menu="end" class="menu-button"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
 
 <!-- CONTEÚDO PRINCIPAL -->
 <ion-content id="main-content">
