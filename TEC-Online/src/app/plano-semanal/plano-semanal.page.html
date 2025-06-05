@@ -28,41 +28,26 @@
   </ion-content>
 </ion-menu>
 
-<!-- TOPO -->
+<!-- TOPO OTIMIZADO PARA MOBILE -->
 <ion-header>
   <ion-toolbar color="primary">
-
-    <!-- Título centralizado -->
-    <ion-buttons slot="primary">
-      <ion-title>
-        <ion-row class="header-container">
-          <ion-col size="auto">
-            <img src="assets/icon/logotipo.png" alt="Logo" class="logo" />
-          </ion-col>
-          <ion-col>
-            <span class="user-title">Olá, {{ utilizadorName || 'Carregando...' }}</span>
-          </ion-col>
-        </ion-row>
-      </ion-title>
-    </ion-buttons>
+    <!-- Conteúdo centralizado -->
+    <div class="header-content">
+      <img src="assets/icon/logotipo.png" alt="Logo" class="header-logo" />
+      <span class="header-title">Olá, {{ utilizadorName || 'Carregando...' }}</span>
+    </div>
 
     <!-- Botão do menu à direita -->
     <ion-buttons slot="end">
-      <ion-menu-button autoHide="false" menu="end"></ion-menu-button>
+      <ion-menu-button autoHide="false" menu="end" class="menu-button"></ion-menu-button>
     </ion-buttons>
-
   </ion-toolbar>
 </ion-header>
 
 <!-- CONTEÚDO PRINCIPAL -->
 <ion-content id="main-content">
-  <div class="menu-user-info">
-  <img src="assets/avatar.png" alt="Avatar" class="user-avatar" />
-  <div class="user-name">{{ utilizadorName || 'Utilizador' }}</div>
-</div>
-
+  <!-- [O restante do seu conteúdo permanece igual] -->
   <ion-grid>
-
     <!-- Barra de pesquisa -->
     <ion-row class="top-bar">
       <ion-col size="12">
