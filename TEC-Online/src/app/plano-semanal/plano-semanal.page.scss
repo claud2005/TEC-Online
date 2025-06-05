@@ -3,58 +3,38 @@
   --ion-text-color: #048;
 }
 
-/* Cabeçalho Ajustado */
+/* CABEÇALHO - AJUSTES PRECISOS */
 .header-container {
   display: flex;
   align-items: center;
-  padding: 15px 20px;
+  padding: 10px 20px; /* Reduzi o padding vertical */
   background: #07f;
-  color: #fff;
-  min-height: 80px;
-}
-
-ion-toolbar {
-  --background: #07f;
-  --color: #fff;
-  text-align: center;
-  border-bottom: 3px solid #0056b3;
-  --min-height: 80px;
-}
-
-.custom-toolbar {
+  min-height: 70px; /* Navbar mais compacta */
   position: relative;
-  height: 80px;
-  --min-height: 80px;
-  display: flex;
-  align-items: center;
 }
 
-/* LOGO REDIMENSIONADO */
+/* LOGOTIPO - AJUSTE DE TAMANHO E POSIÇÃO */
 .header-logo {
-  height: 70px; /* Tamanho reduzido */
+  height: 60px; /* Reduzido para 60px (mais equilibrado) */
   width: auto;
-  margin-left: 20px; /* Margem reduzida */
-  position: relative;
-  top: 0;
+  margin-left: 15px; /* Margem esquerda menor */
+  object-fit: contain; /* Garante que a imagem não distorce */
+  align-self: center; /* Centraliza verticalmente */
 }
 
+/* TÍTULO CENTRAL - POSIÇÃO FIXA */
 .header-title-container {
   position: absolute;
   left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  z-index: 1;
-  top: 50%;
+  transform: translateX(-50%);
+  width: max-content; /* Evita quebras de linha */
 }
 
 .header-title {
-  font-size: 2rem; /* Ligeiramente reduzido */
+  font-size: 1.8rem; /* Tamanho ajustado */
   font-weight: bold;
   color: white;
-  white-space: nowrap;
 }
-
 
 .header-action-button {
   --color: #fff;
