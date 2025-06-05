@@ -3,37 +3,44 @@
   --ion-text-color: #048;
 }
 
-/* CABEÇALHO - AJUSTES PRECISOS */
+/* Cabeçalho maior */
 .header-container {
-  display: flex;
-  align-items: center;
-  padding: 10px 20px; /* Reduzi o padding vertical */
-  background: #07f;
-  min-height: 70px; /* Navbar mais compacta */
-  position: relative;
+  min-height: 100px; /* Aumentado para 100px */
 }
 
-/* LOGOTIPO - AJUSTE DE TAMANHO E POSIÇÃO */
+ion-toolbar {
+  --min-height: 100px;
+}
+
+.custom-toolbar {
+  height: 100px;
+  --min-height: 100px;
+}
+
+/* Logo mantém tamanho mas ajusta posição */
 .header-logo {
-  height: 60px; /* Reduzido para 60px (mais equilibrado) */
+  height: 100px;
   width: auto;
-  margin-left: 15px; /* Margem esquerda menor */
-  object-fit: contain; /* Garante que a imagem não distorce */
-  align-self: center; /* Centraliza verticalmente */
+  margin-left: 30px; /* Reduzido de 100px */
+  position: relative;
+  top: 0;
 }
 
-/* TÍTULO CENTRAL - POSIÇÃO FIXA */
 .header-title-container {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
-  width: max-content; /* Evita quebras de linha */
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  z-index: 1;
+  top: 50%;
 }
 
 .header-title {
-  font-size: 1.8rem; /* Tamanho ajustado */
+  font-size: 2.2rem;
   font-weight: bold;
   color: white;
+  white-space: nowrap;
 }
 
 .header-action-button {
