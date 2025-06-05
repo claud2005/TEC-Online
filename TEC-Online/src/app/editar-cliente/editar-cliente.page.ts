@@ -59,7 +59,6 @@ export class EditarClientePage implements OnInit {
   carregarCliente() {
     this.clienteService.obterClientePorId(this.clienteId).subscribe({
       next: (cliente: any) => {
-        // Certifique-se de que todos os campos existem antes de preencher
         this.clienteForm.patchValue({
           nome: cliente.nome || '',
           codigoPostal: cliente.codigoPostal || '',
@@ -78,27 +77,31 @@ export class EditarClientePage implements OnInit {
     });
   }
 
-editarCliente() {
-  if (this.clienteForm.invalid) {
-    this.showAlert('Erro', 'Por favor, preencha todos os campos corretamente.');
-    return;
-  }
-
-  const dados = this.clienteForm.value;
-  console.log('Dados enviados para o backend:', dados);  // <- Aqui
-
-  this.clienteService.atualizarCliente(this.clienteId, dados).subscribe({
-    next: () => {
-      this.showAlert('Sucesso', 'Cliente atualizado com sucesso!');
-      this.navCtrl.navigateBack('/gestor-clientes');
-    },
-    error: (erro: any) => {
-      console.error('Erro ao atualizar cliente:', erro);
-      const mensagem = erro?.error?.message || erro?.message || 'Erro inesperado ao atualizar cliente.';
-      this.showAlert('Erro', mensagem);
+  editarCliente() {
+    if (this.clienteForm.invalid) {
+      this.showAlert('Erro', 'Por favor, preencha todos os campos corretamente.');
+      return;
     }
-  });
-}
+
+    const dados = {
+      ...this.clienteForm.value,
+      id: this.clienteId  // 🔧 Adiciona o ID ao corpo da requisição
+    };
+
+    console.log('Dados enviados para o backend:', dados);
+
+    this.clienteService.atualizarCliente(this.clienteId, dados).subscribe({
+      next: () => {
+        this.showAlert('Sucesso', 'Cliente atualizado com sucesso!');
+        this.navCtrl.navigateBack('/gestor-clientes');
+      },
+      error: (erro: any) => {
+        console.error('Erro ao atualizar cliente:', erro);
+        const mensagem = erro?.error?.message || erro?.message || 'Erro inesperado ao atualizar cliente.';
+        this.showAlert('Erro', mensagem);
+      }
+    });
+  }
 
   voltar() {
     this.navCtrl.back();
