@@ -24,7 +24,6 @@
         <ion-icon slot="start" name="person-circle"></ion-icon>
         <ion-label>Perfil</ion-label>
       </ion-item>
-      <!-- Novo botão para criar serviço -->
       <ion-item button (click)="navigateToCriarServicos()">
         <ion-icon slot="start" name="add-circle"></ion-icon>
         <ion-label>Criar Serviço</ion-label>
@@ -35,12 +34,12 @@
 
 <!-- TOPO OTIMIZADO PARA MOBILE -->
 <ion-header>
-  <ion-toolbar color="primary" class="custom-toolbar">
-    <!-- Logo alinhado à esquerda -->
-    <img src="assets/icon/logotipo.png" alt="Logo" class="header-logo" />
-
-    <!-- Título centralizado -->
-    <ion-title class="header-title">Olá, {{ utilizadorName || 'Carregando...' }}</ion-title>
+  <ion-toolbar color="primary">
+    <!-- Conteúdo centralizado -->
+    <div class="header-content">
+      <img src="assets/icon/logotipo.png" alt="Logo" class="header-logo" />
+      <span class="header-title">Olá, {{ utilizadorName || 'Carregando...' }}</span>
+    </div>
 
     <!-- Botão do menu à direita -->
     <ion-buttons slot="end">

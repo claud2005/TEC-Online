@@ -3,45 +3,34 @@
   --ion-text-color: #048;
 }
 
-/* Toolbar customizado para layout flex */
-.custom-toolbar {
+/* Header */
+.header-container {
   display: flex;
   align-items: center;
-  justify-content: center;
-  position: relative;
-  --background: #07f;
-  --color: #fff;
-  border-bottom: 3px solid #0056b3;
-  padding: 0 10px;
+  padding: 15px;
+  background: #07f;
+  color: #fff;
 }
 
-/* Logo encostado à esquerda */
 .header-logo {
-  position: absolute;
-  left: 10px;
   width: 100px;
   height: auto;
-  cursor: pointer;
-  z-index: 10;
+  margin-right: 15px;
 }
 
-/* Título centralizado no toolbar */
 .header-title {
   font-size: 2.2rem;
   font-weight: bold;
   color: #fff;
-  text-align: center;
-  width: 100%;
-  user-select: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  pointer-events: none; /* para evitar interferência no clique */
 }
 
-/* Botão do menu mantém slot end (já vem alinhado à direita) */
+ion-toolbar {
+  --background: #07f;
+  --color: #fff;
+  text-align: center;
+  border-bottom: 3px solid #0056b3;
+}
 
-/* Barra superior de pesquisa e select */
 .top-bar {
   margin: 20px 0;
 }
@@ -112,167 +101,251 @@ ion-searchbar::part(searchbar-input) {
   font-weight: 600;
   color: #0056b3;
   margin-bottom: 8px;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
 }
 
 .service-details p {
-  font-size: 1.1rem;
-  color: #555;
-  margin: 2px 0;
   display: flex;
   align-items: center;
+  margin: 6px 0;
+  color: #4a5568;
+  font-size: 1.1rem;
+  line-height: 1.5;
 }
 
 .detail-icon {
+  margin-right: 10px;
   color: #07f;
-  margin-right: 8px;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
+  min-width: 20px;
 }
 
-/* Cores dos badges para status */
 ion-badge {
   font-weight: 600;
-  font-size: 1.1rem;
-  padding: 6px 14px;
-  border-radius: 14px;
-  min-width: 75px;
+  font-size: 1rem;
+  padding: 8px 12px;
+}
+
+/* Sem tarefas */
+.no-tasks {
   text-align: center;
-  margin-left: 10px;
+  padding: 30px;
+  color: #6c757d;
 }
 
-ion-badge[color="success"] {
-  --background: #28a745;
-  --color: #fff;
+.no-tasks .empty-icon {
+  font-size: 3.5rem;
+  color: #cbd5e0;
+  margin-bottom: 20px;
 }
 
-ion-badge[color="warning"] {
-  --background: #ffc107;
-  --color: #212529;
+.no-tasks p {
+  margin-bottom: 25px;
+  font-size: 1.4rem;
 }
 
-ion-badge[color="danger"] {
-  --background: #dc3545;
-  --color: #fff;
+/* Botão Adicionar */
+.add-button {
+  --color: #07f;
+  font-size: 1.4rem;
 }
 
-/* Mensagem quando lista vazia */
-.empty-message {
-  color: #777;
-  font-size: 1.2rem;
-  text-align: center;
-  margin: 60px 0;
-}
-
-.empty-message ion-icon {
-  font-size: 4rem;
-  margin-bottom: 10px;
-  color: #bbb;
+.add-button ion-icon {
+  font-size: 1.8rem;
 }
 
 /* Calendário */
 ion-datetime {
-  margin-top: 30px;
-  --background: #fff;
-  --border-radius: 12px;
-  --padding-start: 14px;
-  --padding-end: 14px;
-  --box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  font-size: 1.3rem;
+  border: 1px solid #e1e8ed;
+  margin-top: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* MODAL (detalhes do serviço) */
-ion-modal {
-  --width: 95vw;
-  --max-width: 550px;
-}
-
-ion-card {
-  border-radius: 15px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
-}
-
-ion-card-header {
-  background: #e3f2fd;
-  border-radius: 15px 15px 0 0;
-  padding: 18px 15px;
-}
-
-ion-card-title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #0a52ff;
-}
-
-ion-card-content p {
-  font-size: 1.2rem;
-  color: #333;
-  margin-bottom: 12px;
-}
-
-/* FAB */
-ion-fab-button {
-  --background: #07f;
-  --box-shadow: 0 4px 10px rgba(0, 70, 196, 0.4);
-}
-
-/* --- Melhorias para o menu lateral --- */
+/* Personalização do menu lateral direito */
 ion-menu.custom-menu {
-  --width: 300px; /* um pouco mais largo */
-  background: #f5f8ff;
-  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+  --width: 280px;
 
   ion-header {
-    --background: linear-gradient(135deg, #0a52ff, #003c99);
+    --background: linear-gradient(135deg, #07f, #0056b3);
     ion-title {
       color: #fff;
-      font-weight: 700;
-      font-size: 1.8rem;
-      letter-spacing: 0.05em;
+      font-weight: bold;
     }
-    ion-button {
-      --color: #fff;
+    ion-icon {
+      color: #fff;
     }
   }
 
   .menu-content {
-    padding: 25px 20px;
+    background: #f9fafe;
+    height: 100%;
+    padding: 20px;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
   }
 
   ion-list {
-    margin-top: 15px;
+    margin-top: 10px;
   }
 
   ion-item {
     --background: #fff;
-    --color: #0046c4;
-    border-radius: 14px;
-    margin: 8px 0;
-    box-shadow: 0 2px 8px rgba(0, 70, 196, 0.15);
-    font-size: 1.3rem;
-    font-weight: 600;
-    --padding-start: 20px;
-    transition: background-color 0.3s ease, transform 0.15s ease;
+    --color: #0056b3;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    font-size: 1.2rem;
+    font-weight: 500;
+    --padding-start: 15px;
   }
 
   ion-item:hover {
-    --background: #d6e4ff;
-    transform: translateX(5px);
+    --background: #e6f0ff;
   }
 
   ion-icon {
-    color: #0a52ff;
-    font-size: 1.7rem;
-    margin-right: 12px;
+    color: #07f;
+    font-size: 1.6rem;
+    margin-right: 8px;
   }
 
   ion-label {
-    color: #003c99;
-    font-weight: 600;
+    color: #0056b3;
+    font-size: 1.2rem;
   }
 
   ion-button {
     --color: #fff;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
+  }
+
+  ion-item {
+    --background: transparent;
+    --color: #333;
+    --border-radius: 10px;
+    margin: 8px 0;
+  }
+
+  ion-icon {
+    color: var(--ion-color-primary);
   }
 }
+
+ion-buttons[slot="start"],
+ion-buttons[slot="end"] {
+  flex: 0;
+}
+
+ion-buttons[slot="primary"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+ion-button {
+  --background: transparent;
+  --color: #fff;
+  font-size: 1.4rem;
+  font-weight: bold;
+  --ripple-color: #fff;
+}
+
+ion-icon {
+  font-size: 1.8rem;
+  margin-right: 8px;
+}
+
+/* Modal */
+ion-modal {
+  --background: rgba(240, 247, 255, 0.95);
+  --width: 85%;
+  --height: 70%;
+  --border-radius: 16px;
+}
+
+ion-modal::part(backdrop) {
+  background: rgba(0, 85, 179, 0.3);
+}
+
+ion-modal ion-header,
+ion-modal ion-footer {
+  --background: #07f;
+  --color: #fff;
+}
+
+ion-modal ion-toolbar {
+  --background: #07f;
+  --color: #fff;
+  padding: 12px;
+}
+
+ion-modal ion-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+ion-modal ion-card {
+  margin: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  background: #fff;
+}
+
+ion-modal ion-card-header {
+  padding: 20px;
+  background: linear-gradient(135deg, #07f, #0056b3);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+ion-modal ion-card-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+ion-modal ion-card-content {
+  padding: 20px;
+  font-size: 1.4rem;
+  color: #2d3748;
+}
+
+ion-modal ion-grid {
+  padding: 0;
+}
+
+ion-modal ion-row {
+  margin-bottom: 15px;
+}
+
+ion-modal ion-col {
+  font-size: 1.4rem;
+  color: #2d3748;
+  line-height: 1.6;
+}
+
+ion-modal ion-col strong {
+  color: #048;
+}
+
+ion-modal ion-fab-button {
+  --background: #07f;
+  --background-activated: #0056b3;
+  --color: #fff;
+  width: 60px;
+  height: 60px;
+}
+
+ion-modal ion-fab-button ion-icon {
+  font-size: 2rem;
+}
+
