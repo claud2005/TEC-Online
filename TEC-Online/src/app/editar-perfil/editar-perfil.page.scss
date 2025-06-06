@@ -1,15 +1,20 @@
 /* 🌌 Fundo geral */
 ion-content {
   --background: linear-gradient(135deg, #264653, #4b0082);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
   padding: 20px;
-  min-height: 100vh;
   position: relative;
   color: #f1f1f1;
   font-family: 'Segoe UI', sans-serif;
+}
+
+/* Wrapper para centralização */
+.content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: 20px;
 }
 
 /* 🧩 Container central */
