@@ -1,125 +1,142 @@
+/* 🌌 Fundo geral */
 ion-content {
-  --background: linear-gradient(135deg, #2a003f, #5a0a73);
-  height: 100%;
-  display: block;
-}
-
-.center-container {
+  --background: linear-gradient(135deg, #264653, #4b0082);
   display: flex;
+  align-items: center;
   justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 56px); // Compensação do ion-header
+  text-align: center;
   padding: 20px;
-  box-sizing: border-box;
+  min-height: 100vh;
+  color: #f1f1f1;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-form {
-  width: 100%;
+/* 🧩 Container central */
+.center-container {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 30px 20px;
   max-width: 500px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 20px;
-  padding: 32px 24px;
-  backdrop-filter: blur(16px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  color: #333;
 }
 
+/* 👤 Foto de perfil */
 .profile-picture {
   width: 140px;
   height: 140px;
   border-radius: 50%;
+  background: #eee;
   overflow: hidden;
-  border: 3px solid #ffcc00;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s ease;
+  margin: 0 auto 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+  transition: transform 0.3s ease;
 }
 
-.alterar-foto {
-  --background: transparent;
-  --box-shadow: none;
-  box-shadow: none;
-  border: none;
-  color: #ffcc00;
-  font-weight: bold;
-  font-size: 16px;
-  text-decoration: underline;
-  margin-top: -12px;
+.profile-picture:hover {
+  transform: scale(1.05);
 }
 
-ion-item {
-  --background: transparent;
+.profile-picture img {
   width: 100%;
-  border-radius: 12px;
-  --highlight-height: 0;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 📸 Botão de alterar foto */
+.alterar-foto {
+  --background: #facc15;
+  --color: #1e293b;
+  font-weight: bold;
+  font-size: 15px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+/* ✏️ Inputs */
+ion-item {
+  margin-bottom: 16px;
+  --highlight-color-focused: #facc15;
 }
 
 ion-label {
-  color: #ffffff;
-  font-size: 18px;
-  font-weight: 500;
+  color: #666;
 }
 
 ion-input {
-  color: #ffffff;
-  --padding-start: 12px;
-  --padding-end: 12px;
-  --background: rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  font-size: 18px;
-  height: 50px;
-  transition: background 0.3s ease;
-
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-  }
+  color: #333;
+  font-size: 16px;
 }
 
-ion-note {
-  font-size: 14px;
-  color: #ff5c5c;
-  margin-top: -16px;
-  width: 100%;
+/* ⚠️ Notas de erro */
+ion-note[color="danger"] {
+  font-size: 13px;
+  margin-top: -12px;
+  margin-bottom: 10px;
+  display: block;
   text-align: left;
-  padding-left: 4px;
 }
 
-ion-toolbar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-}
-
+/* 💾 Botão Salvar */
 ion-button[type="submit"] {
-  --background: #ffcc00;
-  --color: #1a1a1a;
-  font-size: 18px;
+  --background: linear-gradient(135deg, #34d399, #059669); /* Verde */
+  --color: #ffffff;
+  font-size: 16px;
   font-weight: bold;
-  letter-spacing: 0.5px;
-  border-radius: 14px;
-  padding: 16px;
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: 10px;
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
 
-  --box-shadow: none;
-  box-shadow: none;
+ion-button[type="submit"]:hover {
+  filter: brightness(1.1);
+  transform: scale(1.03);
+}
+
+/* 🔙 Botão Voltar */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  color: #facc15;
+  font-size: 16px;
   border: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+}
 
-  transition: background 0.3s ease;
+.back-button:hover {
+  opacity: 0.7;
+}
 
-  &:hover {
-    filter: brightness(1.05);
+/* 📱 Responsividade */
+@media (max-width: 600px) {
+  .center-container {
+    padding: 20px;
+    width: 90%;
+  }
+
+  .profile-picture {
+    width: 100px;
+    height: 100px;
+  }
+
+  ion-button {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .alterar-foto {
+    font-size: 14px;
+    padding: 12px;
   }
 }

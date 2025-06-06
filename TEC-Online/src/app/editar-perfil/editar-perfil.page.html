@@ -1,12 +1,12 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/perfil"></ion-back-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+
 
 <ion-content class="ion-padding">
+  <!-- 🔙 Botão Voltar dentro do conteúdo -->
+  <button class="back-button" (click)="voltar()" aria-label="Voltar">
+    <ion-icon name="arrow-back-outline"></ion-icon>
+    Voltar
+  </button>
+
   <div class="center-container">
     <form #form="ngForm" (ngSubmit)="salvarPerfil()">
 
@@ -15,12 +15,10 @@
         <img [src]="perfil.profilePicture || 'assets/img/default-profile.png'" alt="Foto de Perfil" />
       </div>
 
-      <!-- Botão de Alterar Foto -->
       <ion-button expand="block" class="alterar-foto" (click)="alterarFoto()" aria-label="Alterar Foto">
         Alterar Foto
       </ion-button>
 
-      <!-- Input escondido para escolher arquivo -->
       <input 
         type="file" 
         id="fileInput" 
@@ -29,7 +27,6 @@
         hidden
       />
 
-      <!-- Nome Completo -->
       <ion-item>
         <ion-label position="floating">Nome Completo:</ion-label>
         <ion-input
@@ -44,7 +41,6 @@
         O nome completo é obrigatório.
       </ion-note>
 
-      <!-- Nome de Utilizador -->
       <ion-item>
         <ion-label position="floating">Nome de Utilizador:</ion-label>
         <ion-input
@@ -59,7 +55,6 @@
         O nome de utilizador é obrigatório.
       </ion-note>
 
-      <!-- Botão de Salvar -->
       <ion-button expand="full" type="submit">
         Salvar
       </ion-button>
