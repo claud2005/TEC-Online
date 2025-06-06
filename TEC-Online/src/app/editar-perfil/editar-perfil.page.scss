@@ -140,3 +140,12 @@ ion-button[type="submit"]:hover {
     padding: 12px;
   }
 }
+
+.central-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  width: 100%;
+  padding: 20px;
+}
