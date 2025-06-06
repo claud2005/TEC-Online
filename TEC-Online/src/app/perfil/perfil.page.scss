@@ -1,13 +1,13 @@
 /* 🌟 Estilização Geral */
 ion-content {
-  --background: linear-gradient(135deg, #c2e9fb, #a1c4fd); /* Azul claro com leve roxo */
+  --background: linear-gradient(135deg, #264653, #4b0082); /* Azul-petróleo + Roxo escuro */
   padding: 20px;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: #333;
+  color: #f1f1f1;
   font-family: 'Segoe UI', sans-serif;
 }
 
@@ -16,26 +16,28 @@ ion-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: white;
+  background: #ffffff;
   border-radius: 16px;
   padding: 30px;
   max-width: 500px;
   width: 100%;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   text-align: center;
+  color: #333;
 }
 
 /* 🔠 Nome e Info */
 .profile-title {
   font-size: 28px;
   font-weight: 600;
-  color: #1e3a8a;
+  color: #facc15; /* Amarelo vibrante */
   margin-bottom: 20px;
+  text-transform: uppercase;
 }
 
 .user-info p {
   font-size: 18px;
-  margin: 8px 0;
+  margin: 10px 0;
   color: #444;
   display: flex;
   align-items: center;
@@ -53,7 +55,7 @@ ion-content {
   border-radius: 50%;
   background: #eee;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 .profile-picture img {
@@ -72,27 +74,28 @@ ion-content {
 }
 
 ion-button {
-  --background: #3b82f6;
-  --color: white;
+  --background: #facc15; /* Amarelo */
+  --color: #1e293b;       /* Azul escuro para contraste */
   font-size: 16px;
-  font-weight: 500;
+  font-weight: bold;
   border-radius: 10px;
   padding: 14px;
-  transition: filter 0.3s ease;
+  transition: filter 0.3s ease, transform 0.3s ease;
 }
 
 ion-button:hover {
   filter: brightness(1.1);
+  transform: scale(1.03);
 }
 
 /* Botão de Editar */
 .edit-button {
-  --background: linear-gradient(135deg, #fbc02d, #f57c00);
+  --background: linear-gradient(135deg, #fcd34d, #fbbf24); /* Gradiente amarelo */
 }
 
 /* Botão de Logout */
 .logout-button {
-  --background: linear-gradient(135deg, #ef5350, #d32f2f);
+  --background: linear-gradient(135deg, #f87171, #b91c1c); /* Vermelho suave */
 }
 
 /* 🔻 Cabeçalho */
@@ -112,7 +115,7 @@ ion-toolbar {
 .user-title {
   font-size: 20px;
   font-weight: bold;
-  color: #1e3a8a;
+  color: #facc15; /* Amarelo */
 }
 
 .logo {
@@ -122,7 +125,7 @@ ion-toolbar {
 
 /* 🔻 Rodapé */
 ion-footer {
-  --background: #a1c4fd;
+  --background: #1e293b; /* Azul muito escuro */
   box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.1);
   position: fixed;
   bottom: 0;
@@ -139,7 +142,7 @@ ion-toolbar {
 
 ion-button.footer-button {
   --background: transparent;
-  --color: #1e3a8a;
+  --color: #facc15;
   font-size: 16px;
 }
 
@@ -149,7 +152,7 @@ ion-button.footer-button {
   left: 20px;
   top: 20px;
   background: none;
-  color: #1e3a8a;
+  color: #facc15;
   font-size: 18px;
   border: none;
   cursor: pointer;
