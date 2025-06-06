@@ -7,6 +7,7 @@ ion-content {
   text-align: center;
   padding: 20px;
   min-height: 100vh;
+  position: relative;
   color: #f1f1f1;
   font-family: 'Segoe UI', sans-serif;
 }
@@ -21,6 +22,7 @@ ion-content {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   text-align: center;
   color: #333;
+  z-index: 1;
 }
 
 /* 👤 Foto de perfil */
@@ -82,7 +84,7 @@ ion-note[color="danger"] {
 
 /* 💾 Botão Salvar */
 ion-button[type="submit"] {
-  --background: linear-gradient(135deg, #34d399, #059669); /* Verde */
+  --background: linear-gradient(135deg, #34d399, #059669);
   --color: #ffffff;
   font-size: 16px;
   font-weight: bold;
@@ -99,7 +101,7 @@ ion-button[type="submit"]:hover {
 
 /* 🔙 Botão Voltar */
 .back-button {
-  position: absolute;
+  position: fixed;
   top: 20px;
   left: 20px;
   background: none;
@@ -110,7 +112,7 @@ ion-button[type="submit"]:hover {
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  z-index: 10;
+  z-index: 1000;
   transition: opacity 0.3s ease;
 }
 
@@ -139,13 +141,4 @@ ion-button[type="submit"]:hover {
     font-size: 14px;
     padding: 12px;
   }
-}
-
-.central-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100%;
-  width: 100%;
-  padding: 20px;
 }

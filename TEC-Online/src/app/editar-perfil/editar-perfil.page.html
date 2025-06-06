@@ -1,12 +1,10 @@
-
+<!-- Botão de voltar fora do card -->
+<button class="back-button" (click)="voltar()" aria-label="Voltar">
+  <ion-icon name="arrow-back-outline"></ion-icon>
+  Voltar
+</button>
 
 <ion-content class="ion-padding">
-  <!-- 🔙 Botão Voltar dentro do conteúdo -->
-  <button class="back-button" (click)="voltar()" aria-label="Voltar">
-    <ion-icon name="arrow-back-outline"></ion-icon>
-    Voltar
-  </button>
-
   <div class="center-container">
     <form #form="ngForm" (ngSubmit)="salvarPerfil()">
 
@@ -32,7 +30,6 @@
         <ion-input
           [(ngModel)]="perfil.fullName"
           name="fullName"
-          aria-label="Nome Completo"
           required
           minlength="3"
         ></ion-input>
@@ -46,7 +43,6 @@
         <ion-input
           [(ngModel)]="perfil.username"
           name="username"
-          aria-label="Nome de Utilizador"
           required
           minlength="3"
         ></ion-input>
