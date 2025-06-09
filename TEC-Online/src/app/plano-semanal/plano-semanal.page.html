@@ -80,7 +80,7 @@
         </div>
 
         <ion-list *ngIf="filteredServices.length > 0" lines="full" class="service-list">
-          <ion-item *ngFor="let servico of filteredServices" class="service-item">
+          <ion-item *ngFor="let servico of filteredServices" class="service-item" (click)="editarServico(servico?.id)">
             <ion-label class="service-content">
               <h3 class="service-title">{{ servico.nomeCliente || 'Cliente não informado' }}</h3>
               <div class="service-details">
@@ -98,14 +98,9 @@
                 </p>
               </div>
             </ion-label>
-            <div slot="end" style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
-              <ion-badge [color]="getStatusColor(servico.status)">
-                {{ servico.status || 'Sem status' }}
-              </ion-badge>
-              <ion-button size="small" fill="outline" color="primary" (click)="editarServico(servico?.id)">
-                <ion-icon name="create-outline" slot="icon-only"></ion-icon>
-              </ion-button>
-            </div>
+            <ion-badge slot="end" [color]="getStatusColor(servico.status)">
+              {{ servico.status || 'Sem status' }}
+            </ion-badge>
           </ion-item>
         </ion-list>
       </ion-col>
