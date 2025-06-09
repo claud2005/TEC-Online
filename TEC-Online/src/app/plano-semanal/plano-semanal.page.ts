@@ -24,7 +24,7 @@ export class PlanoSemanalPage implements OnInit {
   filteredServices: any[] = [];
   utilizadorName: string = 'Utilizador';
   searchQuery: string = '';
-  selectedDays: number | null = -1; // inicializa para "Mostrar todos"
+  selectedDays: number | null = -1;
 
   constructor(
     private router: Router,
@@ -55,7 +55,6 @@ export class PlanoSemanalPage implements OnInit {
         this.servicos = data.map(servico => {
           let statusAtual = servico.status?.toLowerCase() || '';
 
-          // Se o status for "concluído", definimos como "fechado"
           if (statusAtual === 'concluído') {
             statusAtual = 'fechado';
           }
@@ -102,9 +101,9 @@ export class PlanoSemanalPage implements OnInit {
     switch (status?.toLowerCase()) {
       case 'aberto': return 'warning';
       case 'em andamento': return 'primary';
-      case 'concluído': return 'success'; // Caso queira mostrar diferente, pode mudar aqui
+      case 'concluído': return 'success';
       case 'cancelado': return 'danger';
-      case 'fechado': return 'medium'; // Cor para fechado
+      case 'fechado': return 'medium';
       default: return 'medium';
     }
   }
@@ -126,7 +125,7 @@ export class PlanoSemanalPage implements OnInit {
       modeloAparelho: '',
       problemaCliente: '',
       observacoes: '',
-      status: 'fechado'  // status padrão ao criar novo
+      status: 'fechado'
     };
 
     this.modal.present();
@@ -147,7 +146,6 @@ export class PlanoSemanalPage implements OnInit {
 
   filtrarPorHistorico(services: any[], dias: number | null): any[] {
     if (dias === null || dias === undefined || dias === -1) {
-      // Sem filtro: retorna todos os serviços
       return services;
     }
 
@@ -155,14 +153,12 @@ export class PlanoSemanalPage implements OnInit {
     hoje.setHours(0, 0, 0, 0);
 
     if (dias === 0) {
-      // Apenas hoje
       return services.filter(servico => {
         const dataServico = new Date(servico.dataServico);
         dataServico.setHours(0, 0, 0, 0);
         return dataServico.getTime() === hoje.getTime();
       });
     } else {
-      // Últimos 'dias' dias
       return services.filter(servico => {
         const dataServico = new Date(servico.dataServico);
         dataServico.setHours(0, 0, 0, 0);
@@ -213,5 +209,20 @@ export class PlanoSemanalPage implements OnInit {
     } else {
       alert('Serviço não possui ID para edição.');
     }
+  }
+
+  alterarStatus(servico: any) {
+    console.log(`Status do serviço ${servico.id} alterado para: ${servico.status}`);
+
+    // Caso queira atualizar no backend:
+    /*
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+    this.http.patch(`${environment.api_url}/api/servicos/${servico.id}`, { status: servico.status }, { headers })
+      .subscribe({
+        next: () => console.log('Status atualizado com sucesso no backend'),
+        error: (err) => console.error('Erro ao atualizar status:', err)
+      });
+    */
   }
 }
