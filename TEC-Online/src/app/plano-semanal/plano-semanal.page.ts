@@ -53,6 +53,7 @@ export class PlanoSemanalPage implements OnInit {
     this.http.get<any[]>(`${environment.api_url}/api/servicos`, { headers }).subscribe({
       next: (data) => {
         this.servicos = data.map(servico => ({
+          id: servico._id, // Adicionado o ID
           nomeCliente: servico.cliente || 'Cliente não informado',
           dataServico: servico.data || 'Data não agendada',
           problemaCliente: servico.descricao || 'Problema não descrito',
@@ -108,7 +109,8 @@ export class PlanoSemanalPage implements OnInit {
       return dataServico === selectedDate;
     });
 
-    this.selectedService = servicoEncontrado || {
+    this.selectedService = servicoEncontrado ? { ...servicoEncontrado } : {
+      id: null,
       nomeCliente: '',
       dataServico: selectedDate,
       horaServico: '',
@@ -163,7 +165,18 @@ export class PlanoSemanalPage implements OnInit {
   navigateToClientes() {
     this.router.navigate(['/gestor-clientes']);
   }
+
   navigateToCriarServicos() {
-  this.router.navigate(['/criar-servicos']);
-}
+    this.router.navigate(['/criar-servicos']);
+  }
+
+  // NOVO MÉTODO: Navegar para editar serviço
+  editarServico(id: string) {
+    if (id) {
+      this.modal.dismiss();
+      this.router.navigate(['/editar-servicos', id]);
+    } else {
+      alert('Serviço não possui ID para edição.');
+    }
+  }
 }

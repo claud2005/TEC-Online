@@ -35,19 +35,13 @@
 <!-- TOPO OTIMIZADO PARA MOBILE -->
 <ion-header>
   <ion-toolbar color="primary" class="custom-toolbar">
-    <!-- Logotipo à esquerda -->
     <ion-buttons slot="start">
       <img src="assets/icon/logotipo.png" alt="Logo" class="header-logo" />
     </ion-buttons>
-
-    <!-- Nome centralizado -->
     <div class="header-title-container">
       <span class="header-title">Olá, {{ utilizadorName || 'Carregando...' }}</span>
     </div>
-
-    <!-- Botões à direita -->
     <ion-buttons slot="end">
-      <!-- Botão menu -->
       <ion-menu-button autoHide="false" menu="end" class="menu-button"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
@@ -154,9 +148,13 @@
         </ion-card-content>
       </ion-card>
 
+      <!-- Botões flutuantes: Adicionar e Editar -->
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button (click)="navigateToOtherPage()">
+        <ion-fab-button color="success" (click)="navigateToOtherPage()">
           <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button color="primary" (click)="editarServico(selectedService?.id)">
+          <ion-icon name="create-outline"></ion-icon>
         </ion-fab-button>
       </ion-fab>
     </ion-content>
