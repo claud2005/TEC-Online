@@ -50,6 +50,7 @@
 <!-- CONTEÚDO PRINCIPAL -->
 <ion-content id="main-content">
   <ion-grid>
+
     <!-- Barra de pesquisa -->
     <ion-row class="top-bar">
       <ion-col size="12">
@@ -71,52 +72,53 @@
     </ion-row>
 
     <!-- Lista de tarefas -->
-<ion-row>
-  <ion-col>
-    <h2>
-      <ion-icon name="list-circle" class="task-icon"></ion-icon>
-      Tarefas
-    </h2>
+    <ion-row>
+      <ion-col>
+        <h2>
+          <ion-icon name="list-circle" class="task-icon"></ion-icon>
+          Tarefas
+        </h2>
 
-    <div *ngIf="filteredServices.length === 0" class="empty-message" style="text-align:center; margin-top: 2rem; color: var(--ion-color-medium);">
-      <ion-icon name="alert-circle-outline" style="font-size: 3rem; margin-bottom: 0.5rem;"></ion-icon>
-      <p>Nenhuma tarefa encontrada</p>
-    </div>
+        <div *ngIf="filteredServices.length === 0" class="empty-message" style="text-align:center; margin-top: 2rem; color: var(--ion-color-medium);">
+          <ion-icon name="alert-circle-outline" style="font-size: 3rem; margin-bottom: 0.5rem;"></ion-icon>
+          <p>Nenhuma tarefa encontrada</p>
+        </div>
 
-    <ion-list *ngIf="filteredServices.length > 0" lines="full" class="service-list">
-      <ion-item *ngFor="let servico of filteredServices" class="service-item" style="margin-bottom: 0.5rem;">
-        <ion-label class="service-content" (click)="editarServico(servico?.id)">
-          <h3 class="service-title">{{ servico.nomeCliente || 'Cliente não informado' }}</h3>
-          <div class="service-details">
-            <p>
-              <ion-icon name="calendar" class="detail-icon"></ion-icon>
-              {{ servico.dataServico ? formatDate(servico.dataServico) : 'Data não agendada' }}
-            </p>
-            <p>
-              <ion-icon name="phone-portrait" class="detail-icon"></ion-icon>
-              {{ servico.marcaAparelho || 'Marca não informada' }} {{ servico.modeloAparelho || '' }}
-            </p>
-            <p>
-              <ion-icon name="alert-circle" class="detail-icon"></ion-icon>
-              {{ servico.problemaCliente || 'Problema não descrito' }}
-            </p>
-          </div>
-        </ion-label>
+        <ion-list *ngIf="filteredServices.length > 0" lines="full" class="service-list">
+          <ion-item *ngFor="let servico of filteredServices" class="service-item" style="margin-bottom: 0.5rem;">
+            <ion-label class="service-content" (click)="editarServico(servico?.id)">
+              <h3 class="service-title">{{ servico.nomeCliente || 'Cliente não informado' }}</h3>
+              <div class="service-details">
+                <p>
+                  <ion-icon name="calendar" class="detail-icon"></ion-icon>
+                  {{ servico.dataServico ? formatDate(servico.dataServico) : 'Data não agendada' }}
+                </p>
+                <p>
+                  <ion-icon name="phone-portrait" class="detail-icon"></ion-icon>
+                  {{ servico.marcaAparelho || 'Marca não informada' }} {{ servico.modeloAparelho || '' }}
+                </p>
+                <p>
+                  <ion-icon name="alert-circle" class="detail-icon"></ion-icon>
+                  {{ servico.problemaCliente || 'Problema não descrito' }}
+                </p>
+              </div>
+            </ion-label>
 
-        <!-- Toggle para status Aberto/Fechado -->
-        <ion-item slot="end" lines="none" style="max-width: 120px; margin-left: auto;">
-          <ion-label>{{ servico.status === 'fechado' ? 'Fechado' : 'Aberto' }}</ion-label>
-          <ion-toggle
-            [checked]="servico.status === 'aberto'"
-            (ionChange)="alterarStatus(servico)">
-          </ion-toggle>
-        </ion-item>
-
-      </ion-item>
-    </ion-list>
-  </ion-col>
-</ion-row>
-
+            <!-- ✅ Status selector corretamente inserido com slot="end" -->
+            <ion-select
+              slot="end"
+              interface="popover"
+              placeholder="Status"
+              [value]="servico.status"
+              (ionChange)="alterarStatus(servico, $event.detail.value)"
+              style="max-width: 150px;">
+              <ion-select-option value="aberto">Aberto</ion-select-option>
+              <ion-select-option value="fechado">Fechado</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
 
     <!-- Calendário -->
     <ion-row>
@@ -124,6 +126,7 @@
         <ion-datetime presentation="date" (ionChange)="openModal($event)"></ion-datetime>
       </ion-col>
     </ion-row>
+
   </ion-grid>
 </ion-content>
 
@@ -160,7 +163,7 @@
         </ion-card-content>
       </ion-card>
 
-      <!-- Botões flutuantes: Adicionar e Editar -->
+      <!-- Botões flutuantes -->
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button color="success" (click)="navigateToOtherPage()" aria-label="Adicionar serviço">
           <ion-icon name="add"></ion-icon>
