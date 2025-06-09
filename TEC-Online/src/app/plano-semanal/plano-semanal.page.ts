@@ -52,18 +52,27 @@ export class PlanoSemanalPage implements OnInit {
 
     this.http.get<any[]>(`${environment.api_url}/api/servicos`, { headers }).subscribe({
       next: (data) => {
-        this.servicos = data.map(servico => ({
-          id: servico._id,
-          nomeCliente: servico.cliente || 'Cliente não informado',
-          dataServico: servico.data || 'Data não agendada',
-          problemaCliente: servico.descricao || 'Problema não descrito',
-          horaServico: servico.horaServico || 'Horário não definido',
-          status: servico.status || '',
-          autorServico: servico.autorServico || '',
-          observacoes: servico.observacoes || '',
-          modeloAparelho: servico.modeloAparelho || '',
-          marcaAparelho: servico.marcaAparelho || '',
-        }));
+        this.servicos = data.map(servico => {
+          let statusAtual = servico.status?.toLowerCase() || '';
+
+          // Se o status for "concluído", definimos como "fechado"
+          if (statusAtual === 'concluído') {
+            statusAtual = 'fechado';
+          }
+
+          return {
+            id: servico._id,
+            nomeCliente: servico.cliente || 'Cliente não informado',
+            dataServico: servico.data || 'Data não agendada',
+            problemaCliente: servico.descricao || 'Problema não descrito',
+            horaServico: servico.horaServico || 'Horário não definido',
+            status: statusAtual,
+            autorServico: servico.autorServico || '',
+            observacoes: servico.observacoes || '',
+            modeloAparelho: servico.modeloAparelho || '',
+            marcaAparelho: servico.marcaAparelho || '',
+          };
+        });
 
         this.servicos.sort((a, b) => {
           const dateA = new Date(a.dataServico).getTime();
@@ -93,8 +102,9 @@ export class PlanoSemanalPage implements OnInit {
     switch (status?.toLowerCase()) {
       case 'aberto': return 'warning';
       case 'em andamento': return 'primary';
-      case 'concluído': return 'success';
+      case 'concluído': return 'success'; // Caso queira mostrar diferente, pode mudar aqui
       case 'cancelado': return 'danger';
+      case 'fechado': return 'medium'; // Cor para fechado
       default: return 'medium';
     }
   }
@@ -115,7 +125,8 @@ export class PlanoSemanalPage implements OnInit {
       marcaAparelho: '',
       modeloAparelho: '',
       problemaCliente: '',
-      observacoes: ''
+      observacoes: '',
+      status: 'fechado'  // status padrão ao criar novo
     };
 
     this.modal.present();
@@ -161,12 +172,10 @@ export class PlanoSemanalPage implements OnInit {
     }
   }
 
-  // Chamado pelo input de busca
   onSearchChange() {
     this.aplicarFiltros();
   }
 
-  // Chamado pelo ionChange do select
   onSelectedDaysChange() {
     this.aplicarFiltros();
   }
