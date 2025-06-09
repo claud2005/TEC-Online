@@ -24,7 +24,7 @@ export class PlanoSemanalPage implements OnInit {
   filteredServices: any[] = [];
   utilizadorName: string = 'Utilizador';
   searchQuery: string = '';
-  selectedDays: number = 7;
+  selectedDays: number = 7; // Histórico padrão: últimos 7 dias
 
   constructor(
     private router: Router,
@@ -53,7 +53,7 @@ export class PlanoSemanalPage implements OnInit {
     this.http.get<any[]>(`${environment.api_url}/api/servicos`, { headers }).subscribe({
       next: (data) => {
         this.servicos = data.map(servico => ({
-          id: servico._id, // Id do serviço
+          id: servico._id,
           nomeCliente: servico.cliente || 'Cliente não informado',
           dataServico: servico.data || 'Data não agendada',
           problemaCliente: servico.descricao || 'Problema não descrito',
@@ -65,16 +65,13 @@ export class PlanoSemanalPage implements OnInit {
           marcaAparelho: servico.marcaAparelho || '',
         }));
 
-        // Ordena os serviços pela data (mais antiga para mais recente)
         this.servicos.sort((a, b) => {
           const dateA = new Date(a.dataServico).getTime();
           const dateB = new Date(b.dataServico).getTime();
           return dateA - dateB;
         });
 
-        this.filteredServices = [...this.servicos];
-        this.filterServices();
-        this.filterByDays();
+        this.aplicarFiltros();
       },
       error: (error) => {
         console.error('Erro ao carregar serviços:', error);
@@ -124,40 +121,43 @@ export class PlanoSemanalPage implements OnInit {
     this.modal.present();
   }
 
-  filterServices() {
+  aplicarFiltros() {
     const query = this.searchQuery.trim().toLowerCase();
-
-    // Filtra pelo texto da pesquisa primeiro
-    this.filteredServices = this.servicos.filter(servico =>
+    let tempFiltered = this.servicos.filter(servico =>
       servico.nomeCliente?.toLowerCase().includes(query)
     );
 
-    // Depois aplica filtro de dias para limitar o histórico
-    this.filterByDays();
+    this.filteredServices = this.filtrarPorHistorico(tempFiltered, this.selectedDays);
   }
 
-  filterByDays() {
-    if (this.selectedDays === 0) {
-      // Mostrar apenas serviços do dia atual
-      const hoje = new Date();
-      this.filteredServices = this.filteredServices.filter(servico => {
+  filtrarPorHistorico(services: any[], dias: number): any[] {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    if (dias === 0) {
+      return services.filter(servico => {
         const dataServico = new Date(servico.dataServico);
-        return (
-          dataServico.getDate() === hoje.getDate() &&
-          dataServico.getMonth() === hoje.getMonth() &&
-          dataServico.getFullYear() === hoje.getFullYear()
-        );
+        dataServico.setHours(0, 0, 0, 0);
+        return dataServico.getTime() === hoje.getTime();
       });
     } else {
-      // Mostrar serviços dos últimos X dias (inclui hoje)
-      const agora = new Date();
-      this.filteredServices = this.filteredServices.filter(servico => {
+      return services.filter(servico => {
         const dataServico = new Date(servico.dataServico);
-        const diffTime = agora.getTime() - dataServico.getTime();
-        const diffDays = diffTime / (1000 * 60 * 60 * 24);
-        return diffDays >= 0 && diffDays <= this.selectedDays;
+        dataServico.setHours(0, 0, 0, 0);
+        const diffDias = (hoje.getTime() - dataServico.getTime()) / (1000 * 60 * 60 * 24);
+        return diffDias >= 0 && diffDias <= dias;
       });
     }
+  }
+
+  // Chamado pelo input
+  onSearchChange() {
+    this.aplicarFiltros();
+  }
+
+  // ✅ Chamado pelo ionChange do select (antes causava erro)
+  onSelectedDaysChange() {
+    this.aplicarFiltros();
   }
 
   closeModal() {

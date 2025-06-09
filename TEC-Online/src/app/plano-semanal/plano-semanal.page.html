@@ -4,7 +4,7 @@
     <ion-toolbar color="tertiary">
       <ion-title>Menu</ion-title>
       <ion-buttons slot="end">
-        <ion-button (click)="closeMenu()">
+        <ion-button (click)="closeMenu()" aria-label="Fechar menu">
           <ion-icon name="close-circle-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -34,15 +34,15 @@
 
 <!-- TOPO OTIMIZADO PARA MOBILE -->
 <ion-header>
-  <ion-toolbar color="primary" class="custom-toolbar">
+  <ion-toolbar color="primary" class="custom-toolbar" style="display: flex; align-items: center;">
     <ion-buttons slot="start">
       <img src="assets/icon/logotipo.png" alt="Logo" class="header-logo" />
     </ion-buttons>
-    <div class="header-title-container">
+    <div class="header-title-container" style="flex: 1; text-align: center;">
       <span class="header-title">Olá, {{ utilizadorName || 'Carregando...' }}</span>
     </div>
     <ion-buttons slot="end">
-      <ion-menu-button autoHide="false" menu="end" class="menu-button"></ion-menu-button>
+      <ion-menu-button autoHide="false" menu="end" class="menu-button" aria-label="Abrir menu"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -57,7 +57,8 @@
       </ion-col>
       <ion-col size="12">
         <ion-label class="label-title">Histórico de Serviços</ion-label>
-        <ion-select [(ngModel)]="selectedDays" interface="popover" (ionChange)="filterByDays()">
+        <ion-select [(ngModel)]="selectedDays" interface="popover" (ionChange)="onSelectedDaysChange()">
+          <ion-select-option disabled value="">Selecionar período</ion-select-option>
           <ion-select-option value="0">Hoje</ion-select-option>
           <ion-select-option value="5">Últimos 5 dias</ion-select-option>
           <ion-select-option value="7">Últimos 7 dias</ion-select-option>
@@ -75,13 +76,13 @@
           Tarefas
         </h2>
 
-        <div *ngIf="filteredServices.length === 0" class="empty-message">
-          <ion-icon name="alert-circle-outline"></ion-icon>
+        <div *ngIf="filteredServices.length === 0" class="empty-message" style="text-align:center; margin-top: 2rem; color: var(--ion-color-medium);">
+          <ion-icon name="alert-circle-outline" style="font-size: 3rem; margin-bottom: 0.5rem;"></ion-icon>
           <p>Nenhuma tarefa encontrada</p>
         </div>
 
         <ion-list *ngIf="filteredServices.length > 0" lines="full" class="service-list">
-          <ion-item *ngFor="let servico of filteredServices" class="service-item" (click)="editarServico(servico?.id)">
+          <ion-item *ngFor="let servico of filteredServices" class="service-item" (click)="editarServico(servico?.id)" style="margin-bottom: 0.5rem;">
             <ion-label class="service-content">
               <h3 class="service-title">{{ servico.nomeCliente || 'Cliente não informado' }}</h3>
               <div class="service-details">
@@ -122,7 +123,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button (click)="closeModal()">
+          <ion-button (click)="closeModal()" aria-label="Voltar">
             <ion-icon name="arrow-back"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -151,10 +152,10 @@
 
       <!-- Botões flutuantes: Adicionar e Editar -->
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button color="success" (click)="navigateToOtherPage()">
+        <ion-fab-button color="success" (click)="navigateToOtherPage()" aria-label="Adicionar serviço">
           <ion-icon name="add"></ion-icon>
         </ion-fab-button>
-        <ion-fab-button color="primary" (click)="editarServico(selectedService?.id)">
+        <ion-fab-button color="primary" (click)="editarServico(selectedService?.id)" aria-label="Editar serviço">
           <ion-icon name="create-outline"></ion-icon>
         </ion-fab-button>
       </ion-fab>
