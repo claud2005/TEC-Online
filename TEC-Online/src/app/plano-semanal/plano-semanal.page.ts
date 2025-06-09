@@ -53,7 +53,7 @@ export class PlanoSemanalPage implements OnInit {
     this.http.get<any[]>(`${environment.api_url}/api/servicos`, { headers }).subscribe({
       next: (data) => {
         this.servicos = data.map(servico => ({
-          id: servico._id, // Adicionado o ID
+          id: servico._id, // Id do serviço
           nomeCliente: servico.cliente || 'Cliente não informado',
           dataServico: servico.data || 'Data não agendada',
           problemaCliente: servico.descricao || 'Problema não descrito',
@@ -65,6 +65,7 @@ export class PlanoSemanalPage implements OnInit {
           marcaAparelho: servico.marcaAparelho || '',
         }));
 
+        // Ordena os serviços pela data (mais antiga para mais recente)
         this.servicos.sort((a, b) => {
           const dateA = new Date(a.dataServico).getTime();
           const dateB = new Date(b.dataServico).getTime();
@@ -125,21 +126,36 @@ export class PlanoSemanalPage implements OnInit {
 
   filterServices() {
     const query = this.searchQuery.trim().toLowerCase();
+
+    // Filtra pelo texto da pesquisa primeiro
     this.filteredServices = this.servicos.filter(servico =>
       servico.nomeCliente?.toLowerCase().includes(query)
     );
+
+    // Depois aplica filtro de dias para limitar o histórico
     this.filterByDays();
   }
 
   filterByDays() {
     if (this.selectedDays === 0) {
-      this.filteredServices = [...this.servicos];
-    } else {
-      const now = new Date();
+      // Mostrar apenas serviços do dia atual
+      const hoje = new Date();
       this.filteredServices = this.filteredServices.filter(servico => {
         const dataServico = new Date(servico.dataServico);
-        const diffDays = (dataServico.getTime() - now.getTime()) / (1000 * 3600 * 24);
-        return diffDays <= this.selectedDays;
+        return (
+          dataServico.getDate() === hoje.getDate() &&
+          dataServico.getMonth() === hoje.getMonth() &&
+          dataServico.getFullYear() === hoje.getFullYear()
+        );
+      });
+    } else {
+      // Mostrar serviços dos últimos X dias (inclui hoje)
+      const agora = new Date();
+      this.filteredServices = this.filteredServices.filter(servico => {
+        const dataServico = new Date(servico.dataServico);
+        const diffTime = agora.getTime() - dataServico.getTime();
+        const diffDays = diffTime / (1000 * 60 * 60 * 24);
+        return diffDays >= 0 && diffDays <= this.selectedDays;
       });
     }
   }
@@ -170,7 +186,6 @@ export class PlanoSemanalPage implements OnInit {
     this.router.navigate(['/criar-servicos']);
   }
 
-  // NOVO MÉTODO: Navegar para editar serviço
   editarServico(id: string) {
     if (id) {
       this.modal.dismiss();
