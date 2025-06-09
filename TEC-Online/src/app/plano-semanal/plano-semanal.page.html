@@ -103,15 +103,15 @@
           </div>
         </ion-label>
 
-        <!-- Segmento para selecionar status Aberto/Fechado -->
-        <ion-segment slot="end" [(ngModel)]="servico.status" (ionChange)="alterarStatus(servico)">
-          <ion-segment-button value="Aberto">
-            Aberto
-          </ion-segment-button>
-          <ion-segment-button value="Fechado">
-            Fechado
-          </ion-segment-button>
-        </ion-segment>
+        <!-- Toggle para status Aberto/Fechado -->
+        <ion-item slot="end" lines="none" style="max-width: 120px; margin-left: auto;">
+          <ion-label>{{ servico.status === 'fechado' ? 'Fechado' : 'Aberto' }}</ion-label>
+          <ion-toggle
+            [checked]="servico.status === 'aberto'"
+            (ionChange)="alterarStatus(servico)">
+          </ion-toggle>
+        </ion-item>
+
       </ion-item>
     </ion-list>
   </ion-col>

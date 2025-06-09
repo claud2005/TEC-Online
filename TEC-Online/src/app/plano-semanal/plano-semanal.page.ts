@@ -212,17 +212,18 @@ export class PlanoSemanalPage implements OnInit {
   }
 
   alterarStatus(servico: any) {
-    console.log(`Status do serviço ${servico.id} alterado para: ${servico.status}`);
+  servico.status = servico.status === 'aberto' ? 'fechado' : 'aberto';
+  console.log(`Status do serviço ${servico.id} alterado para: ${servico.status}`);
 
-    // Caso queira atualizar no backend:
-    /*
-    const token = localStorage.getItem('token');
-    const headers = { 'Authorization': `Bearer ${token}` };
-    this.http.patch(`${environment.api_url}/api/servicos/${servico.id}`, { status: servico.status }, { headers })
-      .subscribe({
-        next: () => console.log('Status atualizado com sucesso no backend'),
-        error: (err) => console.error('Erro ao atualizar status:', err)
-      });
-    */
-  }
+  // Se desejar salvar no backend:
+  /*
+  const token = localStorage.getItem('token');
+  const headers = { 'Authorization': `Bearer ${token}` };
+  this.http.patch(`${environment.api_url}/api/servicos/${servico.id}`, { status: servico.status }, { headers })
+    .subscribe({
+      next: () => console.log('Status atualizado com sucesso no backend'),
+      error: (err) => console.error('Erro ao atualizar status:', err)
+    });
+  */
+}
 }
