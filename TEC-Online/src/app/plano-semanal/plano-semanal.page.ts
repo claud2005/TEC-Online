@@ -124,7 +124,10 @@ export class PlanoSemanalPage implements OnInit {
   aplicarFiltros() {
     const query = this.searchQuery.trim().toLowerCase();
     let tempFiltered = this.servicos.filter(servico =>
-      servico.nomeCliente?.toLowerCase().includes(query)
+      servico.nomeCliente?.toLowerCase().includes(query) ||
+      servico.marcaAparelho?.toLowerCase().includes(query) ||
+      servico.modeloAparelho?.toLowerCase().includes(query) ||
+      servico.problemaCliente?.toLowerCase().includes(query)
     );
 
     this.filteredServices = this.filtrarPorHistorico(tempFiltered, this.selectedDays);
@@ -150,12 +153,12 @@ export class PlanoSemanalPage implements OnInit {
     }
   }
 
-  // Chamado pelo input
+  // ✅ Chamado pelo input de busca
   onSearchChange() {
     this.aplicarFiltros();
   }
 
-  // ✅ Chamado pelo ionChange do select (antes causava erro)
+  // ✅ Chamado pelo ionChange do select
   onSelectedDaysChange() {
     this.aplicarFiltros();
   }

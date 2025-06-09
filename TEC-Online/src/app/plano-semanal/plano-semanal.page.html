@@ -1,4 +1,4 @@
-<!-- MENU LATERAL - DIREITA -->
+<!-- MENU LATERAL - DIREITA, PERSONALIZADO, COM BOTÃO DE FECHAR -->
 <ion-menu contentId="main-content" side="end" type="overlay" class="custom-menu">
   <ion-header>
     <ion-toolbar color="tertiary">
@@ -10,7 +10,7 @@
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  <ion-content>
+  <ion-content class="menu-content">
     <ion-list>
       <ion-item button (click)="navigateToClientes()">
         <ion-icon slot="start" name="people"></ion-icon>
@@ -32,17 +32,17 @@
   </ion-content>
 </ion-menu>
 
-<!-- TOPO -->
+<!-- TOPO OTIMIZADO PARA MOBILE -->
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="primary" class="custom-toolbar" style="display: flex; align-items: center;">
     <ion-buttons slot="start">
       <img src="assets/icon/logotipo.png" alt="Logo" class="header-logo" />
     </ion-buttons>
-    <div style="flex: 1; text-align: center;">
-      <span>Olá, {{ utilizadorName || 'Carregando...' }}</span>
+    <div class="header-title-container" style="flex: 1; text-align: center;">
+      <span class="header-title">Olá, {{ utilizadorName || 'Carregando...' }}</span>
     </div>
     <ion-buttons slot="end">
-      <ion-menu-button autoHide="false" menu="end" aria-label="Abrir menu"></ion-menu-button>
+      <ion-menu-button autoHide="false" menu="end" class="menu-button" aria-label="Abrir menu"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -50,8 +50,8 @@
 <!-- CONTEÚDO PRINCIPAL -->
 <ion-content id="main-content">
   <ion-grid>
-    <!-- Barra de pesquisa e filtro -->
-    <ion-row>
+    <!-- Barra de pesquisa -->
+    <ion-row class="top-bar">
       <ion-col size="12">
         <ion-searchbar [(ngModel)]="searchQuery" placeholder="Procurar Tarefa" (ionInput)="onSearchChange()"></ion-searchbar>
       </ion-col>
@@ -59,6 +59,7 @@
         <ion-item>
           <ion-label>Histórico</ion-label>
           <ion-select [(ngModel)]="selectedDays" interface="popover" (ionChange)="onSelectedDaysChange()">
+            <ion-select-option disabled value="">Selecionar período</ion-select-option>
             <ion-select-option value="0">Hoje</ion-select-option>
             <ion-select-option value="5">Últimos 5 dias</ion-select-option>
             <ion-select-option value="7">Últimos 7 dias</ion-select-option>
@@ -69,7 +70,7 @@
       </ion-col>
     </ion-row>
 
-    <!-- Lista de serviços -->
+    <!-- Lista de tarefas -->
     <ion-row>
       <ion-col>
         <h2>
@@ -82,22 +83,24 @@
           <p>Nenhuma tarefa encontrada</p>
         </div>
 
-        <ion-list *ngIf="filteredServices.length > 0" lines="full">
-          <ion-item *ngFor="let servico of filteredServices" (click)="editarServico(servico?.id)">
-            <ion-label>
-              <h3>{{ servico.nomeCliente || 'Cliente não informado' }}</h3>
-              <p>
-                <ion-icon name="calendar"></ion-icon>
-                {{ servico.dataServico ? formatDate(servico.dataServico) : 'Data não agendada' }}
-              </p>
-              <p>
-                <ion-icon name="phone-portrait"></ion-icon>
-                {{ servico.marcaAparelho || 'Marca não informada' }} {{ servico.modeloAparelho || '' }}
-              </p>
-              <p>
-                <ion-icon name="alert-circle"></ion-icon>
-                {{ servico.problemaCliente || 'Problema não descrito' }}
-              </p>
+        <ion-list *ngIf="filteredServices.length > 0" lines="full" class="service-list">
+          <ion-item *ngFor="let servico of filteredServices" class="service-item" (click)="editarServico(servico?.id)" style="margin-bottom: 0.5rem;">
+            <ion-label class="service-content">
+              <h3 class="service-title">{{ servico.nomeCliente || 'Cliente não informado' }}</h3>
+              <div class="service-details">
+                <p>
+                  <ion-icon name="calendar" class="detail-icon"></ion-icon>
+                  {{ servico.dataServico ? formatDate(servico.dataServico) : 'Data não agendada' }}
+                </p>
+                <p>
+                  <ion-icon name="phone-portrait" class="detail-icon"></ion-icon>
+                  {{ servico.marcaAparelho || 'Marca não informada' }} {{ servico.modeloAparelho || '' }}
+                </p>
+                <p>
+                  <ion-icon name="alert-circle" class="detail-icon"></ion-icon>
+                  {{ servico.problemaCliente || 'Problema não descrito' }}
+                </p>
+              </div>
             </ion-label>
             <ion-badge slot="end" [color]="getStatusColor(servico.status)">
               {{ servico.status || 'Sem status' }}
@@ -149,7 +152,7 @@
         </ion-card-content>
       </ion-card>
 
-      <!-- Botões flutuantes -->
+      <!-- Botões flutuantes: Adicionar e Editar -->
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button color="success" (click)="navigateToOtherPage()" aria-label="Adicionar serviço">
           <ion-icon name="add"></ion-icon>
