@@ -102,9 +102,10 @@
                 </p>
               </div>
             </ion-label>
-            <ion-badge slot="end" [color]="getStatusColor(servico.status)">
+            <!-- Botão que mostra o status -->
+            <ion-button slot="end" size="small" [color]="getStatusColor(servico.status)" fill="solid" disabled>
               {{ servico.status || 'Sem status' }}
-            </ion-badge>
+            </ion-button>
           </ion-item>
         </ion-list>
       </ion-col>
