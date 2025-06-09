@@ -24,7 +24,7 @@ export class PlanoSemanalPage implements OnInit {
   filteredServices: any[] = [];
   utilizadorName: string = 'Utilizador';
   searchQuery: string = '';
-  selectedDays: number | null = null; // <-- inicializa sem filtro
+  selectedDays: number | null = -1; // inicializa para "Mostrar todos"
 
   constructor(
     private router: Router,

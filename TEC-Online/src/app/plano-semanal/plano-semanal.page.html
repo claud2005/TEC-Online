@@ -59,14 +59,14 @@
         <ion-item>
           <ion-label>Histórico</ion-label>
           <ion-select [(ngModel)]="selectedDays" interface="popover" (ionChange)="onSelectedDaysChange()">
-            <ion-select-option disabled value="">Selecionar período</ion-select-option>
-            <ion-select-option value="-1">Mostrar todos</ion-select-option>
-  <ion-select-option value="0">Hoje</ion-select-option>
-  <ion-select-option value="5">Últimos 5 dias</ion-select-option>
-  <ion-select-option value="7">Últimos 7 dias</ion-select-option>
-  <ion-select-option value="15">Últimos 15 dias</ion-select-option>
-  <ion-select-option value="30">Últimos 30 dias</ion-select-option>
-          </ion-select>
+  <ion-select-option [value]="-1">Mostrar todos</ion-select-option>
+  <ion-select-option [value]="0">Hoje</ion-select-option>
+  <ion-select-option [value]="5">Últimos 5 dias</ion-select-option>
+  <ion-select-option [value]="7">Últimos 7 dias</ion-select-option>
+  <ion-select-option [value]="15">Últimos 15 dias</ion-select-option>
+  <ion-select-option [value]="30">Últimos 30 dias</ion-select-option>
+</ion-select>
+
         </ion-item>
       </ion-col>
     </ion-row>
