@@ -24,7 +24,7 @@ export class PlanoSemanalPage implements OnInit {
   filteredServices: any[] = [];
   utilizadorName: string = 'Utilizador';
   searchQuery: string = '';
-  selectedDays: number = 7; // Histórico padrão: últimos 7 dias
+  selectedDays: number | null = null; // <-- inicializa sem filtro
 
   constructor(
     private router: Router,
@@ -123,6 +123,7 @@ export class PlanoSemanalPage implements OnInit {
 
   aplicarFiltros() {
     const query = this.searchQuery.trim().toLowerCase();
+
     let tempFiltered = this.servicos.filter(servico =>
       servico.nomeCliente?.toLowerCase().includes(query) ||
       servico.marcaAparelho?.toLowerCase().includes(query) ||
@@ -133,17 +134,24 @@ export class PlanoSemanalPage implements OnInit {
     this.filteredServices = this.filtrarPorHistorico(tempFiltered, this.selectedDays);
   }
 
-  filtrarPorHistorico(services: any[], dias: number): any[] {
+  filtrarPorHistorico(services: any[], dias: number | null): any[] {
+    if (dias === null || dias === undefined || dias === -1) {
+      // Sem filtro: retorna todos os serviços
+      return services;
+    }
+
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
 
     if (dias === 0) {
+      // Apenas hoje
       return services.filter(servico => {
         const dataServico = new Date(servico.dataServico);
         dataServico.setHours(0, 0, 0, 0);
         return dataServico.getTime() === hoje.getTime();
       });
     } else {
+      // Últimos 'dias' dias
       return services.filter(servico => {
         const dataServico = new Date(servico.dataServico);
         dataServico.setHours(0, 0, 0, 0);
@@ -153,12 +161,12 @@ export class PlanoSemanalPage implements OnInit {
     }
   }
 
-  // ✅ Chamado pelo input de busca
+  // Chamado pelo input de busca
   onSearchChange() {
     this.aplicarFiltros();
   }
 
-  // ✅ Chamado pelo ionChange do select
+  // Chamado pelo ionChange do select
   onSelectedDaysChange() {
     this.aplicarFiltros();
   }
