@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, IonicModule } from '@ionic/angular';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -17,10 +18,8 @@ import { environment } from 'src/environments/environment';
     IonicModule,
   ],
 })
-export class EditarServicosPage implements OnInit {
+export class EditarServicosPage {
   id: string | null = null;
-
-  // Campos do formulário
   dataServico: string = '';
   horaServico: string = '';
   status: string = 'aberto';
@@ -42,8 +41,10 @@ export class EditarServicosPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id'); // Corrigido de 'numero' para 'id'
-    console.log("ID capturado da URL:", this.id);
+    let rawId = this.route.snapshot.paramMap.get('numero');
+    this.id = rawId;
+
+    console.log("ID capturado da URL:", rawId);
     if (this.id) {
       this.carregarServico();
     }
@@ -60,15 +61,14 @@ export class EditarServicosPage implements OnInit {
           return;
         }
 
-        // Preenchendo os campos corretamente com base nos nomes vindos da API
         this.dataServico = data.data ?? '';
         this.horaServico = data.horaServico ?? '';
         this.status = data.status ?? 'aberto';
-        this.nomeCliente = data.cliente ?? '';
-        this.telefoneContato = data.contatoCliente ?? '';
+        this.nomeCliente = data.nomeCompletoCliente ?? '';
+        this.telefoneContato = data.telefoneContato ?? '';
         this.modeloAparelho = data.modeloAparelho ?? '';
         this.marcaAparelho = data.marcaAparelho ?? '';
-        this.problemaCliente = data.problemaRelatado ?? '';
+        this.problemaCliente = data.problemaCliente ?? '';
         this.solucaoInicial = data.solucaoInicial ?? '';
         this.valorTotal = data.valorTotal ?? 0;
         this.observacoes = data.observacoes ?? '';
@@ -87,7 +87,7 @@ export class EditarServicosPage implements OnInit {
     input.type = 'file';
     input.accept = 'image/*';
     input.click();
-
+  
     input.onchange = async (event: any) => {
       const file = event.target.files[0];
       if (file) {
@@ -118,13 +118,13 @@ export class EditarServicosPage implements OnInit {
   validarTelefone(event: any) {
     const input = event.target as HTMLInputElement;
     const valor = input.value.replace(/\D/g, '');
-    input.value = valor.slice(0, 11); // até 11 dígitos
+    input.value = valor.slice(0, 9);
     this.telefoneContato = input.value;
   }
 
   atualizarServico() {
     if (!this.isFormValid()) {
-      alert('Preencha todos os campos obrigatórios e adicione ao menos uma imagem.');
+      alert('Preencha todos os campos obrigatórios.');
       return;
     }
 
@@ -169,22 +169,36 @@ export class EditarServicosPage implements OnInit {
 
   isFormValid(): boolean {
     const camposObrigatorios = [
-      this.dataServico,
-      this.horaServico,
-      this.status,
-      this.nomeCliente,
-      this.telefoneContato,
-      this.modeloAparelho,
-      this.marcaAparelho,
-      this.problemaCliente,
-      this.solucaoInicial,
-      this.autorServico
+      { nome: 'dataServico', valor: this.dataServico },
+      { nome: 'horaServico', valor: this.horaServico },
+      { nome: 'status', valor: this.status },
+      { nome: 'nomeCliente', valor: this.nomeCliente },
+      { nome: 'telefoneContato', valor: this.telefoneContato },
+      { nome: 'modeloAparelho', valor: this.modeloAparelho },
+      { nome: 'marcaAparelho', valor: this.marcaAparelho },
+      { nome: 'problemaCliente', valor: this.problemaCliente },
+      { nome: 'solucaoInicial', valor: this.solucaoInicial },
+      { nome: 'autorServico', valor: this.autorServico },
     ];
 
-    const todosPreenchidos = camposObrigatorios.every(c => c && c.trim() !== '');
-    const valorValido = this.valorTotal !== null && this.valorTotal >= 0;
-    const temImagem = this.imagens.length > 0;
+    const camposPreenchidos = camposObrigatorios.every((campo) => {
+      const valido = campo.valor && campo.valor.trim() !== '';
+      if (!valido) {
+        console.log(`Campo obrigatório não preenchido: ${campo.nome}`);
+      }
+      return valido;
+    });
 
-    return todosPreenchidos && valorValido && temImagem;
+    const valorValido = this.valorTotal !== null && this.valorTotal >= 0;
+    if (!valorValido) {
+      console.log('Valor inválido:', { valorTotal: this.valorTotal });
+    }
+
+    const imagensValidas = this.imagens.length > 0;
+    if (!imagensValidas) {
+      console.log('Nenhuma imagem foi adicionada.');
+    }
+
+    return camposPreenchidos && valorValido && imagensValidas;
   }
 }
