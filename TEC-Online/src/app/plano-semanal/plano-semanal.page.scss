@@ -378,20 +378,28 @@ ion-modal ion-fab-button ion-icon {
     height: 60px;
     --min-height: 60px;
     padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   
   .header-logo {
     height: 40px;
     margin-left: 10px;
+    flex-shrink: 0; /* evita que encolha */
   }
 
   .header-title-container {
-    position: static;
-    transform: none;
+    position: absolute; /* para centralizar no meio do toolbar */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    flex: none;
     text-align: center;
-    flex: 1;
-    top: auto;
-    left: auto;
+    max-width: 60%; /* evita que o texto ocupe todo o espaço */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .header-title {
@@ -400,6 +408,8 @@ ion-modal ion-fab-button ion-icon {
     white-space: normal;
     font-weight: 600;
   }
+}
+
 
   /* Menu lateral */
   ion-menu.custom-menu {
@@ -468,4 +478,4 @@ ion-modal ion-fab-button ion-icon {
   ion-modal ion-fab-button ion-icon {
     font-size: 1.6rem;
   }
-}
+
