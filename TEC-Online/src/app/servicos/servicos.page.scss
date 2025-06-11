@@ -54,6 +54,12 @@ ion-segment-button {
   color: black;
   font-size: 16px;
   font-weight: bold;
+  flex: 1 1 auto;
+  min-width: 100px; /* Garante espaço suficiente */
+  padding: 8px;
+  white-space: nowrap;
+  text-align: center;
+  justify-content: center;
 }
 
 ion-segment-button.ion-activated {
@@ -195,5 +201,10 @@ ion-badge[color="success"] {
 
   ion-button {
     margin-top: 8px;
+  }
+
+  ion-segment-button {
+    font-size: 14px;
+    min-width: 110px; /* Aumenta ainda mais no mobile */
   }
 }
