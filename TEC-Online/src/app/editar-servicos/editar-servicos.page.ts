@@ -42,7 +42,7 @@ export class EditarServicosPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('numero'); // ou 'id', conforme sua rota
+    this.id = this.route.snapshot.paramMap.get('id'); // Corrigido de 'numero' para 'id'
     console.log("ID capturado da URL:", this.id);
     if (this.id) {
       this.carregarServico();
@@ -60,15 +60,15 @@ export class EditarServicosPage implements OnInit {
           return;
         }
 
-        // Preenchendo os campos
+        // Preenchendo os campos corretamente com base nos nomes vindos da API
         this.dataServico = data.data ?? '';
         this.horaServico = data.horaServico ?? '';
         this.status = data.status ?? 'aberto';
-        this.nomeCliente = data.nomeCompletoCliente ?? '';
-        this.telefoneContato = data.telefoneContato ?? '';
+        this.nomeCliente = data.cliente ?? '';
+        this.telefoneContato = data.contatoCliente ?? '';
         this.modeloAparelho = data.modeloAparelho ?? '';
         this.marcaAparelho = data.marcaAparelho ?? '';
-        this.problemaCliente = data.problemaCliente ?? '';
+        this.problemaCliente = data.problemaRelatado ?? '';
         this.solucaoInicial = data.solucaoInicial ?? '';
         this.valorTotal = data.valorTotal ?? 0;
         this.observacoes = data.observacoes ?? '';
