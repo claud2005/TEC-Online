@@ -1,5 +1,5 @@
 :host {
-  --ion-background-color: #1a1a1a; /* Fundo escuro para contraste */
+  --ion-background-color: #1a1a1a; // Fundo escuro
 }
 
 .login-container {
@@ -7,9 +7,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   padding: 20px;
-  background: linear-gradient(135deg, #6a1b9a, #1a1a1a); /* Gradiente moderno */
+  background: linear-gradient(135deg, #6a1b9a, #1a1a1a);
   overflow: hidden;
 }
 
@@ -22,7 +22,7 @@
   width: 150px;
   height: auto;
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
-  animation: float 3s ease-in-out infinite; /* Animação flutuante */
+  animation: float 3s ease-in-out infinite;
 }
 
 .logo-shadow {
@@ -35,7 +35,7 @@
   background: rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   filter: blur(10px);
-  animation: shadow 3s ease-in-out infinite; /* Animação da sombra */
+  animation: shadow 3s ease-in-out infinite;
 }
 
 @keyframes float {
@@ -63,7 +63,7 @@
   text-align: center;
   margin-bottom: 40px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  animation: fadeIn 1.5s ease-in-out; /* Animação de entrada */
+  animation: fadeIn 1.5s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -84,7 +84,7 @@
 }
 
 .input-item {
-  --background: rgba(255, 255, 255, 0.1); /* Fundo semi-transparente */
+  --background: rgba(255, 255, 255, 0.1);
   --border-color: rgba(255, 255, 255, 0.3);
   --color: white;
   --padding-start: 16px;
@@ -101,30 +101,30 @@
 }
 
 .input-icon {
-  color: rgba(255, 255, 255, 0.8); /* Cor dos ícones */
+  color: rgba(255, 255, 255, 0.8);
   margin-right: 10px;
-  font-size: 1.4rem; /* Tamanho maior para os ícones */
+  font-size: 1.4rem;
   transition: color 0.3s ease;
 }
 
 .input-item:hover .input-icon {
-  color: white; /* Cor dos ícones ao passar o mouse */
+  color: white;
 }
 
 ion-label {
   font-size: 1.1rem;
   font-weight: bold;
-  color: rgba(255, 255, 255, 0.8); /* Cor do label */
+  color: rgba(255, 255, 255, 0.8);
   transition: color 0.3s ease;
 }
 
 .input-item:hover ion-label {
-  color: white; /* Cor do label ao passar o mouse */
+  color: white;
 }
 
 ion-input {
-  --color: white; /* Cor do texto digitado */
-  --placeholder-color: rgba(255, 255, 255, 0.5); /* Cor do placeholder */
+  --color: white;
+  --placeholder-color: rgba(255, 255, 255, 0.5);
   --placeholder-opacity: 1;
   font-size: 1.1rem;
   --padding-start: 0;
@@ -133,18 +133,15 @@ ion-input {
   --padding-bottom: 8px;
 }
 
-/* Efeito de foco no input */
+// Foco nos inputs
 .input-item.item-has-focus {
-  --background: rgba(255, 255, 255, 0.15); /* Fundo mais claro ao focar */
-  --border-color: rgba(255, 255, 255, 0.5); /* Borda mais visível ao focar */
+  --background: rgba(255, 255, 255, 0.15);
+  --border-color: rgba(255, 255, 255, 0.5);
 }
 
-.input-item.item-has-focus .input-icon {
-  color: white; /* Cor dos ícones ao focar */
-}
-
+.input-item.item-has-focus .input-icon,
 .input-item.item-has-focus ion-label {
-  color: white; /* Cor do label ao focar */
+  color: white;
 }
 
 ion-button {
@@ -155,7 +152,7 @@ ion-button {
   font-weight: bold;
   border-radius: 25px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  background: linear-gradient(135deg, #00bcd4, #0097a7); /* Gradiente no botão */
+  background: linear-gradient(135deg, #00bcd4, #0097a7);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
@@ -166,10 +163,10 @@ ion-button.btn-animate:hover {
 
 .footer-text {
   margin-top: 20px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: white;
   text-align: center;
-  animation: fadeIn 1.5s ease-in-out; /* Animação de entrada */
+  animation: fadeIn 1.5s ease-in-out;
 }
 
 .footer-text a {
@@ -181,6 +178,6 @@ ion-button.btn-animate:hover {
 }
 
 .footer-text a:hover {
-  color: #ff4081; /* Cor de destaque ao passar o mouse */
+  color: #ff4081;
   text-decoration: underline;
 }
