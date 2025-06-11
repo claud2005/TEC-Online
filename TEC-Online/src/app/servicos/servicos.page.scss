@@ -214,14 +214,8 @@ ion-badge[color="warning"] {
 
   /* Empilha segmento e searchbar no mobile */
   .filtro-linha {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  justify-content: center; /* centraliza */
-  flex-wrap: wrap;
-  max-width: 900px; /* aumentei de 620px para 900px */
-  margin: 0 auto; /* centraliza horizontalmente */
-}
+    flex-direction: column;
+  }
 
   ion-searchbar,
   ion-segment {
