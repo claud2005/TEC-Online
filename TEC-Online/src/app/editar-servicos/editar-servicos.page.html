@@ -17,12 +17,12 @@
       <!-- Campos do formulário -->
       <div class="form-group">
         <ion-label position="stacked">Data do Serviço *</ion-label>
-        <ion-input name="dataServico" [(ngModel)]="dataServico" required></ion-input>
+        <ion-input type="date" name="dataServico" [(ngModel)]="dataServico" required></ion-input>
       </div>
 
       <div class="form-group">
         <ion-label position="stacked">Hora do Serviço *</ion-label>
-        <ion-input name="horaServico" [(ngModel)]="horaServico" required></ion-input>
+        <ion-input type="time" name="horaServico" [(ngModel)]="horaServico" required></ion-input>
       </div>
 
       <div class="form-group">
@@ -40,7 +40,7 @@
 
       <div class="form-group">
         <ion-label position="stacked">Contato *</ion-label>
-        <ion-input name="telefoneContato" [(ngModel)]="telefoneContato" required></ion-input>
+        <ion-input name="telefoneContato" [(ngModel)]="telefoneContato" (ionChange)="validarTelefone($event)" required></ion-input>
       </div>
 
       <div class="form-group">
@@ -73,7 +73,7 @@
         <ion-textarea name="observacoes" [(ngModel)]="observacoes"></ion-textarea>
       </div>
 
-      <!-- Parte das Fotos -->
+      <!-- Fotos -->
       <div class="form-group full-width">
         <ion-label position="stacked">Fotos do Serviço</ion-label>
         <div class="fotos-container">

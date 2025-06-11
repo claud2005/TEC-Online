@@ -41,17 +41,15 @@ export class EditarServicosPage {
   ) {}
 
   ngOnInit() {
-    let rawId = this.route.snapshot.paramMap.get('numero');
-    this.id = rawId;
-
-    console.log("ID capturado da URL:", rawId);
+    this.id = this.route.snapshot.paramMap.get('numero');
+    console.log("ID capturado da URL:", this.id);
     if (this.id) {
       this.carregarServico();
     }
   }
 
   carregarServico() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token') ?? '';
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     this.http.get(`${environment.api_url}/api/servicos/${this.id}`, { headers }).subscribe(
@@ -61,7 +59,13 @@ export class EditarServicosPage {
           return;
         }
 
-        this.dataServico = data.data ?? '';
+        // Ajuste do formato da data caso necessário para input type="date"
+        if (data.data) {
+          this.dataServico = data.data.split('T')[0]; // ex: "2025-06-11T00:00:00" => "2025-06-11"
+        } else {
+          this.dataServico = '';
+        }
+
         this.horaServico = data.horaServico ?? '';
         this.status = data.status ?? 'aberto';
         this.nomeCliente = data.nomeCompletoCliente ?? '';
@@ -87,7 +91,7 @@ export class EditarServicosPage {
     input.type = 'file';
     input.accept = 'image/*';
     input.click();
-  
+
     input.onchange = async (event: any) => {
       const file = event.target.files[0];
       if (file) {
@@ -146,7 +150,7 @@ export class EditarServicosPage {
       formData.append('imagens', base64);
     });
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token') ?? '';
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
