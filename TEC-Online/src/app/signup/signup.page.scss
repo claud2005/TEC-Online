@@ -168,22 +168,28 @@ ion-input {
 /* ===== Adaptação para telemóvel ===== */
 @media screen and (max-width: 480px) {
   .center-content {
-    padding: 40px 15px 80px 15px; /* mais padding em baixo para evitar espaço preto */
-    min-height: auto;
+    padding: 50px 10px 100px 10px; /* mais padding em baixo e menor nas laterais */
+    min-height: 100vh; /* garantir que preenche a altura toda */
+    justify-content: flex-start; /* evita conteúdo muito ao centro num ecrã pequeno */
   }
 
   .logo-container {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
 
   .app-logo {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
+  }
+
+  .logo-shadow {
+    width: 70px;
+    height: 14px;
   }
 
   h2 {
-    font-size: 1.6rem;
-    margin-bottom: 15px;
+    font-size: 1.4rem;
+    margin-bottom: 10px;
   }
 
   .input-item,
@@ -192,14 +198,21 @@ ion-input {
   .btn-animate,
   .login-text,
   .login-text a {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   .btn-animate {
+    margin-top: 14px;
+    padding: 10px 16px;
+    border-radius: 20px;
+  }
+
+  .login-text {
     margin-top: 16px;
   }
 
   .login-text a:hover {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
 }
+
