@@ -7,15 +7,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh; /* use min-height para evitar conteúdo colado no topo */
-  padding: 40px 20px 40px 20px; /* mais padding vertical para espaço */
+  min-height: 100vh;
+  padding: 80px 20px 80px 20px; /* Aumentado o padding vertical para desktop */
   background: linear-gradient(135deg, #2c3e50, #3498db);
   overflow: hidden;
 }
 
 .logo-container {
   position: relative;
-  margin-bottom: 40px; /* um pouco mais de espaço */
+  margin-bottom: 40px;
 }
 
 .app-logo {
@@ -63,7 +63,7 @@ h2 {
   color: white;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   animation: fadeIn 1.5s ease-in-out;
-  text-align: center; /* para alinhar bem no telemóvel */
+  text-align: center;
 }
 
 @keyframes fadeIn {
@@ -168,8 +168,8 @@ ion-input {
 /* ===== Adaptação para telemóvel ===== */
 @media screen and (max-width: 480px) {
   .center-content {
-    padding: 30px 15px 30px 15px;
-    min-height: auto; /* permite scroll se necessário */
+    padding: 40px 15px 80px 15px; /* mais padding em baixo para evitar espaço preto */
+    min-height: auto;
   }
 
   .logo-container {
