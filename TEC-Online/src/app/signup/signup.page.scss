@@ -2,22 +2,15 @@
   --ion-background-color: #1a1a1a;
 }
 
-.signup-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
-  background: linear-gradient(135deg, #2c3e50, #3498db);
-  overflow-y: auto;
-}
-
 .center-content {
-  width: 100%;
-  max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #2c3e50, #3498db);
+  overflow: hidden;
 }
 
 .logo-container {
@@ -169,4 +162,39 @@ ion-input {
   color: #e74c3c;
   text-decoration: underline;
   font-size: 1.5rem;
+}
+
+/* ===== Adaptação para Telemóvel ===== */
+@media screen and (max-width: 480px) {
+  .center-content {
+    padding: 15px;
+    height: auto;
+  }
+
+  .app-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+
+  .input-item,
+  ion-label,
+  ion-input,
+  .btn-animate,
+  .login-text,
+  .login-text a {
+    font-size: 1.2rem;
+  }
+
+  .btn-animate {
+    margin-top: 16px;
+  }
+
+  .login-text a:hover {
+    font-size: 1.3rem;
+  }
 }
