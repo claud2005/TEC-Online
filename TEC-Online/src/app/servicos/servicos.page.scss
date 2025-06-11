@@ -28,7 +28,7 @@ ion-buttons ion-button ion-icon {
 }
 
 /* ======= Fundo ======= */
-ion-content {
+ion-content.custom-background {
   --background: white;
   --color: black;
 }
@@ -42,7 +42,7 @@ ion-content {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* Linha com segmento + searchbar lado a lado */
+/* Container flexível para segmento e busca lado a lado */
 .filtro-linha {
   display: flex;
   gap: 16px;
@@ -164,6 +164,10 @@ ion-badge[color="success"] {
   background-color: #28a745;
   color: white;
 }
+ion-badge[color="warning"] {
+  background-color: #ff9500;
+  color: white;
+}
 
 /* ======= Layout Responsivo ======= */
 .desktop-view {
@@ -187,6 +191,7 @@ ion-badge[color="success"] {
     margin: 10px;
   }
 
+  /* Empilha segmento e searchbar no mobile */
   .filtro-linha {
     flex-direction: column;
   }
