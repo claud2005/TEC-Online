@@ -56,10 +56,8 @@ ion-content.custom-background {
   display: flex;
   gap: 16px;
   align-items: center;
-  justify-content: center; /* centraliza */
+  justify-content: space-between;
   flex-wrap: wrap;
-  max-width: 620px; /* limita a largura do container flex */
-  margin: 0 auto; /* centraliza horizontalmente */
 }
 
 ion-segment {
