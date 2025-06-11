@@ -384,11 +384,12 @@ ion-modal ion-fab-button ion-icon {
   }
   
   .header-logo {
-  height: 40px;
+  height: 60px;     /* aumenta a altura */
   margin-left: 10px;
   flex-shrink: 0;
-  width: auto;
+  width: auto;      /* mantém proporção */
   object-fit: contain;
+  max-width: 100px; /* evita que fique muito larga */
 }
 
   .header-title-container {
