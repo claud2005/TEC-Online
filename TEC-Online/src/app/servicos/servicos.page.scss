@@ -51,13 +51,13 @@ ion-content.custom-background {
   width: 100%; /* garante que ocupe toda a largura disponível */
 }
 
-/* Container flexível para segmento e busca empilhados e centralizados */
+/* Container flexível para segmento e busca lado a lado */
 .filtro-linha {
   display: flex;
-  flex-direction: column; /* empilha verticalmente */
-  align-items: center;    /* centraliza horizontalmente */
-  gap: 16px;              /* espaçamento entre os itens */
-  justify-content: center;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 ion-segment {
@@ -65,7 +65,7 @@ ion-segment {
   border-radius: 12px;
   padding: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-  width: 300px;   /* largura fixa para melhor alinhamento */
+  flex: 1 1 50%;
   min-width: 250px;
 }
 
@@ -90,7 +90,7 @@ ion-segment-button.ion-activated {
 
 /* ======= Searchbar ======= */
 ion-searchbar {
-  margin-top: 0;  /* remove margem extra para ficar juntinho */
+  margin-top: 12px;
   --background: white;
   --border-radius: 12px;
   --box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -98,7 +98,7 @@ ion-searchbar {
   --color: black;
   --icon-color: black;
   --placeholder-color: black;
-  width: 300px;   /* mesma largura do segmento */
+  flex: 1 1 50%;
   min-width: 250px;
 }
 
@@ -210,16 +210,14 @@ ion-badge[color="warning"] {
     width: 100%; /* ocupa toda largura */
   }
 
-  /* Empilha segmento e searchbar no mobile e mantém centralizado */
+  /* Empilha segmento e searchbar no mobile */
   .filtro-linha {
     flex-direction: column;
-    align-items: center; /* garante centralização */
   }
 
   ion-searchbar,
   ion-segment {
     width: 100%;
-    min-width: unset;
     flex: none;
   }
 
