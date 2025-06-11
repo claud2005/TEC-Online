@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, IonicModule } from '@ionic/angular';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -41,10 +40,8 @@ export class EditarServicosPage {
   ) {}
 
   ngOnInit() {
-    let rawId = this.route.snapshot.paramMap.get('numero');
-    this.id = rawId;
-
-    console.log("ID capturado da URL:", rawId);
+    this.id = this.route.snapshot.paramMap.get('numero');
+    console.log("ID capturado da URL:", this.id);
     if (this.id) {
       this.carregarServico();
     }
@@ -87,7 +84,7 @@ export class EditarServicosPage {
     input.type = 'file';
     input.accept = 'image/*';
     input.click();
-  
+
     input.onchange = async (event: any) => {
       const file = event.target.files[0];
       if (file) {
