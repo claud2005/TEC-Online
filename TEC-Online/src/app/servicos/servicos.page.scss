@@ -1,4 +1,8 @@
 /* ======= Estilização Geral ======= */
+* {
+  box-sizing: border-box;
+}
+
 ion-toolbar {
   --background: #ef0f0f;
   --color: white;
@@ -14,26 +18,33 @@ ion-toolbar {
   flex: 1;
 }
 
-/* ======= Estilo do Ícone de Voltar (Seta) ======= */
+/* ======= Botão de Voltar ======= */
 ion-buttons ion-button {
   --background: transparent;
   --color: white;
 }
-
 ion-buttons ion-button ion-icon {
   font-size: 24px;
 }
 
-/* ======= Fundo Branco da Página ======= */
+/* ======= Fundo ======= */
 ion-content {
   --background: white;
   --color: black;
 }
 
-/* ======= Segmento de Filtros (Status) ======= */
+/* ======= Filtros ======= */
+.filtro-container {
+  padding: 16px;
+  margin: 0 16px 16px 16px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Segmento */
 ion-segment {
   background: white;
-  margin: 16px;
   border-radius: 12px;
   padding: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
@@ -52,9 +63,9 @@ ion-segment-button.ion-activated {
   transition: background 0.3s ease-in-out;
 }
 
-/* ======= Barra de Pesquisa ======= */
+/* ======= Searchbar ======= */
 ion-searchbar {
-  margin: 16px;
+  margin-top: 12px;
   --background: white;
   --border-radius: 12px;
   --box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -62,12 +73,9 @@ ion-searchbar {
   --color: black;
   --icon-color: black;
   --placeholder-color: black;
-  position: static !important;
-  top: auto !important;
-  z-index: auto !important;
 }
 
-/* ======= Tabela de Serviços ======= */
+/* ======= Tabela ======= */
 .tabela-wrapper {
   overflow-x: auto;
   padding: 0 16px;
@@ -78,7 +86,7 @@ ion-searchbar {
   border-radius: 12px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
   padding: 16px;
-  min-width: 600px;
+  min-width: 500px;
 }
 
 .tabela-header {
@@ -111,37 +119,29 @@ ion-searchbar {
   background: #f9f9f9;
 }
 
-.tabela-row:last-child {
-  border-bottom: none;
-}
-
 .tabela-row ion-col {
   padding: 14px;
   border-right: 1px solid #d1d1d1;
-  font-size: 16px;
   font-weight: 500;
-  color: black;
 }
 
 .tabela-row ion-col:last-child {
   border-right: none;
 }
 
-/* ======= Cores para status (Badges) ======= */
+/* ======= Badges ======= */
 ion-badge {
   font-size: 16px;
   padding: 6px 14px;
   border-radius: 15px;
   font-weight: bold;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
-  color: black;
 }
 
 ion-badge[color="danger"] {
   background-color: #ff3b30;
   color: white;
 }
-
 ion-badge[color="success"] {
   background-color: #28a745;
   color: white;
@@ -151,12 +151,10 @@ ion-badge[color="success"] {
 .desktop-view {
   display: block;
 }
-
 .mobile-view {
   display: none;
 }
 
-/* Em telas pequenas (mobile) */
 @media screen and (max-width: 768px) {
   .desktop-view {
     display: none;
@@ -166,11 +164,13 @@ ion-badge[color="success"] {
     display: block;
   }
 
+  .filtro-container {
+    padding: 12px;
+    margin: 10px;
+  }
+
   ion-searchbar {
-    margin: 0 10px;
-    position: static !important;
-    top: auto !important;
-    z-index: auto !important;
+    margin: 8px 0 0 0;
   }
 
   ion-card {
@@ -196,35 +196,4 @@ ion-badge[color="success"] {
   ion-button {
     margin-top: 8px;
   }
-}
-
-/* ======= Layout Responsivo ======= */
-.desktop-view {
-  display: block;
-}
-
-.mobile-view {
-  display: none;
-}
-
-/* Em telas pequenas (até 768px), esconde a tabela e mostra os cards */
-@media screen and (max-width: 768px) {
-  .desktop-view {
-    display: none;
-  }
-
-  .mobile-view {
-    display: block;
-  }
-}
-
-
-
-/* ======= Container com Padding Lateral para Segmento e Search ======= */
-.filtro-container {
-  padding: 16px;
-  margin: 16px;
-  background-color: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
