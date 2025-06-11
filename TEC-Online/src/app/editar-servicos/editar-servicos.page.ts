@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -17,8 +17,10 @@ import { environment } from 'src/environments/environment';
     IonicModule,
   ],
 })
-export class EditarServicosPage {
+export class EditarServicosPage implements OnInit {
   id: string | null = null;
+
+  // Campos do formulário
   dataServico: string = '';
   horaServico: string = '';
   status: string = 'aberto';
@@ -40,7 +42,7 @@ export class EditarServicosPage {
   ) {}
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('numero');
+    this.id = this.route.snapshot.paramMap.get('numero'); // ou 'id', conforme sua rota
     console.log("ID capturado da URL:", this.id);
     if (this.id) {
       this.carregarServico();
@@ -58,6 +60,7 @@ export class EditarServicosPage {
           return;
         }
 
+        // Preenchendo os campos
         this.dataServico = data.data ?? '';
         this.horaServico = data.horaServico ?? '';
         this.status = data.status ?? 'aberto';
@@ -115,13 +118,13 @@ export class EditarServicosPage {
   validarTelefone(event: any) {
     const input = event.target as HTMLInputElement;
     const valor = input.value.replace(/\D/g, '');
-    input.value = valor.slice(0, 9);
+    input.value = valor.slice(0, 11); // até 11 dígitos
     this.telefoneContato = input.value;
   }
 
   atualizarServico() {
     if (!this.isFormValid()) {
-      alert('Preencha todos os campos obrigatórios.');
+      alert('Preencha todos os campos obrigatórios e adicione ao menos uma imagem.');
       return;
     }
 
@@ -166,36 +169,22 @@ export class EditarServicosPage {
 
   isFormValid(): boolean {
     const camposObrigatorios = [
-      { nome: 'dataServico', valor: this.dataServico },
-      { nome: 'horaServico', valor: this.horaServico },
-      { nome: 'status', valor: this.status },
-      { nome: 'nomeCliente', valor: this.nomeCliente },
-      { nome: 'telefoneContato', valor: this.telefoneContato },
-      { nome: 'modeloAparelho', valor: this.modeloAparelho },
-      { nome: 'marcaAparelho', valor: this.marcaAparelho },
-      { nome: 'problemaCliente', valor: this.problemaCliente },
-      { nome: 'solucaoInicial', valor: this.solucaoInicial },
-      { nome: 'autorServico', valor: this.autorServico },
+      this.dataServico,
+      this.horaServico,
+      this.status,
+      this.nomeCliente,
+      this.telefoneContato,
+      this.modeloAparelho,
+      this.marcaAparelho,
+      this.problemaCliente,
+      this.solucaoInicial,
+      this.autorServico
     ];
 
-    const camposPreenchidos = camposObrigatorios.every((campo) => {
-      const valido = campo.valor && campo.valor.trim() !== '';
-      if (!valido) {
-        console.log(`Campo obrigatório não preenchido: ${campo.nome}`);
-      }
-      return valido;
-    });
-
+    const todosPreenchidos = camposObrigatorios.every(c => c && c.trim() !== '');
     const valorValido = this.valorTotal !== null && this.valorTotal >= 0;
-    if (!valorValido) {
-      console.log('Valor inválido:', { valorTotal: this.valorTotal });
-    }
+    const temImagem = this.imagens.length > 0;
 
-    const imagensValidas = this.imagens.length > 0;
-    if (!imagensValidas) {
-      console.log('Nenhuma imagem foi adicionada.');
-    }
-
-    return camposPreenchidos && valorValido && imagensValidas;
+    return todosPreenchidos && valorValido && temImagem;
   }
 }

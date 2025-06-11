@@ -22,15 +22,7 @@
 
       <div class="form-group">
         <ion-label position="stacked">Hora do Serviço *</ion-label>
-        <ion-datetime
-          displayFormat="HH:mm"
-          pickerFormat="HH:mm"
-          hourValues="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
-          minuteValues="00,15,30,45"
-          name="horaServico"
-          [(ngModel)]="horaServico"
-          required>
-        </ion-datetime>
+        <ion-input name="horaServico" [(ngModel)]="horaServico" required></ion-input>
       </div>
 
       <div class="form-group">
@@ -48,13 +40,7 @@
 
       <div class="form-group">
         <ion-label position="stacked">Contato *</ion-label>
-        <ion-input
-          name="telefoneContato"
-          type="tel"
-          maxlength="9"
-          [(ngModel)]="telefoneContato"
-          required>
-        </ion-input>
+        <ion-input name="telefoneContato" [(ngModel)]="telefoneContato" required></ion-input>
       </div>
 
       <div class="form-group">
@@ -79,7 +65,7 @@
 
       <div class="form-group">
         <ion-label position="stacked">Valor Total *</ion-label>
-        <ion-input name="valorTotal" type="number" min="0" [(ngModel)]="valorTotal" required></ion-input>
+        <ion-input name="valorTotal" type="number" [(ngModel)]="valorTotal" min="0" required></ion-input>
       </div>
 
       <div class="form-group full-width">
@@ -90,7 +76,6 @@
       <!-- Parte das Fotos -->
       <div class="form-group full-width">
         <ion-label position="stacked">Fotos do Serviço</ion-label>
-        <small>Clique em uma imagem para removê-la.</small>
         <div class="fotos-container">
           <div *ngFor="let img of imagens; let i = index" class="foto-item" (click)="removerFoto(i)">
             <img [src]="img" class="foto-preview" />
