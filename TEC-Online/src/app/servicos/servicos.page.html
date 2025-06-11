@@ -10,21 +10,25 @@
 </ion-header>
 
 <ion-content class="custom-background">
-  <!-- Segmento para Filtros -->
-  <ion-segment [(ngModel)]="filtroStatus" (ionChange)="filtrarServicos()" color="secondary">
-    <ion-segment-button value="todos">
-      <ion-label>Todos</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="aberto">
-      <ion-label>Abertos</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="fechado">
-      <ion-label>Fechados</ion-label>
-    </ion-segment-button>
-  </ion-segment>
 
-  <!-- Barra de Pesquisa -->
-  <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filtrarServicos()" debounce="500" placeholder="Buscar serviço..." animated></ion-searchbar>
+  <!-- Agrupamento com padding lateral -->
+  <div class="filtro-container">
+    <!-- Segmento para Filtros -->
+    <ion-segment [(ngModel)]="filtroStatus" (ionChange)="filtrarServicos()" color="secondary">
+      <ion-segment-button value="todos">
+        <ion-label>Todos</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="aberto">
+        <ion-label>Abertos</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="fechado">
+        <ion-label>Fechados</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <!-- Barra de Pesquisa -->
+    <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filtrarServicos()" debounce="500" placeholder="Buscar serviço..." animated></ion-searchbar>
+  </div>
 
   <!-- Layout Desktop -->
   <div class="desktop-view">
@@ -87,7 +91,7 @@
     <ion-card *ngFor="let servico of servicosFiltrados">
       <ion-card-header>
         <ion-card-title>Serviço Nº {{ servico.numero }}</ion-card-title>
-        <ion-card-subtitle>Status: 
+        <ion-card-subtitle>Status:
           <ion-badge [color]="servico.status === 'ABERTA' ? 'warning' : 'success'">{{ servico.status }}</ion-badge>
         </ion-card-subtitle>
       </ion-card-header>
