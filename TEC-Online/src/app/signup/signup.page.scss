@@ -163,38 +163,3 @@ ion-input {
   text-decoration: underline;
   font-size: 1.5rem;
 }
-
-/* ===== Adaptação para Telemóvel ===== */
-@media screen and (max-width: 480px) {
-  .center-content {
-    padding: 15px;
-    height: auto;
-  }
-
-  .app-logo {
-    width: 100px;
-    height: 100px;
-  }
-
-  h2 {
-    font-size: 1.6rem;
-    text-align: center;
-  }
-
-  .input-item,
-  ion-label,
-  ion-input,
-  .btn-animate,
-  .login-text,
-  .login-text a {
-    font-size: 1.2rem;
-  }
-
-  .btn-animate {
-    margin-top: 16px;
-  }
-
-  .login-text a:hover {
-    font-size: 1.3rem;
-  }
-}
