@@ -56,8 +56,10 @@ ion-content.custom-background {
   display: flex;
   gap: 16px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* centraliza */
   flex-wrap: wrap;
+  max-width: 620px; /* limita a largura do container flex */
+  margin: 0 auto; /* centraliza horizontalmente */
 }
 
 ion-segment {
@@ -212,8 +214,14 @@ ion-badge[color="warning"] {
 
   /* Empilha segmento e searchbar no mobile */
   .filtro-linha {
-    flex-direction: column;
-  }
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center; /* centraliza */
+  flex-wrap: wrap;
+  max-width: 620px; /* limita a largura do container flex */
+  margin: 0 auto; /* centraliza horizontalmente */
+}
 
   ion-searchbar,
   ion-segment {
