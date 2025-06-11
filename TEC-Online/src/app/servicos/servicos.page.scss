@@ -33,6 +33,14 @@ ion-content.custom-background {
   --color: black;
 }
 
+/* ======= Container Principal - para padding e esticar ======= */
+.container-principal {
+  padding: 16px;
+  width: 100%;
+  max-width: 1200px; /* limita no desktop */
+  margin: 0 auto; /* centraliza no desktop */
+}
+
 /* ======= Filtros ======= */
 .filtro-container {
   padding: 16px;
@@ -40,6 +48,7 @@ ion-content.custom-background {
   background-color: #f9f9f9;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  width: 100%; /* garante que ocupe toda a largura disponível */
 }
 
 /* Container flexível para segmento e busca lado a lado */
@@ -105,6 +114,7 @@ ion-searchbar {
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
   padding: 16px;
   min-width: 500px;
+  width: 100%; /* estica no container */
 }
 
 .tabela-header {
@@ -177,6 +187,7 @@ ion-badge[color="warning"] {
   display: none;
 }
 
+/* ======= Estilos para Mobile ======= */
 @media screen and (max-width: 768px) {
   .desktop-view {
     display: none;
@@ -184,11 +195,19 @@ ion-badge[color="warning"] {
 
   .mobile-view {
     display: block;
+    padding: 0 8px; /* espaço nas laterais */
+  }
+
+  .container-principal {
+    padding: 8px 12px;
+    margin: 0;
+    max-width: 100%; /* remove limite de largura no mobile */
   }
 
   .filtro-container {
-    padding: 12px;
-    margin: 10px;
+    padding: 12px 8px;
+    margin: 10px 0;
+    width: 100%; /* ocupa toda largura */
   }
 
   /* Empilha segmento e searchbar no mobile */
@@ -207,8 +226,9 @@ ion-badge[color="warning"] {
   }
 
   ion-card {
-    margin: 12px;
+    margin: 12px 0;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    width: 100%; /* estica o card */
   }
 
   ion-card-title {
