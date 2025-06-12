@@ -24,7 +24,7 @@ export class EditarServicosPage {
   horaServico: string = '';
   status: string = 'aberto';
   nomeCliente: string = '';
-  telefoneContato: string = '';
+  contatoCliente: string = '';
   modeloAparelho: string = '';
   marcaAparelho: string = '';
   problemaCliente: string = '';
@@ -65,10 +65,10 @@ export class EditarServicosPage {
         this.horaServico = data.horaServico ?? '';
         this.status = data.status ?? 'aberto';
         this.nomeCliente = data.nomeCompletoCliente ?? '';
-        this.telefoneContato = data.telefoneContato ?? '';
+        this.contatoCliente = data.contatoCliente ?? '';
         this.modeloAparelho = data.modeloAparelho ?? '';
         this.marcaAparelho = data.marcaAparelho ?? '';
-        this.problemaCliente = data.problemaCliente ?? '';
+        this.problemaCliente = data.problemaRelatado ?? '';
         this.solucaoInicial = data.solucaoInicial ?? '';
         this.valorTotal = data.valorTotal ?? 0;
         this.observacoes = data.observacoes ?? '';
@@ -119,7 +119,7 @@ export class EditarServicosPage {
     const input = event.target as HTMLInputElement;
     const valor = input.value.replace(/\D/g, '');
     input.value = valor.slice(0, 9);
-    this.telefoneContato = input.value;
+    this.contatoCliente = input.value;
   }
 
   atualizarServico() {
@@ -133,7 +133,7 @@ export class EditarServicosPage {
     formData.append('horaServico', this.horaServico);
     formData.append('status', this.status);
     formData.append('nomeCliente', this.nomeCliente);
-    formData.append('telefoneContato', this.telefoneContato);
+    formData.append('contatoCliente', this.contatoCliente);
     formData.append('modeloAparelho', this.modeloAparelho);
     formData.append('marcaAparelho', this.marcaAparelho);
     formData.append('problemaCliente', this.problemaCliente);
@@ -173,7 +173,7 @@ export class EditarServicosPage {
       { nome: 'horaServico', valor: this.horaServico },
       { nome: 'status', valor: this.status },
       { nome: 'nomeCliente', valor: this.nomeCliente },
-      { nome: 'telefoneContato', valor: this.telefoneContato },
+      { nome: 'contatoCliente', valor: this.contatoCliente },
       { nome: 'modeloAparelho', valor: this.modeloAparelho },
       { nome: 'marcaAparelho', valor: this.marcaAparelho },
       { nome: 'problemaCliente', valor: this.problemaCliente },
