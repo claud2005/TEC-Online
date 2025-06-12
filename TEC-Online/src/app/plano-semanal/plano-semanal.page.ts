@@ -24,7 +24,7 @@ export class PlanoSemanalPage implements OnInit {
   filteredServices: any[] = [];
   utilizadorName: string = 'Utilizador';
   searchQuery: string = '';
-  selectedDays: number = 7;
+  selectedDays: number | null = -1;
 
   constructor(
     private router: Router,
@@ -52,17 +52,26 @@ export class PlanoSemanalPage implements OnInit {
 
     this.http.get<any[]>(`${environment.api_url}/api/servicos`, { headers }).subscribe({
       next: (data) => {
-        this.servicos = data.map(servico => ({
-          nomeCliente: servico.cliente || 'Cliente não informado',
-          dataServico: servico.data || 'Data não agendada',
-          problemaCliente: servico.descricao || 'Problema não descrito',
-          horaServico: servico.horaServico || 'Horário não definido',
-          status: servico.status || '',
-          autorServico: servico.autorServico || '',
-          observacoes: servico.observacoes || '',
-          modeloAparelho: servico.modeloAparelho || '',
-          marcaAparelho: servico.marcaAparelho || '',
-        }));
+        this.servicos = data.map(servico => {
+          let statusAtual = servico.status?.toLowerCase() || '';
+
+          if (statusAtual === 'concluído') {
+            statusAtual = 'fechado';
+          }
+
+          return {
+            id: servico._id,
+            nomeCliente: servico.cliente || 'Cliente não informado',
+            dataServico: servico.data || 'Data não agendada',
+            problemaCliente: servico.descricao || 'Problema não descrito',
+            horaServico: servico.horaServico || 'Horário não definido',
+            status: statusAtual,
+            autorServico: servico.autorServico || '',
+            observacoes: servico.observacoes || '',
+            modeloAparelho: servico.modeloAparelho || '',
+            marcaAparelho: servico.marcaAparelho || '',
+          };
+        });
 
         this.servicos.sort((a, b) => {
           const dateA = new Date(a.dataServico).getTime();
@@ -70,9 +79,7 @@ export class PlanoSemanalPage implements OnInit {
           return dateA - dateB;
         });
 
-        this.filteredServices = [...this.servicos];
-        this.filterServices();
-        this.filterByDays();
+        this.aplicarFiltros();
       },
       error: (error) => {
         console.error('Erro ao carregar serviços:', error);
@@ -96,6 +103,7 @@ export class PlanoSemanalPage implements OnInit {
       case 'em andamento': return 'primary';
       case 'concluído': return 'success';
       case 'cancelado': return 'danger';
+      case 'fechado': return 'medium';
       default: return 'medium';
     }
   }
@@ -108,38 +116,64 @@ export class PlanoSemanalPage implements OnInit {
       return dataServico === selectedDate;
     });
 
-    this.selectedService = servicoEncontrado || {
+    this.selectedService = servicoEncontrado ? { ...servicoEncontrado } : {
+      id: null,
       nomeCliente: '',
       dataServico: selectedDate,
       horaServico: '',
       marcaAparelho: '',
       modeloAparelho: '',
       problemaCliente: '',
-      observacoes: ''
+      observacoes: '',
+      status: 'fechado'
     };
 
     this.modal.present();
   }
 
-  filterServices() {
+  aplicarFiltros() {
     const query = this.searchQuery.trim().toLowerCase();
-    this.filteredServices = this.servicos.filter(servico =>
-      servico.nomeCliente?.toLowerCase().includes(query)
+
+    let tempFiltered = this.servicos.filter(servico =>
+      servico.nomeCliente?.toLowerCase().includes(query) ||
+      servico.marcaAparelho?.toLowerCase().includes(query) ||
+      servico.modeloAparelho?.toLowerCase().includes(query) ||
+      servico.problemaCliente?.toLowerCase().includes(query)
     );
-    this.filterByDays();
+
+    this.filteredServices = this.filtrarPorHistorico(tempFiltered, this.selectedDays);
   }
 
-  filterByDays() {
-    if (this.selectedDays === 0) {
-      this.filteredServices = [...this.servicos];
-    } else {
-      const now = new Date();
-      this.filteredServices = this.filteredServices.filter(servico => {
+  filtrarPorHistorico(services: any[], dias: number | null): any[] {
+    if (dias === null || dias === undefined || dias === -1) {
+      return services;
+    }
+
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    if (dias === 0) {
+      return services.filter(servico => {
         const dataServico = new Date(servico.dataServico);
-        const diffDays = (dataServico.getTime() - now.getTime()) / (1000 * 3600 * 24);
-        return diffDays <= this.selectedDays;
+        dataServico.setHours(0, 0, 0, 0);
+        return dataServico.getTime() === hoje.getTime();
+      });
+    } else {
+      return services.filter(servico => {
+        const dataServico = new Date(servico.dataServico);
+        dataServico.setHours(0, 0, 0, 0);
+        const diffDias = (hoje.getTime() - dataServico.getTime()) / (1000 * 60 * 60 * 24);
+        return diffDias >= 0 && diffDias <= dias;
       });
     }
+  }
+
+  onSearchChange() {
+    this.aplicarFiltros();
+  }
+
+  onSelectedDaysChange() {
+    this.aplicarFiltros();
   }
 
   closeModal() {
@@ -163,7 +197,37 @@ export class PlanoSemanalPage implements OnInit {
   navigateToClientes() {
     this.router.navigate(['/gestor-clientes']);
   }
+
   navigateToCriarServicos() {
-  this.router.navigate(['/criar-servicos']);
+    this.router.navigate(['/criar-servicos']);
+  }
+
+  editarServico(id: string) {
+    if (id) {
+      this.modal.dismiss();
+      this.router.navigate(['/editar-servicos', id]);
+    } else {
+      alert('Serviço não possui ID para edição.');
+    }
+  }
+
+  alterarStatus(servico: any, novoStatus: string) {
+  const token = localStorage.getItem('token');
+  const headers = { 'Authorization': `Bearer ${token}` };
+
+  // Atualiza localmente
+  servico.status = novoStatus;
+
+  // Atualiza no servidor
+  this.http.patch(`${environment.api_url}/api/servicos/${servico.id}`, { status: novoStatus }, { headers })
+    .subscribe({
+      next: () => {
+        console.log(`Status do serviço ${servico.id} atualizado para: ${novoStatus}`);
+      },
+      error: (err) => {
+        console.error('Erro ao atualizar status:', err);
+        alert('Erro ao atualizar status no servidor.');
+      }
+    });
 }
 }

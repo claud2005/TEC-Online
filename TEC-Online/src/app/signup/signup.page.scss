@@ -7,15 +7,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  padding: 20px;
+  min-height: 100vh;
+  padding: 80px 20px 80px 20px; /* Aumentado o padding vertical para desktop */
   background: linear-gradient(135deg, #2c3e50, #3498db);
   overflow: hidden;
 }
 
 .logo-container {
   position: relative;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .app-logo {
@@ -63,6 +63,7 @@ h2 {
   color: white;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   animation: fadeIn 1.5s ease-in-out;
+  text-align: center;
 }
 
 @keyframes fadeIn {
@@ -163,3 +164,55 @@ ion-input {
   text-decoration: underline;
   font-size: 1.5rem;
 }
+
+/* ===== Adaptação para telemóvel ===== */
+@media screen and (max-width: 480px) {
+  .center-content {
+    padding: 50px 10px 100px 10px; /* mais padding em baixo e menor nas laterais */
+    min-height: 100vh; /* garantir que preenche a altura toda */
+    justify-content: flex-start; /* evita conteúdo muito ao centro num ecrã pequeno */
+  }
+
+  .logo-container {
+    margin-bottom: 20px;
+  }
+
+  .app-logo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .logo-shadow {
+    width: 70px;
+    height: 14px;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+
+  .input-item,
+  ion-label,
+  ion-input,
+  .btn-animate,
+  .login-text,
+  .login-text a {
+    font-size: 1.1rem;
+  }
+
+  .btn-animate {
+    margin-top: 14px;
+    padding: 10px 16px;
+    border-radius: 20px;
+  }
+
+  .login-text {
+    margin-top: 16px;
+  }
+
+  .login-text a:hover {
+    font-size: 1.2rem;
+  }
+}
+

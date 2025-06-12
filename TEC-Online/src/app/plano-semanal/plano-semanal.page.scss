@@ -369,3 +369,116 @@ ion-modal ion-fab-button {
 ion-modal ion-fab-button ion-icon {
   font-size: 2rem;
 }
+
+
+/* Ajustes para telas pequenas (celular) */
+@media (max-width: 480px) {
+  /* Cabeçalho */
+  .custom-toolbar {
+    height: 60px;
+    --min-height: 60px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .header-logo {
+  height: 50px;     /* aumenta a altura */
+  margin-left: 10px;
+  flex-shrink: 0;
+  width: auto;      /* mantém proporção */
+  object-fit: contain;
+  max-width: 100px; /* evita que fique muito larga */
+}
+
+  .header-title-container {
+    position: absolute; /* para centralizar no meio do toolbar */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    flex: none;
+    text-align: center;
+    max-width: 60%; /* evita que o texto ocupe todo o espaço */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .header-title {
+    font-size: 1.4rem;
+    color: white;
+    white-space: normal;
+    font-weight: 600;
+  }
+}
+
+
+  /* Menu lateral */
+  ion-menu.custom-menu {
+    --width: 240px;
+  }
+
+  /* Barra de pesquisa */
+  ion-searchbar, ion-select {
+    font-size: 1rem;
+    padding: 8px;
+    --border-radius: 15px;
+  }
+
+  /* Lista de tarefas */
+  .service-item {
+    --padding-start: 10px;
+    --padding-end: 10px;
+    margin-bottom: 10px;
+    --background: #fff;
+    border-radius: 10px;
+  }
+
+  .service-title {
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+  }
+
+  .service-details p {
+    font-size: 0.9rem;
+    margin: 3px 0;
+  }
+
+  .detail-icon {
+    font-size: 1rem;
+    margin-right: 6px;
+  }
+
+  /* Calendário */
+  ion-datetime {
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 15px;
+  }
+
+  /* Modal */
+  ion-modal {
+    --width: 95%;
+    --height: 80%;
+    --border-radius: 12px;
+  }
+
+  ion-modal ion-card-title {
+    font-size: 1.4rem;
+  }
+
+  ion-modal ion-card-content {
+    font-size: 1rem;
+  }
+
+  ion-modal ion-fab-button {
+    width: 50px;
+    height: 50px;
+  }
+
+  ion-modal ion-fab-button ion-icon {
+    font-size: 1.6rem;
+  }
+

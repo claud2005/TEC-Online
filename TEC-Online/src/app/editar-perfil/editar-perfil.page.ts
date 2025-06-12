@@ -168,4 +168,8 @@ export class EditarPerfilPage {
     localStorage.removeItem('perfil');
     this.router.navigate(['/home']);
   }
+  voltar() {
+  this.router.navigate(['/perfil']);
+}
+
 }
