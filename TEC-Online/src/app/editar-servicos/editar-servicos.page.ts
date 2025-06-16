@@ -169,20 +169,23 @@ export class EditarServicosPage {
   }
 
   // Método para abrir galeria e adicionar foto
-  async adicionarFoto() {
-    try {
-      const foto = await Camera.getPhoto({
-        quality: 80,
-        allowEditing: false,
-        resultType: CameraResultType.Base64,
-        source: CameraSource.Photos, // galeria do dispositivo
-      });
+async adicionarFoto() {
+  try {
+    const foto = await Camera.getPhoto({
+      quality: 80,
+      allowEditing: false,
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Photos,
+    });
 
-    } catch (error) {
-      console.error('Erro ao adicionar foto:', error);
+    if (foto?.base64String) {
+      const base64ComPrefixo = `data:image/jpeg;base64,${foto.base64String}`;
+      this.imagens.push(base64ComPrefixo);
     }
+  } catch (error) {
+    console.error('Erro ao adicionar foto:', error);
   }
-
+}
   // Remove a foto da lista pelo índice
   removerFoto(index: number) {
     this.imagens.splice(index, 1);
