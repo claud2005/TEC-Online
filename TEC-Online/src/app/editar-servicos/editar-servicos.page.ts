@@ -6,7 +6,7 @@ import { NavController, IonicModule } from '@ionic/angular';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
-// Import do Capacitor Camera
+// Import Capacitor Camera para abrir galeria do dispositivo
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
@@ -34,7 +34,7 @@ export class EditarServicosPage {
   valorTotal: number | null = null;
   observacoes: string = '';
   autorServico: string = '';
-  imagens: string[] = [];
+  imagens: string[] = []; // Array das imagens em base64 com prefixo data:image/jpeg;base64,
 
   constructor(
     private navController: NavController,
@@ -109,6 +109,7 @@ export class EditarServicosPage {
     formData.append('observacoes', this.observacoes.trim() || 'Sem observações');
     formData.append('autorServico', this.autorServico);
 
+    // Adiciona as imagens no formulário para envio
     this.imagens.forEach((base64) => {
       formData.append('imagens', base64);
     });
@@ -161,33 +162,28 @@ export class EditarServicosPage {
       console.log('Valor inválido:', { valorTotal: this.valorTotal });
     }
 
-    // REMOVIDO obrigatoriedade de imagens:
-    // const imagensValidas = this.imagens.length > 0;
-    // if (!imagensValidas) {
-    //   console.log('Nenhuma imagem foi adicionada.');
-    // }
+    // NÃO torna obrigatório ter fotos:
+    // Não checamos se this.imagens está vazio
 
     return camposPreenchidos && valorValido;
   }
 
+  // Método para abrir galeria e adicionar foto
   async adicionarFoto() {
     try {
       const foto = await Camera.getPhoto({
         quality: 80,
         allowEditing: false,
         resultType: CameraResultType.Base64,
-        source: CameraSource.Photos, // abre a galeria para escolher foto
+        source: CameraSource.Photos, // galeria do dispositivo
       });
 
-      if (foto && foto.base64String) {
-        // prefixo base64 para mostrar a imagem direto
-        this.imagens.push(`data:image/jpeg;base64,${foto.base64String}`);
-      }
     } catch (error) {
       console.error('Erro ao adicionar foto:', error);
     }
   }
 
+  // Remove a foto da lista pelo índice
   removerFoto(index: number) {
     this.imagens.splice(index, 1);
   }
