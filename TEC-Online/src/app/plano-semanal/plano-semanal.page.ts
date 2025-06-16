@@ -2,7 +2,7 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, IonModal, MenuController } from '@ionic/angular';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
@@ -30,17 +30,14 @@ export class PlanoSemanalPage implements OnInit {
     private router: Router,
     private http: HttpClient,
     private menuCtrl: MenuController
-  ) {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd && event.url === '/plano-semanal') {
-        this.carregarServicos();
-      }
-    });
-  }
+  ) {}
 
   ngOnInit() {
     this.atualizarNomeUtilizador();
-    this.carregarServicos();
+  }
+
+  ionViewWillEnter() {
+    this.carregarServicos();  // ⚠️ Atualiza SEMPRE que volta para esta página
   }
 
   closeMenu() {
@@ -60,11 +57,9 @@ export class PlanoSemanalPage implements OnInit {
       next: (data) => {
         this.servicos = data.map(servico => {
           let statusAtual = servico.status?.toLowerCase() || '';
-
           if (statusAtual === 'concluído') {
             statusAtual = 'fechado';
           }
-
           return {
             id: servico._id,
             nomeCliente: servico.cliente || 'Cliente não informado',
@@ -101,40 +96,6 @@ export class PlanoSemanalPage implements OnInit {
     } catch {
       return 'Data inválida';
     }
-  }
-
-  getStatusColor(status: string): string {
-    switch (status?.toLowerCase()) {
-      case 'aberto': return 'warning';
-      case 'em andamento': return 'primary';
-      case 'concluído': return 'success';
-      case 'cancelado': return 'danger';
-      case 'fechado': return 'medium';
-      default: return 'medium';
-    }
-  }
-
-  openModal(event: any) {
-    const selectedDate = new Date(event.detail.value).toDateString();
-
-    const servicoEncontrado = this.servicos.find(servico => {
-      const dataServico = new Date(servico.dataServico).toDateString();
-      return dataServico === selectedDate;
-    });
-
-    this.selectedService = servicoEncontrado ? { ...servicoEncontrado } : {
-      id: null,
-      nomeCliente: '',
-      dataServico: selectedDate,
-      horaServico: '',
-      marcaAparelho: '',
-      modeloAparelho: '',
-      problemaCliente: '',
-      observacoes: '',
-      status: 'fechado'
-    };
-
-    this.modal.present();
   }
 
   aplicarFiltros() {
@@ -185,6 +146,29 @@ export class PlanoSemanalPage implements OnInit {
   closeModal() {
     this.modal.dismiss();
     this.selectedService = null;
+  }
+
+  openModal(event: any) {
+    const selectedDate = new Date(event.detail.value).toDateString();
+
+    const servicoEncontrado = this.servicos.find(servico => {
+      const dataServico = new Date(servico.dataServico).toDateString();
+      return dataServico === selectedDate;
+    });
+
+    this.selectedService = servicoEncontrado ? { ...servicoEncontrado } : {
+      id: null,
+      nomeCliente: '',
+      dataServico: selectedDate,
+      horaServico: '',
+      marcaAparelho: '',
+      modeloAparelho: '',
+      problemaCliente: '',
+      observacoes: '',
+      status: 'fechado'
+    };
+
+    this.modal.present();
   }
 
   navigateToOtherPage() {
