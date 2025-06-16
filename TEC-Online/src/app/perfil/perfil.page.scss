@@ -1,13 +1,13 @@
 /* 🌟 Estilização Geral */
 ion-content {
-  --background: linear-gradient(135deg, #264653, #4b0082); /* Azul-petróleo + Roxo escuro */
+  --background: linear-gradient(135deg, #facc15, #3b82f6, #8b5cf6); /* amarelo, azul, roxo */
   padding: 20px;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: #f1f1f1;
+  color: #ffffff; /* branco para contraste com fundo escuro */
   font-family: 'Segoe UI', sans-serif;
 }
 
