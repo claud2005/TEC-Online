@@ -61,7 +61,7 @@ export class EditarServicosPage {
           return;
         }
 
-        this.dataServico = data.data ?? '';
+        this.dataServico = data.dataServico ?? '';
         this.horaServico = data.horaServico ?? '';
         this.status = data.status ?? 'aberto';
         this.nomeCliente = data.nomeCompletoCliente ?? '';
@@ -82,49 +82,14 @@ export class EditarServicosPage {
     );
   }
 
-  async adicionarFoto() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.click();
-  
-    input.onchange = async (event: any) => {
-      const file = event.target.files[0];
-      if (file) {
-        if (!file.type.startsWith('image/')) {
-          alert('Por favor, selecione uma imagem válida.');
-          return;
-        }
-
-        const base64 = await this.convertToBase64(file);
-        this.imagens.push(base64);
-      }
-    };
-  }
-
-  async convertToBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
-
-  removerFoto(index: number) {
-    this.imagens.splice(index, 1);
-  }
-
-  validarTelefone(event: any) {
-    const input = event.target as HTMLInputElement;
-    const valor = input.value.replace(/\D/g, '');
-    input.value = valor.slice(0, 9);
-    this.contatoCliente = input.value;
-  }
-
   atualizarServico() {
     if (!this.isFormValid()) {
       alert('Preencha todos os campos obrigatórios.');
+      return;
+    }
+
+    if (!/^\d{2}:\d{2}$/.test(this.horaServico)) {
+      alert('Hora inválida. Use o formato HH:mm');
       return;
     }
 
@@ -200,5 +165,19 @@ export class EditarServicosPage {
     }
 
     return camposPreenchidos && valorValido && imagensValidas;
+  }
+
+  // ================== NOVOS MÉTODOS ===================
+
+  removerFoto(index: number) {
+    if (index >= 0 && index < this.imagens.length) {
+      this.imagens.splice(index, 1);
+    }
+  }
+
+  adicionarFoto() {
+    // Exemplo simples para teste - adiciona uma imagem placeholder
+    const placeholderImage = 'https://via.placeholder.com/150';
+    this.imagens.push(placeholderImage);
   }
 }
