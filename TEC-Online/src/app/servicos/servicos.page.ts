@@ -98,28 +98,77 @@ export class ServicosPage implements OnInit {
   }
 
   gerarPDF(servico: Servico) {
-    const doc = new jsPDF();
-    doc.setFontSize(16);
-    doc.text('Detalhes do Serviço', 10, 10);
-    doc.setFontSize(12);
+  const doc = new jsPDF({
+    unit: 'mm',
+    format: 'a4',
+  });
 
-    doc.text(`Número: ${servico.numero}`, 10, 20);
-    doc.text(`Cliente: ${servico.nomeCompletoCliente}`, 10, 30);
-    doc.text(`Contacto: ${servico.contatoCliente}`, 10, 50);
-    doc.text(`Modelo do Aparelho: ${servico.modeloAparelho}`, 10, 60);
-    doc.text(`Marca do Aparelho: ${servico.marcaAparelho}`, 10, 70);
-    doc.text(`Problema Relatado: ${servico.problemaRelatado}`, 10, 90);
-    doc.text(`Solução Inicial: ${servico.solucaoInicial}`, 10, 100);
-    doc.text(`Valor Total: € ${parseFloat(servico.valorTotal).toFixed(2)}`, 10, 110);
-    doc.text(`Descrição: ${servico.descricao}`, 10, 120);
-    doc.text(`Responsável: ${servico.responsavel}`, 10, 130);
-    doc.text(`Observações: ${servico.observacoes}`, 10, 140);
+  const leftMargin = 15;
+  let verticalPos = 20;
+  const lineHeight = 8;
+  const pageWidth = doc.internal.pageSize.getWidth();
 
-    if (servico.dataConclusao) doc.text(`Data de Conclusão: ${servico.dataConclusao}`, 10, 150);
-    if (servico.custoEstimado) doc.text(`Custo Estimado: R$ ${parseFloat(servico.custoEstimado).toFixed(2)}`, 10, 160);
-
-    doc.save(`Servico_${servico.numero}.pdf`);
+  // Função auxiliar para quebrar texto longo
+  function addMultilineText(text: string, x: number, y: number, maxWidth: number) {
+    const splitText = doc.splitTextToSize(text, maxWidth);
+    doc.text(splitText, x, y);
+    return splitText.length * lineHeight;
   }
+
+  // Cabeçalho com título
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(20);
+  doc.setTextColor('#007aff');
+  doc.text('Detalhes do Serviço', pageWidth / 2, verticalPos, { align: 'center' });
+  verticalPos += lineHeight + 4;
+
+  // Linha horizontal decorativa
+  doc.setDrawColor('#007aff');
+  doc.setLineWidth(0.7);
+  doc.line(leftMargin, verticalPos, pageWidth - leftMargin, verticalPos);
+  verticalPos += 6;
+
+  // Conteúdo - título e valores
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor('#333');
+
+  // Helper para imprimir label + valor formatado
+  function printLabelValue(label: string, value: string) {
+    doc.text(label + ':', leftMargin, verticalPos);
+    const valueWidth = pageWidth - leftMargin * 2 - 40;
+    doc.setFont('helvetica', 'normal');
+    verticalPos += addMultilineText(value, leftMargin + 40, verticalPos - lineHeight, valueWidth);
+    doc.setFont('helvetica', 'bold');
+  }
+
+  printLabelValue('Número', servico.numero);
+  printLabelValue('Cliente', servico.nomeCompletoCliente);
+  printLabelValue('Contato', servico.contatoCliente);
+  printLabelValue('Modelo do Aparelho', servico.modeloAparelho);
+  printLabelValue('Marca do Aparelho', servico.marcaAparelho);
+  printLabelValue('Problema Relatado', servico.problemaRelatado);
+  printLabelValue('Solução Inicial', servico.solucaoInicial);
+  printLabelValue('Valor Total', `€ ${parseFloat(servico.valorTotal).toFixed(2)}`);
+  printLabelValue('Descrição', servico.descricao);
+  printLabelValue('Responsável', servico.responsavel);
+  printLabelValue('Observações', servico.observacoes);
+
+  if (servico.dataConclusao) printLabelValue('Data de Conclusão', servico.dataConclusao);
+  if (servico.custoEstimado) printLabelValue('Custo Estimado', `€ ${parseFloat(servico.custoEstimado).toFixed(2)}`);
+
+  // Rodapé com paginação e data atual
+  const pageHeight = doc.internal.pageSize.getHeight();
+  doc.setFontSize(10);
+  doc.setTextColor('#666');
+  const now = new Date().toLocaleString();
+  doc.text(`Gerado em: ${now}`, leftMargin, pageHeight - 10);
+  doc.text(`Página 1`, pageWidth - leftMargin, pageHeight - 10, { align: 'right' });
+
+  // Salvar o PDF
+  doc.save(`Servico_${servico.numero}.pdf`);
+}
+
 
   filtrarServicos() {
     this.servicosFiltrados = this.servicos.filter(servico => {
