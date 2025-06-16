@@ -161,10 +161,6 @@ export class EditarServicosPage {
     if (!valorValido) {
       console.log('Valor inválido:', { valorTotal: this.valorTotal });
     }
-
-    // NÃO torna obrigatório ter fotos:
-    // Não checamos se this.imagens está vazio
-
     return camposPreenchidos && valorValido;
   }
 
