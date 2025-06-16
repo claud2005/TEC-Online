@@ -3,9 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, IonicModule } from '@ionic/angular';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+
+// Import do Capacitor Camera
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
   selector: 'app-editar-servicos',
@@ -41,7 +43,7 @@ export class EditarServicosPage {
   ) {}
 
   ngOnInit() {
-    let rawId = this.route.snapshot.paramMap.get('numero');
+    const rawId = this.route.snapshot.paramMap.get('numero');
     this.id = rawId;
 
     console.log("ID capturado da URL:", rawId);
@@ -159,25 +161,34 @@ export class EditarServicosPage {
       console.log('Valor inválido:', { valorTotal: this.valorTotal });
     }
 
-    const imagensValidas = this.imagens.length > 0;
-    if (!imagensValidas) {
-      console.log('Nenhuma imagem foi adicionada.');
-    }
+    // REMOVIDO obrigatoriedade de imagens:
+    // const imagensValidas = this.imagens.length > 0;
+    // if (!imagensValidas) {
+    //   console.log('Nenhuma imagem foi adicionada.');
+    // }
 
-    return camposPreenchidos && valorValido && imagensValidas;
+    return camposPreenchidos && valorValido;
   }
 
-  // ================== NOVOS MÉTODOS ===================
+  async adicionarFoto() {
+    try {
+      const foto = await Camera.getPhoto({
+        quality: 80,
+        allowEditing: false,
+        resultType: CameraResultType.Base64,
+        source: CameraSource.Photos, // abre a galeria para escolher foto
+      });
+
+      if (foto && foto.base64String) {
+        // prefixo base64 para mostrar a imagem direto
+        this.imagens.push(`data:image/jpeg;base64,${foto.base64String}`);
+      }
+    } catch (error) {
+      console.error('Erro ao adicionar foto:', error);
+    }
+  }
 
   removerFoto(index: number) {
-    if (index >= 0 && index < this.imagens.length) {
-      this.imagens.splice(index, 1);
-    }
-  }
-
-  adicionarFoto() {
-    // Exemplo simples para teste - adiciona uma imagem placeholder
-    const placeholderImage = 'https://via.placeholder.com/150';
-    this.imagens.push(placeholderImage);
+    this.imagens.splice(index, 1);
   }
 }
