@@ -1,15 +1,16 @@
 /* 🌟 Estilização Geral */
 ion-content {
-  --background: linear-gradient(135deg, #6a11cb, #2575fc);
+  --background: linear-gradient(135deg, #d4d4d4, #a1a1aa); /* cinza claro para médio */
   padding: 20px;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: #f1f1f1;
+  color: #1e1e1e; /* texto mais escuro para melhor contraste */
   font-family: 'Segoe UI', sans-serif;
 }
+
 
 
 /* 📌 Container Central */
