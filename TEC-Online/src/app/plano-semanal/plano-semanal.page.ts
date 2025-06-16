@@ -2,7 +2,7 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, IonModal, MenuController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
@@ -30,7 +30,13 @@ export class PlanoSemanalPage implements OnInit {
     private router: Router,
     private http: HttpClient,
     private menuCtrl: MenuController
-  ) {}
+  ) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd && event.url === '/plano-semanal') {
+        this.carregarServicos();
+      }
+    });
+  }
 
   ngOnInit() {
     this.atualizarNomeUtilizador();
@@ -212,22 +218,20 @@ export class PlanoSemanalPage implements OnInit {
   }
 
   alterarStatus(servico: any, novoStatus: string) {
-  const token = localStorage.getItem('token');
-  const headers = { 'Authorization': `Bearer ${token}` };
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
 
-  // Atualiza localmente
-  servico.status = novoStatus;
+    servico.status = novoStatus;
 
-  // Atualiza no servidor
-  this.http.patch(`${environment.api_url}/api/servicos/${servico.id}`, { status: novoStatus }, { headers })
-    .subscribe({
-      next: () => {
-        console.log(`Status do serviço ${servico.id} atualizado para: ${novoStatus}`);
-      },
-      error: (err) => {
-        console.error('Erro ao atualizar status:', err);
-        alert('Erro ao atualizar status no servidor.');
-      }
-    });
-}
+    this.http.patch(`${environment.api_url}/api/servicos/${servico.id}`, { status: novoStatus }, { headers })
+      .subscribe({
+        next: () => {
+          console.log(`Status do serviço ${servico.id} atualizado para: ${novoStatus}`);
+        },
+        error: (err) => {
+          console.error('Erro ao atualizar status:', err);
+          alert('Erro ao atualizar status no servidor.');
+        }
+      });
+  }
 }
