@@ -34,7 +34,10 @@ export class PlanoSemanalPage implements OnInit {
 
   ngOnInit() {
     this.atualizarNomeUtilizador();
-    this.carregarServicos();
+  }
+
+  ionViewWillEnter() {
+    this.carregarServicos();  // ⚠️ Atualiza SEMPRE que volta para esta página
   }
 
   closeMenu() {
@@ -54,11 +57,9 @@ export class PlanoSemanalPage implements OnInit {
       next: (data) => {
         this.servicos = data.map(servico => {
           let statusAtual = servico.status?.toLowerCase() || '';
-
           if (statusAtual === 'concluído') {
             statusAtual = 'fechado';
           }
-
           return {
             id: servico._id,
             nomeCliente: servico.cliente || 'Cliente não informado',
@@ -95,40 +96,6 @@ export class PlanoSemanalPage implements OnInit {
     } catch {
       return 'Data inválida';
     }
-  }
-
-  getStatusColor(status: string): string {
-    switch (status?.toLowerCase()) {
-      case 'aberto': return 'warning';
-      case 'em andamento': return 'primary';
-      case 'concluído': return 'success';
-      case 'cancelado': return 'danger';
-      case 'fechado': return 'medium';
-      default: return 'medium';
-    }
-  }
-
-  openModal(event: any) {
-    const selectedDate = new Date(event.detail.value).toDateString();
-
-    const servicoEncontrado = this.servicos.find(servico => {
-      const dataServico = new Date(servico.dataServico).toDateString();
-      return dataServico === selectedDate;
-    });
-
-    this.selectedService = servicoEncontrado ? { ...servicoEncontrado } : {
-      id: null,
-      nomeCliente: '',
-      dataServico: selectedDate,
-      horaServico: '',
-      marcaAparelho: '',
-      modeloAparelho: '',
-      problemaCliente: '',
-      observacoes: '',
-      status: 'fechado'
-    };
-
-    this.modal.present();
   }
 
   aplicarFiltros() {
@@ -181,6 +148,29 @@ export class PlanoSemanalPage implements OnInit {
     this.selectedService = null;
   }
 
+  openModal(event: any) {
+    const selectedDate = new Date(event.detail.value).toDateString();
+
+    const servicoEncontrado = this.servicos.find(servico => {
+      const dataServico = new Date(servico.dataServico).toDateString();
+      return dataServico === selectedDate;
+    });
+
+    this.selectedService = servicoEncontrado ? { ...servicoEncontrado } : {
+      id: null,
+      nomeCliente: '',
+      dataServico: selectedDate,
+      horaServico: '',
+      marcaAparelho: '',
+      modeloAparelho: '',
+      problemaCliente: '',
+      observacoes: '',
+      status: 'fechado'
+    };
+
+    this.modal.present();
+  }
+
   navigateToOtherPage() {
     this.modal.dismiss();
     this.router.navigate(['/criar-servicos']);
@@ -212,22 +202,20 @@ export class PlanoSemanalPage implements OnInit {
   }
 
   alterarStatus(servico: any, novoStatus: string) {
-  const token = localStorage.getItem('token');
-  const headers = { 'Authorization': `Bearer ${token}` };
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
 
-  // Atualiza localmente
-  servico.status = novoStatus;
+    servico.status = novoStatus;
 
-  // Atualiza no servidor
-  this.http.patch(`${environment.api_url}/api/servicos/${servico.id}`, { status: novoStatus }, { headers })
-    .subscribe({
-      next: () => {
-        console.log(`Status do serviço ${servico.id} atualizado para: ${novoStatus}`);
-      },
-      error: (err) => {
-        console.error('Erro ao atualizar status:', err);
-        alert('Erro ao atualizar status no servidor.');
-      }
-    });
-}
+    this.http.patch(`${environment.api_url}/api/servicos/${servico.id}`, { status: novoStatus }, { headers })
+      .subscribe({
+        next: () => {
+          console.log(`Status do serviço ${servico.id} atualizado para: ${novoStatus}`);
+        },
+        error: (err) => {
+          console.error('Erro ao atualizar status:', err);
+          alert('Erro ao atualizar status no servidor.');
+        }
+      });
+  }
 }
