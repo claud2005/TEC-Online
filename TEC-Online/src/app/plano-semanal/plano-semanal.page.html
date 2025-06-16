@@ -28,6 +28,13 @@
         <ion-icon slot="start" name="add-circle"></ion-icon>
         <ion-label>Criar Serviço</ion-label>
       </ion-item>
+
+      <!-- Novo botão Adicionar Cliente -->
+      <ion-item button (click)="navigateToAdicionarCliente()">
+        <ion-icon slot="start" name="person-add"></ion-icon>
+        <ion-label>Adicionar Cliente</ion-label>
+      </ion-item>
+      
     </ion-list>
   </ion-content>
 </ion-menu>
@@ -62,7 +69,6 @@
           <ion-select [(ngModel)]="selectedDays" interface="popover" (ionChange)="onSelectedDaysChange()">
             <ion-select-option [value]="-1">Mostrar todos</ion-select-option>
             <ion-select-option [value]="0">Hoje</ion-select-option>
-            <ion-select-option [value]="5">Últimos 5 dias</ion-select-option>
             <ion-select-option [value]="7">Últimos 7 dias</ion-select-option>
             <ion-select-option [value]="15">Últimos 15 dias</ion-select-option>
             <ion-select-option [value]="30">Últimos 30 dias</ion-select-option>

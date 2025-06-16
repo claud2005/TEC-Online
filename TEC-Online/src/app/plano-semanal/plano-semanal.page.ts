@@ -192,6 +192,10 @@ export class PlanoSemanalPage implements OnInit {
     this.router.navigate(['/criar-servicos']);
   }
 
+  navigateToAdicionarCliente() {
+  this.router.navigate(['/adicionar-cliente']);
+}
+
   editarServico(id: string) {
     if (id) {
       this.modal.dismiss();
