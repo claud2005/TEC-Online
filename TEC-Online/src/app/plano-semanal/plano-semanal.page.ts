@@ -24,7 +24,7 @@ export class PlanoSemanalPage implements OnInit {
   filteredServices: any[] = [];
   utilizadorName: string = 'Utilizador';
   searchQuery: string = '';
-  selectedDays: number | null = -1;
+  selectedFilter: number | string = -1; // -1=todos, 0=hoje, 7, 15, 30, 'aberto', 'fechado'
 
   constructor(
     private router: Router,
@@ -37,7 +37,7 @@ export class PlanoSemanalPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.carregarServicos();  // ⚠️ Atualiza SEMPRE que volta para esta página
+    this.carregarServicos();
   }
 
   closeMenu() {
@@ -57,9 +57,7 @@ export class PlanoSemanalPage implements OnInit {
       next: (data) => {
         this.servicos = data.map(servico => {
           let statusAtual = servico.status?.toLowerCase() || '';
-          if (statusAtual === 'concluído') {
-            statusAtual = 'fechado';
-          }
+          if (statusAtual === 'concluído') statusAtual = 'fechado';
           return {
             id: servico._id,
             nomeCliente: servico.cliente || 'Cliente não informado',
@@ -75,9 +73,7 @@ export class PlanoSemanalPage implements OnInit {
         });
 
         this.servicos.sort((a, b) => {
-          const dateA = new Date(a.dataServico).getTime();
-          const dateB = new Date(b.dataServico).getTime();
-          return dateA - dateB;
+          return new Date(a.dataServico).getTime() - new Date(b.dataServico).getTime();
         });
 
         this.aplicarFiltros();
@@ -100,46 +96,41 @@ export class PlanoSemanalPage implements OnInit {
 
   aplicarFiltros() {
     const query = this.searchQuery.trim().toLowerCase();
-
-    let tempFiltered = this.servicos.filter(servico =>
-      servico.nomeCliente?.toLowerCase().includes(query) ||
-      servico.marcaAparelho?.toLowerCase().includes(query) ||
-      servico.modeloAparelho?.toLowerCase().includes(query) ||
-      servico.problemaCliente?.toLowerCase().includes(query)
-    );
-
-    this.filteredServices = this.filtrarPorHistorico(tempFiltered, this.selectedDays);
-  }
-
-  filtrarPorHistorico(services: any[], dias: number | null): any[] {
-    if (dias === null || dias === undefined || dias === -1) {
-      return services;
-    }
-
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
 
-    if (dias === 0) {
-      return services.filter(servico => {
+    this.filteredServices = this.servicos.filter(servico => {
+      const matchesQuery =
+        servico.nomeCliente?.toLowerCase().includes(query) ||
+        servico.marcaAparelho?.toLowerCase().includes(query) ||
+        servico.modeloAparelho?.toLowerCase().includes(query) ||
+        servico.problemaCliente?.toLowerCase().includes(query);
+
+      let matchesFilter = true;
+
+      if (typeof this.selectedFilter === 'number' && this.selectedFilter >= 0) {
         const dataServico = new Date(servico.dataServico);
         dataServico.setHours(0, 0, 0, 0);
-        return dataServico.getTime() === hoje.getTime();
-      });
-    } else {
-      return services.filter(servico => {
-        const dataServico = new Date(servico.dataServico);
-        dataServico.setHours(0, 0, 0, 0);
-        const diffDias = (hoje.getTime() - dataServico.getTime()) / (1000 * 60 * 60 * 24);
-        return diffDias >= 0 && diffDias <= dias;
-      });
-    }
+
+        if (this.selectedFilter === 0) {
+          matchesFilter = dataServico.getTime() === hoje.getTime();
+        } else {
+          const diffDias = (hoje.getTime() - dataServico.getTime()) / (1000 * 60 * 60 * 24);
+          matchesFilter = diffDias >= 0 && diffDias <= this.selectedFilter;
+        }
+      } else if (typeof this.selectedFilter === 'string') {
+        matchesFilter = servico.status === this.selectedFilter;
+      }
+
+      return matchesQuery && matchesFilter;
+    });
   }
 
   onSearchChange() {
     this.aplicarFiltros();
   }
 
-  onSelectedDaysChange() {
+  onSelectedFilterChange() {
     this.aplicarFiltros();
   }
 
@@ -190,6 +181,10 @@ export class PlanoSemanalPage implements OnInit {
 
   navigateToCriarServicos() {
     this.router.navigate(['/criar-servicos']);
+  }
+
+  navigateToAdicionarCliente() {
+    this.router.navigate(['/adicionar-cliente']);
   }
 
   editarServico(id: string) {

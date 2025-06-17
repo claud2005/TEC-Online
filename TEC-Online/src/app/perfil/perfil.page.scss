@@ -152,7 +152,7 @@ ion-button.footer-button {
   left: 20px;
   top: 20px;
   background: none;
-  color: #facc15;
+  color: #000000;  /* Preto */
   font-size: 18px;
   border: none;
   cursor: pointer;
@@ -161,6 +161,7 @@ ion-button.footer-button {
   gap: 6px;
   transition: opacity 0.3s ease;
 }
+
 
 .back-button:hover {
   opacity: 0.7;

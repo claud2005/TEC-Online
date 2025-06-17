@@ -42,10 +42,6 @@ export class GestorClientesPage implements OnInit {
     );
   }
 
-  adicionarCliente() {
-    this.navCtrl.navigateForward('/adicionar-cliente');
-  }
-
   voltar() {
     this.navCtrl.back();
   }
