@@ -79,7 +79,6 @@ export class GestorClientesPage implements OnInit {
         {
           text: 'Excluir',
           handler: () => {
-            // Aqui pode ser interessante chamar o serviço para excluir no backend também
             this.clienteService.deletarCliente(cliente._id).subscribe({
               next: () => {
                 this.clientes = this.clientes.filter(c => c._id !== cliente._id);
@@ -97,6 +96,10 @@ export class GestorClientesPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  verOrcamentos(cliente: any) {
+    this.navCtrl.navigateForward(`/orcamentos-clientes/${cliente._id}`);
   }
 
   private async showAlert(header: string, message: string) {
