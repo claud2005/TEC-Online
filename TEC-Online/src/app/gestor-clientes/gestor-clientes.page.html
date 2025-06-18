@@ -6,12 +6,12 @@
       </ion-button>
     </ion-buttons>
     <ion-title class="center-title">Gestor de Clientes</ion-title>
-    <ion-buttons slot="end">
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding conteudo-branco">
+
+  <!-- Barra de pesquisa -->
   <ion-searchbar [(ngModel)]="filtro" placeholder="Pesquisar..." (ionInput)="filtrarClientes()" debounce="300"></ion-searchbar>
 
   <!-- Layout para ecrãs grandes -->
@@ -25,19 +25,17 @@
       <ion-col size="2"><strong>Ações</strong></ion-col>
     </ion-row>
 
-    <ion-row *ngFor="let cliente of clientesFiltrados">
+    <ion-row *ngFor="let cliente of clientesFiltrados" class="table-row" (click)="verOrcamentos(cliente)">
       <ion-col size="2">{{ cliente.codigoCliente }}</ion-col>
-      <ion-col size="2">
-        <span (click)="verOrcamentos(cliente)" class="link-cliente">{{ cliente.nome }}</span>
-      </ion-col>
+      <ion-col size="2">{{ cliente.nome }}</ion-col>
       <ion-col size="2">{{ cliente.contacto }}</ion-col>
       <ion-col size="2">{{ cliente.email }}</ion-col>
       <ion-col size="2">{{ cliente.morada }}</ion-col>
       <ion-col size="2">
-        <ion-button color="primary" size="small" fill="clear" (click)="editarCliente(cliente)">
+        <ion-button color="primary" size="small" fill="clear" (click)="editarCliente(cliente); $event.stopPropagation()">
           <ion-icon name="create-outline"></ion-icon>
         </ion-button>
-        <ion-button color="danger" size="small" fill="clear" (click)="excluirCliente(cliente)">
+        <ion-button color="danger" size="small" fill="clear" (click)="excluirCliente(cliente); $event.stopPropagation()">
           <ion-icon name="trash-outline"></ion-icon>
         </ion-button>
       </ion-col>
@@ -64,4 +62,5 @@
       </ion-card-content>
     </ion-card>
   </div>
+
 </ion-content>
