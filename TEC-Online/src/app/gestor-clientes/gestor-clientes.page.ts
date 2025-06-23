@@ -18,6 +18,7 @@ export class GestorClientesPage implements OnInit {
   filtro: string = '';
   clientes: any[] = [];
   clientesFiltrados: any[] = [];
+  router: any;
 
   constructor(
     private alertController: AlertController,
@@ -94,9 +95,9 @@ export class GestorClientesPage implements OnInit {
     await alert.present();
   }
 
-  verOrcamentos(cliente: any) {
-    this.navCtrl.navigateForward(`/orcamentos-clientes/${cliente._id}`);
-  }
+verOrcamentos(cliente: any) {
+  this.router.navigate([`/orcamentos-clientes/${cliente._id}`]);
+}
 
   private async showAlert(header: string, message: string) {
     const alert = await this.alertController.create({
