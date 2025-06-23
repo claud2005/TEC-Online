@@ -78,9 +78,8 @@ export class OrcamentosClientesPage implements OnInit {
     });
   }
 
-  abrirOrcamento(orcamento: any) {
-    console.log('Orçamento selecionado:', orcamento);
-    // Exemplo de navegação — ajuste a rota conforme sua aplicação
-    this.router.navigate(['/orcamento-detalhes', orcamento.id]);
+  abrirOrcamento(orcamentoId: string) {
+    // Ajusta a rota para a página de detalhes do orçamento (muda conforme tua rota real)
+    this.router.navigate(['/orcamento-detalhe', orcamentoId]);
   }
 }
