@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, NavController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 // Importa o serviço
 import { ClienteService } from '../services/cliente.service';
@@ -18,12 +19,11 @@ export class GestorClientesPage implements OnInit {
   filtro: string = '';
   clientes: any[] = [];
   clientesFiltrados: any[] = [];
-  router: any;
 
   constructor(
     private alertController: AlertController,
-    private navCtrl: NavController,
-    private clienteService: ClienteService
+    private clienteService: ClienteService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -44,7 +44,7 @@ export class GestorClientesPage implements OnInit {
   }
 
   voltar() {
-    this.navCtrl.back();
+    this.router.navigate(['/']); // Podes mudar para onde quiseres voltar
   }
 
   filtrarClientes() {
@@ -57,7 +57,7 @@ export class GestorClientesPage implements OnInit {
   }
 
   editarCliente(cliente: any) {
-    this.navCtrl.navigateForward(`/editar-cliente/${cliente._id}`);
+    this.router.navigate([`/editar-cliente/${cliente._id}`]);
   }
 
   excluirCliente(cliente: any) {
@@ -95,9 +95,9 @@ export class GestorClientesPage implements OnInit {
     await alert.present();
   }
 
-verOrcamentos(cliente: any) {
-  this.router.navigate([`/orcamentos-clientes/${cliente._id}`]);
-}
+  verOrcamentos(cliente: any) {
+    this.router.navigate([`/orcamentos-clientes/${cliente._id}`]);
+  }
 
   private async showAlert(header: string, message: string) {
     const alert = await this.alertController.create({

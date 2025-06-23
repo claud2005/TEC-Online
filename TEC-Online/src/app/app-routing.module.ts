@@ -63,10 +63,9 @@ const routes: Routes = [
     loadComponent: () => import('./editar-cliente/editar-cliente.page').then(m => m.EditarClientePage)
   },
   {
-    path: 'orcamentos-clientes/:id',
+    path: 'orcamentos-clientes',
     loadComponent: () => import('./orcamentos-clientes/orcamentos-clientes.page').then(m => m.OrcamentosClientesPage)
-  },
-
+  }
   
   
 
