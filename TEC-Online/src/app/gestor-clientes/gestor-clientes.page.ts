@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
-import { IonicModule } from '@ionic/angular';
+import { AlertController, NavController, IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
-// Importa o serviço
 import { ClienteService } from '../services/cliente.service';
 
 @Component({
@@ -13,7 +11,7 @@ import { ClienteService } from '../services/cliente.service';
   templateUrl: './gestor-clientes.page.html',
   styleUrls: ['./gestor-clientes.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule],
+  imports: [IonicModule, CommonModule, FormsModule, RouterModule],
 })
 export class GestorClientesPage implements OnInit {
   filtro: string = '';
@@ -44,7 +42,7 @@ export class GestorClientesPage implements OnInit {
   }
 
   voltar() {
-    this.router.navigate(['/']); // Podes mudar para onde quiseres voltar
+    this.router.navigate(['/']); // Define aqui a rota correta para onde queres voltar (ex: /home ou /dashboard)
   }
 
   filtrarClientes() {
