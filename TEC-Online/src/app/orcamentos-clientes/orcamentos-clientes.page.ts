@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, LoadingController, AlertController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
+import { ClienteService } from '../services/cliente.service';
 
 @Component({
   selector: 'app-orcamentos-clientes',
@@ -16,29 +18,62 @@ export class OrcamentosClientesPage implements OnInit {
   cliente: any = null;
   orcamentos: any[] = [];
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private clienteService: ClienteService,
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController
+  ) {}
 
   ngOnInit() {
     this.clienteId = this.route.snapshot.paramMap.get('id');
-    this.carregarCliente();
-    this.carregarOrcamentos();
+    if (this.clienteId) {
+      this.carregarCliente(this.clienteId);
+      this.carregarOrcamentos(this.clienteId);
+    }
   }
 
-  carregarCliente() {
-    // Dados simulados — depois pode substituir pelo serviço real
-    this.cliente = {
-      _id: this.clienteId,
-      nome: 'João Silva',
-      email: 'joao@email.com'
-    };
+  async carregarCliente(clienteId: string) {
+    const loading = await this.loadingCtrl.create({ message: 'Carregando cliente...' });
+    await loading.present();
+
+    this.clienteService.obterClientePorId(clienteId).subscribe({
+      next: (cliente) => {
+        this.cliente = cliente;
+        loading.dismiss();
+      },
+      error: async (err) => {
+        console.error(err);
+        loading.dismiss();
+        const alert = await this.alertCtrl.create({
+          header: 'Erro',
+          message: 'Não foi possível carregar os dados do cliente.',
+          buttons: ['OK'],
+        });
+        await alert.present();
+      }
+    });
   }
 
-  carregarOrcamentos() {
-    // Lista simulada de orçamentos — substitua depois pelo serviço real
-    this.orcamentos = [
-      { titulo: 'Orçamento #1', valor: 150.00, data: new Date('2024-05-10') },
-      { titulo: 'Orçamento #2', valor: 320.50, data: new Date('2024-06-15') },
-      { titulo: 'Orçamento #3', valor: 99.99, data: new Date('2024-06-20') },
-    ];
+  async carregarOrcamentos(clienteId: string) {
+    const loading = await this.loadingCtrl.create({ message: 'Carregando orçamentos...' });
+    await loading.present();
+
+    this.clienteService.getOrcamentosPorCliente(clienteId).subscribe({
+      next: (orcamentos: any[]) => {
+        this.orcamentos = orcamentos;
+        loading.dismiss();
+      },
+      error: async (err) => {
+        console.error(err);
+        loading.dismiss();
+        const alert = await this.alertCtrl.create({
+          header: 'Erro',
+          message: 'Não foi possível carregar os orçamentos.',
+          buttons: ['OK'],
+        });
+        await alert.present();
+      }
+    });
   }
 }
