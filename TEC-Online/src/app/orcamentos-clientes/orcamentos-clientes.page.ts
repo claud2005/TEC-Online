@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { IonicModule, LoadingController, AlertController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,7 +20,6 @@ export class OrcamentosClientesPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private clienteService: ClienteService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController
@@ -43,8 +42,7 @@ export class OrcamentosClientesPage implements OnInit {
         this.cliente = cliente;
         loading.dismiss();
       },
-      error: async (err) => {
-        console.error(err);
+      error: async () => {
         loading.dismiss();
         const alert = await this.alertCtrl.create({
           header: 'Erro',
@@ -57,7 +55,7 @@ export class OrcamentosClientesPage implements OnInit {
   }
 
   async carregarOrcamentos(clienteId: string) {
-    const loading = await this.loadingCtrl.create({ message: 'Carregando orçamentos...' });
+    const loading = await this.loadingCtrl.create({ message: 'Carregando orçamentos e serviços...' });
     await loading.present();
 
     this.clienteService.getOrcamentosPorCliente(clienteId).subscribe({
@@ -65,8 +63,7 @@ export class OrcamentosClientesPage implements OnInit {
         this.orcamentos = orcamentos;
         loading.dismiss();
       },
-      error: async (err) => {
-        console.error(err);
+      error: async () => {
         loading.dismiss();
         const alert = await this.alertCtrl.create({
           header: 'Erro',
@@ -78,8 +75,7 @@ export class OrcamentosClientesPage implements OnInit {
     });
   }
 
-  abrirOrcamento(orcamentoId: string) {
-    // Ajusta a rota para a página de detalhes do orçamento (muda conforme tua rota real)
-    this.router.navigate(['/orcamento-detalhe', orcamentoId]);
+  calcularTotalServicos(orcamento: any): number {
+    return orcamento.servicos?.reduce((acc: number, serv: any) => acc + serv.preco, 0) || 0;
   }
 }
