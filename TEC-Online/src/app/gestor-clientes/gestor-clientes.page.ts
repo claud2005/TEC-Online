@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, NavController, IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -42,7 +42,7 @@ export class GestorClientesPage implements OnInit {
   }
 
   voltar() {
-    this.router.navigate(['/']); // Define aqui a rota correta para onde queres voltar (ex: /home ou /dashboard)
+    this.router.navigate(['/']); // Ajustar conforme necessário
   }
 
   filtrarClientes() {

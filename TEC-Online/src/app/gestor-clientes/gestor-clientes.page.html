@@ -25,16 +25,17 @@
       <ion-col size="2"><strong>Ações</strong></ion-col>
     </ion-row>
 
-    <ion-row *ngFor="let cliente of clientesFiltrados" class="table-row" (click)="verOrcamentos(cliente)">
+    <!-- REMOVIDO o (click) no ion-row -->
+    <ion-row *ngFor="let cliente of clientesFiltrados" class="table-row">
       <ion-col size="2">{{ cliente.codigoCliente }}</ion-col>
       <ion-col size="2">{{ cliente.nome }}</ion-col>
       <ion-col size="2">{{ cliente.contacto }}</ion-col>
       <ion-col size="2">{{ cliente.email }}</ion-col>
       <ion-col size="2">{{ cliente.morada }}</ion-col>
       <ion-col size="2">
-      <ion-button color="primary" size="small" fill="clear" (click)="verOrcamentos(cliente); $event.stopPropagation()">
-        <ion-icon name="information-circle-outline"></ion-icon>
-      </ion-button>
+        <ion-button color="primary" size="small" fill="clear" (click)="verOrcamentos(cliente); $event.stopPropagation()">
+          <ion-icon name="information-circle-outline"></ion-icon>
+        </ion-button>
         <ion-button color="primary" size="small" fill="clear" (click)="editarCliente(cliente); $event.stopPropagation()">
           <ion-icon name="create-outline"></ion-icon>
         </ion-button>
@@ -49,7 +50,7 @@
   <div class="mobile-view">
     <ion-card *ngFor="let cliente of clientesFiltrados">
       <ion-card-header>
-        <ion-card-title (click)="verOrcamentos(cliente)" class="link-cliente">{{ cliente.nome }}</ion-card-title>
+        <ion-card-title class="link-cliente">{{ cliente.nome }}</ion-card-title> <!-- REMOVIDO (click) -->
       </ion-card-header>
       <ion-card-content>
         <p><strong>Código:</strong> {{ cliente.codigoCliente }}</p>
@@ -59,10 +60,10 @@
         <ion-button color="primary" size="small" fill="clear" (click)="verOrcamentos(cliente); $event.stopPropagation()">
           <ion-icon name="information-circle-outline"></ion-icon>
         </ion-button>
-        <ion-button color="primary" size="small" fill="clear" (click)="editarCliente(cliente)">
+        <ion-button color="primary" size="small" fill="clear" (click)="editarCliente(cliente); $event.stopPropagation()">
           <ion-icon name="create-outline"></ion-icon>
         </ion-button>
-        <ion-button color="danger" size="small" fill="clear" (click)="excluirCliente(cliente)">
+        <ion-button color="danger" size="small" fill="clear" (click)="excluirCliente(cliente); $event.stopPropagation()">
           <ion-icon name="trash-outline"></ion-icon>
         </ion-button>
       </ion-card-content>
