@@ -18,8 +18,6 @@ import { environment } from 'src/environments/environment';
   ],
 })
 export class PlanoSemanalPage implements OnInit {
-  @ViewChild(IonModal) modal!: IonModal;
-  selectedService: any = null;
   servicos: any[] = [];
   filteredServices: any[] = [];
   utilizadorName: string = 'Utilizador';
@@ -134,39 +132,6 @@ export class PlanoSemanalPage implements OnInit {
     this.aplicarFiltros();
   }
 
-  closeModal() {
-    this.modal.dismiss();
-    this.selectedService = null;
-  }
-
-  openModal(event: any) {
-    const selectedDate = new Date(event.detail.value).toDateString();
-
-    const servicoEncontrado = this.servicos.find(servico => {
-      const dataServico = new Date(servico.dataServico).toDateString();
-      return dataServico === selectedDate;
-    });
-
-    this.selectedService = servicoEncontrado ? { ...servicoEncontrado } : {
-      id: null,
-      nomeCliente: '',
-      dataServico: selectedDate,
-      horaServico: '',
-      marcaAparelho: '',
-      modeloAparelho: '',
-      problemaCliente: '',
-      observacoes: '',
-      status: 'fechado'
-    };
-
-    this.modal.present();
-  }
-
-  navigateToOtherPage() {
-    this.modal.dismiss();
-    this.router.navigate(['/criar-servicos']);
-  }
-
   navigateToPerfil() {
     this.router.navigate(['/perfil']);
   }
@@ -189,7 +154,6 @@ export class PlanoSemanalPage implements OnInit {
 
   editarServico(id: string) {
     if (id) {
-      this.modal.dismiss();
       this.router.navigate(['/editar-servicos', id]);
     } else {
       alert('Serviço não possui ID para edição.');
