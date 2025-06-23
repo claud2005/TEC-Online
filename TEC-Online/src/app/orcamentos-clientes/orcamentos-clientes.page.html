@@ -1,10 +1,35 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>Orçamentos Clientes</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/gestor-clientes"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Orçamentos do Cliente</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <!-- Conteúdo aqui -->
-  <p>Conteúdo da página Orcamentos Clientes.</p>
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Informações do Cliente</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Nome: {{ cliente?.nome }}</p>
+      <p>Email: {{ cliente?.email }}</p>
+      <!-- Você pode adicionar mais campos conforme necessário -->
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Orçamentos</ion-label>
+    </ion-list-header>
+
+    <ion-item *ngFor="let orcamento of orcamentos">
+      <ion-label>
+        <h2>{{ orcamento.titulo }}</h2>
+        <p>Valor: {{ orcamento.valor | currency:'EUR' }}</p>
+        <p>Data: {{ orcamento.data | date }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
