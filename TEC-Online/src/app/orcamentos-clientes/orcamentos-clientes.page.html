@@ -15,7 +15,6 @@
     <ion-card-content>
       <p>Nome: {{ cliente?.nome }}</p>
       <p>Email: {{ cliente?.email }}</p>
-      <!-- Você pode adicionar mais campos conforme necessário -->
     </ion-card-content>
   </ion-card>
 
@@ -30,6 +29,11 @@
         <p>Valor: {{ orcamento.valor | currency:'EUR' }}</p>
         <p>Data: {{ orcamento.data | date }}</p>
       </ion-label>
+
+      <!-- ✅ Só o botão aciona ação -->
+      <ion-button fill="outline" slot="end" (click)="abrirOrcamento(orcamento)">
+        Ver Detalhes
+      </ion-button>
     </ion-item>
   </ion-list>
 </ion-content>

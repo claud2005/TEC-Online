@@ -1,30 +1,55 @@
 ion-card {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 ion-card-title {
-  font-size: 1.2rem;
-  color: #333;
+  font-size: 1.3rem;
+  color: #222;
+  font-weight: 600;
+}
+
+ion-card-content p {
+  font-size: 0.95rem;
+  color: #444;
+  margin: 0.25rem 0;
 }
 
 ion-list-header {
-  margin-top: 10px;
-  font-weight: bold;
+  margin-top: 1rem;
+  font-weight: 600;
   font-size: 1rem;
+  color: #222;
 }
 
 ion-item {
   --padding-start: 16px;
   --inner-padding-end: 16px;
+  --border-color: #e0e0e0;
+  --background: #fafafa;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+ion-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 ion-label h2 {
-  font-size: 1rem;
-  font-weight: 500;
-  margin-bottom: 5px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1a1a1a;
 }
 
 ion-label p {
   font-size: 0.9rem;
   color: #666;
+}
+
+ion-button {
+  --border-radius: 8px;
+  font-size: 0.85rem;
 }

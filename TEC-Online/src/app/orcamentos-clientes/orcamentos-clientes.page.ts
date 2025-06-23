@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonicModule, LoadingController, AlertController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,6 +20,7 @@ export class OrcamentosClientesPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private clienteService: ClienteService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController
@@ -75,5 +76,11 @@ export class OrcamentosClientesPage implements OnInit {
         await alert.present();
       }
     });
+  }
+
+  abrirOrcamento(orcamento: any) {
+    console.log('Orçamento selecionado:', orcamento);
+    // Exemplo de navegação — ajuste a rota conforme sua aplicação
+    this.router.navigate(['/orcamento-detalhes', orcamento.id]);
   }
 }
