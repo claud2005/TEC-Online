@@ -97,78 +97,176 @@ export class ServicosPage implements OnInit {
     );
   }
 
-  gerarPDF(servico: Servico) {
+  async gerarPDF(servico: Servico) {
   const doc = new jsPDF({
     unit: 'mm',
     format: 'a4',
   });
 
+  // Configurações de layout
   const leftMargin = 15;
+  const rightMargin = 15;
   let verticalPos = 20;
-  const lineHeight = 8;
+  const lineHeight = 7;
   const pageWidth = doc.internal.pageSize.getWidth();
+  const contentWidth = pageWidth - leftMargin - rightMargin;
+  const pageHeight = doc.internal.pageSize.getHeight();
+
+  // Cores da empresa (pode ajustar conforme necessário)
+  const primaryColor = '#007aff';
+  const secondaryColor = '#333333';
+  const lightColor = '#f5f5f5';
 
   // Função auxiliar para quebrar texto longo
-  function addMultilineText(text: string, x: number, y: number, maxWidth: number) {
+  const addMultilineText = (text: string, x: number, y: number, maxWidth: number, lineHeight: number) => {
     const splitText = doc.splitTextToSize(text, maxWidth);
     doc.text(splitText, x, y);
     return splitText.length * lineHeight;
-  }
+  };
 
-  // Cabeçalho com título
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(20);
-  doc.setTextColor('#007aff');
-  doc.text('Detalhes do Serviço', pageWidth / 2, verticalPos, { align: 'center' });
-  verticalPos += lineHeight + 4;
-
-  // Linha horizontal decorativa
-  doc.setDrawColor('#007aff');
-  doc.setLineWidth(0.7);
-  doc.line(leftMargin, verticalPos, pageWidth - leftMargin, verticalPos);
-  verticalPos += 6;
-
-  // Conteúdo - título e valores
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor('#333');
-
-  // Helper para imprimir label + valor formatado
-  function printLabelValue(label: string, value: string) {
-    doc.text(label + ':', leftMargin, verticalPos);
-    const valueWidth = pageWidth - leftMargin * 2 - 40;
-    doc.setFont('helvetica', 'normal');
-    verticalPos += addMultilineText(value, leftMargin + 40, verticalPos - lineHeight, valueWidth);
+  // Adicionar logotipo (substitua pela URL/base64 do seu logotipo)
+  const addLogo = async () => {
+    try {
+      const imgData = await this.getBase64ImageFromAssets('logotipo.png');
+      doc.addImage(imgData, 'PNG', leftMargin, 10, 30, 10); // Ajuste tamanho conforme necessário
+    } catch (e) {
+      console.error('Erro ao carregar logotipo:', e);
+      // Fallback textual
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(16);
+      doc.setTextColor(primaryColor);
+      doc.text('RFM-Informatica', leftMargin, 15);
+    }
+  };
+    // Cabeçalho
+    // Aguarde o carregamento do logotipo antes de continuar
+    await addLogo();
+  
+    // Título principal 
     doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(secondaryColor);
+    doc.text('RELATÓRIO DE SERVIÇO', pageWidth / 2, verticalPos, { align: 'center' });
+    verticalPos += lineHeight + 2;
+
+    // Informações básicas em linha
+    doc.setFontSize(10);
+    doc.setTextColor('#666');
+    doc.text(`Nº: ${servico.numero}`, leftMargin, verticalPos);
+    doc.text(`Data: ${new Date().toLocaleDateString()}`, pageWidth - rightMargin, verticalPos, { align: 'right' });
+    verticalPos += lineHeight + 4;
+
+    // Linha horizontal decorativa
+    doc.setDrawColor(primaryColor);
+    doc.setLineWidth(0.5);
+    doc.line(leftMargin, verticalPos, pageWidth - rightMargin, verticalPos);
+    verticalPos += 8;
+
+    // Seção de Dados do Cliente
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(primaryColor);
+    doc.text('DADOS DO CLIENTE', leftMargin, verticalPos);
+    verticalPos += lineHeight;
+
+    // Fundo para seção
+    doc.setFillColor(lightColor);
+    doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
+  
+    // Helper para imprimir label + valor formatado
+    const printLabelValue = (label: string, value: string, indent = 0) => {
+      const labelWidth = 40;
+      const valueX = leftMargin + labelWidth + indent;
+      const valueWidth = contentWidth - labelWidth - indent;
+    
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(secondaryColor);
+      doc.text(`${label}:`, leftMargin + indent, verticalPos);
+    
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor('#444');
+      const lines = addMultilineText(value || 'Não informado', valueX, verticalPos, valueWidth, lineHeight - 1);
+      verticalPos += Math.max(lineHeight, lines);
+    };
+
+    // Dados do cliente
+    printLabelValue('Nome', servico.nomeCompletoCliente);
+    printLabelValue('Contato', servico.contatoCliente);
+    verticalPos += 2;
+
+    // Seção de Dados do Aparelho
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(primaryColor);
+    doc.text('DADOS DO APARELHO', leftMargin, verticalPos);
+    verticalPos += lineHeight;
+
+    doc.setFillColor(lightColor);
+    doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
+  
+    printLabelValue('Marca', servico.marcaAparelho);
+    printLabelValue('Modelo', servico.modeloAparelho);
+    verticalPos += 2;
+
+    // Seção de Descrição do Serviço
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(primaryColor);
+    doc.text('DESCRIÇÃO DO SERVIÇO', leftMargin, verticalPos);
+    verticalPos += lineHeight;
+
+    doc.setFillColor(lightColor);
+    doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
+  
+    printLabelValue('Problema relatado', servico.problemaRelatado);
+    printLabelValue('Solução aplicada', servico.solucaoInicial);
+    printLabelValue('Observações', servico.observacoes);
+    verticalPos += 2;
+
+    // Seção Financeira
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(primaryColor);
+    doc.text('INFORMAÇÕES FINANCEIRAS', leftMargin, verticalPos);
+    verticalPos += lineHeight;
+
+    doc.setFillColor(lightColor);
+    doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
+  
+    printLabelValue('Custo estimado', servico.custoEstimado ? `€ ${parseFloat(servico.custoEstimado).toFixed(2)}` : 'Não informado');
+    printLabelValue('Valor total', servico.valorTotal ? `€ ${parseFloat(servico.valorTotal).toFixed(2)}` : 'Não informado');
+    verticalPos += 2;
+
+    // Seção de Responsável
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(primaryColor);
+    doc.text('RESPONSÁVEL', leftMargin, verticalPos);
+    verticalPos += lineHeight;
+
+    doc.setFillColor(lightColor);
+    doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
+  
+    printLabelValue('Técnico', servico.responsavel);
+      if (servico.dataConclusao) {
+    printLabelValue('Data conclusão', servico.dataConclusao);
+    }
+    verticalPos += 10;
+
+    // Rodapé
+    doc.setFontSize(10);
+    doc.setTextColor('#666');
+    doc.setFont('helvetica', 'italic');
+  
+    // Linha de rodapé
+    doc.setDrawColor(primaryColor);
+    doc.setLineWidth(0.3);
+    doc.line(leftMargin, pageHeight - 20, pageWidth - rightMargin, pageHeight - 20);
+  
+    // Informações de rodapé
+    doc.text('TECH REPAIR - Soluções em Tecnologia', pageWidth / 2, pageHeight - 15, { align: 'center' });
+    doc.text(`Documento gerado em: ${new Date().toLocaleString()}`, leftMargin, pageHeight - 10);
+    doc.text('Página 1/1', pageWidth - rightMargin, pageHeight - 10, { align: 'right' });
+
+    // Salvar o PDF
+    doc.save(`Servico_${servico.numero}_${new Date().toISOString().slice(0,10)}.pdf`);
   }
-
-  printLabelValue('Número', servico.numero);
-  printLabelValue('Cliente', servico.nomeCompletoCliente);
-  printLabelValue('Contato', servico.contatoCliente);
-  printLabelValue('Modelo do Aparelho', servico.modeloAparelho);
-  printLabelValue('Marca do Aparelho', servico.marcaAparelho);
-  printLabelValue('Problema Relatado', servico.problemaRelatado);
-  printLabelValue('Solução Inicial', servico.solucaoInicial);
-  printLabelValue('Valor Total', `€ ${parseFloat(servico.valorTotal).toFixed(2)}`);
-  printLabelValue('Descrição', servico.descricao);
-  printLabelValue('Responsável', servico.responsavel);
-  printLabelValue('Observações', servico.observacoes);
-
-  if (servico.dataConclusao) printLabelValue('Data de Conclusão', servico.dataConclusao);
-  if (servico.custoEstimado) printLabelValue('Custo Estimado', `€ ${parseFloat(servico.custoEstimado).toFixed(2)}`);
-
-  // Rodapé com paginação e data atual
-  const pageHeight = doc.internal.pageSize.getHeight();
-  doc.setFontSize(10);
-  doc.setTextColor('#666');
-  const now = new Date().toLocaleString();
-  doc.text(`Gerado em: ${now}`, leftMargin, pageHeight - 10);
-  doc.text(`Página 1`, pageWidth - leftMargin, pageHeight - 10, { align: 'right' });
-
-  // Salvar o PDF
-  doc.save(`Servico_${servico.numero}.pdf`);
-}
-
 
   filtrarServicos() {
     this.servicosFiltrados = this.servicos.filter(servico => {
@@ -191,4 +289,23 @@ export class ServicosPage implements OnInit {
     console.log("ID do serviço sendo passado:", servico._id);
     this.router.navigate(['/editar-servicos', servico._id]);
   }
+async getBase64ImageFromAssets(imagePath: string): Promise<string> {
+  // Ajuste o caminho conforme necessário para o seu projeto Angular/Ionic
+  const response = await fetch(`assets/${imagePath}`);
+  const blob = await response.blob();
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (typeof reader.result === 'string') {
+        // Remove o prefixo "data:*/*;base64," se necessário
+        resolve(reader.result.toString());
+      } else {
+        reject('Erro ao converter imagem para base64');
+      }
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
 }
+}
+
