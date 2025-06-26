@@ -129,18 +129,24 @@ async gerarPDF(servico: Servico) {
   }
 
   // Adicionar logotipo
-  const addLogo = async () => {
-    try {
-      const imgData = await getBase64ImageFromAssets('icon/logotipo.png');
-      doc.addImage(imgData, 'PNG', leftMargin, 10, 30, 10);
-    } catch (e) {
-      console.error('Erro ao carregar logotipo:', e);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(16);
-      doc.setTextColor(primaryColor);
-      doc.text('RFM-Informatica', leftMargin, 15);
-    }
-  };
+const addLogo = async () => {
+  try {
+    const imgData = await getBase64ImageFromAssets('icon/logotipo.png');
+
+    // Tamanho do logotipo
+    const logoHeight = 15;
+    const logoWidth = 40;
+    const centerX = (doc.internal.pageSize.getWidth() - logoWidth) / 2;
+
+    doc.addImage(imgData, 'PNG', centerX, 10, logoWidth, logoHeight);
+  } catch (e) {
+    console.error('Erro ao carregar logotipo:', e);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.setTextColor(primaryColor);
+    doc.text('RFM-Informatica', leftMargin, 15);
+  }
+};
 
   // Aguarda logotipo
   await addLogo();
