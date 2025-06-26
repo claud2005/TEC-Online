@@ -128,58 +128,5 @@
       </ion-col>
     </ion-row>
 
-    <!-- Calendário -->
-    <ion-row>
-      <ion-col>
-        <ion-datetime presentation="date" (ionChange)="openModal($event)"></ion-datetime>
-      </ion-col>
-    </ion-row>
 
-  </ion-grid>
-</ion-content>
 
-<!-- MODAL DE DETALHES -->
-<ion-modal #modal>
-  <ng-template>
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-button (click)="closeModal()" aria-label="Voltar">
-            <ion-icon name="arrow-back"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-        <ion-title>Detalhes do Serviço</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content *ngIf="selectedService">
-      <ion-card>
-        <ion-card-header>
-          <ion-card-title>{{ selectedService.nomeCliente || 'Cliente não informado' }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-grid>
-            <ion-row>
-              <ion-col size="12">
-                <p><strong>Data:</strong> {{ formatDate(selectedService.dataServico) || 'Não informada' }}</p>
-                <p><strong>Hora:</strong> {{ selectedService.horaServico || 'Não informada' }}</p>
-                <p><strong>Aparelho:</strong> {{ selectedService.marcaAparelho || 'Não informada' }} {{ selectedService.modeloAparelho || '' }}</p>
-                <p><strong>Problema:</strong> {{ selectedService.problemaCliente || 'Não descrito' }}</p>
-                <p><strong>Observações:</strong> {{ selectedService.observacoes || 'Nenhuma observação' }}</p>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-card-content>
-      </ion-card>
-
-      <!-- Botões flutuantes -->
-      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button color="success" (click)="navigateToOtherPage()" aria-label="Adicionar serviço">
-          <ion-icon name="add"></ion-icon>
-        </ion-fab-button>
-        <ion-fab-button color="primary" (click)="editarServico(selectedService?.id)" aria-label="Editar serviço">
-          <ion-icon name="create-outline"></ion-icon>
-        </ion-fab-button>
-      </ion-fab>
-    </ion-content>
-  </ng-template>
-</ion-modal>
