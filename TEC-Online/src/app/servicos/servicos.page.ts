@@ -97,13 +97,12 @@ export class ServicosPage implements OnInit {
     );
   }
 
-  async gerarPDF(servico: Servico) {
+async gerarPDF(servico: Servico) {
   const doc = new jsPDF({
     unit: 'mm',
     format: 'a4',
   });
 
-  // Configurações de layout
   const leftMargin = 15;
   const rightMargin = 15;
   let verticalPos = 20;
@@ -112,161 +111,165 @@ export class ServicosPage implements OnInit {
   const contentWidth = pageWidth - leftMargin - rightMargin;
   const pageHeight = doc.internal.pageSize.getHeight();
 
-  // Cores da empresa (pode ajustar conforme necessário)
   const primaryColor = '#007aff';
   const secondaryColor = '#333333';
   const lightColor = '#f5f5f5';
 
-  // Função auxiliar para quebrar texto longo
-  const addMultilineText = (text: string, x: number, y: number, maxWidth: number, lineHeight: number) => {
-    const splitText = doc.splitTextToSize(text, maxWidth);
-    doc.text(splitText, x, y);
-    return splitText.length * lineHeight;
-  };
+  // Função para carregar imagem da pasta assets como base64
+  async function getBase64ImageFromAssets(path: string): Promise<string> {
+    const response = await fetch(`assets/${path}`);
+    const blob = await response.blob();
 
-  // Adicionar logotipo (substitua pela URL/base64 do seu logotipo)
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  // Adicionar logotipo
   const addLogo = async () => {
     try {
-      const imgData = await this.getBase64ImageFromAssets('logotipo.png');
-      doc.addImage(imgData, 'PNG', leftMargin, 10, 30, 10); // Ajuste tamanho conforme necessário
+      const imgData = await getBase64ImageFromAssets('icon/logotipo.png');
+      doc.addImage(imgData, 'PNG', leftMargin, 10, 30, 10);
     } catch (e) {
       console.error('Erro ao carregar logotipo:', e);
-      // Fallback textual
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(16);
       doc.setTextColor(primaryColor);
       doc.text('RFM-Informatica', leftMargin, 15);
     }
   };
-    // Cabeçalho
-    // Aguarde o carregamento do logotipo antes de continuar
-    await addLogo();
-  
-    // Título principal 
+
+  // Aguarda logotipo
+  await addLogo();
+
+  // Título
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(18);
+  doc.setTextColor(secondaryColor);
+  doc.text('RELATÓRIO DE SERVIÇO', pageWidth / 2, verticalPos, { align: 'center' });
+  verticalPos += lineHeight + 2;
+
+  // Infos iniciais
+  doc.setFontSize(10);
+  doc.setTextColor('#666');
+  doc.text(`Nº: ${servico.numero}`, leftMargin, verticalPos);
+  doc.text(`Data: ${new Date().toLocaleDateString()}`, pageWidth - rightMargin, verticalPos, { align: 'right' });
+  verticalPos += lineHeight + 4;
+
+  // Linha decorativa
+  doc.setDrawColor(primaryColor);
+  doc.setLineWidth(0.5);
+  doc.line(leftMargin, verticalPos, pageWidth - rightMargin, verticalPos);
+  verticalPos += 8;
+
+  // Util: quebrar texto
+  const addMultilineText = (text: string, x: number, y: number, maxWidth: number, lineHeight: number) => {
+    const splitText = doc.splitTextToSize(text, maxWidth);
+    doc.text(splitText, x, y);
+    return splitText.length * lineHeight;
+  };
+
+  // Util: campo label + valor
+  const printLabelValue = (label: string, value: string, indent = 0) => {
+    const labelWidth = 40;
+    const valueX = leftMargin + labelWidth + indent;
+    const valueWidth = contentWidth - labelWidth - indent;
+
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(18);
     doc.setTextColor(secondaryColor);
-    doc.text('RELATÓRIO DE SERVIÇO', pageWidth / 2, verticalPos, { align: 'center' });
-    verticalPos += lineHeight + 2;
+    doc.text(`${label}:`, leftMargin + indent, verticalPos);
 
-    // Informações básicas em linha
-    doc.setFontSize(10);
-    doc.setTextColor('#666');
-    doc.text(`Nº: ${servico.numero}`, leftMargin, verticalPos);
-    doc.text(`Data: ${new Date().toLocaleDateString()}`, pageWidth - rightMargin, verticalPos, { align: 'right' });
-    verticalPos += lineHeight + 4;
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor('#444');
+    const lines = addMultilineText(value || 'Não informado', valueX, verticalPos, valueWidth, lineHeight - 1);
+    verticalPos += Math.max(lineHeight, lines);
+  };
 
-    // Linha horizontal decorativa
-    doc.setDrawColor(primaryColor);
-    doc.setLineWidth(0.5);
-    doc.line(leftMargin, verticalPos, pageWidth - rightMargin, verticalPos);
-    verticalPos += 8;
+  // === Seções ===
 
-    // Seção de Dados do Cliente
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(primaryColor);
-    doc.text('DADOS DO CLIENTE', leftMargin, verticalPos);
-    verticalPos += lineHeight;
+  // Dados do cliente
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(primaryColor);
+  doc.text('DADOS DO CLIENTE', leftMargin, verticalPos);
+  verticalPos += lineHeight;
+  doc.setFillColor(lightColor);
+  doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
 
-    // Fundo para seção
-    doc.setFillColor(lightColor);
-    doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
-  
-    // Helper para imprimir label + valor formatado
-    const printLabelValue = (label: string, value: string, indent = 0) => {
-      const labelWidth = 40;
-      const valueX = leftMargin + labelWidth + indent;
-      const valueWidth = contentWidth - labelWidth - indent;
-    
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(secondaryColor);
-      doc.text(`${label}:`, leftMargin + indent, verticalPos);
-    
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor('#444');
-      const lines = addMultilineText(value || 'Não informado', valueX, verticalPos, valueWidth, lineHeight - 1);
-      verticalPos += Math.max(lineHeight, lines);
-    };
+  printLabelValue('Nome', servico.nomeCompletoCliente);
+  printLabelValue('Contato', servico.contatoCliente);
+  verticalPos += 2;
 
-    // Dados do cliente
-    printLabelValue('Nome', servico.nomeCompletoCliente);
-    printLabelValue('Contato', servico.contatoCliente);
-    verticalPos += 2;
+  // Aparelho
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(primaryColor);
+  doc.text('DADOS DO APARELHO', leftMargin, verticalPos);
+  verticalPos += lineHeight;
+  doc.setFillColor(lightColor);
+  doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
 
-    // Seção de Dados do Aparelho
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(primaryColor);
-    doc.text('DADOS DO APARELHO', leftMargin, verticalPos);
-    verticalPos += lineHeight;
+  printLabelValue('Marca', servico.marcaAparelho);
+  printLabelValue('Modelo', servico.modeloAparelho);
+  verticalPos += 2;
 
-    doc.setFillColor(lightColor);
-    doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
-  
-    printLabelValue('Marca', servico.marcaAparelho);
-    printLabelValue('Modelo', servico.modeloAparelho);
-    verticalPos += 2;
+  // Descrição
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(primaryColor);
+  doc.text('DESCRIÇÃO DO SERVIÇO', leftMargin, verticalPos);
+  verticalPos += lineHeight;
+  doc.setFillColor(lightColor);
+  doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
 
-    // Seção de Descrição do Serviço
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(primaryColor);
-    doc.text('DESCRIÇÃO DO SERVIÇO', leftMargin, verticalPos);
-    verticalPos += lineHeight;
+  printLabelValue('Problema relatado', servico.problemaRelatado);
+  printLabelValue('Solução aplicada', servico.solucaoInicial);
+  printLabelValue('Observações', servico.observacoes);
+  verticalPos += 2;
 
-    doc.setFillColor(lightColor);
-    doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
-  
-    printLabelValue('Problema relatado', servico.problemaRelatado);
-    printLabelValue('Solução aplicada', servico.solucaoInicial);
-    printLabelValue('Observações', servico.observacoes);
-    verticalPos += 2;
+  // Financeiro
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(primaryColor);
+  doc.text('INFORMAÇÕES FINANCEIRAS', leftMargin, verticalPos);
+  verticalPos += lineHeight;
+  doc.setFillColor(lightColor);
+  doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
 
-    // Seção Financeira
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(primaryColor);
-    doc.text('INFORMAÇÕES FINANCEIRAS', leftMargin, verticalPos);
-    verticalPos += lineHeight;
+  printLabelValue('Custo estimado', servico.custoEstimado ? `€ ${parseFloat(servico.custoEstimado).toFixed(2)}` : 'Não informado');
+  printLabelValue('Valor total', servico.valorTotal ? `€ ${parseFloat(servico.valorTotal).toFixed(2)}` : 'Não informado');
+  verticalPos += 2;
 
-    doc.setFillColor(lightColor);
-    doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
-  
-    printLabelValue('Custo estimado', servico.custoEstimado ? `€ ${parseFloat(servico.custoEstimado).toFixed(2)}` : 'Não informado');
-    printLabelValue('Valor total', servico.valorTotal ? `€ ${parseFloat(servico.valorTotal).toFixed(2)}` : 'Não informado');
-    verticalPos += 2;
+  // Responsável
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(primaryColor);
+  doc.text('RESPONSÁVEL', leftMargin, verticalPos);
+  verticalPos += lineHeight;
+  doc.setFillColor(lightColor);
+  doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
 
-    // Seção de Responsável
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(primaryColor);
-    doc.text('RESPONSÁVEL', leftMargin, verticalPos);
-    verticalPos += lineHeight;
-
-    doc.setFillColor(lightColor);
-    doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
-  
-    printLabelValue('Técnico', servico.responsavel);
-      if (servico.dataConclusao) {
+  printLabelValue('Técnico', servico.responsavel);
+  if (servico.dataConclusao) {
     printLabelValue('Data conclusão', servico.dataConclusao);
-    }
-    verticalPos += 10;
-
-    // Rodapé
-    doc.setFontSize(10);
-    doc.setTextColor('#666');
-    doc.setFont('helvetica', 'italic');
-  
-    // Linha de rodapé
-    doc.setDrawColor(primaryColor);
-    doc.setLineWidth(0.3);
-    doc.line(leftMargin, pageHeight - 20, pageWidth - rightMargin, pageHeight - 20);
-  
-    // Informações de rodapé
-    doc.text('TECH REPAIR - Soluções em Tecnologia', pageWidth / 2, pageHeight - 15, { align: 'center' });
-    doc.text(`Documento gerado em: ${new Date().toLocaleString()}`, leftMargin, pageHeight - 10);
-    doc.text('Página 1/1', pageWidth - rightMargin, pageHeight - 10, { align: 'right' });
-
-    // Salvar o PDF
-    doc.save(`Servico_${servico.numero}_${new Date().toISOString().slice(0,10)}.pdf`);
   }
+  verticalPos += 10;
+
+  // Rodapé
+  doc.setFontSize(10);
+  doc.setTextColor('#666');
+  doc.setFont('helvetica', 'italic');
+  doc.setDrawColor(primaryColor);
+  doc.setLineWidth(0.3);
+  doc.line(leftMargin, pageHeight - 20, pageWidth - rightMargin, pageHeight - 20);
+
+  doc.text('RFM-INFORMATICA', pageWidth / 2, pageHeight - 15, { align: 'center' });
+  doc.text(`Documento gerado em: ${new Date().toLocaleString()}`, leftMargin, pageHeight - 10);
+  doc.text('Página 1/1', pageWidth - rightMargin, pageHeight - 10, { align: 'right' });
+
+  // Exporta o PDF
+  doc.save(`Servico_${servico.numero}_${new Date().toISOString().slice(0, 10)}.pdf`);
+}
+
 
   filtrarServicos() {
     this.servicosFiltrados = this.servicos.filter(servico => {
