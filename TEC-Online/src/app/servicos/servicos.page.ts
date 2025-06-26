@@ -105,7 +105,7 @@ async gerarPDF(servico: Servico) {
 
   const leftMargin = 15;
   const rightMargin = 15;
-  let verticalPos = 20;
+  let verticalPos = 35; // Aumentado para evitar sobreposição com o logotipo
   const lineHeight = 7;
   const pageWidth = doc.internal.pageSize.getWidth();
   const contentWidth = pageWidth - leftMargin - rightMargin;
@@ -129,24 +129,24 @@ async gerarPDF(servico: Servico) {
   }
 
   // Adicionar logotipo
-const addLogo = async () => {
-  try {
-    const imgData = await getBase64ImageFromAssets('icon/logotipo.png');
+  const addLogo = async () => {
+    try {
+      const imgData = await getBase64ImageFromAssets('icon/logotipo.png');
 
-    // Tamanho do logotipo
-    const logoHeight = 15;
-    const logoWidth = 40;
-    const centerX = (doc.internal.pageSize.getWidth() - logoWidth) / 2;
+      const logoWidth = 45;
+      const logoHeight = 20;
+      const centerX = (doc.internal.pageSize.getWidth() - logoWidth) / 2;
+      const logoY = 10;
 
-    doc.addImage(imgData, 'PNG', centerX, 10, logoWidth, logoHeight);
-  } catch (e) {
-    console.error('Erro ao carregar logotipo:', e);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(16);
-    doc.setTextColor(primaryColor);
-    doc.text('RFM-Informatica', leftMargin, 15);
-  }
-};
+      doc.addImage(imgData, 'PNG', centerX, logoY, logoWidth, logoHeight);
+    } catch (e) {
+      console.error('Erro ao carregar logotipo:', e);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(16);
+      doc.setTextColor(primaryColor);
+      doc.text('RFM-Informatica', leftMargin, 20);
+    }
+  };
 
   // Aguarda logotipo
   await addLogo();
@@ -275,6 +275,7 @@ const addLogo = async () => {
   // Exporta o PDF
   doc.save(`Servico_${servico.numero}_${new Date().toISOString().slice(0, 10)}.pdf`);
 }
+
 
 
   filtrarServicos() {
