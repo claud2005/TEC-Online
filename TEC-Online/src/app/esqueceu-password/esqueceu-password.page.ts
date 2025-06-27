@@ -22,7 +22,7 @@ export class EsqueceuPasswordPage {
     if (this.email) {
       console.log('Tentando recuperar senha para o e-mail:', this.email);
 
-      this.http.post(`${environment.api_url}/api/esqueceu-password`, { email: this.email }).subscribe(
+      this.http.post(`http://localhost:3000/api/esqueceu-password`, { email: this.email }).subscribe(
         async (response: any) => {
           const alert = await this.alertController.create({
             header: 'Sucesso!',

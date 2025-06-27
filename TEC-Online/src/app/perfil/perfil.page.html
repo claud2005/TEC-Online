@@ -26,7 +26,7 @@
 
       <!-- Foto de Perfil -->
       <div class="profile-picture">
-        <img [src]="fotoPerfil ? 'http://localhost:3000/' + fotoPerfil : 'assets/img/default-profile.png'" alt="Foto de Perfil" />
+        <img [src]="fotoPerfil || 'assets/img/default-profile.png'" alt="Foto de Perfil" />
       </div>
 
       <!-- Informações do Usuário -->
