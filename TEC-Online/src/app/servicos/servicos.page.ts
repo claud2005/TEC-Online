@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 
 interface Servico {
   numero: string;
-  data: string;
+  dataServico: string;
   status: string;
   cliente: string;
   descricao: string;
@@ -85,7 +85,7 @@ export class ServicosPage implements OnInit {
         this.servicos = response.map((servico, index) => ({
           ...servico,
           numero: this.formatarIdServico((index + 1).toString()),
-          data: this.formatarData(servico.data)
+          data: this.formatarData(servico.dataServico)
         }));
         this.filtrarServicos();
         console.log('Serviços carregados:', this.servicos);
