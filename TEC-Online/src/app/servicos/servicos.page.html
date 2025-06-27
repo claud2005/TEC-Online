@@ -53,7 +53,7 @@
       <ng-container *ngFor="let servico of servicosFiltrados">
         <ion-row class="tabela-row">
           <ion-col>{{ servico.numero }}</ion-col>
-          <ion-col>{{ servico.data }}</ion-col>
+          <ion-col>{{ servico.dataServico }}</ion-col>
           <ion-col>
             <ion-badge [color]="servico.status === 'ABERTA' ? 'warning' : 'success'">
               {{ servico.status }}
@@ -105,7 +105,7 @@
         </ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        <p><strong>Data:</strong> {{ servico.data }}</p>
+        <p><strong>Data:</strong> {{ servico.dataServico }}</p>
         <p><strong>Cliente:</strong> {{ servico.cliente }}</p>
         <p><strong>Responsável:</strong> {{ servico.responsavel }}</p>
         <p><strong>Autor do Serviço:</strong> {{ servico.autorServico }}</p>

@@ -59,7 +59,7 @@ export class PlanoSemanalPage implements OnInit {
           return {
             id: servico._id,
             nomeCliente: servico.cliente || 'Cliente não informado',
-            dataServico: servico.data || 'Data não agendada',
+            dataServico: servico.dataServico || 'Data não agendada',
             problemaCliente: servico.descricao || 'Problema não descrito',
             horaServico: servico.horaServico || 'Horário não definido',
             status: statusAtual,

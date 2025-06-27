@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 
 interface Servico {
   numero: string;
-  data: string;
+  dataServico: string;
   status: string;
   cliente: string;
   descricao: string;
@@ -57,17 +57,17 @@ export class ServicosPage implements OnInit {
       return 'Data inválida';
     }
     if (data.includes('T')) {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
       const hours = String(date.getHours()).padStart(2, '0');
       const minutes = String(date.getMinutes()).padStart(2, '0');
-      return `${year}-${month}-${day} ${hours}:${minutes}`;
+      return `${day}-${month}-${year} ${hours}:${minutes}`;
     } else {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day} 00:00`;
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}-${month}-${year} 00:00`;
     }
   }
 
@@ -85,7 +85,7 @@ export class ServicosPage implements OnInit {
         this.servicos = response.map((servico, index) => ({
           ...servico,
           numero: this.formatarIdServico((index + 1).toString()),
-          data: this.formatarData(servico.data)
+          data: this.formatarData(servico.dataServico),
         }));
         this.filtrarServicos();
         console.log('Serviços carregados:', this.servicos);
