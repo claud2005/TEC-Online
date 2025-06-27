@@ -12,7 +12,7 @@
 
         <!-- Foto de Perfil -->
         <div class="profile-picture" (click)="alterarFoto()">
-          <img [src]="perfil.profilePicture || 'assets/img/default-profile.png'" alt="Foto de Perfil" />
+          <img [src]="perfil.profilePicture || 'assets/img/default-profile.png'" alt="Foto de Perfil" id="previewImage" />
         </div>
 
         <ion-button expand="block" class="alterar-foto" (click)="alterarFoto()" aria-label="Alterar Foto">
