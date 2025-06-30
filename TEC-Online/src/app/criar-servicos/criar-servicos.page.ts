@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NavController, IonicModule } from '@ionic/angular';
+import { IonSelect, IonSelectOption } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment.prod';
 
@@ -15,6 +16,8 @@ import { environment } from 'src/environments/environment.prod';
     CommonModule,
     FormsModule,
     IonicModule,
+    IonSelect,
+    IonSelectOption,
   ],
 })
 export class CriarServicosPage implements OnInit {
@@ -31,6 +34,8 @@ export class CriarServicosPage implements OnInit {
   valorTotal: number | null = null;
   observacoes: string = '';
 
+  clientes: any[] = [];
+
   constructor(private http: HttpClient, private navController: NavController, private router: Router) {}
 
   ngOnInit() {
@@ -39,6 +44,23 @@ export class CriarServicosPage implements OnInit {
 
     const nomeUsuario = localStorage.getItem('username');
     this.autorServico = nomeUsuario || '';
+
+    this.carregarClientes();
+  }
+
+  carregarClientes() {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe(
+      (response) => {
+        this.clientes = response;
+      },
+      (error) => {
+        console.error('Erro ao carregar clientes:', error);
+        alert('Erro ao carregar lista de clientes.');
+      }
+    );
   }
 
   salvarServico() {

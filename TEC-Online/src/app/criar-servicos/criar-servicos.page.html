@@ -49,7 +49,11 @@
 
       <div class="form-group">
         <ion-label position="floating">Nome Completo do Cliente *</ion-label>
-        <ion-input name="nomeCliente" type="text" placeholder="Ex: João Silva" [(ngModel)]="nomeCliente" required></ion-input>
+        <ion-select name="nomeCliente" [(ngModel)]="nomeCliente" required>
+          <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.nome">
+            {{ cliente.nome }}
+          </ion-select-option>
+        </ion-select>
       </div>
 
       <div class="form-group">
