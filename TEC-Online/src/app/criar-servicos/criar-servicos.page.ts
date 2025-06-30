@@ -25,7 +25,7 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  clienteId: any = null;
+  clienteSelecionado: any = null;
   marcaAparelho: string = '';
   modeloAparelho: string = '';
   problemaCliente: string = '';
@@ -54,16 +54,21 @@ export class CriarServicosPage implements OnInit {
 
   carregarClientes() {
     const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token não encontrado');
+      return;
+    }
+
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
         this.clientes = response;
-        console.log('Clientes carregados:', this.clientes);
+        console.log('Clientes carregados com sucesso:', this.clientes);
       },
       error: (error) => {
         console.error('Erro ao carregar clientes:', error);
-        alert('Erro ao carregar lista de clientes.');
+        alert('Erro ao carregar lista de clientes. Verifique o console para detalhes.');
       }
     });
   }
@@ -77,70 +82,83 @@ export class CriarServicosPage implements OnInit {
   }
 
   onClienteChange(event: any) {
-    console.log('Evento de seleção:', event);
-    this.clienteId = event.detail.value;
-    console.log('Cliente selecionado:', this.clienteId);
-    console.log('Tipo do clienteId:', typeof this.clienteId);
+    this.clienteSelecionado = event.detail.value;
+    console.log('Cliente selecionado:', this.clienteSelecionado);
   }
 
-  salvarServico() {
-    console.log('Validando formulário...');
-    console.log('Cliente atual:', this.clienteId);
-
+  async salvarServico() {
+    // Validação dos campos obrigatórios
     if (!this.isFormValid()) {
-      alert('Preencha todos os campos obrigatórios.');
+      alert('Por favor, preencha todos os campos obrigatórios corretamente.');
       return;
     }
 
-    if (!this.clienteId || (typeof this.clienteId === 'object' && !this.clienteId.id)) {
-      alert('Por favor, selecione um cliente válido.');
+    // Validação específica do cliente
+    if (!this.clienteSelecionado?.id) {
+      alert('Por favor, selecione um cliente válido da lista.');
       return;
     }
 
-    const novoServico = {
+    // Preparação dos dados para a API
+    const dadosServico = {
       data_servico: this.dataServico,
       hora_servico: this.horaServico,
       status: this.status,
       autor_servico: this.autorServico,
-      cliente_id: typeof this.clienteId === 'object' ? this.clienteId.id : this.clienteId,
-      nome_cliente: typeof this.clienteId === 'object' ? this.clienteId.nome : '',
+      cliente_id: this.clienteSelecionado.id,
+      nome_cliente: this.clienteSelecionado.nome,
       marca_aparelho: this.marcaAparelho,
       modelo_aparelho: this.modeloAparelho,
       problema_cliente: this.problemaCliente,
       solucao_inicial: this.solucaoInicial,
-      valor_total: this.valorTotal,
-      observacoes: this.observacoes || 'Sem observações',
+      valor_total: this.valorTotal || 0,
+      observacoes: this.observacoes || 'Sem observações'
     };
 
-    console.log('Dados a serem enviados:', novoServico);
+    console.log('Enviando dados para a API:', dadosServico);
 
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    this.http.post(`${environment.api_url}/api/servicos/`, novoServico, { headers }).subscribe({
-      next: () => {
-        alert('Serviço criado com sucesso!');
-        this.router.navigate(['/plano-semanal']);
-      },
-      error: (error) => {
-        console.error('Erro completo:', error);
-        console.error('Detalhes do erro:', error.error);
-        alert(`Erro ao criar serviço: ${error.error?.message || error.message || 'Verifique os dados e tente novamente'}`);
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Token de autenticação não encontrado');
       }
-    });
+
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      });
+
+      const resposta = await this.http.post(
+        `${environment.api_url}/api/servicos/`,
+        dadosServico,
+        { headers }
+      ).toPromise();
+
+      console.log('Serviço criado com sucesso:', resposta);
+      alert('Serviço registrado com sucesso!');
+      this.router.navigate(['/plano-semanal']);
+
+    } catch (error) {
+      console.error('Erro ao criar serviço:', error);
+      let mensagem = 'Erro ao criar serviço.';
+      
+      if (typeof error === 'object' && error !== null && 'error' in error && (error as any).error?.message) {
+        mensagem += ` Detalhes: ${(error as any).error.message}`;
+      } else if (typeof error === 'object' && error !== null && 'message' in error) {
+        mensagem += ` Erro: ${(error as any).message}`;
+      }
+      
+      alert(mensagem);
+    }
   }
 
   isFormValid(): boolean {
-    const clienteValido = typeof this.clienteId === 'object' ? 
-      (this.clienteId && this.clienteId.id) : 
-      (this.clienteId !== null && this.clienteId !== undefined);
-
     return !!(
       this.dataServico &&
       this.horaServico &&
       this.status &&
       this.autorServico &&
-      clienteValido &&
+      this.clienteSelecionado?.id &&
       this.marcaAparelho &&
       this.modeloAparelho &&
       this.problemaCliente
