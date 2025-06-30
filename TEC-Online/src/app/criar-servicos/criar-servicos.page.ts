@@ -28,7 +28,7 @@ export class CriarServicosPage implements OnInit {
   clienteId: any = null;
   marcaAparelho: string = '';
   modeloAparelho: string = '';
-  problemaCliente: string = '';
+  problemaCliente: string = ''; // Corrigido o nome da propriedade
   solucaoInicial: string = '';
   valorTotal: number | null = null;
   observacoes: string = '';
@@ -89,19 +89,21 @@ export class CriarServicosPage implements OnInit {
     }
 
     const novoServico = {
-      dataServico: this.dataServico,
-      horaServico: this.horaServico,
+      data_servico: this.dataServico, // Alterado para data_servico (com underscore)
+      hora_servico: this.horaServico, // Alterado para hora_servico
       status: this.status,
-      autorServico: this.autorServico,
-      clienteId: this.clienteId.id,
-      nomeCliente: this.clienteId.nome,
-      marcaAparelho: this.marcaAparelho,
-      modeloAparelho: this.modeloAparelho,
-      problemaCliente: this.problemaCliente,
-      solucaoInicial: this.solucaoInicial,
-      valorTotal: this.valorTotal,
+      autor_servico: this.autorServico, // Alterado para autor_servico
+      cliente_id: this.clienteId.id, // Alterado para cliente_id
+      nome_cliente: this.clienteId.nome, // Alterado para nome_cliente
+      marca_aparelho: this.marcaAparelho, // Alterado para marca_aparelho
+      modelo_aparelho: this.modeloAparelho, // Alterado para modelo_aparelho
+      problema_cliente: this.problemaCliente, // Alterado para problema_cliente
+      solucao_inicial: this.solucaoInicial, // Alterado para solucao_inicial
+      valor_total: this.valorTotal, // Alterado para valor_total
       observacoes: this.observacoes || 'Sem observações',
     };
+
+    console.log('Dados sendo enviados:', novoServico); // Adicionado log para debug
 
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
@@ -113,7 +115,8 @@ export class CriarServicosPage implements OnInit {
       },
       error: (error) => {
         console.error('Erro ao criar serviço:', error);
-        alert('Erro ao criar serviço. Verifique o console para detalhes.');
+        console.error('Detalhes do erro:', error.error); // Mostra detalhes do erro
+        alert(`Erro ao criar serviço: ${error.error?.message || 'Verifique os dados e tente novamente'}`);
       }
     });
   }
