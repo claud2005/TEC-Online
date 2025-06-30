@@ -5,15 +5,16 @@
       <div class="logo-shadow"></div>
     </div>
 
-    <h2>Gerenciar Usuários</h2>
+    <h2>Gerenciar Utilizadores</h2>
 
     <form #userForm="ngForm" (ngSubmit)="submitForm()">
+      <!-- campos iguais, vinculados ao "utilizador" -->
       <ion-item class="input-item">
         <ion-icon name="person-outline" slot="start" class="input-icon"></ion-icon>
         <ion-label position="floating">Nome Completo</ion-label>
         <ion-input
           type="text"
-          [(ngModel)]="user.fullName"
+          [(ngModel)]="utilizador.fullName"
           name="fullName"
           required
         ></ion-input>
@@ -24,7 +25,7 @@
         <ion-label position="floating">Utilizador</ion-label>
         <ion-input
           type="text"
-          [(ngModel)]="user.username"
+          [(ngModel)]="utilizador.username"
           name="username"
           required
         ></ion-input>
@@ -35,7 +36,7 @@
         <ion-label position="floating">Telefone</ion-label>
         <ion-input
           type="tel"
-          [(ngModel)]="user.telefone"
+          [(ngModel)]="utilizador.telefone"
           name="telefone"
         ></ion-input>
       </ion-item>
@@ -45,7 +46,7 @@
         <ion-label position="floating">E-mail</ion-label>
         <ion-input
           type="email"
-          [(ngModel)]="user.email"
+          [(ngModel)]="utilizador.email"
           name="email"
           required
           email
@@ -61,7 +62,7 @@
         <ion-label position="floating">Senha</ion-label>
         <ion-input
           type="password"
-          [(ngModel)]="user.password"
+          [(ngModel)]="utilizador.password"
           name="password"
           required
         ></ion-input>
@@ -88,7 +89,7 @@
         class="btn-animate btn-register"
         type="submit"
       >
-        {{ editing ? 'Atualizar Usuário' : 'Salvar Usuário' }}
+        {{ editing ? 'Atualizar Utilizador' : 'Salvar Utilizador' }}
       </ion-button>
 
       <ion-button
@@ -102,10 +103,10 @@
       </ion-button>
     </form>
 
-    <div class="user-list" *ngIf="users.length > 0">
-      <h3>Usuários Cadastrados</h3>
+    <div class="user-list" *ngIf="utilizadores.length > 0">
+      <h3>Utilizadores Cadastrados</h3>
       <ion-list>
-        <ion-item *ngFor="let u of users">
+        <ion-item *ngFor="let u of utilizadores">
           <ion-label>
             <h2>{{ u.fullName }} ({{ u.username }})</h2>
             <p>{{ u.email }} - {{ u.telefone }}</p>
