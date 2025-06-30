@@ -1,13 +1,36 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>administradores</ion-title>
+    <ion-title>Administradores</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">administradores</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <ion-list *ngIf="trabalhadores.length > 0; else noWorkers">
+    <ion-item *ngFor="let trabalhador of trabalhadores">
+      <ion-label>
+        <h2>{{ trabalhador.nome || trabalhador.username }}</h2>
+        <p>{{ trabalhador.email }}</p>
+      </ion-label>
+
+      <ion-buttons slot="end">
+        <!-- Botão para alterar senha -->
+        <ion-button color="warning" (click)="alterarSenha(trabalhador)">
+          <ion-icon slot="icon-only" name="key-outline"></ion-icon>
+        </ion-button>
+
+        <!-- Botão para eliminar -->
+        <ion-button color="danger" (click)="eliminarTrabalhador(trabalhador.id)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #noWorkers>
+    <p style="text-align: center; margin-top: 2rem;">
+      Nenhum trabalhador registrado.
+    </p>
+  </ng-template>
+
 </ion-content>
