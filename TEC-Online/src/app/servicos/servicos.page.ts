@@ -298,7 +298,6 @@ async gerarPDF(servico: Servico) {
   doc.setTextColor('#666');
   doc.text(empresaNome, pageWidth / 2, pageHeight - 15, { align: 'center' });
   doc.text(`Email: ${empresaEmail}  |  Tel: ${empresaTelefone}`, pageWidth / 2, pageHeight - 11, { align: 'center' });
-  doc.text(`Documento gerado em: ${new Date().toLocaleString()}`, leftMargin, pageHeight - 6);
   doc.text('Página 1/1', pageWidth - rightMargin, pageHeight - 6, { align: 'right' });
 
   // Salvar
