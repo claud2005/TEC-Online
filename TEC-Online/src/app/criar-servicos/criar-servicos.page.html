@@ -58,11 +58,22 @@
           name="clienteId" 
           [(ngModel)]="clienteId" 
           required
+          (ionChange)="validarClienteSelecionado($event)"
         >
-          <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.id">
+          <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.id?.toString()">
             {{ cliente.nome }} {{ cliente.telefone ? '(' + cliente.telefone + ')' : '' }}
           </ion-select-option>
         </ion-select>
+      </div>
+
+      <div class="form-group">
+        <ion-label position="floating">Contacto Alternativo</ion-label>
+        <ion-input 
+          name="telefoneContato" 
+          type="tel" 
+          [(ngModel)]="telefoneContato"
+          placeholder="Opcional - diferente do contacto principal"
+        ></ion-input>
       </div>
 
       <div class="form-group">

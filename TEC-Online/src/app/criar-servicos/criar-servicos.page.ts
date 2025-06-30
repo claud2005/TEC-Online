@@ -26,6 +26,7 @@ export class CriarServicosPage implements OnInit {
   status: string = 'aberto';
   autorServico: string = '';
   clienteId: string = '';
+  telefoneContato: string = '';
   marcaAparelho: string = '';
   modeloAparelho: string = '';
   problemaCliente: string = '';
@@ -59,6 +60,7 @@ export class CriarServicosPage implements OnInit {
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
         this.clientes = response;
+        console.log('Clientes carregados:', this.clientes.map(c => ({id: c.id, nome: c.nome})));
       },
       error: (error) => {
         console.error('Erro ao carregar clientes:', error);
@@ -67,15 +69,23 @@ export class CriarServicosPage implements OnInit {
     });
   }
 
+  validarClienteSelecionado(event: any) {
+    this.clienteId = event.detail.value;
+    console.log('Cliente selecionado:', this.clienteId);
+  }
+
   salvarServico() {
     if (!this.isFormValid()) {
       alert('Preencha todos os campos obrigatórios marcados com *');
       return;
     }
 
-    const clienteSelecionado = this.clientes.find(c => c.id === this.clienteId);
+    const clienteSelecionado = this.clientes.find(c => c.id?.toString() === this.clienteId?.toString());
+    
     if (!clienteSelecionado) {
-      alert('Por favor, selecione um cliente válido');
+      console.error('Cliente inválido selecionado:', this.clienteId);
+      console.log('Clientes disponíveis:', this.clientes);
+      alert('Por favor, selecione um cliente válido da lista.');
       return;
     }
 
@@ -86,7 +96,7 @@ export class CriarServicosPage implements OnInit {
       autorServico: this.autorServico,
       clienteId: this.clienteId,
       nomeCliente: clienteSelecionado.nome,
-      telefoneContato: clienteSelecionado.telefone || '',
+      telefoneContato: this.telefoneContato || clienteSelecionado.telefone || '',
       marcaAparelho: this.marcaAparelho,
       modeloAparelho: this.modeloAparelho,
       problemaCliente: this.problemaCliente,
