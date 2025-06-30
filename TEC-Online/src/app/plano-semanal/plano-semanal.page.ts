@@ -151,6 +151,10 @@ export class PlanoSemanalPage implements OnInit {
   navigateToAdicionarCliente() {
     this.router.navigate(['/adicionar-cliente']);
   }
+  navigateToAdministradores() {
+  this.router.navigate(['/administradores']);
+}
+
 
   editarServico(id: string) {
     if (id) {
@@ -158,6 +162,7 @@ export class PlanoSemanalPage implements OnInit {
     } else {
       alert('Serviço não possui ID para edição.');
     }
+    
   }
 
   alterarStatus(servico: any, novoStatus: string) {
