@@ -5,60 +5,119 @@
       <div class="logo-shadow"></div>
     </div>
 
-    <h2>Crie sua conta</h2>
+    <h2>Gerenciar Usuários</h2>
 
-    <form #signupForm="ngForm" (ngSubmit)="submitForm()">
-      <!-- Campo para o nome completo -->
+    <form #userForm="ngForm" (ngSubmit)="submitForm()">
       <ion-item class="input-item">
         <ion-icon name="person-outline" slot="start" class="input-icon"></ion-icon>
         <ion-label position="floating">Nome Completo</ion-label>
-        <ion-input type="text" [(ngModel)]="fullName" name="fullName" required></ion-input>
+        <ion-input
+          type="text"
+          [(ngModel)]="user.fullName"
+          name="fullName"
+          required
+        ></ion-input>
       </ion-item>
 
-      <!-- Campo para o nome de usuário -->
       <ion-item class="input-item">
         <ion-icon name="at-outline" slot="start" class="input-icon"></ion-icon>
         <ion-label position="floating">Utilizador</ion-label>
-        <ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
+        <ion-input
+          type="text"
+          [(ngModel)]="user.username"
+          name="username"
+          required
+        ></ion-input>
       </ion-item>
 
-      <!-- Campo para o telefone -->
-<ion-item class="input-item">
-  <ion-icon name="call-outline" slot="start" class="input-icon"></ion-icon>
-  <ion-label position="floating">Telefone</ion-label>
-  <ion-input type="tel" [(ngModel)]="telefone" name="telefone"></ion-input>
-</ion-item>
+      <ion-item class="input-item">
+        <ion-icon name="call-outline" slot="start" class="input-icon"></ion-icon>
+        <ion-label position="floating">Telefone</ion-label>
+        <ion-input
+          type="tel"
+          [(ngModel)]="user.telefone"
+          name="telefone"
+        ></ion-input>
+      </ion-item>
 
-      <!-- Campo para o e-mail -->
       <ion-item class="input-item">
         <ion-icon name="mail-outline" slot="start" class="input-icon"></ion-icon>
         <ion-label position="floating">E-mail</ion-label>
-        <ion-input type="email" [(ngModel)]="email" name="email" required email></ion-input>
+        <ion-input
+          type="email"
+          [(ngModel)]="user.email"
+          name="email"
+          required
+          email
+        ></ion-input>
       </ion-item>
 
-      <!-- Campo para a senha -->
-      <ion-item class="input-item">
-        <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+      <ion-item class="input-item" *ngIf="!editing">
+        <ion-icon
+          name="lock-closed-outline"
+          slot="start"
+          class="input-icon"
+        ></ion-icon>
         <ion-label position="floating">Senha</ion-label>
-        <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+        <ion-input
+          type="password"
+          [(ngModel)]="user.password"
+          name="password"
+          required
+        ></ion-input>
       </ion-item>
 
-      <!-- Campo para confirmar a senha -->
-      <ion-item class="input-item">
-        <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+      <ion-item class="input-item" *ngIf="!editing">
+        <ion-icon
+          name="lock-closed-outline"
+          slot="start"
+          class="input-icon"
+        ></ion-icon>
         <ion-label position="floating">Confirmar Senha</ion-label>
-        <ion-input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required></ion-input>
+        <ion-input
+          type="password"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          required
+        ></ion-input>
       </ion-item>
 
-      <!-- Botão de envio do formulário -->
-      <ion-button expand="full" fill="solid" class="btn-animate btn-register" type="submit">
-        Registar
+      <ion-button
+        expand="full"
+        fill="solid"
+        class="btn-animate btn-register"
+        type="submit"
+      >
+        {{ editing ? 'Atualizar Usuário' : 'Salvar Usuário' }}
+      </ion-button>
+
+      <ion-button
+        *ngIf="editing"
+        expand="full"
+        fill="outline"
+        color="medium"
+        (click)="cancelEdit()"
+      >
+        Cancelar
       </ion-button>
     </form>
 
-    <!-- Texto para redirecionar para o login -->
-    <div class="login-text">
-      <p>Já tens uma conta? <a (click)="goToLogin()">Faz login aqui</a>.</p>
+    <div class="user-list" *ngIf="users.length > 0">
+      <h3>Usuários Cadastrados</h3>
+      <ion-list>
+        <ion-item *ngFor="let u of users">
+          <ion-label>
+            <h2>{{ u.fullName }} ({{ u.username }})</h2>
+            <p>{{ u.email }} - {{ u.telefone }}</p>
+          </ion-label>
+          <ion-button fill="clear" color="primary" (click)="editUser(u)">
+            Editar
+          </ion-button>
+          <ion-button fill="clear" color="danger" (click)="deleteUser(u)">
+            Excluir
+          </ion-button>
+        </ion-item>
+      </ion-list>
     </div>
   </div>
 </ion-content>
