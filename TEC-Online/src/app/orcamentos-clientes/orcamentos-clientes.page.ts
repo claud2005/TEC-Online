@@ -17,7 +17,7 @@ export class OrcamentosClientesPage implements OnInit {
   clienteId: string | null = null;
   cliente: any = null;
   orcamentos: any[] = [];
-  servicos: any[] = []; // ✅ NOVO array para armazenar serviços do cliente
+  servicos: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -31,7 +31,7 @@ export class OrcamentosClientesPage implements OnInit {
     if (this.clienteId) {
       this.carregarCliente(this.clienteId);
       this.carregarOrcamentos(this.clienteId);
-      this.carregarServicos(this.clienteId); // ✅ buscar serviços ao iniciar
+      this.carregarServicos(this.clienteId);
     }
   }
 
@@ -77,7 +77,6 @@ export class OrcamentosClientesPage implements OnInit {
     });
   }
 
-  // ✅ NOVO método para carregar serviços do cliente
   async carregarServicos(clienteId: string) {
     const loading = await this.loadingCtrl.create({ message: 'Carregando serviços do cliente...' });
     await loading.present();
