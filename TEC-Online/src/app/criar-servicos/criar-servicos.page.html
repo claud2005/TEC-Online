@@ -58,10 +58,12 @@
           name="clienteId" 
           [(ngModel)]="clienteId" 
           required
-          (ionChange)="validarClienteSelecionado($event)"
+          interface="popover"
+          (ionChange)="onClienteChange($event)"
+          [compareWith]="compareWithClientes"
         >
-          <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.id?.toString()">
-            {{ cliente.nome }} {{ cliente.telefone ? '(' + cliente.telefone + ')' : '' }}
+          <ion-select-option *ngFor="let cliente of clientes" [value]="cliente">
+            {{ cliente.nome }} ({{ cliente.telefone || 'Sem telefone' }})
           </ion-select-option>
         </ion-select>
       </div>

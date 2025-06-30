@@ -25,7 +25,7 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  clienteId: string = '';
+  clienteId: any = null;
   telefoneContato: string = '';
   marcaAparelho: string = '';
   modeloAparelho: string = '';
@@ -60,7 +60,7 @@ export class CriarServicosPage implements OnInit {
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
         this.clientes = response;
-        console.log('Clientes carregados:', this.clientes.map(c => ({id: c.id, nome: c.nome})));
+        console.log('Clientes carregados:', this.clientes);
       },
       error: (error) => {
         console.error('Erro ao carregar clientes:', error);
@@ -69,23 +69,23 @@ export class CriarServicosPage implements OnInit {
     });
   }
 
-  validarClienteSelecionado(event: any) {
+  compareWithClientes(o1: any, o2: any) {
+    return o1 && o2 ? o1.id === o2.id : o1 === o2;
+  }
+
+  onClienteChange(event: any) {
     this.clienteId = event.detail.value;
     console.log('Cliente selecionado:', this.clienteId);
   }
 
   salvarServico() {
     if (!this.isFormValid()) {
-      alert('Preencha todos os campos obrigatórios marcados com *');
+      alert('Preencha todos os campos obrigatórios.');
       return;
     }
 
-    const clienteSelecionado = this.clientes.find(c => c.id?.toString() === this.clienteId?.toString());
-    
-    if (!clienteSelecionado) {
-      console.error('Cliente inválido selecionado:', this.clienteId);
-      console.log('Clientes disponíveis:', this.clientes);
-      alert('Por favor, selecione um cliente válido da lista.');
+    if (!this.clienteId || !this.clienteId.id) {
+      alert('Por favor, selecione um cliente válido.');
       return;
     }
 
@@ -94,9 +94,9 @@ export class CriarServicosPage implements OnInit {
       horaServico: this.horaServico,
       status: this.status,
       autorServico: this.autorServico,
-      clienteId: this.clienteId,
-      nomeCliente: clienteSelecionado.nome,
-      telefoneContato: this.telefoneContato || clienteSelecionado.telefone || '',
+      clienteId: this.clienteId.id,
+      nomeCliente: this.clienteId.nome,
+      telefoneContato: this.telefoneContato || this.clienteId.telefone || '',
       marcaAparelho: this.marcaAparelho,
       modeloAparelho: this.modeloAparelho,
       problemaCliente: this.problemaCliente,
@@ -115,7 +115,7 @@ export class CriarServicosPage implements OnInit {
       },
       error: (error) => {
         console.error('Erro ao criar serviço:', error);
-        alert('Erro ao criar serviço. Por favor, tente novamente.');
+        alert('Erro ao criar serviço. Verifique o console para detalhes.');
       }
     });
   }
