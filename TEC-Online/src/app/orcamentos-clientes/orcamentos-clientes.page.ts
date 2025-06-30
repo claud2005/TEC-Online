@@ -29,76 +29,47 @@ export class OrcamentosClientesPage implements OnInit {
   ngOnInit() {
     this.clienteId = this.route.snapshot.paramMap.get('id');
     if (this.clienteId) {
-      this.carregarCliente(this.clienteId);
-      this.carregarOrcamentos(this.clienteId);
-      this.carregarServicos(this.clienteId);
+      this.carregarDados(this.clienteId);
     }
   }
 
-  async carregarCliente(clienteId: string) {
-    const loading = await this.loadingCtrl.create({ message: 'Carregando cliente...' });
+  async carregarDados(clienteId: string) {
+    const loading = await this.loadingCtrl.create({
+      message: 'Carregando dados do cliente...'
+    });
     await loading.present();
 
-    this.clienteService.obterClientePorId(clienteId).subscribe({
-      next: (cliente) => {
-        this.cliente = cliente;
-        loading.dismiss();
-      },
-      error: async () => {
-        loading.dismiss();
-        const alert = await this.alertCtrl.create({
-          header: 'Erro',
-          message: 'Não foi possível carregar os dados do cliente.',
-          buttons: ['OK'],
-        });
-        await alert.present();
-      }
-    });
-  }
+    try {
+      // Carrega dados do cliente
+      const [cliente, orcamentos, servicos] = await Promise.all([
+        this.clienteService.obterClientePorId(clienteId).toPromise(),
+        this.clienteService.getOrcamentosPorCliente(clienteId).toPromise(),
+        this.clienteService.getServicosPorCliente(clienteId).toPromise()
+      ]);
 
-  async carregarOrcamentos(clienteId: string) {
-    const loading = await this.loadingCtrl.create({ message: 'Carregando orçamentos e serviços...' });
-    await loading.present();
-
-    this.clienteService.getOrcamentosPorCliente(clienteId).subscribe({
-      next: (orcamentos: any[]) => {
-        this.orcamentos = orcamentos;
-        loading.dismiss();
-      },
-      error: async () => {
-        loading.dismiss();
-        const alert = await this.alertCtrl.create({
-          header: 'Erro',
-          message: 'Não foi possível carregar os orçamentos.',
-          buttons: ['OK'],
-        });
-        await alert.present();
-      }
-    });
-  }
-
-  async carregarServicos(clienteId: string) {
-    const loading = await this.loadingCtrl.create({ message: 'Carregando serviços do cliente...' });
-    await loading.present();
-
-    this.clienteService.getServicosPorCliente(clienteId).subscribe({
-      next: (servicos: any[]) => {
-        this.servicos = servicos;
-        loading.dismiss();
-      },
-      error: async () => {
-        loading.dismiss();
-        const alert = await this.alertCtrl.create({
-          header: 'Erro',
-          message: 'Não foi possível carregar os serviços do cliente.',
-          buttons: ['OK'],
-        });
-        await alert.present();
-      }
-    });
+      this.cliente = cliente;
+      this.orcamentos = orcamentos || [];
+      this.servicos = servicos || [];
+      
+      loading.dismiss();
+    } catch (error) {
+      loading.dismiss();
+      const alert = await this.alertCtrl.create({
+        header: 'Erro',
+        message: 'Não foi possível carregar os dados do cliente.',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      console.error('Erro ao carregar dados:', error);
+    }
   }
 
   calcularTotalServicos(orcamento: any): number {
-    return orcamento.servicos?.reduce((acc: number, serv: any) => acc + serv.preco, 0) || 0;
+    return orcamento.servicos?.reduce((acc: number, serv: any) => acc + (serv.preco || 0), 0) || 0;
+  }
+
+  // Nova função para formatar data
+  formatarData(data: string): string {
+    return new Date(data).toLocaleDateString('pt-PT');
   }
 }

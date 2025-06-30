@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NavController, IonicModule } from '@ionic/angular';
-import { FormsModule } from '@angular/forms';   // 👈 adicione isto
+import { FormsModule } from '@angular/forms';
 import { IonSelect, IonSelectOption } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment.prod';
@@ -14,19 +14,18 @@ import { environment } from 'src/environments/environment.prod';
   styleUrls: ['./criar-servicos.page.scss'],
   imports: [
     CommonModule,
-    FormsModule,            // 👈 adicione aqui
+    FormsModule,
     IonicModule,
     IonSelect,
     IonSelectOption,
   ],
 })
-
 export class CriarServicosPage implements OnInit {
   dataServico: string = '';
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  nomeCliente: string = '';
+  clienteId: string = ''; // Alterado para armazenar ID do cliente
   telefoneContato: string = '';
   marcaAparelho: string = '';
   modeloAparelho: string = '';
@@ -37,15 +36,16 @@ export class CriarServicosPage implements OnInit {
 
   clientes: any[] = [];
 
-  constructor(private http: HttpClient, private navController: NavController, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private navController: NavController,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     const hoje = new Date();
     this.dataServico = hoje.toISOString().split('T')[0];
-
-    const nomeUsuario = localStorage.getItem('username');
-    this.autorServico = nomeUsuario || '';
-
+    this.autorServico = localStorage.getItem('username') || '';
     this.carregarClientes();
   }
 
@@ -70,19 +70,26 @@ export class CriarServicosPage implements OnInit {
       return;
     }
 
+    const clienteSelecionado = this.clientes.find(c => c.id === this.clienteId);
+    if (!clienteSelecionado) {
+      alert('Cliente selecionado inválido.');
+      return;
+    }
+
     const novoServico = {
-      dataServico: this.dataServico.trim(),
-      horaServico: this.horaServico.trim(),
+      dataServico: this.dataServico,
+      horaServico: this.horaServico,
       status: this.status,
-      autorServico: this.autorServico.trim(),
-      nomeCliente: this.nomeCliente.trim(),
-      telefoneContato: this.telefoneContato.trim(),
-      marcaAparelho: this.marcaAparelho.trim(),
-      modeloAparelho: this.modeloAparelho.trim(),
-      problemaCliente: this.problemaCliente.trim(),
-      solucaoInicial: this.solucaoInicial?.trim() || '',
-      valorTotal: this.valorTotal ?? null,
-      observacoes: this.observacoes.trim() || 'Sem observações',
+      autorServico: this.autorServico,
+      clienteId: this.clienteId, // ID do cliente
+      nomeCliente: clienteSelecionado.nome, // Nome para referência
+      telefoneContato: clienteSelecionado.telefone || this.telefoneContato,
+      marcaAparelho: this.marcaAparelho,
+      modeloAparelho: this.modeloAparelho,
+      problemaCliente: this.problemaCliente,
+      solucaoInicial: this.solucaoInicial,
+      valorTotal: this.valorTotal,
+      observacoes: this.observacoes || 'Sem observações',
     };
 
     const token = localStorage.getItem('token');
@@ -95,21 +102,25 @@ export class CriarServicosPage implements OnInit {
       },
       (error) => {
         console.error('Erro ao criar serviço:', error);
-        alert('Erro ao criar serviço.');
+        alert('Erro ao criar serviço. Verifique o console para detalhes.');
       }
     );
   }
 
   isFormValid(): boolean {
-    return [
-      this.dataServico, this.horaServico, this.status, this.autorServico,
-      this.nomeCliente, this.telefoneContato, this.marcaAparelho, this.modeloAparelho,
+    return !!(
+      this.dataServico &&
+      this.horaServico &&
+      this.status &&
+      this.autorServico &&
+      this.clienteId && // Validação do ID do cliente
+      this.marcaAparelho &&
+      this.modeloAparelho &&
       this.problemaCliente
-    ].every(campo => campo !== undefined && campo.trim() !== '') &&
-      (this.valorTotal === null || this.valorTotal >= 0);
+    );
   }
 
   goBack() {
     this.navController.back();
-  }
+  }
 }
