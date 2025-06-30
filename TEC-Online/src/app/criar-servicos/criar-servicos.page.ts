@@ -26,7 +26,6 @@ export class CriarServicosPage implements OnInit {
   status: string = 'aberto';
   autorServico: string = '';
   clienteId: any = null;
-  telefoneContato: string = '';
   marcaAparelho: string = '';
   modeloAparelho: string = '';
   problemaCliente: string = '';
@@ -84,7 +83,7 @@ export class CriarServicosPage implements OnInit {
       return;
     }
 
-    if (!this.clienteId || !this.clienteId.id) {
+    if (!this.clienteId) {
       alert('Por favor, selecione um cliente válido.');
       return;
     }
@@ -96,7 +95,6 @@ export class CriarServicosPage implements OnInit {
       autorServico: this.autorServico,
       clienteId: this.clienteId.id,
       nomeCliente: this.clienteId.nome,
-      telefoneContato: this.telefoneContato || this.clienteId.telefone || '',
       marcaAparelho: this.marcaAparelho,
       modeloAparelho: this.modeloAparelho,
       problemaCliente: this.problemaCliente,

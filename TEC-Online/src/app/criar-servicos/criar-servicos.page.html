@@ -63,19 +63,9 @@
           [compareWith]="compareWithClientes"
         >
           <ion-select-option *ngFor="let cliente of clientes" [value]="cliente">
-            {{ cliente.nome }} ({{ cliente.telefone || 'Sem telefone' }})
+            {{ cliente.nome }} {{ cliente.telefone ? '(' + cliente.telefone + ')' : '' }}
           </ion-select-option>
         </ion-select>
-      </div>
-
-      <div class="form-group">
-        <ion-label position="floating">Contacto Alternativo</ion-label>
-        <ion-input 
-          name="telefoneContato" 
-          type="tel" 
-          [(ngModel)]="telefoneContato"
-          placeholder="Opcional - diferente do contacto principal"
-        ></ion-input>
       </div>
 
       <div class="form-group">
