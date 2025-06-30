@@ -69,21 +69,30 @@ export class CriarServicosPage implements OnInit {
   }
 
   compareWithClientes(o1: any, o2: any) {
-    return o1 && o2 ? o1.id === o2.id : o1 === o2;
+    if (!o1 || !o2) return false;
+    if (typeof o1 === 'object' && typeof o2 === 'object') {
+      return o1.id === o2.id;
+    }
+    return o1 === o2;
   }
 
   onClienteChange(event: any) {
+    console.log('Evento de seleção:', event);
     this.clienteId = event.detail.value;
     console.log('Cliente selecionado:', this.clienteId);
+    console.log('Tipo do clienteId:', typeof this.clienteId);
   }
 
   salvarServico() {
+    console.log('Validando formulário...');
+    console.log('Cliente atual:', this.clienteId);
+
     if (!this.isFormValid()) {
       alert('Preencha todos os campos obrigatórios.');
       return;
     }
 
-    if (!this.clienteId || !this.clienteId.id) {
+    if (!this.clienteId || (typeof this.clienteId === 'object' && !this.clienteId.id)) {
       alert('Por favor, selecione um cliente válido.');
       return;
     }
@@ -93,8 +102,8 @@ export class CriarServicosPage implements OnInit {
       hora_servico: this.horaServico,
       status: this.status,
       autor_servico: this.autorServico,
-      cliente_id: this.clienteId.id, // Garantindo que estamos enviando o ID numérico
-      nome_cliente: this.clienteId.nome,
+      cliente_id: typeof this.clienteId === 'object' ? this.clienteId.id : this.clienteId,
+      nome_cliente: typeof this.clienteId === 'object' ? this.clienteId.nome : '',
       marca_aparelho: this.marcaAparelho,
       modelo_aparelho: this.modeloAparelho,
       problema_cliente: this.problemaCliente,
@@ -103,7 +112,7 @@ export class CriarServicosPage implements OnInit {
       observacoes: this.observacoes || 'Sem observações',
     };
 
-    console.log('Payload sendo enviado:', novoServico); // Para debug
+    console.log('Dados a serem enviados:', novoServico);
 
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
@@ -115,19 +124,23 @@ export class CriarServicosPage implements OnInit {
       },
       error: (error) => {
         console.error('Erro completo:', error);
-        console.error('Resposta do servidor:', error.error);
+        console.error('Detalhes do erro:', error.error);
         alert(`Erro ao criar serviço: ${error.error?.message || error.message || 'Verifique os dados e tente novamente'}`);
       }
     });
   }
 
   isFormValid(): boolean {
+    const clienteValido = typeof this.clienteId === 'object' ? 
+      (this.clienteId && this.clienteId.id) : 
+      (this.clienteId !== null && this.clienteId !== undefined);
+
     return !!(
       this.dataServico &&
       this.horaServico &&
       this.status &&
       this.autorServico &&
-      this.clienteId &&
+      clienteValido &&
       this.marcaAparelho &&
       this.modeloAparelho &&
       this.problemaCliente
