@@ -13,7 +13,5 @@ describe('CriarServicosPage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
+  });
 });
-
-
