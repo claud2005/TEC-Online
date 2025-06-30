@@ -1,7 +1,7 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, IonModal, MenuController } from '@ionic/angular';
+import { IonicModule, MenuController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -23,7 +23,7 @@ export class PlanoSemanalPage implements OnInit {
   utilizadorName: string = 'Utilizador';
   searchQuery: string = '';
   selectedFilter: number | string = -1;
-  isAdmin: boolean = false; // ✅ Adicionado
+  isAdmin: boolean = false;
 
   constructor(
     private router: Router,
@@ -33,7 +33,7 @@ export class PlanoSemanalPage implements OnInit {
 
   ngOnInit() {
     this.atualizarNomeUtilizador();
-    this.verificarSeAdmin(); // ✅ chamada para definir isAdmin
+    this.verificarSeAdmin();
   }
 
   ionViewWillEnter() {
@@ -46,17 +46,21 @@ export class PlanoSemanalPage implements OnInit {
 
   atualizarNomeUtilizador() {
     const storedUsername = localStorage.getItem('username');
-    this.utilizadorName = storedUsername || 'Utilizador';
+    this.utilizadorName = storedUsername ?? 'Utilizador'; // Usa nullish coalescing para segurança
   }
 
   verificarSeAdmin() {
-    // ✅ Adapte esta lógica conforme o seu sistema
-    const role = localStorage.getItem('role'); // Exemplo: 'admin', 'user'
+    const role = localStorage.getItem('role');
     this.isAdmin = role === 'admin';
+    console.log('isAdmin:', this.isAdmin); // Para depurar se o valor está correto
   }
 
   carregarServicos() {
     const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token não encontrado');
+      return;
+    }
     const headers = { 'Authorization': `Bearer ${token}` };
 
     this.http.get<any[]>(`${environment.api_url}/api/servicos`, { headers }).subscribe({
@@ -67,7 +71,7 @@ export class PlanoSemanalPage implements OnInit {
           return {
             id: servico._id,
             nomeCliente: servico.cliente || 'Cliente não informado',
-            dataServico: servico.dataServico || 'Data não agendada',
+            dataServico: servico.dataServico || '', // Use string vazia para evitar erros na conversão Date
             problemaCliente: servico.descricao || 'Problema não descrito',
             horaServico: servico.horaServico || 'Horário não definido',
             status: statusAtual,
@@ -79,7 +83,9 @@ export class PlanoSemanalPage implements OnInit {
         });
 
         this.servicos.sort((a, b) => {
-          return new Date(a.dataServico).getTime() - new Date(b.dataServico).getTime();
+          const dateA = new Date(a.dataServico).getTime();
+          const dateB = new Date(b.dataServico).getTime();
+          return dateA - dateB;
         });
 
         this.aplicarFiltros();
@@ -174,6 +180,10 @@ export class PlanoSemanalPage implements OnInit {
 
   alterarStatus(servico: any, novoStatus: string) {
     const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Usuário não autenticado.');
+      return;
+    }
     const headers = { 'Authorization': `Bearer ${token}` };
 
     servico.status = novoStatus;
