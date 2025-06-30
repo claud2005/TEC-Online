@@ -21,9 +21,9 @@
     </ion-row>
 
     <ion-row *ngFor="let admin of administradores" style="border-bottom: 1px solid #eee; align-items: center;">
-      <ion-col>{{ admin.nome }}</ion-col>
+      <ion-col>{{ admin.fullName }}</ion-col>
       <ion-col>{{ admin.email }}</ion-col>
-      <ion-col>{{ admin.telefone || '-' }}</ion-col>
+      <ion-col>{{ admin.telefone }}</ion-col>
       <ion-col>{{ admin.isAdmin ? 'Sim' : 'Não' }}</ion-col>
       <ion-col>
         <ion-button size="small" color="warning" (click)="alterarSenha(admin)">

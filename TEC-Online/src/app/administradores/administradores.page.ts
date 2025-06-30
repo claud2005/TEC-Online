@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-administradores',
@@ -12,7 +12,8 @@ import { HttpClient } from '@angular/common/http';
   imports: [
     IonicModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ]
 })
 export class AdministradoresPage implements OnInit {
@@ -27,14 +28,13 @@ export class AdministradoresPage implements OnInit {
   carregarAdministradores() {
     this.http.get<any[]>('http://localhost:3000/api/users').subscribe(
       (data) => {
-        // Ajusta os dados para a tabela
         this.administradores = data.map(user => ({
           id: user._id,
           fullName: user.fullName,
           username: user.username,
           email: user.email,
           isAdmin: user.isAdmin || false,
-          telefone: user.telefone || '-'  // se existir telefone no seu schema, senão remova
+          telefone: user.telefone || '-'
         }));
         console.log('Administradores carregados:', this.administradores);
       },
@@ -45,12 +45,10 @@ export class AdministradoresPage implements OnInit {
   }
 
   criarAdministrador() {
-    // aqui você pode abrir modal ou navegar para a página de cadastro
     console.log('Criar administrador - abrir formulário');
   }
 
   sair() {
-    // lógica para sair / logout
     console.log('Sair');
   }
 
@@ -60,6 +58,5 @@ export class AdministradoresPage implements OnInit {
 
   eliminarAdministrador(id: string) {
     console.log('Eliminar administrador com id:', id);
-    // aqui você chamaria o backend para deletar e atualizar lista
   }
 }
