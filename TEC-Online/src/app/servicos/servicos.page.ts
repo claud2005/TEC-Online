@@ -97,12 +97,13 @@ export class ServicosPage implements OnInit {
     );
   }
 
-async gerarPDF(servico: Servico) {
+  async gerarPDF(servico: Servico) {
   const doc = new jsPDF({
     unit: 'mm',
     format: 'a4',
   });
 
+  // Configurações de layout
   const leftMargin = 15;
   const rightMargin = 15;
   let verticalPos = 20;
@@ -111,114 +112,161 @@ async gerarPDF(servico: Servico) {
   const contentWidth = pageWidth - leftMargin - rightMargin;
   const pageHeight = doc.internal.pageSize.getHeight();
 
+  // Cores da empresa (pode ajustar conforme necessário)
   const primaryColor = '#007aff';
   const secondaryColor = '#333333';
   const lightColor = '#f5f5f5';
 
-  // Dados fixos da empresa
-  const empresaNome = 'RFM-Informatica';
-  const empresaTelefone = 'Tel: +351 912 345 678';
-  const empresaEmail = 'Email: geral@rfm-informatica.pt';
-  const empresaMorada = 'Rua Exemplo, 123, 4000-000 Porto';
-
+  // Função auxiliar para quebrar texto longo
   const addMultilineText = (text: string, x: number, y: number, maxWidth: number, lineHeight: number) => {
     const splitText = doc.splitTextToSize(text, maxWidth);
     doc.text(splitText, x, y);
     return splitText.length * lineHeight;
   };
 
+  // Adicionar logotipo (substitua pela URL/base64 do seu logotipo)
   const addLogo = async () => {
     try {
       const imgData = await this.getBase64ImageFromAssets('logotipo.png');
-      // Desenhar logotipo à esquerda
-      doc.addImage(imgData, 'PNG', leftMargin, 10, 30, 10);
-      
-      // Informações da empresa ao lado do logotipo
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
-      doc.setTextColor(secondaryColor);
-      doc.text(empresaNome, leftMargin + 35, 14);
-      
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      doc.setTextColor('#444');
-      doc.text(empresaTelefone, leftMargin + 35, 18);
-      doc.text(empresaEmail, leftMargin + 35, 22);
-      doc.text(empresaMorada, leftMargin + 35, 26);
-      
+      doc.addImage(imgData, 'PNG', leftMargin, 10, 30, 10); // Ajuste tamanho conforme necessário
     } catch (e) {
       console.error('Erro ao carregar logotipo:', e);
       // Fallback textual
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(16);
       doc.setTextColor(primaryColor);
-      doc.text(empresaNome, leftMargin, 15);
+      doc.text('RFM-Informatica', leftMargin, 15);
     }
   };
-
-  // Aguarde o logotipo e contactos no cabeçalho
-  await addLogo();
-  verticalPos = 32; // ajustar após cabeçalho
-
-  // Título principal
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(18);
-  doc.setTextColor(secondaryColor);
-  doc.text('RELATÓRIO DE SERVIÇO', pageWidth / 2, verticalPos, { align: 'center' });
-  verticalPos += lineHeight + 2;
-
-  // Informações básicas
-  doc.setFontSize(10);
-  doc.setTextColor('#666');
-  doc.text(`Nº: ${servico.numero}`, leftMargin, verticalPos);
-  doc.text(`Data: ${new Date().toLocaleDateString()}`, pageWidth - rightMargin, verticalPos, { align: 'right' });
-  verticalPos += lineHeight + 4;
-
-  doc.setDrawColor(primaryColor);
-  doc.setLineWidth(0.5);
-  doc.line(leftMargin, verticalPos, pageWidth - rightMargin, verticalPos);
-  verticalPos += 8;
-
-  // Seções (mantidas do teu código, sem alterações)
-  const printLabelValue = (label: string, value: string, indent = 0) => {
-    const labelWidth = 40;
-    const valueX = leftMargin + labelWidth + indent;
-    const valueWidth = contentWidth - labelWidth - indent;
-
+    // Cabeçalho
+    // Aguarde o carregamento do logotipo antes de continuar
+    await addLogo();
+  
+    // Título principal 
     doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
     doc.setTextColor(secondaryColor);
-    doc.text(`${label}:`, leftMargin + indent, verticalPos);
+    doc.text('RELATÓRIO DE SERVIÇO', pageWidth / 2, verticalPos, { align: 'center' });
+    verticalPos += lineHeight + 2;
 
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor('#444');
-    const lines = addMultilineText(value || 'Não informado', valueX, verticalPos, valueWidth, lineHeight - 1);
-    verticalPos += Math.max(lineHeight, lines);
-  };
+    // Informações básicas em linha
+    doc.setFontSize(10);
+    doc.setTextColor('#666');
+    doc.text(`Nº: ${servico.numero}`, leftMargin, verticalPos);
+    doc.text(`Data: ${new Date().toLocaleDateString()}`, pageWidth - rightMargin, verticalPos, { align: 'right' });
+    verticalPos += lineHeight + 4;
 
-  // ... (seções de Dados do Cliente, Aparelho, Descrição, Financeiras, Responsável — sem alterações)
+    // Linha horizontal decorativa
+    doc.setDrawColor(primaryColor);
+    doc.setLineWidth(0.5);
+    doc.line(leftMargin, verticalPos, pageWidth - rightMargin, verticalPos);
+    verticalPos += 8;
 
-  // Rodapé
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'italic');
-  doc.setTextColor('#666');
+    // Seção de Dados do Cliente
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(primaryColor);
+    doc.text('DADOS DO CLIENTE', leftMargin, verticalPos);
+    verticalPos += lineHeight;
 
-  // Linha decorativa
-  doc.setDrawColor(primaryColor);
-  doc.setLineWidth(0.3);
-  doc.line(leftMargin, pageHeight - 20, pageWidth - rightMargin, pageHeight - 20);
+    // Fundo para seção
+    doc.setFillColor(lightColor);
+    doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
+  
+    // Helper para imprimir label + valor formatado
+    const printLabelValue = (label: string, value: string, indent = 0) => {
+      const labelWidth = 40;
+      const valueX = leftMargin + labelWidth + indent;
+      const valueWidth = contentWidth - labelWidth - indent;
+    
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(secondaryColor);
+      doc.text(`${label}:`, leftMargin + indent, verticalPos);
+    
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor('#444');
+      const lines = addMultilineText(value || 'Não informado', valueX, verticalPos, valueWidth, lineHeight - 1);
+      verticalPos += Math.max(lineHeight, lines);
+    };
 
-  // Nome da empresa e contactos no rodapé
-  doc.text(empresaNome, pageWidth / 2, pageHeight - 16, { align: 'center' });
-  doc.text(`${empresaTelefone} | ${empresaEmail}`, pageWidth / 2, pageHeight - 12, { align: 'center' });
-  doc.text(`${empresaMorada}`, pageWidth / 2, pageHeight - 8, { align: 'center' });
+    // Dados do cliente
+    printLabelValue('Nome', servico.nomeCompletoCliente);
+    printLabelValue('Contato', servico.contatoCliente);
+    verticalPos += 2;
 
-  // Página e data
-  doc.text(`Documento gerado em: ${new Date().toLocaleString()}`, leftMargin, pageHeight - 4);
-  doc.text('Página 1/1', pageWidth - rightMargin, pageHeight - 4, { align: 'right' });
+    // Seção de Dados do Aparelho
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(primaryColor);
+    doc.text('DADOS DO APARELHO', leftMargin, verticalPos);
+    verticalPos += lineHeight;
 
-  doc.save(`Servico_${servico.numero}_${new Date().toISOString().slice(0,10)}.pdf`);
-}
+    doc.setFillColor(lightColor);
+    doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
+  
+    printLabelValue('Marca', servico.marcaAparelho);
+    printLabelValue('Modelo', servico.modeloAparelho);
+    verticalPos += 2;
 
+    // Seção de Descrição do Serviço
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(primaryColor);
+    doc.text('DESCRIÇÃO DO SERVIÇO', leftMargin, verticalPos);
+    verticalPos += lineHeight;
+
+    doc.setFillColor(lightColor);
+    doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
+  
+    printLabelValue('Problema relatado', servico.problemaRelatado);
+    printLabelValue('Solução aplicada', servico.solucaoInicial);
+    printLabelValue('Observações', servico.observacoes);
+    verticalPos += 2;
+
+    // Seção Financeira
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(primaryColor);
+    doc.text('INFORMAÇÕES FINANCEIRAS', leftMargin, verticalPos);
+    verticalPos += lineHeight;
+
+    doc.setFillColor(lightColor);
+    doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
+  
+    printLabelValue('Custo estimado', servico.custoEstimado ? `€ ${parseFloat(servico.custoEstimado).toFixed(2)}` : 'Não informado');
+    printLabelValue('Valor total', servico.valorTotal ? `€ ${parseFloat(servico.valorTotal).toFixed(2)}` : 'Não informado');
+    verticalPos += 2;
+
+    // Seção de Responsável
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(primaryColor);
+    doc.text('RESPONSÁVEL', leftMargin, verticalPos);
+    verticalPos += lineHeight;
+
+    doc.setFillColor(lightColor);
+    doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
+  
+    printLabelValue('Técnico', servico.responsavel);
+      if (servico.dataConclusao) {
+    printLabelValue('Data conclusão', servico.dataConclusao);
+    }
+    verticalPos += 10;
+
+    // Rodapé
+    doc.setFontSize(10);
+    doc.setTextColor('#666');
+    doc.setFont('helvetica', 'italic');
+  
+    // Linha de rodapé
+    doc.setDrawColor(primaryColor);
+    doc.setLineWidth(0.3);
+    doc.line(leftMargin, pageHeight - 20, pageWidth - rightMargin, pageHeight - 20);
+  
+    // Informações de rodapé
+    doc.text('RFM-Informatica', pageWidth / 2, pageHeight - 15, { align: 'center' });
+    doc.text(`Documento gerado em: ${new Date().toLocaleString()}`, leftMargin, pageHeight - 10);
+    doc.text('Página 1/1', pageWidth - rightMargin, pageHeight - 10, { align: 'right' });
+
+    // Salvar o PDF
+    doc.save(`Servico_${servico.numero}_${new Date().toISOString().slice(0,10)}.pdf`);
+  }
 
   filtrarServicos() {
     this.servicosFiltrados = this.servicos.filter(servico => {
