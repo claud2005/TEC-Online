@@ -65,12 +65,11 @@ const routes: Routes = [
   {
     path: 'orcamentos-clientes/:id',
     loadComponent: () => import('./orcamentos-clientes/orcamentos-clientes.page').then(m => m.OrcamentosClientesPage)
+  },
+  {
+    path: 'administradores',
+    loadComponent: () => import('./administradores/administradores.page').then(m => m.AdministradoresPage)
   }
-
-
-  
-  
-
 ];
 
 @NgModule({
