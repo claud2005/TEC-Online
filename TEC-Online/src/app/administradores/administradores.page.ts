@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment.prod';  // Ajuste o caminho se necessário
 
 @Component({
   selector: 'app-administradores',
@@ -26,7 +27,10 @@ export class AdministradoresPage implements OnInit {
   }
 
   carregarAdministradores() {
-    this.http.get<any[]>('http://localhost:3000/api/users').subscribe(
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http.get<any[]>(`${environment.api_url}/api/users`, { headers }).subscribe(
       (data) => {
         this.administradores = data.map(user => ({
           id: user._id,
@@ -46,17 +50,31 @@ export class AdministradoresPage implements OnInit {
 
   criarAdministrador() {
     console.log('Criar administrador - abrir formulário');
+    // Aqui você pode navegar para a página de criação ou abrir modal
   }
 
   sair() {
     console.log('Sair');
+    // Implementar logout ou navegação para página de login
   }
 
   alterarSenha(admin: any) {
     console.log('Alterar senha de:', admin);
+    // Implementar funcionalidade para alterar senha do admin
   }
 
   eliminarAdministrador(id: string) {
-    console.log('Eliminar administrador com id:', id);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http.delete(`${environment.api_url}/api/users/${id}`, { headers }).subscribe(
+      () => {
+        console.log(`Administrador com id ${id} eliminado.`);
+        this.carregarAdministradores(); // Recarrega lista após exclusão
+      },
+      (error) => {
+        console.error('Erro ao eliminar administrador:', error);
+      }
+    );
   }
 }
