@@ -18,7 +18,6 @@
           name="dataServico"
           type="date"
           [(ngModel)]="dataServico"
-          [value]="dataServico"
           required
         ></ion-input>
       </div>
@@ -59,10 +58,9 @@
           name="clienteId" 
           [(ngModel)]="clienteId" 
           required
-          interface="action-sheet"
         >
           <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.id">
-            {{ cliente.nome }} ({{ cliente.telefone || 'Sem telefone' }})
+            {{ cliente.nome }} {{ cliente.telefone ? '(' + cliente.telefone + ')' : '' }}
           </ion-select-option>
         </ion-select>
       </div>

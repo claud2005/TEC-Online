@@ -25,8 +25,7 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  clienteId: string = ''; // Alterado para armazenar ID do cliente
-  telefoneContato: string = '';
+  clienteId: string = '';
   marcaAparelho: string = '';
   modeloAparelho: string = '';
   problemaCliente: string = '';
@@ -43,6 +42,10 @@ export class CriarServicosPage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.carregarDadosIniciais();
+  }
+
+  carregarDadosIniciais() {
     const hoje = new Date();
     this.dataServico = hoje.toISOString().split('T')[0];
     this.autorServico = localStorage.getItem('username') || '';
@@ -53,26 +56,26 @@ export class CriarServicosPage implements OnInit {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe(
-      (response) => {
+    this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
+      next: (response) => {
         this.clientes = response;
       },
-      (error) => {
+      error: (error) => {
         console.error('Erro ao carregar clientes:', error);
         alert('Erro ao carregar lista de clientes.');
       }
-    );
+    });
   }
 
   salvarServico() {
     if (!this.isFormValid()) {
-      alert('Preencha todos os campos obrigatórios.');
+      alert('Preencha todos os campos obrigatórios marcados com *');
       return;
     }
 
     const clienteSelecionado = this.clientes.find(c => c.id === this.clienteId);
     if (!clienteSelecionado) {
-      alert('Cliente selecionado inválido.');
+      alert('Por favor, selecione um cliente válido');
       return;
     }
 
@@ -81,9 +84,9 @@ export class CriarServicosPage implements OnInit {
       horaServico: this.horaServico,
       status: this.status,
       autorServico: this.autorServico,
-      clienteId: this.clienteId, // ID do cliente
-      nomeCliente: clienteSelecionado.nome, // Nome para referência
-      telefoneContato: clienteSelecionado.telefone || this.telefoneContato,
+      clienteId: this.clienteId,
+      nomeCliente: clienteSelecionado.nome,
+      telefoneContato: clienteSelecionado.telefone || '',
       marcaAparelho: this.marcaAparelho,
       modeloAparelho: this.modeloAparelho,
       problemaCliente: this.problemaCliente,
@@ -95,16 +98,16 @@ export class CriarServicosPage implements OnInit {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.post(`${environment.api_url}/api/servicos/`, novoServico, { headers }).subscribe(
-      (response) => {
+    this.http.post(`${environment.api_url}/api/servicos/`, novoServico, { headers }).subscribe({
+      next: () => {
         alert('Serviço criado com sucesso!');
         this.router.navigate(['/plano-semanal']);
       },
-      (error) => {
+      error: (error) => {
         console.error('Erro ao criar serviço:', error);
-        alert('Erro ao criar serviço. Verifique o console para detalhes.');
+        alert('Erro ao criar serviço. Por favor, tente novamente.');
       }
-    );
+    });
   }
 
   isFormValid(): boolean {
@@ -113,7 +116,7 @@ export class CriarServicosPage implements OnInit {
       this.horaServico &&
       this.status &&
       this.autorServico &&
-      this.clienteId && // Validação do ID do cliente
+      this.clienteId &&
       this.marcaAparelho &&
       this.modeloAparelho &&
       this.problemaCliente
