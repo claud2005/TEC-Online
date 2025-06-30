@@ -4,33 +4,42 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content class="ion-padding">
 
-  <ion-list *ngIf="trabalhadores.length > 0; else noWorkers">
-    <ion-item *ngFor="let trabalhador of trabalhadores">
-      <ion-label>
-        <h2>{{ trabalhador.nome || trabalhador.username }}</h2>
-        <p>{{ trabalhador.email }}</p>
-      </ion-label>
+  <div style="display: flex; justify-content: flex-start; gap: 1rem; margin-bottom: 1rem;">
+    <ion-button (click)="criarAdministrador()">Criar Administrador</ion-button>
+    <ion-button color="medium" (click)="sair()">Sair</ion-button>
+  </div>
 
-      <ion-buttons slot="end">
-        <!-- Botão para alterar senha -->
-        <ion-button color="warning" (click)="alterarSenha(trabalhador)">
+  <ion-grid>
+    <ion-row class="table-header" style="font-weight: bold; border-bottom: 2px solid #ccc;">
+      <ion-col>Nome</ion-col>
+      <ion-col>Email</ion-col>
+      <ion-col>Telefone</ion-col>
+      <ion-col>Administrador</ion-col>
+      <ion-col>Gerenciar</ion-col>
+    </ion-row>
+
+    <ion-row *ngFor="let admin of administradores" style="border-bottom: 1px solid #eee; align-items: center;">
+      <ion-col>{{ admin.nome }}</ion-col>
+      <ion-col>{{ admin.email }}</ion-col>
+      <ion-col>{{ admin.telefone || '-' }}</ion-col>
+      <ion-col>{{ admin.isAdmin ? 'Sim' : 'Não' }}</ion-col>
+      <ion-col>
+        <ion-button size="small" color="warning" (click)="alterarSenha(admin)">
           <ion-icon slot="icon-only" name="key-outline"></ion-icon>
         </ion-button>
-
-        <!-- Botão para eliminar -->
-        <ion-button color="danger" (click)="eliminarTrabalhador(trabalhador.id)">
+        <ion-button size="small" color="danger" (click)="eliminarAdministrador(admin.id)">
           <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-button>
-      </ion-buttons>
-    </ion-item>
-  </ion-list>
+      </ion-col>
+    </ion-row>
 
-  <ng-template #noWorkers>
-    <p style="text-align: center; margin-top: 2rem;">
-      Nenhum trabalhador registrado.
-    </p>
-  </ng-template>
+    <ion-row *ngIf="administradores.length === 0" style="text-align: center;">
+      <ion-col colspan="5">
+        Nenhum administrador registrado.
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>
