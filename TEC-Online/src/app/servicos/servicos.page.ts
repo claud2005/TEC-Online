@@ -98,53 +98,87 @@ export class ServicosPage implements OnInit {
   }
 
 async gerarPDF(servico: Servico) {
-  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const doc = new jsPDF({
+    unit: 'mm',
+    format: 'a4',
+  });
 
   const leftMargin = 15;
   const rightMargin = 15;
   let verticalPos = 20;
   const lineHeight = 7;
   const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
   const contentWidth = pageWidth - leftMargin - rightMargin;
+  const pageHeight = doc.internal.pageSize.getHeight();
 
   const primaryColor = '#007aff';
   const secondaryColor = '#333333';
   const lightColor = '#f5f5f5';
 
   const empresaNome = 'RFM-Informatica';
-  const empresaTelefone = '+351 912 345 678';
-  const empresaEmail = 'geral@rfm-informatica.pt';
+  const empresaEmail = 'rfm@gmail.com';
+  const empresaTelefone = '911234567';
 
-  const getBase64ImageFromAssets = (url: string): Promise<string> => {
+  const addMultilineText = (text: string, x: number, y: number, maxWidth: number, lineHeight: number) => {
+    const splitText = doc.splitTextToSize(text, maxWidth);
+    doc.text(splitText, x, y);
+    return splitText.length * lineHeight;
+  };
+
+  const getBase64ImageFromAssets = async (path: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       const img = new Image();
+      img.src = path;
       img.crossOrigin = 'anonymous';
-      img.src = url;
+
       img.onload = () => {
         const canvas = document.createElement('canvas');
         canvas.width = img.width;
         canvas.height = img.height;
         const ctx = canvas.getContext('2d');
-        ctx?.drawImage(img, 0, 0);
-        resolve(canvas.toDataURL('image/png'));
+        if (!ctx) return reject('Canvas context não disponível');
+
+        ctx.drawImage(img, 0, 0);
+        const dataURL = canvas.toDataURL('image/png');
+        resolve(dataURL);
       };
-      img.onerror = (err) => reject(err);
+
+      img.onerror = (err) => {
+        reject(err);
+      };
     });
   };
 
   const addLogo = async () => {
     try {
       const imgData = await getBase64ImageFromAssets('assets/icon/logotipo.png');
-      const imgWidth = 30;
-      const imgHeight = 12;
-      doc.addImage(imgData, 'PNG', leftMargin, 10, imgWidth, imgHeight);
 
-      // Nome da empresa ao lado do logo
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
-      doc.setTextColor(primaryColor);
-      doc.text(empresaNome, leftMargin + imgWidth + 5, 18); // alinhado com o logo
+      const img = new Image();
+      img.src = imgData;
+
+      await new Promise<void>((resolve) => {
+        img.onload = () => {
+          const originalWidth = img.width;
+          const originalHeight = img.height;
+
+          const targetWidth = 25;
+          const aspectRatio = originalHeight / originalWidth;
+          const targetHeight = targetWidth * aspectRatio;
+
+          const xPos = leftMargin;
+          const yPos = 10;
+
+          doc.addImage(imgData, 'PNG', xPos, yPos, targetWidth, targetHeight);
+
+          // Nome da empresa ao lado do logo
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(14);
+          doc.setTextColor(primaryColor);
+          doc.text(empresaNome, xPos + targetWidth + 5, yPos + targetHeight / 2 + 4);
+
+          resolve();
+        };
+      });
     } catch (e) {
       console.error('Erro ao carregar logotipo:', e);
       doc.setFont('helvetica', 'bold');
@@ -154,9 +188,9 @@ async gerarPDF(servico: Servico) {
     }
   };
 
-  // Aguarda o logotipo
   await addLogo();
-  verticalPos = 28;
+
+  verticalPos += 25;
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(18);
@@ -175,11 +209,14 @@ async gerarPDF(servico: Servico) {
   doc.line(leftMargin, verticalPos, pageWidth - rightMargin, verticalPos);
   verticalPos += 8;
 
-  const addMultilineText = (text: string, x: number, y: number, maxWidth: number, lineHeight: number) => {
-    const splitText = doc.splitTextToSize(text, maxWidth);
-    doc.text(splitText, x, y);
-    return splitText.length * lineHeight;
-  };
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(primaryColor);
+  doc.text('DADOS DO CLIENTE', leftMargin, verticalPos);
+  verticalPos += lineHeight;
+
+  doc.setFillColor(lightColor);
+  doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
 
   const printLabelValue = (label: string, value: string, indent = 0) => {
     const labelWidth = 40;
@@ -196,59 +233,55 @@ async gerarPDF(servico: Servico) {
     verticalPos += Math.max(lineHeight, lines);
   };
 
-  // Cliente
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(primaryColor);
-  doc.text('DADOS DO CLIENTE', leftMargin, verticalPos);
-  verticalPos += lineHeight;
-  doc.setFillColor(lightColor);
-  doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
   printLabelValue('Nome', servico.nomeCompletoCliente);
   printLabelValue('Contato', servico.contatoCliente);
   verticalPos += 2;
 
-  // Aparelho
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(primaryColor);
   doc.text('DADOS DO APARELHO', leftMargin, verticalPos);
   verticalPos += lineHeight;
+
   doc.setFillColor(lightColor);
   doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
+
   printLabelValue('Marca', servico.marcaAparelho);
   printLabelValue('Modelo', servico.modeloAparelho);
   verticalPos += 2;
 
-  // Serviço
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(primaryColor);
   doc.text('DESCRIÇÃO DO SERVIÇO', leftMargin, verticalPos);
   verticalPos += lineHeight;
+
   doc.setFillColor(lightColor);
   doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
+
   printLabelValue('Problema relatado', servico.problemaRelatado);
   printLabelValue('Solução aplicada', servico.solucaoInicial);
   printLabelValue('Observações', servico.observacoes);
   verticalPos += 2;
 
-  // Financeiro
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(primaryColor);
   doc.text('INFORMAÇÕES FINANCEIRAS', leftMargin, verticalPos);
   verticalPos += lineHeight;
+
   doc.setFillColor(lightColor);
   doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
+
   printLabelValue('Custo estimado', servico.custoEstimado ? `€ ${parseFloat(servico.custoEstimado).toFixed(2)}` : 'Não informado');
   printLabelValue('Valor total', servico.valorTotal ? `€ ${parseFloat(servico.valorTotal).toFixed(2)}` : 'Não informado');
   verticalPos += 2;
 
-  // Responsável
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(primaryColor);
   doc.text('RESPONSÁVEL', leftMargin, verticalPos);
   verticalPos += lineHeight;
+
   doc.setFillColor(lightColor);
   doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
+
   printLabelValue('Técnico', servico.responsavel);
   if (servico.dataConclusao) {
     printLabelValue('Data conclusão', servico.dataConclusao);
@@ -256,22 +289,21 @@ async gerarPDF(servico: Servico) {
   verticalPos += 10;
 
   // Rodapé
-  doc.setFontSize(10);
-  doc.setTextColor('#666');
-  doc.setFont('helvetica', 'italic');
   doc.setDrawColor(primaryColor);
   doc.setLineWidth(0.3);
   doc.line(leftMargin, pageHeight - 20, pageWidth - rightMargin, pageHeight - 20);
 
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'italic');
+  doc.setTextColor('#666');
   doc.text(empresaNome, pageWidth / 2, pageHeight - 15, { align: 'center' });
-  doc.text(`${empresaTelefone} | ${empresaEmail}`, pageWidth / 2, pageHeight - 11, { align: 'center' });
-
+  doc.text(`Email: ${empresaEmail}  |  Tel: ${empresaTelefone}`, pageWidth / 2, pageHeight - 11, { align: 'center' });
   doc.text(`Documento gerado em: ${new Date().toLocaleString()}`, leftMargin, pageHeight - 6);
   doc.text('Página 1/1', pageWidth - rightMargin, pageHeight - 6, { align: 'right' });
 
-  doc.save(`Servico_${servico.numero}_${new Date().toISOString().slice(0, 10)}.pdf`);
+  // Salvar
+  doc.save(`Servico_${servico.numero}_${new Date().toISOString().slice(0,10)}.pdf`);
 }
-
 
 
   filtrarServicos() {
