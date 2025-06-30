@@ -1,13 +1,13 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Administradores</ion-title>
+    <ion-title>Utilizadores</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
 
   <div style="display: flex; justify-content: flex-start; gap: 1rem; margin-bottom: 1rem;">
-    <ion-button (click)="criarAdministrador()">Criar Administrador</ion-button>
+    <ion-button (click)="criarUtilizador()">Criar Utilizador</ion-button>
     <ion-button color="medium" (click)="sair()">Sair</ion-button>
   </div>
 
@@ -20,24 +20,24 @@
       <ion-col>Gerenciar</ion-col>
     </ion-row>
 
-    <ion-row *ngFor="let admin of administradores" style="border-bottom: 1px solid #eee; align-items: center;">
-      <ion-col>{{ admin.fullName }}</ion-col>
-      <ion-col>{{ admin.email }}</ion-col>
-      <ion-col>{{ admin.telefone }}</ion-col>
-      <ion-col>{{ admin.isAdmin ? 'Sim' : 'Não' }}</ion-col>
+    <ion-row *ngFor="let user of utilizadores" style="border-bottom: 1px solid #eee; align-items: center;">
+      <ion-col>{{ user.fullName }}</ion-col>
+      <ion-col>{{ user.email }}</ion-col>
+      <ion-col>{{ user.telefone }}</ion-col>
+      <ion-col>{{ user.isAdmin ? 'Sim' : 'Não' }}</ion-col>
       <ion-col>
-        <ion-button size="small" color="warning" (click)="alterarSenha(admin)">
+        <ion-button size="small" color="warning" (click)="alterarSenha(user)">
           <ion-icon slot="icon-only" name="key-outline"></ion-icon>
         </ion-button>
-        <ion-button size="small" color="danger" (click)="eliminarAdministrador(admin.id)">
+        <ion-button size="small" color="danger" (click)="eliminarUtilizador(user.id)">
           <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-button>
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="administradores.length === 0" style="text-align: center;">
+    <ion-row *ngIf="utilizadores.length === 0" style="text-align: center;">
       <ion-col colspan="5">
-        Nenhum administrador registrado.
+        Nenhum utilizador registrado.
       </ion-col>
     </ion-row>
   </ion-grid>
