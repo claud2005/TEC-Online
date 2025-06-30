@@ -24,7 +24,7 @@ const routes: Routes = [
   },
   {
     path: 'criar-servicos',
-    loadChildren: () => import('./criar-servicos/criar-servicos.module').then(m => m.CriarServicosPageModule),
+    loadComponent: () => import('./criar-servicos/criar-servicos.page').then(m => m.CriarServicosPage)
   },
   {
     path: 'servicos',
@@ -65,9 +65,6 @@ const routes: Routes = [
   {
     path: 'orcamentos-clientes/:id',
     loadComponent: () => import('./orcamentos-clientes/orcamentos-clientes.page').then(m => m.OrcamentosClientesPage)
-  },  {
-    path: 'administradores',
-    loadChildren: () => import('./administradores/administradores.module').then( m => m.AdministradoresPageModule)
   }
 
 

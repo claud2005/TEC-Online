@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NavController, IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';   // 👈 adicione isto
 import { IonSelect, IonSelectOption } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment.prod';
@@ -14,12 +14,13 @@ import { environment } from 'src/environments/environment.prod';
   styleUrls: ['./criar-servicos.page.scss'],
   imports: [
     CommonModule,
-    FormsModule,
+    FormsModule,            // 👈 adicione aqui
     IonicModule,
     IonSelect,
     IonSelectOption,
   ],
 })
+
 export class CriarServicosPage implements OnInit {
   dataServico: string = '';
   horaServico: string = '';
@@ -110,5 +111,5 @@ export class CriarServicosPage implements OnInit {
 
   goBack() {
     this.navController.back();
-  }
+  }
 }
