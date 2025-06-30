@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment.prod';  // Ajusta cami
 
 @Component({
   selector: 'app-utilizadores',
-  templateUrl: './administradores.page.html', // Mantém o mesmo html, só muda nome da classe
+  templateUrl: './administradores.page.html', // Usa o mesmo template
   styleUrls: ['./administradores.page.scss'],
   standalone: true,
   imports: [
@@ -49,10 +49,7 @@ export class AdministradoresPage implements OnInit {
   }
 
   criarUtilizador() {
-    console.log('Criar utilizador - abrir formulário');
-    // Aqui podes navegar para página de criação de utilizador ou abrir modal
-    // Exemplo:
-    // this.navCtrl.navigateForward('/utilizadores-criar');
+    this.navCtrl.navigateForward('/signup');  // Navega para a página signup
   }
 
   sair() {
