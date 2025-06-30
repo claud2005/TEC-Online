@@ -18,9 +18,16 @@
       <!-- Campo para o nome de usuário -->
       <ion-item class="input-item">
         <ion-icon name="at-outline" slot="start" class="input-icon"></ion-icon>
-        <ion-label position="floating">Usuário</ion-label>
+        <ion-label position="floating">Utilizador</ion-label>
         <ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
       </ion-item>
+
+      <!-- Campo para o telefone -->
+<ion-item class="input-item">
+  <ion-icon name="call-outline" slot="start" class="input-icon"></ion-icon>
+  <ion-label position="floating">Telefone</ion-label>
+  <ion-input type="tel" [(ngModel)]="telefone" name="telefone"></ion-input>
+</ion-item>
 
       <!-- Campo para o e-mail -->
       <ion-item class="input-item">
