@@ -41,4 +41,26 @@
     </ion-card-content>
   </ion-card>
 
+  <!-- ✅ NOVA secção: lista de serviços diretamente do cliente -->
+  <ion-card *ngIf="servicos.length > 0">
+    <ion-card-header>
+      <ion-card-title>Serviços do Cliente</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let servico of servicos">
+          <ion-label>
+            <h3>{{ servico.nome }}</h3>
+            <p>Preço: {{ servico.preco | currency:'EUR' }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-item *ngIf="servicos.length === 0">
+    <ion-label color="medium">Nenhum serviço direto encontrado para este cliente.</ion-label>
+  </ion-item>
+
 </ion-content>

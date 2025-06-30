@@ -71,13 +71,24 @@ export class ClienteService {
     );
   }
 
-  // ✅ NOVO método para obter orçamentos por cliente
+  // ✅ já existia: obter orçamentos por cliente
   getOrcamentosPorCliente(clienteId: string): Observable<any[]> {
     const headers = this.getAuthHeaders();
     return this.http.get<any[]>(`${this.apiUrl}/${clienteId}/orcamentos`, { headers }).pipe(
       catchError(error => {
         console.error('Erro ao obter orçamentos do cliente:', error);
         return throwError(() => new Error(error?.error?.message || 'Erro ao obter orçamentos.'));
+      })
+    );
+  }
+
+  // ✅ NOVO método: obter serviços diretamente de um cliente
+  getServicosPorCliente(clienteId: string): Observable<any[]> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<any[]>(`${this.apiUrl}/${clienteId}/servicos`, { headers }).pipe(
+      catchError(error => {
+        console.error('Erro ao obter serviços do cliente:', error);
+        return throwError(() => new Error(error?.error?.message || 'Erro ao obter serviços.'));
       })
     );
   }
