@@ -23,8 +23,8 @@ interface User {
   imports: [CommonModule, IonicModule, FormsModule]
 })
 export class SignupPage implements OnInit {
-  users: User[] = [];
-  user: User = this.getEmptyUser();
+  utilizadores: User[] = [];
+  utilizador: User = this.getEmptyUser();
   confirmPassword: string = '';
   editing: boolean = false;
 
@@ -47,55 +47,55 @@ export class SignupPage implements OnInit {
   loadUsers() {
     this.http.get<User[]>(`${environment.api_url}/api/users`).subscribe(
       (data) => {
-        this.users = data;
+        this.utilizadores = data;
       },
       (error) => {
-        console.error('Erro ao carregar usuários', error);
+        console.error('Erro ao carregar utilizadores', error);
       }
     );
   }
 
   submitForm() {
-    if (!this.user.fullName || !this.user.username || !this.user.email) {
+    if (!this.utilizador.fullName || !this.utilizador.username || !this.utilizador.email) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
-    if (!this.editing && (!this.user.password || this.user.password.length < 6)) {
+    if (!this.editing && (!this.utilizador.password || this.utilizador.password.length < 6)) {
       alert('A senha deve ter pelo menos 6 caracteres.');
       return;
     }
 
-    if (!this.editing && this.user.password !== this.confirmPassword) {
+    if (!this.editing && this.utilizador.password !== this.confirmPassword) {
       alert('As senhas não coincidem.');
       return;
     }
 
     if (this.editing) {
-      // Atualizar usuário
-      this.http.put(`${environment.api_url}/api/users/${this.user._id}`, this.user).subscribe(
+      // Atualizar utilizador
+      this.http.put(`${environment.api_url}/api/users/${this.utilizador._id}`, this.utilizador).subscribe(
         () => {
-          alert('Usuário atualizado com sucesso!');
+          alert('Utilizador atualizado com sucesso!');
           this.cancelEdit();
           this.loadUsers();
         },
         (error) => {
-          console.error('Erro ao atualizar usuário', error);
-          alert('Erro ao atualizar usuário');
+          console.error('Erro ao atualizar utilizador', error);
+          alert('Erro ao atualizar utilizador');
         }
       );
     } else {
-      // Criar usuário
-      this.http.post(`${environment.api_url}/api/signup`, this.user).subscribe(
+      // Criar utilizador
+      this.http.post(`${environment.api_url}/api/signup`, this.utilizador).subscribe(
         () => {
-          alert('Usuário criado com sucesso!');
-          this.user = this.getEmptyUser();
+          alert('Utilizador criado com sucesso!');
+          this.utilizador = this.getEmptyUser();
           this.confirmPassword = '';
           this.loadUsers();
         },
         (error) => {
-          console.error('Erro ao criar usuário', error);
-          alert(error.error?.message || 'Erro ao criar usuário');
+          console.error('Erro ao criar utilizador', error);
+          alert(error.error?.message || 'Erro ao criar utilizador');
         }
       );
     }
@@ -103,13 +103,13 @@ export class SignupPage implements OnInit {
 
   editUser(u: User) {
     this.editing = true;
-    this.user = { ...u };
+    this.utilizador = { ...u };
     this.confirmPassword = '';
   }
 
   cancelEdit() {
     this.editing = false;
-    this.user = this.getEmptyUser();
+    this.utilizador = this.getEmptyUser();
     this.confirmPassword = '';
   }
 
