@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { environment } from 'src/environments/environment';
 
-interface Utilizador {
+interface User {
   _id?: string;
   fullName: string;
   username: string;
@@ -23,18 +23,18 @@ interface Utilizador {
   imports: [CommonModule, IonicModule, FormsModule]
 })
 export class SignupPage implements OnInit {
-  utilizadores: Utilizador[] = [];
-  utilizador: Utilizador = this.getEmptyUtilizador();
+  users: User[] = [];
+  user: User = this.getEmptyUser();
   confirmPassword: string = '';
   editing: boolean = false;
 
   constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit() {
-    this.loadUtilizadores();
+    this.loadUsers();
   }
 
-  getEmptyUtilizador(): Utilizador {
+  getEmptyUser(): User {
     return {
       fullName: '',
       username: '',
@@ -44,81 +44,81 @@ export class SignupPage implements OnInit {
     };
   }
 
-  loadUtilizadores() {
-    this.http.get<Utilizador[]>(`${environment.api_url}/api/utilizadores`).subscribe(
+  loadUsers() {
+    this.http.get<User[]>(`${environment.api_url}/api/users`).subscribe(
       (data) => {
-        this.utilizadores = data;
+        this.users = data;
       },
       (error) => {
-        console.error('Erro ao carregar utilizadores', error);
+        console.error('Erro ao carregar usuários', error);
       }
     );
   }
 
   submitForm() {
-    if (!this.utilizador.fullName || !this.utilizador.username || !this.utilizador.email) {
+    if (!this.user.fullName || !this.user.username || !this.user.email) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
-    if (!this.editing && (!this.utilizador.password || this.utilizador.password.length < 6)) {
+    if (!this.editing && (!this.user.password || this.user.password.length < 6)) {
       alert('A senha deve ter pelo menos 6 caracteres.');
       return;
     }
 
-    if (!this.editing && this.utilizador.password !== this.confirmPassword) {
+    if (!this.editing && this.user.password !== this.confirmPassword) {
       alert('As senhas não coincidem.');
       return;
     }
 
     if (this.editing) {
-      // Atualizar utilizador
-      this.http.put(`${environment.api_url}/api/utilizadores/${this.utilizador._id}`, this.utilizador).subscribe(
+      // Atualizar usuário
+      this.http.put(`${environment.api_url}/api/users/${this.user._id}`, this.user).subscribe(
         () => {
-          alert('Utilizador atualizado com sucesso!');
+          alert('Usuário atualizado com sucesso!');
           this.cancelEdit();
-          this.loadUtilizadores();
+          this.loadUsers();
         },
         (error) => {
-          console.error('Erro ao atualizar utilizador', error);
-          alert('Erro ao atualizar utilizador');
+          console.error('Erro ao atualizar usuário', error);
+          alert('Erro ao atualizar usuário');
         }
       );
     } else {
-      // Criar utilizador
-      this.http.post(`${environment.api_url}/api/signup`, this.utilizador).subscribe(
+      // Criar usuário
+      this.http.post(`${environment.api_url}/api/signup`, this.user).subscribe(
         () => {
-          alert('Utilizador criado com sucesso!');
-          this.utilizador = this.getEmptyUtilizador();
+          alert('Usuário criado com sucesso!');
+          this.user = this.getEmptyUser();
           this.confirmPassword = '';
-          this.loadUtilizadores();
+          this.loadUsers();
         },
         (error) => {
-          console.error('Erro ao criar utilizador', error);
-          alert(error.error?.message || 'Erro ao criar utilizador');
+          console.error('Erro ao criar usuário', error);
+          alert(error.error?.message || 'Erro ao criar usuário');
         }
       );
     }
   }
 
-  editUser(u: Utilizador) {
+  editUser(u: User) {
     this.editing = true;
-    this.utilizador = { ...u };
+    this.user = { ...u };
     this.confirmPassword = '';
   }
 
   cancelEdit() {
     this.editing = false;
-    this.utilizador = this.getEmptyUtilizador();
+    this.user = this.getEmptyUser();
     this.confirmPassword = '';
   }
 
-  deleteUser(u: Utilizador) {
+  deleteUser(u: User) {
     if (confirm(`Tem certeza que deseja excluir o utilizador ${u.fullName}?`)) {
-      this.http.delete(`${environment.api_url}/api/utilizadores/${u._id}`).subscribe(
+      this.http.delete(`${environment.api_url}/api/users/${u._id}`).subscribe(
         () => {
           alert('Utilizador excluído com sucesso!');
-          this.loadUtilizadores();
+          this.loadUsers();
         },
         (error) => {
           console.error('Erro ao excluir utilizador', error);
