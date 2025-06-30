@@ -22,7 +22,8 @@ export class PlanoSemanalPage implements OnInit {
   filteredServices: any[] = [];
   utilizadorName: string = 'Utilizador';
   searchQuery: string = '';
-  selectedFilter: number | string = -1; // -1=todos, 0=hoje, 7, 15, 30, 'aberto', 'fechado'
+  selectedFilter: number | string = -1;
+  isAdmin: boolean = false; // ✅ Adicionado
 
   constructor(
     private router: Router,
@@ -32,6 +33,7 @@ export class PlanoSemanalPage implements OnInit {
 
   ngOnInit() {
     this.atualizarNomeUtilizador();
+    this.verificarSeAdmin(); // ✅ chamada para definir isAdmin
   }
 
   ionViewWillEnter() {
@@ -45,6 +47,12 @@ export class PlanoSemanalPage implements OnInit {
   atualizarNomeUtilizador() {
     const storedUsername = localStorage.getItem('username');
     this.utilizadorName = storedUsername || 'Utilizador';
+  }
+
+  verificarSeAdmin() {
+    // ✅ Adapte esta lógica conforme o seu sistema
+    const role = localStorage.getItem('role'); // Exemplo: 'admin', 'user'
+    this.isAdmin = role === 'admin';
   }
 
   carregarServicos() {
@@ -151,10 +159,10 @@ export class PlanoSemanalPage implements OnInit {
   navigateToAdicionarCliente() {
     this.router.navigate(['/adicionar-cliente']);
   }
-  navigateToAdministradores() {
-  this.router.navigate(['/administradores']);
-}
 
+  navigateToAdministradores() {
+    this.router.navigate(['/administradores']);
+  }
 
   editarServico(id: string) {
     if (id) {
@@ -162,7 +170,6 @@ export class PlanoSemanalPage implements OnInit {
     } else {
       alert('Serviço não possui ID para edição.');
     }
-    
   }
 
   alterarStatus(servico: any, novoStatus: string) {

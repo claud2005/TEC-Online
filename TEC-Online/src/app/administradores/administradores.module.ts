@@ -13,8 +13,8 @@ import { AdministradoresPage } from './administradores.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    AdministradoresPageRoutingModule
-  ],
-  declarations: [AdministradoresPage]
+    AdministradoresPageRoutingModule,
+    AdministradoresPage
+  ]
 })
 export class AdministradoresPageModule {}
