@@ -109,17 +109,17 @@ export class CriarServicosPage implements OnInit {
     }
 
     const dadosServico = {
-      data_servico: this.dataServico,
-      hora_servico: this.horaServico,
+      dataServico: this.dataServico,
+      horaServico: this.horaServico,
       status: this.status,
-      autor_servico: this.autorServico,
+      autorServico: this.autorServico,
       clienteId: cliente.id,
-      nome_cliente: cliente.nome,
-      marca_aparelho: this.marcaAparelho,
-      modelo_aparelho: this.modeloAparelho,
-      problema_cliente: this.problemaCliente,
-      solucao_inicial: this.solucaoInicial,
-      valor_total: this.valorTotal || 0,
+      nomeCompletoCliente: cliente.nome,
+      marcaAparelho: this.marcaAparelho,
+      modeloAparelho: this.modeloAparelho,
+      problemaRelatado: this.problemaCliente,
+      solucaoInicial: this.solucaoInicial,
+      valorTotal: this.valorTotal || 0,
       observacoes: this.observacoes || 'Sem observações'
     };
 
