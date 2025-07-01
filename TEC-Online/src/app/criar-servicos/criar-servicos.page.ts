@@ -25,7 +25,7 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  clienteSelecionado: number | null = null; // Agora guarda só o ID do cliente
+  clienteSelecionado: string | null = null; // Agora string porque _id é string
   marcaAparelho: string = '';
   modeloAparelho: string = '';
   problemaCliente: string = '';
@@ -34,8 +34,8 @@ export class CriarServicosPage implements OnInit {
   observacoes: string = '';
 
   clientes: any[] = [
-    { id: 1, nome: 'Cliente 1' },
-    { id: 2, nome: 'Cliente 2' }
+    { id: '1', nome: 'Cliente 1' },
+    { id: '2', nome: 'Cliente 2' }
   ];
 
   constructor(
@@ -74,8 +74,8 @@ export class CriarServicosPage implements OnInit {
 
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
-        // Remove o campo telefone/contacto dos clientes
-        this.clientes = response.map(cliente => ({ id: cliente.id, nome: cliente.nome }));
+        // Corrigido: mapear _id para id
+        this.clientes = response.map(cliente => ({ id: cliente._id, nome: cliente.nome }));
         console.log('Clientes carregados:', this.clientes);
       },
       error: (error) => {
@@ -86,7 +86,7 @@ export class CriarServicosPage implements OnInit {
   }
 
   compareWithClientes(o1: any, o2: any) {
-    return o1 === o2; // Como agora clienteSelecionado é ID, só compara os números
+    return o1 === o2; // clienteSelecionado é string ID
   }
 
   onClienteChange(event: any) {
