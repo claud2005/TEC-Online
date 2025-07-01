@@ -33,12 +33,10 @@
         <ion-label>Criar Serviço</ion-label>
       </ion-item>
 
-      <!-- Novo botão Adicionar Cliente -->
       <ion-item button (click)="navigateToAdicionarCliente()">
         <ion-icon slot="start" name="person-add"></ion-icon>
         <ion-label>Adicionar Cliente</ion-label>
       </ion-item>
-      
     </ion-list>
   </ion-content>
 </ion-menu>
@@ -65,86 +63,96 @@
     <!-- Barra de pesquisa -->
     <ion-row class="top-bar">
       <ion-col size="12">
-        <ion-searchbar [(ngModel)]="searchQuery" placeholder="Procurar Tarefa" (ionInput)="onSearchChange()"></ion-searchbar>
-      </ion-col>
-      <ion-col size="12">
-        <ion-item>
-          <ion-label>Filtrar</ion-label>
-          <ion-select [(ngModel)]="selectedFilter" interface="popover" (ionChange)="onSelectedFilterChange()">
-            <ion-select-option [value]="-1">Mostrar todos</ion-select-option>
-            <ion-select-option [value]="0">Hoje</ion-select-option>
-            <ion-select-option [value]="7">Últimos 7 dias</ion-select-option>
-            <ion-select-option [value]="15">Últimos 15 dias</ion-select-option>
-            <ion-select-option [value]="30">Últimos 30 dias</ion-select-option>
-            <ion-select-option value="aberto">Somente abertos</ion-select-option>
-            <ion-select-option value="fechado">Somente fechados</ion-select-option>
-          </ion-select>
-        </ion-item>
+        <ion-searchbar
+          [(ngModel)]="searchQuery"
+          (ionChange)="onSearchChange()"
+          debounce="300"
+          placeholder="Pesquisar serviços, marcas, modelos..."
+          aria-label="Pesquisar serviços, marcas, modelos"
+        >
+        </ion-searchbar>
       </ion-col>
     </ion-row>
 
-    <!-- Lista de tarefas -->
-    <ion-row>
-      <ion-col>
-        <h2>
-          <ion-icon name="list-circle" class="task-icon"></ion-icon>
-          Tarefas
-        </h2>
+    <!-- Filtros (Dropdown) -->
+    <ion-row class="filter-row">
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-select
+          placeholder="Filtrar"
+          [(ngModel)]="selectedFilter"
+          (ionChange)="onSelectedFilterChange()"
+          interface="popover"
+          aria-label="Filtrar serviços"
+        >
+          <ion-select-option [value]="-1">Sem filtro</ion-select-option>
+          <ion-select-option [value]="0">Hoje</ion-select-option>
+          <ion-select-option [value]="7">Últimos 7 dias</ion-select-option>
+          <ion-select-option [value]="30">Últimos 30 dias</ion-select-option>
+          <ion-select-option value="aberto">Aberto</ion-select-option>
+          <ion-select-option value="fechado">Fechado</ion-select-option>
+        </ion-select>
+      </ion-col>
+    </ion-row>
 
-        <div *ngIf="filteredServices.length === 0" class="empty-message" style="text-align:center; margin-top: 2rem; color: var(--ion-color-medium);">
-          <ion-icon name="alert-circle-outline" style="font-size: 3rem; margin-bottom: 0.5rem;"></ion-icon>
-          <p>Nenhuma tarefa encontrada</p>
-        </div>
+    <!-- Lista de serviços -->
+    <ion-row *ngIf="filteredServices.length > 0; else noResults">
+      <ion-col size="12" *ngFor="let servico of filteredServices">
+        <ion-card class="service-card">
+          <ion-card-header>
+            <ion-card-title>{{ servico.nomeCompletoCliente }}</ion-card-title>
+            <ion-card-subtitle>
+              {{ formatDate(servico.dataServico) }} | {{ servico.horaServico }}
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <p><strong>Problema:</strong> {{ servico.problemaCliente }}</p>
+            <p><strong>Modelo:</strong> {{ servico.marcaAparelho }} {{ servico.modeloAparelho }}</p>
+            <p><strong>Observações:</strong> {{ servico.observacoes }}</p>
 
-        <ion-list *ngIf="filteredServices.length > 0" lines="full" class="service-list">
-          <ion-item *ngFor="let servico of filteredServices" class="service-item" style="margin-bottom: 0.5rem;">
-            <ion-label class="service-content" (click)="editarServico(servico?.id)">
-              <h3 class="service-title">{{ servico.nomeCompletoCliente || 'Cliente não informado' }}</h3>
-              <div class="service-details">
-                <p>
-                  <ion-icon name="calendar" class="detail-icon"></ion-icon>
-                  {{ servico.dataServico ? formatDate(servico.dataServico) : 'Data não agendada' }}
-                </p>
-                <p>
-                  <ion-icon name="time-outline" class="detail-icon"></ion-icon>
-                  {{ servico.horaServico || 'Horário não definido' }}
-                </p>
-                <p>
-                  <ion-icon name="phone-portrait" class="detail-icon"></ion-icon>
-                  {{ servico.marcaAparelho || 'Marca não informada' }} {{ servico.modeloAparelho || '' }}
-                </p>
-                <p>
-                  <ion-icon name="alert-circle" class="detail-icon"></ion-icon>
-                  {{ servico.problemaRelatado || 'Problema não descrito' }}
-                </p>
-              </div>
-            </ion-label>
-
-            <ion-buttons slot="end">
+            <!-- Botões de status -->
+            <div class="status-toggle">
               <ion-button
-                *ngIf="servico.status === 'fechado'"
+                fill="outline"
+                shape="round"
+                [class.active]="servico.status === 'aberto'"
                 color="success"
-                fill="outline"
                 (click)="alterarStatus(servico, 'aberto')"
-                aria-label="Reabrir serviço"
-                title="Reabrir serviço"
+                aria-pressed="{{ servico.status === 'aberto' ? 'true' : 'false' }}"
               >
-                <ion-icon name="refresh-circle-outline"></ion-icon>
+                Aberto
               </ion-button>
+
               <ion-button
-                *ngIf="servico.status === 'aberto'"
-                color="danger"
                 fill="outline"
+                shape="round"
+                [class.active]="servico.status === 'fechado'"
+                color="danger"
                 (click)="alterarStatus(servico, 'fechado')"
-                aria-label="Fechar serviço"
-                title="Fechar serviço"
+                aria-pressed="{{ servico.status === 'fechado' ? 'true' : 'false' }}"
               >
-                <ion-icon name="checkmark-done-outline"></ion-icon>
+                Fechado
               </ion-button>
-            </ion-buttons>
-          </ion-item>
-        </ion-list>
+            </div>
+
+            <ion-button
+              expand="block"
+              fill="solid"
+              color="primary"
+              (click)="editarServico(servico.id)"
+              aria-label="Editar serviço {{ servico.nomeCompletoCliente }}"
+            >
+              Editar Serviço
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
     </ion-row>
+
+    <ng-template #noResults>
+      <ion-col size="12" class="no-results-message">
+        <p>Nenhum serviço encontrado.</p>
+      </ion-col>
+    </ng-template>
+
   </ion-grid>
 </ion-content>
