@@ -64,21 +64,17 @@ export class CriarServicosPage implements OnInit {
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
         this.clientes = response;
-        console.log('Clientes carregados com sucesso:', this.clientes);
+        console.log('Clientes carregados:', this.clientes);
       },
       error: (error) => {
         console.error('Erro ao carregar clientes:', error);
-        alert('Erro ao carregar lista de clientes. Verifique o console para detalhes.');
+        alert('Erro ao carregar lista de clientes.');
       }
     });
   }
 
   compareWithClientes(o1: any, o2: any) {
-    if (!o1 || !o2) return false;
-    if (typeof o1 === 'object' && typeof o2 === 'object') {
-      return o1.id === o2.id;
-    }
-    return o1 === o2;
+    return o1 && o2 ? o1.id === o2.id : o1 === o2;
   }
 
   onClienteChange(event: any) {
@@ -87,19 +83,22 @@ export class CriarServicosPage implements OnInit {
   }
 
   async salvarServico() {
-    // Validação dos campos obrigatórios
+    // Debug form validation
+    console.log('Validando formulário...');
+    console.log('Data:', this.dataServico);
+    console.log('Hora:', this.horaServico);
+    console.log('Cliente:', this.clienteSelecionado);
+
     if (!this.isFormValid()) {
-      alert('Por favor, preencha todos os campos obrigatórios corretamente.');
+      alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
-    // Validação específica do cliente
     if (!this.clienteSelecionado?.id) {
-      alert('Por favor, selecione um cliente válido da lista.');
+      alert('Selecione um cliente válido.');
       return;
     }
 
-    // Preparação dos dados para a API
     const dadosServico = {
       data_servico: this.dataServico,
       hora_servico: this.horaServico,
@@ -115,45 +114,31 @@ export class CriarServicosPage implements OnInit {
       observacoes: this.observacoes || 'Sem observações'
     };
 
-    console.log('Enviando dados para a API:', dadosServico);
+    console.log('Enviando dados:', dadosServico);
 
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('Token de autenticação não encontrado');
-      }
-
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       });
 
-      const resposta = await this.http.post(
+      await this.http.post(
         `${environment.api_url}/api/servicos/`,
         dadosServico,
         { headers }
       ).toPromise();
 
-      console.log('Serviço criado com sucesso:', resposta);
-      alert('Serviço registrado com sucesso!');
+      alert('Serviço criado com sucesso!');
       this.router.navigate(['/plano-semanal']);
-
     } catch (error) {
-      console.error('Erro ao criar serviço:', error);
-      let mensagem = 'Erro ao criar serviço.';
-      
-      if (typeof error === 'object' && error !== null && 'error' in error && (error as any).error?.message) {
-        mensagem += ` Detalhes: ${(error as any).error.message}`;
-      } else if (typeof error === 'object' && error !== null && 'message' in error) {
-        mensagem += ` Erro: ${(error as any).message}`;
-      }
-      
-      alert(mensagem);
+      console.error('Erro:', error);
+      alert('Erro ao criar serviço. Verifique o console.');
     }
   }
 
   isFormValid(): boolean {
-    return !!(
+    const valid = !!(
       this.dataServico &&
       this.horaServico &&
       this.status &&
@@ -163,6 +148,9 @@ export class CriarServicosPage implements OnInit {
       this.modeloAparelho &&
       this.problemaCliente
     );
+    
+    console.log('Formulário válido?', valid);
+    return valid;
   }
 
   goBack() {
