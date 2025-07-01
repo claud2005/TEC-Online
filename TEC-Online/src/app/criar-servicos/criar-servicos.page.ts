@@ -25,7 +25,7 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  clienteSelecionado: string | null = null; // Agora string, pois IDs do Mongo são strings
+  clienteSelecionado: string = ''; // Alterado para string vazia como padrão
   marcaAparelho: string = '';
   modeloAparelho: string = '';
   problemaCliente: string = '';
@@ -71,40 +71,67 @@ export class CriarServicosPage implements OnInit {
 
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
-        console.log('Resposta completa da API:', response);
+        console.log('Resposta COMPLETA da API:', JSON.parse(JSON.stringify(response)));
         
-        // Mapeamento corrigido para a estrutura da sua API
-        this.clientes = response.map(cliente => ({
-          id: cliente._id,  // Usa _id que é o padrão do MongoDB
-          nome: cliente.nome,
-          // Adicione outros campos se necessário
-          codigoCliente: cliente.codigoCliente,
-          numeroCliente: cliente.numeroCliente
-        }));
+        // Mapeamento ultra-robusto
+        this.clientes = response.map(cliente => {
+          // Extrai ID de todas as formas possíveis
+          const id = cliente?._id || cliente?.id || cliente?.clienteId || cliente?.codigo;
+          
+          if (!id) {
+            console.error('Cliente sem ID válido:', cliente);
+            return null;
+          }
 
-        console.log('Clientes formatados:', this.clientes);
+          return {
+            id: id.toString(), // Garante que é string
+            nome: cliente?.nome || 'Cliente sem nome',
+            // Mantém referência ao objeto original para debug
+            _original: cliente
+          };
+        }).filter(cliente => cliente !== null);
+
+        console.log('Clientes processados:', this.clientes);
+
+        if (this.clientes.length === 0) {
+          console.warn('Nenhum cliente válido foi carregado');
+        }
       },
       error: (error) => {
-        console.error('Erro ao carregar clientes:', error);
+        console.error('Erro completo ao carregar clientes:', error);
+        alert('Erro ao carregar clientes. Verifique o console.');
         this.clientes = [];
       }
     });
   }
 
   compareWithClientes(o1: any, o2: any) {
-    // Compara strings ou nulls para seleção correta no ion-select
-    return o1 === o2;
+    if (!o1 || !o2) return false;
+    
+    // Converte ambos para strings para comparação
+    const id1 = typeof o1 === 'object' ? o1.id?.toString() : o1?.toString();
+    const id2 = typeof o2 === 'object' ? o2.id?.toString() : o2?.toString();
+    
+    return id1 === id2;
   }
 
   async salvarServico() {
+    console.log('Tentando salvar com cliente selecionado:', this.clienteSelecionado);
+    console.log('Lista completa de clientes:', this.clientes);
+
     if (!this.isFormValid()) {
       alert('Por favor, preencha todos os campos obrigatórios corretamente.');
       return;
     }
 
-    const cliente = this.clientes.find(c => c.id === this.clienteSelecionado);
+    const cliente = this.clientes.find(c => c.id === this.clienteSelecionado.toString());
+    
     if (!cliente) {
-      alert('Cliente selecionado não encontrado.');
+      alert(`Cliente selecionado não encontrado. ID procurado: ${this.clienteSelecionado}`);
+      console.error('Cliente não encontrado. Dados completos:', {
+        clienteSelecionado: this.clienteSelecionado,
+        clientesDisponiveis: this.clientes
+      });
       return;
     }
 
@@ -123,7 +150,7 @@ export class CriarServicosPage implements OnInit {
       observacoes: this.observacoes || 'Sem observações'
     };
 
-    console.log('Dados a serem enviados:', dadosServico);
+    console.log('Dados do serviço a enviar:', dadosServico);
 
     try {
       const token = localStorage.getItem('token');
@@ -132,17 +159,18 @@ export class CriarServicosPage implements OnInit {
         'Content-Type': 'application/json'
       });
 
-      await this.http.post(
+      const response = await this.http.post(
         `${environment.api_url}/api/servicos/`,
         dadosServico,
         { headers }
       ).toPromise();
 
+      console.log('Resposta completa da API:', response);
       alert('Serviço criado com sucesso!');
       this.router.navigate(['/orcamentos-clientes', cliente.id]);
     } catch (error) {
-      console.error('Erro ao criar serviço:', error);
-      alert('Erro ao criar serviço. Verifique o console.');
+      console.error('Erro completo ao criar serviço:', error);
+      alert('Erro ao criar serviço. Verifique o console para detalhes.');
     }
   }
 
