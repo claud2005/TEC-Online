@@ -56,35 +56,24 @@ export class SignupPage implements OnInit {
   }
 
   submitForm() {
+    // Validação comum
     if (!this.utilizador.fullName || !this.utilizador.username || !this.utilizador.email) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
-    if (!this.editing && (!this.utilizador.password || this.utilizador.password.length < 6)) {
-      alert('A senha deve ter pelo menos 6 caracteres.');
-      return;
-    }
+    if (!this.editing) {
+      // Validação específica do cadastro
+      if (!this.utilizador.password || this.utilizador.password.length < 6) {
+        alert('A senha deve ter pelo menos 6 caracteres.');
+        return;
+      }
 
-    if (!this.editing && this.utilizador.password !== this.confirmPassword) {
-      alert('As senhas não coincidem.');
-      return;
-    }
+      if (this.utilizador.password !== this.confirmPassword) {
+        alert('As senhas não coincidem.');
+        return;
+      }
 
-    if (this.editing) {
-      // Atualizar utilizador
-      this.http.put(`${environment.api_url}/api/users/${this.utilizador._id}`, this.utilizador).subscribe(
-        () => {
-          alert('Utilizador atualizado com sucesso!');
-          this.cancelEdit();
-          this.loadUsers();
-        },
-        (error) => {
-          console.error('Erro ao atualizar utilizador', error);
-          alert('Erro ao atualizar utilizador');
-        }
-      );
-    } else {
       // Criar utilizador
       this.http.post(`${environment.api_url}/api/signup`, this.utilizador).subscribe(
         () => {
@@ -96,6 +85,26 @@ export class SignupPage implements OnInit {
         (error) => {
           console.error('Erro ao criar utilizador', error);
           alert(error.error?.message || 'Erro ao criar utilizador');
+        }
+      );
+    } else {
+      // Atualizar utilizador
+      const dataToUpdate = { ...this.utilizador };
+
+      // Se senha estiver vazia, não envia para o backend
+      if (!dataToUpdate.password || dataToUpdate.password.trim() === '') {
+        delete dataToUpdate.password;
+      }
+
+      this.http.put(`${environment.api_url}/api/users/${this.utilizador._id}`, dataToUpdate).subscribe(
+        () => {
+          alert('Utilizador atualizado com sucesso!');
+          this.cancelEdit();
+          this.loadUsers();
+        },
+        (error) => {
+          console.error('Erro ao atualizar utilizador', error);
+          alert('Erro ao atualizar utilizador');
         }
       );
     }
