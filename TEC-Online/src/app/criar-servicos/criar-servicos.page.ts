@@ -34,8 +34,8 @@ export class CriarServicosPage implements OnInit {
   observacoes: string = '';
 
   clientes: any[] = [
-    { id: 1, nome: 'Cliente 1', telefone: '123456789' },
-    { id: 2, nome: 'Cliente 2', telefone: '987654321' }
+    { id: 1, nome: 'Cliente 1' },
+    { id: 2, nome: 'Cliente 2' }
   ];
 
   constructor(
@@ -46,7 +46,7 @@ export class CriarServicosPage implements OnInit {
 
   ngOnInit() {
     this.carregarDadosIniciais();
-    this.carregarClientes(); // Adicionei esta linha para carregar os clientes
+    this.carregarClientes();
   }
 
   carregarDadosIniciais() {
@@ -66,7 +66,6 @@ export class CriarServicosPage implements OnInit {
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('Token não encontrado');
-      // Carrega clientes mockados temporariamente
       console.log('Usando clientes mockados:', this.clientes);
       return;
     }
@@ -75,13 +74,13 @@ export class CriarServicosPage implements OnInit {
 
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
-        this.clientes = response;
+        // Remove o campo telefone/contacto dos clientes
+        this.clientes = response.map(cliente => ({ id: cliente.id, nome: cliente.nome }));
         console.log('Clientes carregados:', this.clientes);
       },
       error: (error) => {
         console.error('Erro ao carregar clientes:', error);
         console.log('Usando clientes mockados devido ao erro');
-        // Mantém os clientes mockados se a API falhar
       }
     });
   }
@@ -117,6 +116,8 @@ export class CriarServicosPage implements OnInit {
       observacoes: this.observacoes || 'Sem observações'
     };
 
+    console.log('Dados a serem enviados:', dadosServico);
+
     try {
       const token = localStorage.getItem('token');
       const headers = new HttpHeaders({
@@ -133,7 +134,7 @@ export class CriarServicosPage implements OnInit {
       alert('Serviço criado com sucesso!');
       this.router.navigate(['/plano-semanal']);
     } catch (error) {
-      console.error('Erro:', error);
+      console.error('Erro ao criar serviço:', error);
       alert('Erro ao criar serviço. Verifique o console.');
     }
   }
@@ -150,7 +151,16 @@ export class CriarServicosPage implements OnInit {
       this.problemaCliente
     );
     
-    console.log('Formulário válido?', valid);
+    console.log('Validação do formulário:');
+    console.log('Data:', !!this.dataServico);
+    console.log('Hora:', !!this.horaServico);
+    console.log('Status:', !!this.status);
+    console.log('Autor:', !!this.autorServico);
+    console.log('Cliente:', !!this.clienteSelecionado?.id);
+    console.log('Marca:', !!this.marcaAparelho);
+    console.log('Modelo:', !!this.modeloAparelho);
+    console.log('Problema:', !!this.problemaCliente);
+    
     return valid;
   }
 

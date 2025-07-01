@@ -9,24 +9,42 @@
 
   <div class="form-container">
     <h1>Criar Serviço</h1>
+    <p class="form-description">Preencha os campos abaixo para criar um novo serviço</p>
     
     <form class="grid-container">
       <!-- Data -->
       <div class="form-group">
         <ion-label position="floating">Data *</ion-label>
-        <ion-input type="date" [(ngModel)]="dataServico" name="dataServico" required></ion-input>
+        <ion-input 
+          type="date" 
+          [(ngModel)]="dataServico" 
+          name="dataServico" 
+          required
+          placeholder="Selecione a data"
+        ></ion-input>
       </div>
 
       <!-- Hora -->
       <div class="form-group">
         <ion-label position="floating">Hora *</ion-label>
-        <ion-input type="time" [(ngModel)]="horaServico" name="horaServico" required></ion-input>
+        <ion-input 
+          type="time" 
+          [(ngModel)]="horaServico" 
+          name="horaServico" 
+          required
+          placeholder="Selecione a hora"
+        ></ion-input>
       </div>
 
       <!-- Status -->
       <div class="form-group">
         <ion-label position="floating">Status *</ion-label>
-        <ion-select [(ngModel)]="status" name="status" required>
+        <ion-select 
+          [(ngModel)]="status" 
+          name="status" 
+          required
+          placeholder="Selecione o status"
+        >
           <ion-select-option value="aberto">Aberto</ion-select-option>
           <ion-select-option value="em_andamento">Em Andamento</ion-select-option>
           <ion-select-option value="fechado">Fechado</ion-select-option>
@@ -36,7 +54,12 @@
       <!-- Autor -->
       <div class="form-group">
         <ion-label position="floating">Autor *</ion-label>
-        <ion-input [(ngModel)]="autorServico" name="autorServico" required></ion-input>
+        <ion-input 
+          [(ngModel)]="autorServico" 
+          name="autorServico" 
+          required
+          placeholder="Digite o nome do autor"
+        ></ion-input>
       </div>
 
       <!-- Cliente -->
@@ -49,9 +72,10 @@
           (ionChange)="onClienteChange($event)"
           [compareWith]="compareWithClientes"
           interface="popover"
+          placeholder="Selecione o cliente"
         >
           <ion-select-option *ngFor="let cliente of clientes" [value]="cliente">
-            {{ cliente.nome }} ({{ cliente.telefone || 'Sem telefone' }})
+            {{ cliente.nome }}
           </ion-select-option>
         </ion-select>
       </div>
@@ -59,34 +83,67 @@
       <!-- Marca/Modelo -->
       <div class="form-group">
         <ion-label position="floating">Marca *</ion-label>
-        <ion-input [(ngModel)]="marcaAparelho" name="marcaAparelho" required></ion-input>
+        <ion-input 
+          [(ngModel)]="marcaAparelho" 
+          name="marcaAparelho" 
+          required
+          placeholder="Digite a marca do aparelho"
+        ></ion-input>
       </div>
 
       <div class="form-group">
         <ion-label position="floating">Modelo *</ion-label>
-        <ion-input [(ngModel)]="modeloAparelho" name="modeloAparelho" required></ion-input>
+        <ion-input 
+          [(ngModel)]="modeloAparelho" 
+          name="modeloAparelho" 
+          required
+          placeholder="Digite o modelo do aparelho"
+        ></ion-input>
       </div>
 
       <!-- Problema/Solução -->
       <div class="form-group full-width">
         <ion-label position="floating">Problema *</ion-label>
-        <ion-textarea [(ngModel)]="problemaCliente" name="problemaCliente" rows="3" required></ion-textarea>
+        <ion-textarea 
+          [(ngModel)]="problemaCliente" 
+          name="problemaCliente" 
+          rows="3" 
+          required
+          placeholder="Descreva o problema relatado pelo cliente"
+        ></ion-textarea>
       </div>
 
       <div class="form-group full-width">
         <ion-label position="floating">Solução</ion-label>
-        <ion-textarea [(ngModel)]="solucaoInicial" name="solucaoInicial" rows="3"></ion-textarea>
+        <ion-textarea 
+          [(ngModel)]="solucaoInicial" 
+          name="solucaoInicial" 
+          rows="3"
+          placeholder="Descreva a solução proposta (opcional)"
+        ></ion-textarea>
       </div>
 
       <!-- Valor/Observações -->
       <div class="form-group">
         <ion-label position="floating">Valor (€)</ion-label>
-        <ion-input type="number" [(ngModel)]="valorTotal" name="valorTotal" min="0" step="0.01"></ion-input>
+        <ion-input 
+          type="number" 
+          [(ngModel)]="valorTotal" 
+          name="valorTotal" 
+          min="0" 
+          step="0.01"
+          placeholder="0.00"
+        ></ion-input>
       </div>
 
       <div class="form-group full-width">
         <ion-label position="floating">Observações</ion-label>
-        <ion-textarea [(ngModel)]="observacoes" name="observacoes" rows="2"></ion-textarea>
+        <ion-textarea 
+          [(ngModel)]="observacoes" 
+          name="observacoes" 
+          rows="2"
+          placeholder="Adicione observações relevantes (opcional)"
+        ></ion-textarea>
       </div>
     </form>
 
@@ -95,6 +152,7 @@
         expand="block" 
         (click)="salvarServico()" 
         [disabled]="!isFormValid()"
+        class="save-button"
         [class.button-disabled]="!isFormValid()"
       >
         <ion-icon slot="start" name="save-outline"></ion-icon>
