@@ -25,7 +25,7 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  clienteSelecionadoId: number | null = null;
+  clienteSelecionadoId: string = ''; // armazenamos só o _id
   marcaAparelho: string = '';
   modeloAparelho: string = '';
   problemaCliente: string = '';
@@ -33,10 +33,7 @@ export class CriarServicosPage implements OnInit {
   valorTotal: number | null = null;
   observacoes: string = '';
 
-  clientes: any[] = [
-    { id: 1, nome: 'Cliente 1', contacto: '123456789' },
-    { id: 2, nome: 'Cliente 2', contacto: '987654321' }
-  ];
+  clientes: any[] = [];
 
   constructor(
     private http: HttpClient,
@@ -47,10 +44,6 @@ export class CriarServicosPage implements OnInit {
   ngOnInit() {
     this.carregarDadosIniciais();
     this.carregarClientes();
-  }
-
-  get clienteSelecionado() {
-    return this.clientes.find(c => c.id === this.clienteSelecionadoId) || null;
   }
 
   carregarDadosIniciais() {
@@ -70,7 +63,6 @@ export class CriarServicosPage implements OnInit {
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('Token não encontrado');
-      console.log('Usando clientes mockados:', this.clientes);
       return;
     }
 
@@ -79,13 +71,15 @@ export class CriarServicosPage implements OnInit {
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
         this.clientes = response;
-        console.log('Clientes carregados:', this.clientes);
       },
       error: (error) => {
         console.error('Erro ao carregar clientes:', error);
-        console.log('Usando clientes mockados devido ao erro');
       }
     });
+  }
+
+  compareWithClientes(o1: any, o2: any) {
+    return o1 && o2 ? o1._id === o2._id : o1 === o2;
   }
 
   async salvarServico() {
@@ -94,7 +88,7 @@ export class CriarServicosPage implements OnInit {
       return;
     }
 
-    const cliente = this.clientes.find(c => c.id === this.clienteSelecionadoId);
+    const cliente = this.clientes.find(c => c._id === this.clienteSelecionadoId);
     if (!cliente) {
       alert('Cliente inválido selecionado.');
       return;
@@ -105,7 +99,7 @@ export class CriarServicosPage implements OnInit {
       hora_servico: this.horaServico,
       status: this.status,
       autor_servico: this.autorServico,
-      cliente_id: cliente.id,
+      cliente_id: cliente._id,
       nome_cliente: cliente.nome,
       marca_aparelho: this.marcaAparelho,
       modelo_aparelho: this.modeloAparelho,
