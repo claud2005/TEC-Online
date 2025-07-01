@@ -48,8 +48,14 @@ export class CriarServicosPage implements OnInit {
   carregarDadosIniciais() {
     const hoje = new Date();
     this.dataServico = hoje.toISOString().split('T')[0];
-    this.autorServico = localStorage.getItem('username') || '';
-    this.carregarClientes();
+    this.horaServico = this.formatarHora(hoje);
+    this.autorServico = localStorage.getItem('username') || 'Técnico';
+  }
+
+  formatarHora(data: Date): string {
+    const horas = data.getHours().toString().padStart(2, '0');
+    const minutos = data.getMinutes().toString().padStart(2, '0');
+    return `${horas}:${minutos}`;
   }
 
   carregarClientes() {
@@ -80,22 +86,12 @@ export class CriarServicosPage implements OnInit {
   onClienteChange(event: any) {
     this.clienteSelecionado = event.detail.value;
     console.log('Cliente selecionado:', this.clienteSelecionado);
+    console.log('Formulário válido?', this.isFormValid());
   }
 
   async salvarServico() {
-    // Debug form validation
-    console.log('Validando formulário...');
-    console.log('Data:', this.dataServico);
-    console.log('Hora:', this.horaServico);
-    console.log('Cliente:', this.clienteSelecionado);
-
     if (!this.isFormValid()) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
-      return;
-    }
-
-    if (!this.clienteSelecionado?.id) {
-      alert('Selecione um cliente válido.');
+      alert('Por favor, preencha todos os campos obrigatórios corretamente.');
       return;
     }
 
@@ -113,8 +109,6 @@ export class CriarServicosPage implements OnInit {
       valor_total: this.valorTotal || 0,
       observacoes: this.observacoes || 'Sem observações'
     };
-
-    console.log('Enviando dados:', dadosServico);
 
     try {
       const token = localStorage.getItem('token');
@@ -138,7 +132,7 @@ export class CriarServicosPage implements OnInit {
   }
 
   isFormValid(): boolean {
-    const valid = !!(
+    return !!(
       this.dataServico &&
       this.horaServico &&
       this.status &&
@@ -148,9 +142,6 @@ export class CriarServicosPage implements OnInit {
       this.modeloAparelho &&
       this.problemaCliente
     );
-    
-    console.log('Formulário válido?', valid);
-    return valid;
   }
 
   goBack() {

@@ -36,7 +36,7 @@
       <!-- Autor -->
       <div class="form-group">
         <ion-label position="floating">Autor *</ion-label>
-        <ion-input [(ngModel)]="autorServico" name="autorServico" readonly required></ion-input>
+        <ion-input [(ngModel)]="autorServico" name="autorServico" required></ion-input>
       </div>
 
       <!-- Cliente -->
@@ -51,7 +51,7 @@
           interface="popover"
         >
           <ion-select-option *ngFor="let cliente of clientes" [value]="cliente">
-            {{ cliente.nome }} {{ cliente.telefone ? ' - ' + cliente.telefone : '' }}
+            {{ cliente.nome }}
           </ion-select-option>
         </ion-select>
       </div>
@@ -95,6 +95,7 @@
         expand="block" 
         (click)="salvarServico()" 
         [disabled]="!isFormValid()"
+        [class.button-disabled]="!isFormValid()"
       >
         <ion-icon slot="start" name="save-outline"></ion-icon>
         Salvar Serviço
