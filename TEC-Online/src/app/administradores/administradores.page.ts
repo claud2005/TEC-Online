@@ -3,11 +3,12 @@ import { IonicModule, NavController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from 'src/environments/environment.prod';  // Ajusta caminho se necessário
+import { Location } from '@angular/common'; // ✅ Importa Location
+import { environment } from 'src/environments/environment.prod';  // Ajusta conforme o caminho correto
 
 @Component({
   selector: 'app-utilizadores',
-  templateUrl: './administradores.page.html', // Usa o mesmo template
+  templateUrl: './administradores.page.html',
   styleUrls: ['./administradores.page.scss'],
   standalone: true,
   imports: [
@@ -20,7 +21,11 @@ import { environment } from 'src/environments/environment.prod';  // Ajusta cami
 export class AdministradoresPage implements OnInit {
   utilizadores: any[] = [];
 
-  constructor(private http: HttpClient, private navCtrl: NavController) {}
+  constructor(
+    private http: HttpClient,
+    private navCtrl: NavController,
+    private location: Location // ✅ Injeta Location
+  ) {}
 
   ngOnInit() {
     this.carregarUtilizadores();
@@ -49,13 +54,11 @@ export class AdministradoresPage implements OnInit {
   }
 
   criarUtilizador() {
-    this.navCtrl.navigateForward('/signup');  // Navega para a página signup
+    this.navCtrl.navigateForward('/signup');
   }
 
   sair() {
-    console.log('Sair');
-    localStorage.removeItem('token');
-    this.navCtrl.navigateRoot('/login'); // Ajusta rota para login da tua app
+    this.location.back(); // ✅ Volta para a página anterior
   }
 
   alterarSenha(user: any) {
@@ -81,7 +84,7 @@ export class AdministradoresPage implements OnInit {
     this.http.delete(`${environment.api_url}/api/users/${id}`, { headers }).subscribe(
       () => {
         console.log(`Utilizador com id ${id} eliminado.`);
-        this.carregarUtilizadores(); // Recarrega lista após exclusão
+        this.carregarUtilizadores();
       },
       (error) => {
         console.error('Erro ao eliminar utilizador:', error);
