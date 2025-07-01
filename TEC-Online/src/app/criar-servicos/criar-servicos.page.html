@@ -51,7 +51,7 @@
           interface="popover"
         >
           <ion-select-option *ngFor="let cliente of clientes" [value]="cliente">
-            {{ cliente.nome }}
+            {{ cliente.nome }} ({{ cliente.telefone || 'Sem telefone' }})
           </ion-select-option>
         </ion-select>
       </div>

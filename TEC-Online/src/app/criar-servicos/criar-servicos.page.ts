@@ -33,7 +33,10 @@ export class CriarServicosPage implements OnInit {
   valorTotal: number | null = null;
   observacoes: string = '';
 
-  clientes: any[] = [];
+  clientes: any[] = [
+    { id: 1, nome: 'Cliente 1', telefone: '123456789' },
+    { id: 2, nome: 'Cliente 2', telefone: '987654321' }
+  ];
 
   constructor(
     private http: HttpClient,
@@ -43,6 +46,7 @@ export class CriarServicosPage implements OnInit {
 
   ngOnInit() {
     this.carregarDadosIniciais();
+    this.carregarClientes(); // Adicionei esta linha para carregar os clientes
   }
 
   carregarDadosIniciais() {
@@ -62,6 +66,8 @@ export class CriarServicosPage implements OnInit {
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('Token não encontrado');
+      // Carrega clientes mockados temporariamente
+      console.log('Usando clientes mockados:', this.clientes);
       return;
     }
 
@@ -74,7 +80,8 @@ export class CriarServicosPage implements OnInit {
       },
       error: (error) => {
         console.error('Erro ao carregar clientes:', error);
-        alert('Erro ao carregar lista de clientes.');
+        console.log('Usando clientes mockados devido ao erro');
+        // Mantém os clientes mockados se a API falhar
       }
     });
   }
@@ -132,7 +139,7 @@ export class CriarServicosPage implements OnInit {
   }
 
   isFormValid(): boolean {
-    return !!(
+    const valid = !!(
       this.dataServico &&
       this.horaServico &&
       this.status &&
@@ -142,6 +149,9 @@ export class CriarServicosPage implements OnInit {
       this.modeloAparelho &&
       this.problemaCliente
     );
+    
+    console.log('Formulário válido?', valid);
+    return valid;
   }
 
   goBack() {
