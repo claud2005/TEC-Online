@@ -308,7 +308,7 @@ async gerarPDF(servico: Servico) {
   filtrarServicos() {
     this.servicosFiltrados = this.servicos.filter(servico => {
       const matchStatus = this.filtroStatus === 'todos' || servico.status === this.filtroStatus;
-      const matchSearch = servico.cliente.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      const matchSearch = servico.nomeCompletoCliente.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                           servico.descricao.toLowerCase().includes(this.searchTerm.toLowerCase());
       return matchStatus && matchSearch;
     });
