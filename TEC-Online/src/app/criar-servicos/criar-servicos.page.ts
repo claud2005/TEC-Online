@@ -82,53 +82,59 @@ export class CriarServicosPage implements OnInit {
     return o1 && o2 ? o1._id === o2._id : o1 === o2;
   }
 
-  async salvarServico() {
-    if (!this.isFormValid()) {
-      alert('Por favor, preencha todos os campos obrigatórios corretamente.');
-      return;
-    }
-
-    const cliente = this.clientes.find(c => c._id === this.clienteSelecionadoId);
-    if (!cliente) {
-      alert('Cliente inválido selecionado.');
-      return;
-    }
-
-    const dadosServico = {
-      data_servico: this.dataServico,
-      hora_servico: this.horaServico,
-      status: this.status,
-      autor_servico: this.autorServico,
-      cliente_id: cliente._id,
-      nome_cliente: cliente.nome,
-      marca_aparelho: this.marcaAparelho,
-      modelo_aparelho: this.modeloAparelho,
-      problema_cliente: this.problemaCliente,
-      solucao_inicial: this.solucaoInicial,
-      valor_total: this.valorTotal || 0,
-      observacoes: this.observacoes || 'Sem observações'
-    };
-
-    try {
-      const token = localStorage.getItem('token');
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      });
-
-      await this.http.post(
-        `${environment.api_url}/api/servicos/`,
-        dadosServico,
-        { headers }
-      ).toPromise();
-
-      alert('Serviço criado com sucesso!');
-      this.router.navigate(['/plano-semanal']);
-    } catch (error) {
-      console.error('Erro:', error);
-      alert('Erro ao criar serviço. Verifique o console.');
-    }
+async salvarServico() {
+  if (!this.isFormValid()) {
+    alert('Por favor, preencha todos os campos obrigatórios corretamente.');
+    return;
   }
+
+  const cliente = this.clientes.find(c => c._id === this.clienteSelecionadoId);
+  if (!cliente) {
+    alert('Cliente inválido selecionado.');
+    return;
+  }
+
+  const numeroServico = `SVC-${Date.now()}`; // exemplo: SVC-17234567890
+
+  const dadosServico = {
+    numero: numeroServico,
+    dataServico: this.dataServico,
+    horaServico: this.horaServico,
+    status: this.status,
+    cliente: cliente._id, // ou cliente.nome se preferires
+    descricao: `Serviço criado para ${cliente.nome}`,
+    responsavel: this.autorServico, // pode ser igual ao autor
+    observacoes: this.observacoes || 'Sem observações',
+    autorServico: this.autorServico,
+    nomeCompletoCliente: cliente.nome,
+    contatoCliente: cliente.contacto || '',
+    modeloAparelho: this.modeloAparelho,
+    marcaAparelho: this.marcaAparelho,
+    problemaRelatado: this.problemaCliente,
+    solucaoInicial: this.solucaoInicial || '',
+    valorTotal: this.valorTotal || 0
+  };
+
+  try {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    await this.http.post(
+      `${environment.api_url}/api/servicos/`,
+      dadosServico,
+      { headers }
+    ).toPromise();
+
+    alert('Serviço criado com sucesso!');
+    this.router.navigate(['/plano-semanal']);
+  } catch (error: any) {
+    console.error('Erro:', error);
+    alert('Erro ao criar serviço. Verifique o console.');
+  }
+}
 
   isFormValid(): boolean {
     return !!(
