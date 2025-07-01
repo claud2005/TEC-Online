@@ -117,7 +117,7 @@
                 [class.active]="servico.status === 'aberto'"
                 color="success"
                 (click)="alterarStatus(servico, 'aberto')"
-                aria-pressed="{{ servico.status === 'aberto' ? 'true' : 'false' }}"
+                [attr.aria-pressed]="servico.status === 'aberto' ? 'true' : 'false'"
               >
                 Aberto
               </ion-button>
@@ -128,7 +128,7 @@
                 [class.active]="servico.status === 'fechado'"
                 color="danger"
                 (click)="alterarStatus(servico, 'fechado')"
-                aria-pressed="{{ servico.status === 'fechado' ? 'true' : 'false' }}"
+                [attr.aria-pressed]="servico.status === 'fechado' ? 'true' : 'false'"
               >
                 Fechado
               </ion-button>
@@ -139,7 +139,7 @@
               fill="solid"
               color="primary"
               (click)="editarServico(servico.id)"
-              aria-label="Editar serviço {{ servico.nomeCompletoCliente }}"
+              [attr.aria-label]="'Editar serviço ' + servico.nomeCompletoCliente"
             >
               Editar Serviço
             </ion-button>
