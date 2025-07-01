@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { Location } from '@angular/common';      // <-- Importa Location
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms'; 
@@ -28,7 +29,11 @@ export class SignupPage implements OnInit {
   confirmPassword: string = '';
   editing: boolean = false;
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private location: Location          // <-- Injeta Location aqui
+  ) {}
 
   ngOnInit() {
     this.loadUsers();
@@ -56,14 +61,12 @@ export class SignupPage implements OnInit {
   }
 
   submitForm() {
-    // Validação comum
     if (!this.utilizador.fullName || !this.utilizador.username || !this.utilizador.email) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
     if (!this.editing) {
-      // Validação específica do cadastro
       if (!this.utilizador.password || this.utilizador.password.length < 6) {
         alert('A senha deve ter pelo menos 6 caracteres.');
         return;
@@ -74,7 +77,6 @@ export class SignupPage implements OnInit {
         return;
       }
 
-      // Criar utilizador
       this.http.post(`${environment.api_url}/api/signup`, this.utilizador).subscribe(
         () => {
           alert('Utilizador criado com sucesso!');
@@ -88,10 +90,7 @@ export class SignupPage implements OnInit {
         }
       );
     } else {
-      // Atualizar utilizador
       const dataToUpdate = { ...this.utilizador };
-
-      // Se senha estiver vazia, não envia para o backend
       if (!dataToUpdate.password || dataToUpdate.password.trim() === '') {
         delete dataToUpdate.password;
       }
@@ -135,5 +134,9 @@ export class SignupPage implements OnInit {
         }
       );
     }
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

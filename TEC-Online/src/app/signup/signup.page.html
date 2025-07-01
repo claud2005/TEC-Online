@@ -1,5 +1,11 @@
 <ion-content class="signup-content">
   <div class="center-content" style="margin-top: 20px;">
+
+<ion-button fill="clear" color="medium" (click)="goBack()" aria-label="Voltar página anterior">
+      <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+      Voltar
+    </ion-button>
+
     <h2>Gerenciar Utilizadores</h2>
 
     <form #userForm="ngForm" (ngSubmit)="submitForm()">
