@@ -63,7 +63,6 @@ export class CriarServicosPage implements OnInit {
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('Token não encontrado');
-      // Caso não tenha token, pode usar mock ou deixar array vazio
       this.clientes = [];
       return;
     }
@@ -72,12 +71,18 @@ export class CriarServicosPage implements OnInit {
 
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
-        // Mapeia _id para id para usar no select
+        console.log('Resposta completa da API:', response);
+        
+        // Mapeamento corrigido para a estrutura da sua API
         this.clientes = response.map(cliente => ({
-          id: cliente._id,  // <== aqui pega _id do Mongo e usa como id
-          nome: cliente.nome
+          id: cliente._id,  // Usa _id que é o padrão do MongoDB
+          nome: cliente.nome,
+          // Adicione outros campos se necessário
+          codigoCliente: cliente.codigoCliente,
+          numeroCliente: cliente.numeroCliente
         }));
-        console.log('Clientes carregados:', this.clientes);
+
+        console.log('Clientes formatados:', this.clientes);
       },
       error: (error) => {
         console.error('Erro ao carregar clientes:', error);
