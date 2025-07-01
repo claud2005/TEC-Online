@@ -25,7 +25,7 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  clienteSelecionado: string | null = null; // Agora string porque _id é string
+  clienteSelecionado: string | null = null; // Agora string, pois IDs do Mongo são strings
   marcaAparelho: string = '';
   modeloAparelho: string = '';
   problemaCliente: string = '';
@@ -33,10 +33,7 @@ export class CriarServicosPage implements OnInit {
   valorTotal: number | null = null;
   observacoes: string = '';
 
-  clientes: any[] = [
-    { id: '1', nome: 'Cliente 1' },
-    { id: '2', nome: 'Cliente 2' }
-  ];
+  clientes: any[] = [];
 
   constructor(
     private http: HttpClient,
@@ -66,7 +63,8 @@ export class CriarServicosPage implements OnInit {
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('Token não encontrado');
-      console.log('Usando clientes mockados:', this.clientes);
+      // Caso não tenha token, pode usar mock ou deixar array vazio
+      this.clientes = [];
       return;
     }
 
@@ -74,25 +72,23 @@ export class CriarServicosPage implements OnInit {
 
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
-        // Corrigido: mapear _id para id
-        this.clientes = response.map(cliente => ({ id: cliente._id, nome: cliente.nome }));
+        // Mapeia _id para id para usar no select
+        this.clientes = response.map(cliente => ({
+          id: cliente._id,  // <== aqui pega _id do Mongo e usa como id
+          nome: cliente.nome
+        }));
         console.log('Clientes carregados:', this.clientes);
       },
       error: (error) => {
         console.error('Erro ao carregar clientes:', error);
-        console.log('Usando clientes mockados devido ao erro');
+        this.clientes = [];
       }
     });
   }
 
   compareWithClientes(o1: any, o2: any) {
-    return o1 === o2; // clienteSelecionado é string ID
-  }
-
-  onClienteChange(event: any) {
-    this.clienteSelecionado = event.detail.value;
-    console.log('Cliente selecionado:', this.clienteSelecionado);
-    console.log('Formulário válido?', this.isFormValid());
+    // Compara strings ou nulls para seleção correta no ion-select
+    return o1 === o2;
   }
 
   async salvarServico() {
