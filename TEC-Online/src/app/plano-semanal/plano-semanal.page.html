@@ -119,27 +119,16 @@
                 </p>
               </div>
             </ion-label>
-
             <ion-buttons slot="end">
               <ion-button
-                *ngIf="servico.status === 'fechado'"
-                color="success"
-                fill="outline"
-                (click)="alterarStatus(servico, 'aberto')"
-                aria-label="Reabrir serviço"
-                title="Reabrir serviço"
-              >
-                <ion-icon name="refresh-circle-outline"></ion-icon>
-              </ion-button>
-              <ion-button
-                *ngIf="servico.status === 'aberto'"
-                color="danger"
-                fill="outline"
-                (click)="alterarStatus(servico, 'fechado')"
-                aria-label="Fechar serviço"
-                title="Fechar serviço"
-              >
-                <ion-icon name="checkmark-done-outline"></ion-icon>
+                [color]="servico.status === 'aberto' ? 'success' : 'medium'"
+                fill="solid"
+                shape="round"
+                (click)="alterarStatus(servico, servico.status === 'aberto' ? 'fechado' : 'aberto')"
+                aria-label="Alterar status"
+                title="Alterar status"
+                >
+                {{ servico.status === 'aberto' ? 'ON' : 'OFF' }}
               </ion-button>
             </ion-buttons>
           </ion-item>
