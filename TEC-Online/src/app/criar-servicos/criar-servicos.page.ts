@@ -25,10 +25,10 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  clienteSelecionado: string | null = null; 
+  clienteSelecionado: string | null = null; // ID do cliente
   marcaAparelho: string = '';
   modeloAparelho: string = '';
-  problemaCliente: string = '';
+  problemaRelatado: string = '';
   solucaoInicial: string = '';
   valorTotal: number | null = null;
   observacoes: string = '';
@@ -74,9 +74,9 @@ export class CriarServicosPage implements OnInit {
         console.log('Resposta completa da API:', response);
 
         this.clientes = response.map(cliente => ({
-          id: cliente.id,  // usamos codigoCliente como id
+          id: cliente.id,                    // ou cliente._id dependendo do backend
           nome: cliente.nome,
-          numeroCliente: cliente.numeroCliente
+          numeroCliente: cliente.numeroCliente // ou cliente.telefone se vier assim
         }));
 
         console.log('Clientes formatados:', this.clientes);
@@ -113,11 +113,13 @@ export class CriarServicosPage implements OnInit {
       horaServico: this.horaServico,
       status: this.status,
       autorServico: this.autorServico,
-      clienteId: cliente.id,
-      nomeCompletoCliente: cliente.nome,
+      clienteId: cliente.id,               // ID real do cliente
+      cliente: cliente.nome,               // campo 'cliente' no schema (required)
+      nomeCompletoCliente: cliente.nome,   // campo 'nomeCompletoCliente' no schema
+      contatoCliente: cliente.numeroCliente, // campo 'contatoCliente' no schema
       marcaAparelho: this.marcaAparelho,
       modeloAparelho: this.modeloAparelho,
-      problemaRelatado: this.problemaCliente,
+      problemaRelatado: this.problemaRelatado,
       solucaoInicial: this.solucaoInicial,
       valorTotal: this.valorTotal || 0,
       observacoes: this.observacoes || 'Sem observações'
@@ -155,7 +157,8 @@ export class CriarServicosPage implements OnInit {
       this.clienteSelecionado &&
       this.marcaAparelho &&
       this.modeloAparelho &&
-      this.problemaCliente
+      this.problemaRelatado &&
+      this.solucaoInicial
     );
   }
 
