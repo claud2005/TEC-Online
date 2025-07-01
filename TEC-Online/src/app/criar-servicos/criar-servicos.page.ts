@@ -113,7 +113,7 @@ export class CriarServicosPage implements OnInit {
       hora_servico: this.horaServico,
       status: this.status,
       autor_servico: this.autorServico,
-      cliente_id: cliente.id,
+      clienteId: cliente.id,
       nome_cliente: cliente.nome,
       marca_aparelho: this.marcaAparelho,
       modelo_aparelho: this.modeloAparelho,
