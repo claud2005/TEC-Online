@@ -110,39 +110,40 @@
             <p><strong>Observações:</strong> {{ servico.observacoes }}</p>
 
             <!-- Botões de status -->
-            <div class="status-toggle">
-              <ion-button
-                fill="outline"
-                shape="round"
-                [class.active]="servico.status === 'aberto'"
-                color="success"
-                (click)="alterarStatus(servico, 'aberto')"
-                aria-pressed="{{ servico.status === 'aberto' ? 'true' : 'false' }}"
-              >
-                Aberto
-              </ion-button>
+<div class="status-toggle">
+  <ion-button
+    fill="outline"
+    shape="round"
+    [class.active]="servico.status === 'aberto'"
+    color="success"
+    (click)="alterarStatus(servico, 'aberto')"
+    [attr.aria-pressed]="servico.status === 'aberto' ? 'true' : 'false'"
+  >
+    Aberto
+  </ion-button>
 
-              <ion-button
-                fill="outline"
-                shape="round"
-                [class.active]="servico.status === 'fechado'"
-                color="danger"
-                (click)="alterarStatus(servico, 'fechado')"
-                aria-pressed="{{ servico.status === 'fechado' ? 'true' : 'false' }}"
-              >
-                Fechado
-              </ion-button>
-            </div>
+  <ion-button
+    fill="outline"
+    shape="round"
+    [class.active]="servico.status === 'fechado'"
+    color="danger"
+    (click)="alterarStatus(servico, 'fechado')"
+    [attr.aria-pressed]="servico.status === 'fechado' ? 'true' : 'false'"
+  >
+    Fechado
+  </ion-button>
+</div>
 
-            <ion-button
-              expand="block"
-              fill="solid"
-              color="primary"
-              (click)="editarServico(servico.id)"
-              aria-label="Editar serviço {{ servico.nomeCompletoCliente }}"
-            >
-              Editar Serviço
-            </ion-button>
+<ion-button
+  expand="block"
+  fill="solid"
+  color="primary"
+  (click)="editarServico(servico.id)"
+  [attr.aria-label]="'Editar serviço ' + servico.nomeCompletoCliente"
+>
+  Editar Serviço
+</ion-button>
+
           </ion-card-content>
         </ion-card>
       </ion-col>
