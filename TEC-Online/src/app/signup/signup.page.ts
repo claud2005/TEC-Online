@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Location } from '@angular/common';      // <-- Importa Location
+import { Location } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms'; 
@@ -14,6 +14,7 @@ interface User {
   email: string;
   telefone?: string;
   password?: string;
+  role?: string; // <-- Adicionado
 }
 
 @Component({
@@ -32,7 +33,7 @@ export class SignupPage implements OnInit {
   constructor(
     private router: Router,
     private http: HttpClient,
-    private location: Location          // <-- Injeta Location aqui
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -45,7 +46,8 @@ export class SignupPage implements OnInit {
       username: '',
       email: '',
       telefone: '',
-      password: ''
+      password: '',
+      role: 'user' // <-- Valor padrão
     };
   }
 
@@ -61,7 +63,7 @@ export class SignupPage implements OnInit {
   }
 
   submitForm() {
-    if (!this.utilizador.fullName || !this.utilizador.username || !this.utilizador.email) {
+    if (!this.utilizador.fullName || !this.utilizador.username || !this.utilizador.email || !this.utilizador.role) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -91,6 +93,7 @@ export class SignupPage implements OnInit {
       );
     } else {
       const dataToUpdate = { ...this.utilizador };
+
       if (!dataToUpdate.password || dataToUpdate.password.trim() === '') {
         delete dataToUpdate.password;
       }
