@@ -74,7 +74,7 @@ export class CriarServicosPage implements OnInit {
         console.log('Resposta completa da API:', response);
 
         this.clientes = response.map(cliente => ({
-          id: cliente.codigoCliente,  // usamos codigoCliente como id
+          id: cliente.id,  // usamos codigoCliente como id
           nome: cliente.nome,
           numeroCliente: cliente.numeroCliente
         }));
