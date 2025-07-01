@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { IonicModule, LoadingController, AlertController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { firstValueFrom } from 'rxjs';
 
 import { ClienteService } from '../services/cliente.service';
 
@@ -40,20 +41,17 @@ export class OrcamentosClientesPage implements OnInit {
     await loading.present();
 
     try {
-      // Carrega dados do cliente
-      const [cliente, orcamentos, servicos] = await Promise.all([
-        this.clienteService.obterClientePorId(clienteId).toPromise(),
-        this.clienteService.getOrcamentosPorCliente(clienteId).toPromise(),
-        this.clienteService.getServicosPorCliente(clienteId).toPromise()
-      ]);
+      const cliente = await firstValueFrom(this.clienteService.obterClientePorId(clienteId));
+      const orcamentos = await firstValueFrom(this.clienteService.getOrcamentosPorCliente(clienteId));
+      const servicos = await firstValueFrom(this.clienteService.getServicosPorCliente(clienteId));
 
       this.cliente = cliente;
       this.orcamentos = orcamentos || [];
       this.servicos = servicos || [];
-      
-      loading.dismiss();
+
+      await loading.dismiss();
     } catch (error) {
-      loading.dismiss();
+      await loading.dismiss();
       const alert = await this.alertCtrl.create({
         header: 'Erro',
         message: 'Não foi possível carregar os dados do cliente.',
@@ -68,7 +66,6 @@ export class OrcamentosClientesPage implements OnInit {
     return orcamento.servicos?.reduce((acc: number, serv: any) => acc + (serv.preco || 0), 0) || 0;
   }
 
-  // Nova função para formatar data
   formatarData(data: string): string {
     return new Date(data).toLocaleDateString('pt-PT');
   }

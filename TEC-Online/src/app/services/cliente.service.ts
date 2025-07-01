@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class ClienteService {
-  private apiUrl = `${environment.api_url}/api/clientes`;  // CORRIGIDO: crase
+  private apiUrl = `${environment.api_url}/api/clientes`;
 
   constructor(private http: HttpClient) {}
 
@@ -16,7 +16,7 @@ export class ClienteService {
     const token = localStorage.getItem('token');
     if (!token) throw new Error('Token não encontrado.');
     return new HttpHeaders({
-      'Authorization': `Bearer ${token}`,  // CORRIGIDO: template string
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
   }
@@ -71,7 +71,6 @@ export class ClienteService {
     );
   }
 
-  // Orçamentos do cliente
   getOrcamentosPorCliente(clienteId: string): Observable<any[]> {
     const headers = this.getAuthHeaders();
     return this.http.get<any[]>(`${this.apiUrl}/${clienteId}/orcamentos`, { headers }).pipe(
@@ -82,7 +81,6 @@ export class ClienteService {
     );
   }
 
-  // Serviços diretos do cliente
   getServicosPorCliente(clienteId: string): Observable<any[]> {
     const headers = this.getAuthHeaders();
     return this.http.get<any[]>(`${this.apiUrl}/${clienteId}/servicos`, { headers }).pipe(

@@ -25,7 +25,7 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  clienteSelecionado: any = null;
+  clienteSelecionado: number | null = null; // Agora guarda só o ID do cliente
   marcaAparelho: string = '';
   modeloAparelho: string = '';
   problemaCliente: string = '';
@@ -86,7 +86,7 @@ export class CriarServicosPage implements OnInit {
   }
 
   compareWithClientes(o1: any, o2: any) {
-    return o1 && o2 ? o1.id === o2.id : o1 === o2;
+    return o1 === o2; // Como agora clienteSelecionado é ID, só compara os números
   }
 
   onClienteChange(event: any) {
@@ -101,13 +101,19 @@ export class CriarServicosPage implements OnInit {
       return;
     }
 
+    const cliente = this.clientes.find(c => c.id === this.clienteSelecionado);
+    if (!cliente) {
+      alert('Cliente selecionado não encontrado.');
+      return;
+    }
+
     const dadosServico = {
       data_servico: this.dataServico,
       hora_servico: this.horaServico,
       status: this.status,
       autor_servico: this.autorServico,
-      cliente_id: this.clienteSelecionado.id,
-      nome_cliente: this.clienteSelecionado.nome,
+      cliente_id: cliente.id,
+      nome_cliente: cliente.nome,
       marca_aparelho: this.marcaAparelho,
       modelo_aparelho: this.modeloAparelho,
       problema_cliente: this.problemaCliente,
@@ -132,7 +138,7 @@ export class CriarServicosPage implements OnInit {
       ).toPromise();
 
       alert('Serviço criado com sucesso!');
-      this.router.navigate(['/plano-semanal']);
+      this.router.navigate(['/orcamentos-clientes', cliente.id]);
     } catch (error) {
       console.error('Erro ao criar serviço:', error);
       alert('Erro ao criar serviço. Verifique o console.');
@@ -140,28 +146,16 @@ export class CriarServicosPage implements OnInit {
   }
 
   isFormValid(): boolean {
-    const valid = !!(
+    return !!(
       this.dataServico &&
       this.horaServico &&
       this.status &&
       this.autorServico &&
-      this.clienteSelecionado?.id &&
+      this.clienteSelecionado &&
       this.marcaAparelho &&
       this.modeloAparelho &&
       this.problemaCliente
     );
-    
-    console.log('Validação do formulário:');
-    console.log('Data:', !!this.dataServico);
-    console.log('Hora:', !!this.horaServico);
-    console.log('Status:', !!this.status);
-    console.log('Autor:', !!this.autorServico);
-    console.log('Cliente:', !!this.clienteSelecionado?.id);
-    console.log('Marca:', !!this.marcaAparelho);
-    console.log('Modelo:', !!this.modeloAparelho);
-    console.log('Problema:', !!this.problemaCliente);
-    
-    return valid;
   }
 
   goBack() {

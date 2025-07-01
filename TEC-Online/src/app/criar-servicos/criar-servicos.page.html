@@ -20,7 +20,7 @@
           [(ngModel)]="dataServico" 
           name="dataServico" 
           required
-          placeholder="Selecione a data"
+          placeholder="Selecione a data do serviço"
         ></ion-input>
       </div>
 
@@ -32,7 +32,7 @@
           [(ngModel)]="horaServico" 
           name="horaServico" 
           required
-          placeholder="Selecione a hora"
+          placeholder="Selecione a hora do serviço"
         ></ion-input>
       </div>
 
@@ -43,7 +43,7 @@
           [(ngModel)]="status" 
           name="status" 
           required
-          placeholder="Selecione o status"
+          placeholder="Selecione o status do serviço"
         >
           <ion-select-option value="aberto">Aberto</ion-select-option>
           <ion-select-option value="em_andamento">Em Andamento</ion-select-option>
@@ -58,7 +58,7 @@
           [(ngModel)]="autorServico" 
           name="autorServico" 
           required
-          placeholder="Digite o nome do autor"
+          placeholder="Digite o nome do autor do serviço"
         ></ion-input>
       </div>
 
@@ -74,7 +74,7 @@
           interface="popover"
           placeholder="Selecione o cliente"
         >
-          <ion-select-option *ngFor="let cliente of clientes" [value]="cliente">
+          <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.id">
             {{ cliente.nome }}
           </ion-select-option>
         </ion-select>
