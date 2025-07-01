@@ -25,7 +25,7 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  clienteSelecionado: string | null = null; // Agora string, pois IDs do Mongo são strings
+  clienteSelecionado: string | null = null; 
   marcaAparelho: string = '';
   modeloAparelho: string = '';
   problemaCliente: string = '';
@@ -72,13 +72,10 @@ export class CriarServicosPage implements OnInit {
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
         console.log('Resposta completa da API:', response);
-        
-        // Mapeamento corrigido para a estrutura da sua API
+
         this.clientes = response.map(cliente => ({
-          id: cliente._id,  // Usa _id que é o padrão do MongoDB
+          id: cliente.codigoCliente,  // usamos codigoCliente como id
           nome: cliente.nome,
-          // Adicione outros campos se necessário
-          codigoCliente: cliente.codigoCliente,
           numeroCliente: cliente.numeroCliente
         }));
 
@@ -91,9 +88,9 @@ export class CriarServicosPage implements OnInit {
     });
   }
 
-  compareWithClientes(o1: any, o2: any) {
-    // Compara strings ou nulls para seleção correta no ion-select
-    return o1 === o2;
+  onClienteChange(event: any) {
+    this.clienteSelecionado = event.detail.value;
+    console.log('Cliente selecionado agora:', this.clienteSelecionado);
   }
 
   async salvarServico() {
@@ -102,7 +99,10 @@ export class CriarServicosPage implements OnInit {
       return;
     }
 
+    console.log('Tentando achar cliente com ID:', this.clienteSelecionado);
     const cliente = this.clientes.find(c => c.id === this.clienteSelecionado);
+    console.log('Cliente encontrado:', cliente);
+
     if (!cliente) {
       alert('Cliente selecionado não encontrado.');
       return;

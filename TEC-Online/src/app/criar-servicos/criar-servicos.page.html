@@ -64,19 +64,19 @@
 
       <!-- Cliente -->
       <div class="form-group">
-        <ion-label position="floating">Cliente *</ion-label>
-        <ion-select
+        <ion-label>Cliente</ion-label>
+      <ion-select
           [(ngModel)]="clienteSelecionado"
           name="clienteSelecionado"
-          required
-          [compareWith]="compareWithClientes"
-          interface="popover"
           placeholder="Selecione o cliente"
-        >
-          <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.id">
-            {{ cliente.nome }}
-          </ion-select-option>
-        </ion-select>
+          interface="popover"
+          (ionChange)="onClienteChange($event)"
+          required
+      >
+        <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.id">
+          {{ cliente.nome }}
+        </ion-select-option>
+      </ion-select>
       </div>
 
       <!-- Marca/Modelo -->
