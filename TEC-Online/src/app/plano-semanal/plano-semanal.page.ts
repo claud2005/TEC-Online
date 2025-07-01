@@ -67,15 +67,13 @@ export class PlanoSemanalPage implements OnInit {
       next: (data) => {
         this.servicos = data.map(servico => {
           let statusAtual = servico.status?.toLowerCase() || '';
-          if (statusAtual === 'concluído' || statusAtual === 'fechado') statusAtual = 'fechado';
-          else statusAtual = 'aberto';
-
+          if (statusAtual === 'concluído') statusAtual = 'fechado';
           return {
             id: servico._id,
-            nomeCompletoCliente: servico.cliente || 'Cliente não informado',
+            nomeCompletoCliente: servico.nomeCompletoCliente || 'Cliente não informado',
             dataServico: servico.dataServico || '',
-            problemaCliente: servico.problemaRelatado || 'Problema não descrito',
             horaServico: servico.horaServico || 'Horário não definido',
+            problemaRelatado: servico.problemaRelatado || 'Problema não descrito',
             status: statusAtual,
             autorServico: servico.autorServico || '',
             observacoes: servico.observacoes || '',
@@ -118,7 +116,7 @@ export class PlanoSemanalPage implements OnInit {
         servico.nomeCompletoCliente?.toLowerCase().includes(query) ||
         servico.marcaAparelho?.toLowerCase().includes(query) ||
         servico.modeloAparelho?.toLowerCase().includes(query) ||
-        servico.problemaCliente?.toLowerCase().includes(query);
+        servico.problemaRelatado?.toLowerCase().includes(query);
 
       let matchesFilter = true;
 
