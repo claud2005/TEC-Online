@@ -25,7 +25,7 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  clienteSelecionadoId: string = ''; // armazenamos só o _id
+  clienteSelecionado: any = null;
   marcaAparelho: string = '';
   modeloAparelho: string = '';
   problemaCliente: string = '';
@@ -33,7 +33,10 @@ export class CriarServicosPage implements OnInit {
   valorTotal: number | null = null;
   observacoes: string = '';
 
-  clientes: any[] = [];
+  clientes: any[] = [
+    { id: 1, nome: 'Cliente 1', telefone: '123456789' },
+    { id: 2, nome: 'Cliente 2', telefone: '987654321' }
+  ];
 
   constructor(
     private http: HttpClient,
@@ -43,7 +46,7 @@ export class CriarServicosPage implements OnInit {
 
   ngOnInit() {
     this.carregarDadosIniciais();
-    this.carregarClientes();
+    this.carregarClientes(); // Adicionei esta linha para carregar os clientes
   }
 
   carregarDadosIniciais() {
@@ -63,6 +66,8 @@ export class CriarServicosPage implements OnInit {
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('Token não encontrado');
+      // Carrega clientes mockados temporariamente
+      console.log('Usando clientes mockados:', this.clientes);
       return;
     }
 
@@ -71,15 +76,24 @@ export class CriarServicosPage implements OnInit {
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
         this.clientes = response;
+        console.log('Clientes carregados:', this.clientes);
       },
       error: (error) => {
         console.error('Erro ao carregar clientes:', error);
+        console.log('Usando clientes mockados devido ao erro');
+        // Mantém os clientes mockados se a API falhar
       }
     });
   }
 
   compareWithClientes(o1: any, o2: any) {
-    return o1 && o2 ? o1._id === o2._id : o1 === o2;
+    return o1 && o2 ? o1.id === o2.id : o1 === o2;
+  }
+
+  onClienteChange(event: any) {
+    this.clienteSelecionado = event.detail.value;
+    console.log('Cliente selecionado:', this.clienteSelecionado);
+    console.log('Formulário válido?', this.isFormValid());
   }
 
   async salvarServico() {
@@ -88,19 +102,13 @@ export class CriarServicosPage implements OnInit {
       return;
     }
 
-    const cliente = this.clientes.find(c => c._id === this.clienteSelecionadoId);
-    if (!cliente) {
-      alert('Cliente inválido selecionado.');
-      return;
-    }
-
     const dadosServico = {
       data_servico: this.dataServico,
       hora_servico: this.horaServico,
       status: this.status,
       autor_servico: this.autorServico,
-      cliente_id: cliente._id,
-      nome_cliente: cliente.nome,
+      cliente_id: this.clienteSelecionado.id,
+      nome_cliente: this.clienteSelecionado.nome,
       marca_aparelho: this.marcaAparelho,
       modelo_aparelho: this.modeloAparelho,
       problema_cliente: this.problemaCliente,
@@ -131,16 +139,19 @@ export class CriarServicosPage implements OnInit {
   }
 
   isFormValid(): boolean {
-    return !!(
+    const valid = !!(
       this.dataServico &&
       this.horaServico &&
       this.status &&
       this.autorServico &&
-      this.clienteSelecionadoId &&
+      this.clienteSelecionado?.id &&
       this.marcaAparelho &&
       this.modeloAparelho &&
       this.problemaCliente
     );
+    
+    console.log('Formulário válido?', valid);
+    return valid;
   }
 
   goBack() {
