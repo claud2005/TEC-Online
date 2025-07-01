@@ -20,16 +20,17 @@
       <ion-col>Gerenciar</ion-col>
     </ion-row>
 
-    <ion-row *ngFor="let user of utilizadores" style="border-bottom: 1px solid #eee; align-items: center;">
+    <ion-row *ngFor="let user of utilizadores" style="border-bottom: 1px solid #eee; align-items: center; cursor: pointer;"
+      (click)="editarUtilizador(user.id)">
       <ion-col>{{ user.fullName }}</ion-col>
       <ion-col>{{ user.email }}</ion-col>
       <ion-col>{{ user.telefone }}</ion-col>
       <ion-col>{{ user.isAdmin ? 'Sim' : 'Não' }}</ion-col>
       <ion-col>
-        <ion-button size="small" color="warning" (click)="alterarSenha(user)">
+        <ion-button size="small" color="warning" (click)="alterarSenha(user); $event.stopPropagation()">
           <ion-icon slot="icon-only" name="key-outline"></ion-icon>
         </ion-button>
-        <ion-button size="small" color="danger" (click)="eliminarUtilizador(user.id)">
+        <ion-button size="small" color="danger" (click)="eliminarUtilizador(user.id); $event.stopPropagation()">
           <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-button>
       </ion-col>

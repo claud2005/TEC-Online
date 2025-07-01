@@ -14,7 +14,7 @@ interface User {
   email: string;
   telefone?: string;
   password?: string;
-  role?: string; // <-- Adicionado
+  role?: string;
 }
 
 @Component({
@@ -47,7 +47,7 @@ export class SignupPage implements OnInit {
       email: '',
       telefone: '',
       password: '',
-      role: 'user' // <-- Valor padrão
+      role: 'user' // Valor padrão
     };
   }
 

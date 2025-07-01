@@ -3,7 +3,7 @@ import { IonicModule, NavController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
-import { Location } from '@angular/common'; // ✅ Importa Location
+import { Location } from '@angular/common';
 import { environment } from 'src/environments/environment.prod';  // Ajusta conforme o caminho correto
 
 @Component({
@@ -24,7 +24,7 @@ export class AdministradoresPage implements OnInit {
   constructor(
     private http: HttpClient,
     private navCtrl: NavController,
-    private location: Location // ✅ Injeta Location
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -42,7 +42,7 @@ export class AdministradoresPage implements OnInit {
           fullName: user.fullName,
           username: user.username,
           email: user.email,
-          isAdmin: user.role === 'admin',  // <-- Correção aqui
+          isAdmin: user.role === 'admin',  // Corrigido para verificar a role
           telefone: user.telefone || '-'
         }));
         console.log('Utilizadores carregados:', this.utilizadores);
@@ -58,7 +58,7 @@ export class AdministradoresPage implements OnInit {
   }
 
   sair() {
-    this.location.back(); // ✅ Volta para a página anterior
+    this.location.back();
   }
 
   alterarSenha(user: any) {
@@ -90,5 +90,9 @@ export class AdministradoresPage implements OnInit {
         console.error('Erro ao eliminar utilizador:', error);
       }
     );
+  }
+
+  editarUtilizador(id: string) {
+    this.navCtrl.navigateForward(`/signup/${id}`); // Navega para página signup com id para edição
   }
 }

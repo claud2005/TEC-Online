@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { SignupPage } from './signup/signup.page';
-import { PerfilPage } from './perfil/perfil.page'; // Importando o PerfilPage standalone
+import { PerfilPage } from './perfil/perfil.page';
 import { GestorClientesPage } from './gestor-clientes/gestor-clientes.page';
 
 const routes: Routes = [
@@ -10,7 +10,11 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then(m => m.HomePageModule),
   },
   {
-    path: 'signup',
+    path: 'signup',          // Rota para criar utilizador
+    component: SignupPage,
+  },
+  {
+    path: 'signup/:id',      // Rota para editar utilizador
     component: SignupPage,
   },
   {
@@ -20,7 +24,7 @@ const routes: Routes = [
   },
   {
     path: 'perfil',
-    component: PerfilPage, // Usando o PerfilPage diretamente como componente standalone
+    component: PerfilPage,
   },
   {
     path: 'criar-servicos',
@@ -44,7 +48,7 @@ const routes: Routes = [
   },
   {
     path: 'gestor-clientes',
-    component: GestorClientesPage, // Usando o GestorClientesPage diretamente como componente standalone
+    component: GestorClientesPage,
   },
   {
     path: 'esqueceu-password',
