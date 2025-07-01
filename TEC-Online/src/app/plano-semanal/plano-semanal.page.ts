@@ -70,7 +70,7 @@ export class PlanoSemanalPage implements OnInit {
           if (statusAtual === 'concluído') statusAtual = 'fechado';
           return {
             id: servico._id,
-            nomeCliente: servico.cliente || 'Cliente não informado',
+            nomeCompletoCliente: servico.cliente || 'Cliente não informado',
             dataServico: servico.dataServico || '', // Use string vazia para evitar erros na conversão Date
             problemaCliente: servico.descricao || 'Problema não descrito',
             horaServico: servico.horaServico || 'Horário não definido',
@@ -113,10 +113,10 @@ export class PlanoSemanalPage implements OnInit {
 
     this.filteredServices = this.servicos.filter(servico => {
       const matchesQuery =
-        servico.nomeCliente?.toLowerCase().includes(query) ||
+        servico.nomeCompletoCliente?.toLowerCase().includes(query) ||
         servico.marcaAparelho?.toLowerCase().includes(query) ||
         servico.modeloAparelho?.toLowerCase().includes(query) ||
-        servico.problemaCliente?.toLowerCase().includes(query);
+        servico.problemaRelatado?.toLowerCase().includes(query);
 
       let matchesFilter = true;
 

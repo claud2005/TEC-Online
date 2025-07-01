@@ -99,7 +99,7 @@
         <ion-list *ngIf="filteredServices.length > 0" lines="full" class="service-list">
           <ion-item *ngFor="let servico of filteredServices" class="service-item" style="margin-bottom: 0.5rem;">
             <ion-label class="service-content" (click)="editarServico(servico?.id)">
-              <h3 class="service-title">{{ servico.nomeCliente || 'Cliente não informado' }}</h3>
+              <h3 class="service-title">{{ servico.nomeCompletoCliente || 'Cliente não informado' }}</h3>
               <div class="service-details">
                 <p>
                   <ion-icon name="calendar" class="detail-icon"></ion-icon>
