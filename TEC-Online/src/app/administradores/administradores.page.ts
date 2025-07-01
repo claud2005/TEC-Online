@@ -42,7 +42,7 @@ export class AdministradoresPage implements OnInit {
           fullName: user.fullName,
           username: user.username,
           email: user.email,
-          isAdmin: user.isAdmin || false,
+          isAdmin: user.role === 'admin',  // <-- Correção aqui
           telefone: user.telefone || '-'
         }));
         console.log('Utilizadores carregados:', this.utilizadores);
