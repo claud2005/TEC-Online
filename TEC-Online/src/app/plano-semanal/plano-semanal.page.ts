@@ -46,13 +46,13 @@ export class PlanoSemanalPage implements OnInit {
 
   atualizarNomeUtilizador() {
     const storedUsername = localStorage.getItem('username');
-    this.utilizadorName = storedUsername ?? 'Utilizador'; // Usa nullish coalescing para segurança
+    this.utilizadorName = storedUsername ?? 'Utilizador';
   }
 
   verificarSeAdmin() {
     const role = localStorage.getItem('role');
     this.isAdmin = role === 'admin';
-    console.log('isAdmin:', this.isAdmin); // Para depurar se o valor está correto
+    console.log('isAdmin:', this.isAdmin);
   }
 
   carregarServicos() {
@@ -70,10 +70,10 @@ export class PlanoSemanalPage implements OnInit {
           if (statusAtual === 'concluído') statusAtual = 'fechado';
           return {
             id: servico._id,
-            nomeCliente: servico.cliente || 'Cliente não informado',
-            dataServico: servico.dataServico || '', // Use string vazia para evitar erros na conversão Date
-            problemaCliente: servico.descricao || 'Problema não descrito',
+            nomeCompletoCliente: servico.nomeCompletoCliente || 'Cliente não informado',
+            dataServico: servico.dataServico || '',
             horaServico: servico.horaServico || 'Horário não definido',
+            problemaRelatado: servico.problemaRelatado || 'Problema não descrito',
             status: statusAtual,
             autorServico: servico.autorServico || '',
             observacoes: servico.observacoes || '',
@@ -113,10 +113,10 @@ export class PlanoSemanalPage implements OnInit {
 
     this.filteredServices = this.servicos.filter(servico => {
       const matchesQuery =
-        servico.nomeCliente?.toLowerCase().includes(query) ||
+        servico.nomeCompletoCliente?.toLowerCase().includes(query) ||
         servico.marcaAparelho?.toLowerCase().includes(query) ||
         servico.modeloAparelho?.toLowerCase().includes(query) ||
-        servico.problemaCliente?.toLowerCase().includes(query);
+        servico.problemaRelatado?.toLowerCase().includes(query);
 
       let matchesFilter = true;
 

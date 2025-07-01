@@ -25,10 +25,10 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  clienteSelecionado: any = null;
+  clienteSelecionado: string | null = null; // ID do cliente
   marcaAparelho: string = '';
   modeloAparelho: string = '';
-  problemaCliente: string = '';
+  problemaRelatado: string = '';
   solucaoInicial: string = '';
   valorTotal: number | null = null;
   observacoes: string = '';
@@ -43,19 +43,27 @@ export class CriarServicosPage implements OnInit {
 
   ngOnInit() {
     this.carregarDadosIniciais();
+    this.carregarClientes();
   }
 
   carregarDadosIniciais() {
     const hoje = new Date();
     this.dataServico = hoje.toISOString().split('T')[0];
-    this.autorServico = localStorage.getItem('username') || '';
-    this.carregarClientes();
+    this.horaServico = this.formatarHora(hoje);
+    this.autorServico = localStorage.getItem('username') || 'Técnico';
+  }
+
+  formatarHora(data: Date): string {
+    const horas = data.getHours().toString().padStart(2, '0');
+    const minutos = data.getMinutes().toString().padStart(2, '0');
+    return `${horas}:${minutos}`;
   }
 
   carregarClientes() {
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('Token não encontrado');
+      this.clientes = [];
       return;
     }
 
@@ -63,92 +71,80 @@ export class CriarServicosPage implements OnInit {
 
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
-        this.clientes = response;
-        console.log('Clientes carregados com sucesso:', this.clientes);
+        console.log('Resposta completa da API:', response);
+
+        this.clientes = response.map(cliente => ({
+          id: cliente.id,                    // ou cliente._id dependendo do backend
+          nome: cliente.nome,
+          numeroCliente: cliente.numeroCliente // ou cliente.telefone se vier assim
+        }));
+
+        console.log('Clientes formatados:', this.clientes);
       },
       error: (error) => {
         console.error('Erro ao carregar clientes:', error);
-        alert('Erro ao carregar lista de clientes. Verifique o console para detalhes.');
+        this.clientes = [];
       }
     });
   }
 
-  compareWithClientes(o1: any, o2: any) {
-    if (!o1 || !o2) return false;
-    if (typeof o1 === 'object' && typeof o2 === 'object') {
-      return o1.id === o2.id;
-    }
-    return o1 === o2;
-  }
-
   onClienteChange(event: any) {
     this.clienteSelecionado = event.detail.value;
-    console.log('Cliente selecionado:', this.clienteSelecionado);
+    console.log('Cliente selecionado agora:', this.clienteSelecionado);
   }
 
   async salvarServico() {
-    // Validação dos campos obrigatórios
     if (!this.isFormValid()) {
       alert('Por favor, preencha todos os campos obrigatórios corretamente.');
       return;
     }
 
-    // Validação específica do cliente
-    if (!this.clienteSelecionado?.id) {
-      alert('Por favor, selecione um cliente válido da lista.');
+    console.log('Tentando achar cliente com ID:', this.clienteSelecionado);
+    const cliente = this.clientes.find(c => c.id === this.clienteSelecionado);
+    console.log('Cliente encontrado:', cliente);
+
+    if (!cliente) {
+      alert('Cliente selecionado não encontrado.');
       return;
     }
 
-    // Preparação dos dados para a API
     const dadosServico = {
-      data_servico: this.dataServico,
-      hora_servico: this.horaServico,
+      dataServico: this.dataServico,
+      horaServico: this.horaServico,
       status: this.status,
-      autor_servico: this.autorServico,
-      cliente_id: this.clienteSelecionado.id,
-      nome_cliente: this.clienteSelecionado.nome,
-      marca_aparelho: this.marcaAparelho,
-      modelo_aparelho: this.modeloAparelho,
-      problema_cliente: this.problemaCliente,
-      solucao_inicial: this.solucaoInicial,
-      valor_total: this.valorTotal || 0,
+      autorServico: this.autorServico,
+      clienteId: cliente.id,               // ID real do cliente
+      cliente: cliente.nome,               // campo 'cliente' no schema (required)
+      nomeCompletoCliente: cliente.nome,   // campo 'nomeCompletoCliente' no schema
+      contatoCliente: cliente.numeroCliente, // campo 'contatoCliente' no schema
+      marcaAparelho: this.marcaAparelho,
+      modeloAparelho: this.modeloAparelho,
+      problemaRelatado: this.problemaRelatado,
+      solucaoInicial: this.solucaoInicial,
+      valorTotal: this.valorTotal || 0,
       observacoes: this.observacoes || 'Sem observações'
     };
 
-    console.log('Enviando dados para a API:', dadosServico);
+    console.log('Dados a serem enviados:', dadosServico);
 
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('Token de autenticação não encontrado');
-      }
-
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       });
 
-      const resposta = await this.http.post(
+      await this.http.post(
         `${environment.api_url}/api/servicos/`,
         dadosServico,
         { headers }
       ).toPromise();
 
-      console.log('Serviço criado com sucesso:', resposta);
-      alert('Serviço registrado com sucesso!');
-      this.router.navigate(['/plano-semanal']);
-
+      alert('Serviço criado com sucesso!');
+      this.router.navigate(['/orcamentos-clientes', cliente.id]);
     } catch (error) {
       console.error('Erro ao criar serviço:', error);
-      let mensagem = 'Erro ao criar serviço.';
-      
-      if (typeof error === 'object' && error !== null && 'error' in error && (error as any).error?.message) {
-        mensagem += ` Detalhes: ${(error as any).error.message}`;
-      } else if (typeof error === 'object' && error !== null && 'message' in error) {
-        mensagem += ` Erro: ${(error as any).message}`;
-      }
-      
-      alert(mensagem);
+      alert('Erro ao criar serviço. Verifique o console.');
     }
   }
 
@@ -158,10 +154,11 @@ export class CriarServicosPage implements OnInit {
       this.horaServico &&
       this.status &&
       this.autorServico &&
-      this.clienteSelecionado?.id &&
+      this.clienteSelecionado &&
       this.marcaAparelho &&
       this.modeloAparelho &&
-      this.problemaCliente
+      this.problemaRelatado &&
+      this.solucaoInicial
     );
   }
 
