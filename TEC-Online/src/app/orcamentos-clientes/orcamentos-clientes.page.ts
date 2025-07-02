@@ -99,47 +99,44 @@ export class OrcamentosClientesPage implements OnInit {
     console.log('Debug Info:', this.debugInfo);
   }
 
-  carregarDadosCliente(clienteId: string): void {
-    this.isLoading = true;
-    this.errorMessage = null;
-    const headers = this.getAuthHeaders();
+carregarDadosCliente(clienteId: string): void {
+  this.isLoading = true;
+  this.errorMessage = null;
+  const headers = this.getAuthHeaders();
 
-    // Verificação adicional da API
-    this.testApiConnectivity().then(() => {
-      this.http.get(`${environment.api_url}/clientes/${clienteId}`, { headers }).pipe(
-        tap(response => {
-          this.debugInfo.apiResponse = response;
-          if (!response) {
-            throw new Error('Resposta vazia da API');
-          }
-        }),
-        catchError((error: HttpErrorResponse) => {
-          this.debugInfo.apiError = {
-            status: error.status,
-            message: error.message,
-            url: error.url,
-            headers: error.headers
-          };
-          
-          if (error.status === 404) {
-            throw new Error('Cliente não encontrado na base de dados');
-          } else if (error.status === 401) {
-            this.redirectToLogin();
-            throw new Error('Autenticação necessária');
-          } else {
-            throw new Error(`Erro na API: ${error.statusText}`);
-          }
-        }),
-        finalize(() => this.logDebugInfo())
-      ).subscribe({
-        next: (cliente: any) => {
-          this.cliente = cliente;
-          this.carregarServicos(clienteId);
-        },
-        error: (err) => this.handleError(err.message, err)
-      });
-    });
-  }
+  this.http.get(`${environment.api_url}/clientes/${clienteId}`, { headers }).pipe(
+    tap(response => {
+      this.debugInfo.apiResponse = response;
+      if (!response) {
+        throw new Error('Resposta vazia da API');
+      }
+    }),
+    catchError((error: HttpErrorResponse) => {
+      this.debugInfo.apiError = {
+        status: error.status,
+        message: error.message,
+        url: error.url,
+        headers: error.headers
+      };
+      
+      if (error.status === 404) {
+        throw new Error('Cliente não encontrado na base de dados');
+      } else if (error.status === 401) {
+        this.redirectToLogin();
+        throw new Error('Autenticação necessária');
+      } else {
+        throw new Error(`Erro na API: ${error.statusText}`);
+      }
+    }),
+    finalize(() => this.logDebugInfo())
+  ).subscribe({
+    next: (cliente: any) => {
+      this.cliente = cliente;
+      this.carregarServicos(clienteId);
+    },
+    error: (err) => this.handleError(err.message, err)
+  });
+}
 
   private async testApiConnectivity() {
     try {
