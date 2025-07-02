@@ -3,7 +3,7 @@ import { IonicModule, NavController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
-import { Location } from '@angular/common'; // ✅ Importa Location
+import { Location } from '@angular/common';
 import { environment } from 'src/environments/environment.prod';  // Ajusta conforme o caminho correto
 
 @Component({
@@ -24,7 +24,7 @@ export class AdministradoresPage implements OnInit {
   constructor(
     private http: HttpClient,
     private navCtrl: NavController,
-    private location: Location // ✅ Injeta Location
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -42,7 +42,7 @@ export class AdministradoresPage implements OnInit {
           fullName: user.fullName,
           username: user.username,
           email: user.email,
-          isAdmin: user.isAdmin || false,
+          isAdmin: user.role === 'admin',
           telefone: user.telefone || '-'
         }));
         console.log('Utilizadores carregados:', this.utilizadores);
@@ -58,23 +58,12 @@ export class AdministradoresPage implements OnInit {
   }
 
   sair() {
-    this.location.back(); // ✅ Volta para a página anterior
+    this.location.back();
   }
 
   alterarSenha(user: any) {
-    const novaSenha = prompt(`Digite a nova senha para ${user.fullName}:`);
-    if (novaSenha && novaSenha.trim() !== '') {
-      const token = localStorage.getItem('token');
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-      this.http.patch(`${environment.api_url}/api/users/${user.id}/password`, { password: novaSenha }, { headers }).subscribe(
-        () => alert('Senha alterada com sucesso!'),
-        (error) => {
-          console.error('Erro ao alterar senha:', error);
-          alert('Erro ao alterar senha.');
-        }
-      );
-    }
+    // Navega para a página esqueceu-password passando o id do utilizador
+    this.navCtrl.navigateForward(`/esqueceu-password/${user.id}`);
   }
 
   eliminarUtilizador(id: string) {
@@ -90,5 +79,9 @@ export class AdministradoresPage implements OnInit {
         console.error('Erro ao eliminar utilizador:', error);
       }
     );
+  }
+
+  editarUtilizador(id: string) {
+    this.navCtrl.navigateForward(`/signup/${id}`); // Navega para página signup com id para edição
   }
 }

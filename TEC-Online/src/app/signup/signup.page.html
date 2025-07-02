@@ -1,7 +1,7 @@
 <ion-content class="signup-content">
   <div class="center-content" style="margin-top: 20px;">
 
-<ion-button fill="clear" color="medium" (click)="goBack()" aria-label="Voltar página anterior">
+    <ion-button fill="clear" color="medium" (click)="goBack()" aria-label="Voltar página anterior">
       <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
       Voltar
     </ion-button>
@@ -51,6 +51,21 @@
           required
           email
         ></ion-input>
+      </ion-item>
+
+      <!-- Seletor de tipo de utilizador -->
+      <ion-item class="input-item">
+        <ion-icon name="shield-checkmark-outline" slot="start" class="input-icon"></ion-icon>
+        <ion-label position="floating">Tipo de Utilizador</ion-label>
+        <ion-select
+          [(ngModel)]="utilizador.role"
+          name="role"
+          required
+          interface="popover"
+        >
+          <ion-select-option value="user">Utilizador</ion-select-option>
+          <ion-select-option value="admin">Administrador</ion-select-option>
+        </ion-select>
       </ion-item>
 
       <ion-item class="input-item" *ngIf="!editing">
@@ -109,7 +124,7 @@
         <ion-item *ngFor="let u of utilizadores">
           <ion-label>
             <h2>{{ u.fullName }} ({{ u.username }})</h2>
-            <p>{{ u.email }} - {{ u.telefone }}</p>
+            <p>{{ u.email }} - {{ u.telefone }} - <strong>{{ u.role === 'admin' ? 'Administrador' : 'Utilizador' }}</strong></p>
           </ion-label>
           <ion-button fill="clear" color="primary" (click)="editUser(u)">Editar</ion-button>
           <ion-button fill="clear" color="danger" (click)="deleteUser(u)">Excluir</ion-button>

@@ -1,58 +1,95 @@
-import { Component } from '@angular/core';
-import { IonicModule, AlertController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { NavController, IonicModule } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http'; // Importando HttpClient para fazer requisições HTTP
-import { environment } from 'src/environments/environment';
+import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-esqueceu-password',
-  standalone: true,
-  imports: [IonicModule, FormsModule],
   templateUrl: './esqueceu-password.page.html',
   styleUrls: ['./esqueceu-password.page.scss'],
+  standalone: true,
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
 })
-export class EsqueceuPasswordPage {
+export class EsqueceuPasswordPage implements OnInit {
+  userId: string | null = null;
+  novaSenha: string = '';
+  confirmarSenha: string = '';
 
-  email: string = ''; 
+  utilizador: any = null;
 
-  constructor(private router: Router, private alertController: AlertController, private http: HttpClient) {}
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private navCtrl: NavController
+  ) {}
 
-  async onSubmit() {
-    if (this.email) {
-      console.log('Tentando recuperar senha para o e-mail:', this.email);
-
-      this.http.post(`http://localhost:3000/api/esqueceu-password`, { email: this.email }).subscribe(
-        async (response: any) => {
-          const alert = await this.alertController.create({
-            header: 'Sucesso!',
-            message: response.message,
-            buttons: ['OK'],
-          });
-          await alert.present();
-          this.router.navigate(['/home']);  // Redireciona para a página de login após o envio
-        },
-        async (error) => {
-          const alert = await this.alertController.create({
-            header: 'Erro',
-            message: error.error.message || 'Não foi possível enviar o link de recuperação. Tente novamente.',
-            buttons: ['OK'],
-          });
-          await alert.present();
-        }
-      );
-      
-    } else {
-      const alert = await this.alertController.create({
-        header: 'Erro',
-        message: 'Por favor, insira um e-mail válido.',
-        buttons: ['OK'],
-      });
-      await alert.present();
+  ngOnInit() {
+    this.userId = this.route.snapshot.paramMap.get('id');
+    if (!this.userId) {
+      alert('ID do utilizador não fornecido.');
+      this.navCtrl.back();
+      return;
     }
+    this.carregarUtilizador();
   }
 
-  goToLogin() {
-    this.router.navigate(['/home']);
+  carregarUtilizador() {
+    const token = localStorage.getItem('token') || '';
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http.get(`${environment.api_url}/api/users/${this.userId}`, { headers })
+      .subscribe(
+        (data) => {
+          this.utilizador = data;
+        },
+        (error) => {
+          console.error('Erro ao carregar utilizador:', error);
+          alert('Não foi possível carregar os dados do utilizador.');
+          this.navCtrl.back();
+        }
+      );
+  }
+
+  onSubmit() {
+    if (!this.novaSenha.trim()) {
+      alert('Por favor, insira uma nova senha válida.');
+      return;
+    }
+
+    if (this.novaSenha !== this.confirmarSenha) {
+      alert('As senhas não coincidem.');
+      return;
+    }
+
+    const token = localStorage.getItem('token') || '';
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http.put(
+      `${environment.api_url}/api/users/${this.userId}/esqueceu-password`,  // ✅ corrigido aqui
+      { password: this.novaSenha },
+      { headers }
+    ).subscribe(
+      () => {
+        alert('Senha alterada com sucesso!');
+        this.navCtrl.back();
+      },
+      (error) => {
+        console.error('Erro ao alterar senha:', error);
+        if (error.status === 400) {
+          alert('Senha inválida: deve ter pelo menos 6 caracteres.');
+        } else if (error.status === 403) {
+          alert('Não autorizado a alterar esta senha.');
+        } else {
+          alert('Erro ao alterar senha. Tente novamente.');
+        }
+      }
+    );
+  }
+
+  cancelar() {
+    this.navCtrl.back();
   }
 }

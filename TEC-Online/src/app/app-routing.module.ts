@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { SignupPage } from './signup/signup.page';
-import { PerfilPage } from './perfil/perfil.page'; // Importando o PerfilPage standalone
+import { PerfilPage } from './perfil/perfil.page';
 import { GestorClientesPage } from './gestor-clientes/gestor-clientes.page';
 
 const routes: Routes = [
@@ -10,7 +10,11 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then(m => m.HomePageModule),
   },
   {
-    path: 'signup',
+    path: 'signup',          // Rota para criar utilizador
+    component: SignupPage,
+  },
+  {
+    path: 'signup/:id',      // Rota para editar utilizador
     component: SignupPage,
   },
   {
@@ -20,11 +24,11 @@ const routes: Routes = [
   },
   {
     path: 'perfil',
-    component: PerfilPage, // Usando o PerfilPage diretamente como componente standalone
+    component: PerfilPage,
   },
   {
     path: 'criar-servicos',
-    loadComponent: () => import('./criar-servicos/criar-servicos.page').then(m => m.CriarServicosPage)
+    loadComponent: () => import('./criar-servicos/criar-servicos.page').then(m => m.CriarServicosPage),
   },
   {
     path: 'servicos',
@@ -44,12 +48,19 @@ const routes: Routes = [
   },
   {
     path: 'gestor-clientes',
-    component: GestorClientesPage, // Usando o GestorClientesPage diretamente como componente standalone
+    component: GestorClientesPage,
   },
+
+  // Rotas para esqueceu-password
   {
     path: 'esqueceu-password',
     loadChildren: () => import('./esqueceu-password/esqueceu-password.module').then(m => m.EsqueceuPasswordPageModule),
   },
+  {
+    path: 'esqueceu-password/:id',
+    loadChildren: () => import('./esqueceu-password/esqueceu-password.module').then(m => m.EsqueceuPasswordPageModule),
+  },
+
   {
     path: 'reset-password/:token',
     loadComponent: () => import('./reset-password/reset-password.page').then(m => m.ResetPasswordPage),
@@ -60,16 +71,16 @@ const routes: Routes = [
   },
   {
     path: 'editar-cliente/:id',
-    loadComponent: () => import('./editar-cliente/editar-cliente.page').then(m => m.EditarClientePage)
+    loadComponent: () => import('./editar-cliente/editar-cliente.page').then(m => m.EditarClientePage),
   },
   {
     path: 'orcamentos-clientes/:id',
-    loadComponent: () => import('./orcamentos-clientes/orcamentos-clientes.page').then(m => m.OrcamentosClientesPage)
+    loadComponent: () => import('./orcamentos-clientes/orcamentos-clientes.page').then(m => m.OrcamentosClientesPage),
   },
   {
     path: 'administradores',
-    loadComponent: () => import('./administradores/administradores.page').then(m => m.AdministradoresPage)
-  }
+    loadComponent: () => import('./administradores/administradores.page').then(m => m.AdministradoresPage),
+  },
 ];
 
 @NgModule({

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { Location } from '@angular/common';      // <-- Importa Location
+import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Location } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms'; 
@@ -14,6 +14,7 @@ interface User {
   email: string;
   telefone?: string;
   password?: string;
+  role?: string;
 }
 
 @Component({
@@ -28,15 +29,23 @@ export class SignupPage implements OnInit {
   utilizador: User = this.getEmptyUser();
   confirmPassword: string = '';
   editing: boolean = false;
+  userId: string | null = null;
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private http: HttpClient,
-    private location: Location          // <-- Injeta Location aqui
+    private location: Location
   ) {}
 
   ngOnInit() {
-    this.loadUsers();
+    this.userId = this.route.snapshot.paramMap.get('id');
+    if (this.userId) {
+      this.loadUser(this.userId);
+      this.editing = true;
+    } else {
+      this.loadUsers();
+    }
   }
 
   getEmptyUser(): User {
@@ -45,7 +54,8 @@ export class SignupPage implements OnInit {
       username: '',
       email: '',
       telefone: '',
-      password: ''
+      password: '',
+      role: 'user' // Valor padrão
     };
   }
 
@@ -60,8 +70,24 @@ export class SignupPage implements OnInit {
     );
   }
 
+  loadUser(id: string) {
+    const token = localStorage.getItem('token') || '';
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http.get<User>(`${environment.api_url}/api/users/${id}`, { headers }).subscribe(
+      (user) => {
+        this.utilizador = { ...user, password: '' }; // limpa a senha para edição
+      },
+      (error) => {
+        console.error('Erro ao carregar utilizador', error);
+        alert('Erro ao carregar dados do utilizador');
+        this.location.back();
+      }
+    );
+  }
+
   submitForm() {
-    if (!this.utilizador.fullName || !this.utilizador.username || !this.utilizador.email) {
+    if (!this.utilizador.fullName || !this.utilizador.username || !this.utilizador.email || !this.utilizador.role) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -100,6 +126,7 @@ export class SignupPage implements OnInit {
           alert('Utilizador atualizado com sucesso!');
           this.cancelEdit();
           this.loadUsers();
+          this.router.navigate(['/signup']); // volta para lista sem id na rota
         },
         (error) => {
           console.error('Erro ao atualizar utilizador', error);
@@ -110,15 +137,14 @@ export class SignupPage implements OnInit {
   }
 
   editUser(u: User) {
-    this.editing = true;
-    this.utilizador = { ...u };
-    this.confirmPassword = '';
+    this.router.navigate(['/signup', u._id]);
   }
 
   cancelEdit() {
     this.editing = false;
     this.utilizador = this.getEmptyUser();
     this.confirmPassword = '';
+    this.router.navigate(['/signup']); // limpa o id da rota e volta à lista
   }
 
   deleteUser(u: User) {
