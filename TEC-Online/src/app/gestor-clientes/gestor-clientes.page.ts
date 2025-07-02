@@ -55,7 +55,7 @@ export class GestorClientesPage implements OnInit {
   }
 
   editarCliente(cliente: any) {
-    this.router.navigate([`/editar-cliente/${cliente._id}`]);
+    this.router.navigate([`/editar-cliente/${cliente.id}`]);
   }
 
   excluirCliente(cliente: any) {
@@ -76,7 +76,7 @@ export class GestorClientesPage implements OnInit {
           handler: () => {
             this.clienteService.deletarCliente(cliente._id).subscribe({
               next: () => {
-                this.clientes = this.clientes.filter(c => c._id !== cliente._id);
+                this.clientes = this.clientes.filter(c => c.id !== cliente.id);
                 this.filtrarClientes();
                 this.showAlert('Sucesso', 'Cliente excluído com sucesso!');
               },
