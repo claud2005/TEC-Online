@@ -68,7 +68,7 @@ export class EsqueceuPasswordPage implements OnInit {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     this.http.put(
-      `${environment.api_url}/api/users/${this.userId}`,
+      `${environment.api_url}/api/users/${this.userId}/password`,  // CORRETO: rota com /password
       { password: this.novaSenha },
       { headers }
     ).subscribe(
@@ -78,7 +78,13 @@ export class EsqueceuPasswordPage implements OnInit {
       },
       (error) => {
         console.error('Erro ao alterar senha:', error);
-        alert('Erro ao alterar senha.');
+        if (error.status === 400) {
+          alert('Senha inválida: deve ter pelo menos 6 caracteres.');
+        } else if (error.status === 403) {
+          alert('Não autorizado a alterar esta senha.');
+        } else {
+          alert('Erro ao alterar senha. Tente novamente.');
+        }
       }
     );
   }
