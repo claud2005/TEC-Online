@@ -68,7 +68,7 @@ export class EsqueceuPasswordPage implements OnInit {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     this.http.put(
-      `${environment.api_url}/api/users/${this.userId}/password`,  // CORRETO: rota com /password
+      `${environment.api_url}/api/users/${this.userId}/esqueceu-password`,  // ✅ corrigido aqui
       { password: this.novaSenha },
       { headers }
     ).subscribe(
