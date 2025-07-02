@@ -2,6 +2,20 @@ ion-content {
   --background: #f5f5f5;
 }
 
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
+.error-message {
+  color: var(--ion-color-danger);
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
 .cliente-info {
   margin-bottom: 20px;
   border-radius: 10px;
@@ -50,9 +64,4 @@ ion-item-divider {
   --background: #f5f5f5;
   --color: var(--ion-color-primary);
   font-weight: bold;
-}
-
-ion-spinner {
-  display: block;
-  margin: 20px auto;
 }

@@ -8,7 +8,19 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  @if (cliente) {
+  @if (isLoading) {
+    <div class="loading-spinner">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (cliente && !isLoading) {
     <ion-card class="cliente-info">
       <ion-card-header>
         <ion-card-title>{{ cliente.nome }}</ion-card-title>

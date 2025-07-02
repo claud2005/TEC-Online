@@ -6,9 +6,10 @@ import { CommonModule } from '@angular/common';
 import { 
   IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, 
   IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, 
-  IonList, IonItemGroup, IonItemDivider, IonLabel, IonItem 
+  IonList, IonItemGroup, IonItemDivider, IonLabel, IonItem, IonSpinner 
 } from '@ionic/angular/standalone';
-import { FormsModule } from '@angular/forms';
+import { catchError, finalize } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-orcamentos-clientes',
@@ -17,16 +18,16 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent,
     IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
-    IonList, IonItemGroup, IonItemDivider, IonLabel, IonItem
+    IonList, IonItemGroup, IonItemDivider, IonLabel, IonItem, IonSpinner
   ]
 })
 export class OrcamentosClientesPage implements OnInit {
   cliente: any = null;
   servicos: any[] = [];
   isLoading = true;
+  errorMessage: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -38,42 +39,51 @@ export class OrcamentosClientesPage implements OnInit {
     if (clienteId) {
       this.carregarDadosCliente(clienteId);
     } else {
-      console.error('ID do cliente não encontrado na rota.');
+      this.errorMessage = 'ID do cliente não encontrado na URL';
       this.isLoading = false;
     }
   }
 
   carregarDadosCliente(clienteId: string) {
     this.isLoading = true;
+    this.errorMessage = null;
     
-    // Primeiro carrega os dados do cliente
-    this.http.get(`${environment.api_url}/clientes/${clienteId}`).subscribe(
-      (cliente: any) => {
-        this.cliente = cliente;
-        
-        // Depois carrega os serviços associados
-        this.http.get(`${environment.api_url}/servicos?clienteId=${clienteId}`).subscribe(
-          (servicos: any) => {
-            this.servicos = servicos;
-            this.isLoading = false;
-          },
-          (error) => {
-            console.error('Erro ao carregar serviços:', error);
-            this.isLoading = false;
-          }
-        );
-      },
-      (error) => {
+    // Carrega dados do cliente
+    this.http.get(`${environment.api_url}/clientes/${clienteId}`).pipe(
+      catchError(error => {
         console.error('Erro ao carregar cliente:', error);
-        this.isLoading = false;
+        this.errorMessage = 'Erro ao carregar dados do cliente';
+        return of(null);
+      }),
+      finalize(() => this.isLoading = false)
+    ).subscribe(cliente => {
+      if (cliente) {
+        this.cliente = cliente;
+        this.carregarServicos(clienteId);
       }
-    );
+    });
+  }
+
+  carregarServicos(clienteId: string) {
+    this.isLoading = true;
+    this.http.get(`${environment.api_url}/servicos?clienteId=${clienteId}`).pipe(
+      catchError(error => {
+        console.error('Erro ao carregar serviços:', error);
+        this.errorMessage = 'Erro ao carregar serviços';
+        return of([]);
+      }),
+      finalize(() => this.isLoading = false)
+    ).subscribe(servicos => {
+      this.servicos = servicos as any[];
+    });
   }
 
   formatCurrency(value: number): string {
-    return new Intl.NumberFormat('pt-PT', { 
-      style: 'currency', 
-      currency: 'EUR' 
-    }).format(value);
+    return value.toLocaleString('pt-PT', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
   }
 }
