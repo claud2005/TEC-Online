@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-
+import { RouterModule, Routes } from '@angular/router';
 import { EsqueceuPasswordPage } from './esqueceu-password.page';
 
 const routes: Routes = [
@@ -11,7 +10,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes), EsqueceuPasswordPage],
   exports: [RouterModule],
 })
 export class EsqueceuPasswordPageRoutingModule {}

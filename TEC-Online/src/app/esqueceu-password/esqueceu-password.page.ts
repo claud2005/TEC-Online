@@ -1,58 +1,62 @@
-import { Component } from '@angular/core';
-import { IonicModule, AlertController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { NavController, IonicModule } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http'; // Importando HttpClient para fazer requisições HTTP
-import { environment } from 'src/environments/environment';
+import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-esqueceu-password',
-  standalone: true,
-  imports: [IonicModule, FormsModule],
   templateUrl: './esqueceu-password.page.html',
   styleUrls: ['./esqueceu-password.page.scss'],
+  standalone: true,
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
 })
-export class EsqueceuPasswordPage {
+export class EsqueceuPasswordPage implements OnInit {
+  userId: string | null = null;
+  novaSenha: string = '';
 
-  email: string = ''; 
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private navCtrl: NavController
+  ) {}
 
-  constructor(private router: Router, private alertController: AlertController, private http: HttpClient) {}
-
-  async onSubmit() {
-    if (this.email) {
-      console.log('Tentando recuperar senha para o e-mail:', this.email);
-
-      this.http.post(`http://localhost:3000/api/esqueceu-password`, { email: this.email }).subscribe(
-        async (response: any) => {
-          const alert = await this.alertController.create({
-            header: 'Sucesso!',
-            message: response.message,
-            buttons: ['OK'],
-          });
-          await alert.present();
-          this.router.navigate(['/home']);  // Redireciona para a página de login após o envio
-        },
-        async (error) => {
-          const alert = await this.alertController.create({
-            header: 'Erro',
-            message: error.error.message || 'Não foi possível enviar o link de recuperação. Tente novamente.',
-            buttons: ['OK'],
-          });
-          await alert.present();
-        }
-      );
-      
-    } else {
-      const alert = await this.alertController.create({
-        header: 'Erro',
-        message: 'Por favor, insira um e-mail válido.',
-        buttons: ['OK'],
-      });
-      await alert.present();
+  ngOnInit() {
+    this.userId = this.route.snapshot.paramMap.get('id');
+    if (!this.userId) {
+      alert('ID do utilizador não fornecido.');
+      this.navCtrl.back();
     }
   }
 
-  goToLogin() {
-    this.router.navigate(['/home']);
+  onSubmit() {
+    if (!this.novaSenha.trim()) {
+      alert('Por favor, insira uma nova senha válida.');
+      return;
+    }
+
+    const token = localStorage.getItem('token') || '';
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http.patch(
+      `${environment.api_url}/api/users/${this.userId}/password`,
+      { password: this.novaSenha },
+      { headers }
+    ).subscribe(
+      () => {
+        alert('Senha alterada com sucesso!');
+        this.navCtrl.back();
+      },
+      (error) => {
+        console.error('Erro ao alterar senha:', error);
+        alert('Erro ao alterar senha.');
+      }
+    );
+  }
+
+  cancelar() {
+    this.navCtrl.back();
   }
 }
