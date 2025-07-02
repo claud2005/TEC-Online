@@ -141,7 +141,7 @@ export class CriarServicosPage implements OnInit {
       ).toPromise();
 
       alert('Serviço criado com sucesso!');
-      this.router.navigate(['/orcamentos-clientes', cliente.id]);
+      this.router.navigate(['/plano-semanal', cliente.id]);
     } catch (error) {
       console.error('Erro ao criar serviço:', error);
       alert('Erro ao criar serviço. Verifique o console.');

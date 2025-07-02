@@ -94,7 +94,7 @@ export class GestorClientesPage implements OnInit {
   }
 
   verOrcamentos(cliente: any) {
-    this.router.navigate([`/orcamentos-clientes/${cliente._id}`]);
+    this.router.navigate([`/orcamentos-clientes/${cliente.id}`]);
   }
 
   private async showAlert(header: string, message: string) {
