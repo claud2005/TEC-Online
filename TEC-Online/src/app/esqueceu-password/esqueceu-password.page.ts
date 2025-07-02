@@ -18,7 +18,7 @@ export class EsqueceuPasswordPage implements OnInit {
   novaSenha: string = '';
   confirmarSenha: string = '';
 
-  utilizador: any = null;  // Dados do utilizador para exibir
+  utilizador: any = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -67,8 +67,8 @@ export class EsqueceuPasswordPage implements OnInit {
     const token = localStorage.getItem('token') || '';
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.patch(
-      `${environment.api_url}/api/users/${this.userId}/password`,
+    this.http.put(
+      `${environment.api_url}/api/users/${this.userId}`,
       { password: this.novaSenha },
       { headers }
     ).subscribe(
