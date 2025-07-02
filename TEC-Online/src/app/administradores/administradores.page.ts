@@ -42,7 +42,7 @@ export class AdministradoresPage implements OnInit {
           fullName: user.fullName,
           username: user.username,
           email: user.email,
-          isAdmin: user.role === 'admin',  // Corrigido para verificar a role
+          isAdmin: user.role === 'admin',
           telefone: user.telefone || '-'
         }));
         console.log('Utilizadores carregados:', this.utilizadores);
@@ -62,19 +62,8 @@ export class AdministradoresPage implements OnInit {
   }
 
   alterarSenha(user: any) {
-    const novaSenha = prompt(`Digite a nova senha para ${user.fullName}:`);
-    if (novaSenha && novaSenha.trim() !== '') {
-      const token = localStorage.getItem('token');
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-      this.http.patch(`${environment.api_url}/api/users/${user.id}/password`, { password: novaSenha }, { headers }).subscribe(
-        () => alert('Senha alterada com sucesso!'),
-        (error) => {
-          console.error('Erro ao alterar senha:', error);
-          alert('Erro ao alterar senha.');
-        }
-      );
-    }
+    // Navega para a página esqueceu-password passando o id do utilizador
+    this.navCtrl.navigateForward(`/esqueceu-password/${user.id}`);
   }
 
   eliminarUtilizador(id: string) {

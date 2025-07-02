@@ -28,8 +28,9 @@
       <ion-col>{{ user.isAdmin ? 'Sim' : 'Não' }}</ion-col>
       <ion-col>
         <ion-button size="small" color="warning" (click)="alterarSenha(user); $event.stopPropagation()">
-          <ion-icon slot="icon-only" name="key-outline"></ion-icon>
-        </ion-button>
+  <ion-icon slot="icon-only" name="key-outline"></ion-icon>
+</ion-button>
+
         <ion-button size="small" color="danger" (click)="eliminarUtilizador(user.id); $event.stopPropagation()">
           <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-button>
