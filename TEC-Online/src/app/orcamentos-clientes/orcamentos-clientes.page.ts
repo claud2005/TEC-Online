@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { 
@@ -10,7 +10,7 @@ import {
   AlertController
 } from '@ionic/angular/standalone';
 import { catchError, finalize, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { throwError, of } from 'rxjs';
 
 @Component({
   selector: 'app-orcamentos-clientes',
@@ -29,7 +29,6 @@ export class OrcamentosClientesPage implements OnInit {
   servicos: any[] = [];
   isLoading = true;
   errorMessage: string | null = null;
-  debugInfo: any = {}; // Para análise de problemas
 
   constructor(
     private route: ActivatedRoute,
@@ -40,42 +39,43 @@ export class OrcamentosClientesPage implements OnInit {
 
   ngOnInit() {
     const clienteId = this.route.snapshot.paramMap.get('id');
-    this.debugInfo.clienteId = clienteId;
-    this.debugInfo.apiUrl = environment.api_url;
+    console.log('ID do cliente recebido:', clienteId);
 
-    if (clienteId && this.isValidId(clienteId)) {
+    if (clienteId && this.isValidMongoId(clienteId)) {
       this.carregarDadosCliente(clienteId);
     } else {
-      this.handleError('ID do cliente inválido ou não fornecido');
-      this.logDebugInfo();
+      this.handleError('ID do cliente inválido');
+      this.mostrarAlertaComRedirect('ID inválido', '/gestor-clientes');
     }
   }
 
-  private isValidId(id: string): boolean {
-    return /^[0-9a-fA-F]{24}$/.test(id); // Valida ObjectId do MongoDB
+  private isValidMongoId(id: string): boolean {
+    return /^[0-9a-fA-F]{24}$/.test(id);
   }
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
-    this.debugInfo.tokenPresent = !!token;
-    
     if (!token) {
-      this.handleError('Autenticação necessária - Token não encontrado');
+      this.handleError('Token de autenticação não encontrado');
       this.redirectToLogin();
       throw new Error('Token não disponível');
     }
-    
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
   }
 
-  private async showAlert(message: string) {
+  private async mostrarAlertaComRedirect(message: string, redirectUrl: string) {
     const alert = await this.alertController.create({
-      header: 'Erro',
+      header: 'Aviso',
       message,
-      buttons: ['OK']
+      buttons: [{
+        text: 'OK',
+        handler: () => {
+          this.router.navigateByUrl(redirectUrl);
+        }
+      }]
     });
     await alert.present();
   }
@@ -90,63 +90,42 @@ export class OrcamentosClientesPage implements OnInit {
     console.error(message, error);
     this.errorMessage = message;
     this.isLoading = false;
-    this.debugInfo.lastError = { message, error };
-    this.logDebugInfo();
-    this.showAlert(message);
   }
 
-  private logDebugInfo() {
-    console.log('Debug Info:', this.debugInfo);
-  }
+  carregarDadosCliente(clienteId: string): void {
+    this.isLoading = true;
+    this.errorMessage = null;
+    const headers = this.getAuthHeaders();
 
-carregarDadosCliente(clienteId: string): void {
-  this.isLoading = true;
-  this.errorMessage = null;
-  const headers = this.getAuthHeaders();
-
-  this.http.get(`${environment.api_url}/clientes/${clienteId}`, { headers }).pipe(
-    tap(response => {
-      this.debugInfo.apiResponse = response;
-      if (!response) {
-        throw new Error('Resposta vazia da API');
-      }
-    }),
-    catchError((error: HttpErrorResponse) => {
-      this.debugInfo.apiError = {
-        status: error.status,
-        message: error.message,
-        url: error.url,
-        headers: error.headers
-      };
-      
-      if (error.status === 404) {
-        throw new Error('Cliente não encontrado na base de dados');
-      } else if (error.status === 401) {
-        this.redirectToLogin();
-        throw new Error('Autenticação necessária');
-      } else {
-        throw new Error(`Erro na API: ${error.statusText}`);
-      }
-    }),
-    finalize(() => this.logDebugInfo())
-  ).subscribe({
-    next: (cliente: any) => {
-      this.cliente = cliente;
-      this.carregarServicos(clienteId);
-    },
-    error: (err) => this.handleError(err.message, err)
-  });
-}
-
-  private async testApiConnectivity() {
-    try {
-      const testUrl = `${environment.api_url}/health`;
-      const response = await this.http.get(testUrl).toPromise();
-      this.debugInfo.apiHealth = response;
-    } catch (error) {
-      this.debugInfo.apiHealthError = error;
-      throw new Error('Falha na conexão com a API');
-    }
+    this.http.get(`${environment.api_url}/clientes/${clienteId}`, { headers }).pipe(
+      tap(response => {
+        if (!response) {
+          throw new Error('Resposta vazia da API');
+        }
+      }),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 404) {
+          this.mostrarAlertaComRedirect('Cliente não encontrado na base de dados', '/gestor-clientes');
+          return of(null);
+        } else if (error.status === 401) {
+          this.redirectToLogin();
+          return throwError(() => new Error('Autenticação necessária'));
+        } else {
+          return throwError(() => new Error(`Erro na API: ${error.message}`));
+        }
+      }),
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: (cliente: any) => {
+        if (cliente) {
+          this.cliente = cliente;
+          // Normaliza o ID para garantir compatibilidade
+          this.cliente.id = this.cliente._id ? this.cliente._id.toString() : clienteId;
+          this.carregarServicos(clienteId);
+        }
+      },
+      error: (err) => this.handleError(err.message, err)
+    });
   }
 
   carregarServicos(clienteId: string): void {
@@ -154,19 +133,18 @@ carregarDadosCliente(clienteId: string): void {
 
     this.http.get(`${environment.api_url}/servicos?clienteId=${clienteId}`, { headers }).pipe(
       catchError((error: HttpErrorResponse) => {
-        this.debugInfo.servicosError = {
-          status: error.status,
-          message: error.message,
-          url: error.url
-        };
+        console.error('Erro ao carregar serviços:', error);
         return of([]);
       }),
-      finalize(() => {
-        this.isLoading = false;
-        this.logDebugInfo();
-      })
+      finalize(() => this.isLoading = false)
     ).subscribe({
-      next: (servicos: any) => this.servicos = servicos,
+      next: (servicos: any) => {
+        this.servicos = servicos.map((servico: any) => ({
+          ...servico,
+          // Normaliza IDs dos serviços
+          id: servico._id ? servico._id.toString() : servico.id
+        }));
+      },
       error: (err) => this.handleError('Erro ao carregar serviços', err)
     });
   }
