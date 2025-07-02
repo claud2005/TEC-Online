@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { 
@@ -39,23 +39,45 @@ export class OrcamentosClientesPage implements OnInit {
     if (clienteId) {
       this.carregarDadosCliente(clienteId);
     } else {
-      this.errorMessage = 'ID do cliente não encontrado na URL';
-      this.isLoading = false;
+      this.handleError('ID do cliente não encontrado na URL');
     }
   }
 
-  carregarDadosCliente(clienteId: string) {
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token JWT não encontrado no localStorage');
+      this.handleError('Autenticação necessária');
+      throw new Error('Token não disponível');
+    }
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
+
+  private handleError(message: string, error?: any): void {
+    console.error(message, error);
+    this.errorMessage = message;
+    this.isLoading = false;
+  }
+
+  carregarDadosCliente(clienteId: string): void {
     this.isLoading = true;
     this.errorMessage = null;
-    
-    // Carrega dados do cliente
-    this.http.get(`${environment.api_url}/clientes/${clienteId}`).pipe(
+
+    const headers = this.getAuthHeaders();
+
+    // Primeiro carrega o cliente
+    this.http.get(`${environment.api_url}/clientes/${clienteId}`, { headers }).pipe(
       catchError(error => {
-        console.error('Erro ao carregar cliente:', error);
-        this.errorMessage = 'Erro ao carregar dados do cliente';
+        this.handleError(
+          error.status === 404 
+            ? 'Cliente não encontrado' 
+            : 'Erro ao carregar dados do cliente',
+          error
+        );
         return of(null);
-      }),
-      finalize(() => this.isLoading = false)
+      })
     ).subscribe(cliente => {
       if (cliente) {
         this.cliente = cliente;
@@ -64,12 +86,12 @@ export class OrcamentosClientesPage implements OnInit {
     });
   }
 
-  carregarServicos(clienteId: string) {
-    this.isLoading = true;
-    this.http.get(`${environment.api_url}/servicos?clienteId=${clienteId}`).pipe(
+  carregarServicos(clienteId: string): void {
+    const headers = this.getAuthHeaders();
+
+    this.http.get(`${environment.api_url}/servicos?clienteId=${clienteId}`, { headers }).pipe(
       catchError(error => {
-        console.error('Erro ao carregar serviços:', error);
-        this.errorMessage = 'Erro ao carregar serviços';
+        this.handleError('Erro ao carregar serviços do cliente', error);
         return of([]);
       }),
       finalize(() => this.isLoading = false)
@@ -79,11 +101,11 @@ export class OrcamentosClientesPage implements OnInit {
   }
 
   formatCurrency(value: number): string {
-    return value.toLocaleString('pt-PT', {
+    return value?.toLocaleString('pt-PT', {
       style: 'currency',
       currency: 'EUR',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
-    });
+    }) || '€0.00';
   }
 }
