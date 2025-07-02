@@ -3,64 +3,52 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/gestor-clientes"></ion-back-button>
     </ion-buttons>
-    <ion-title>Orçamentos de {{ cliente?.nome }}</ion-title>
+    <ion-title>Orçamentos do Cliente</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  @if (cliente) {
+    <ion-card class="cliente-info">
+      <ion-card-header>
+        <ion-card-title>{{ cliente.nome }}</ion-card-title>
+        <ion-card-subtitle>ID: {{ cliente.id }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        @if (cliente.email) {
+          <p>Email: {{ cliente.email }}</p>
+        }
+        @if (cliente.telefone) {
+          <p>Telefone: {{ cliente.telefone }}</p>
+        }
+      </ion-card-content>
+    </ion-card>
 
-  <ion-card *ngFor="let orcamento of orcamentos">
-    <ion-card-header>
-      <ion-card-title>{{ orcamento.titulo }}</ion-card-title>
-      <ion-note>Data: {{ orcamento.data | date }}</ion-note>
-    </ion-card-header>
+    <ion-list>
+      <ion-item-group>
+        <ion-item-divider>
+          <ion-label>Serviços Associados</ion-label>
+        </ion-item-divider>
 
-    <ion-card-content>
-      <p><strong>Total do Orçamento:</strong> {{ orcamento.valor | currency:'EUR' }}</p>
-
-      <ion-list *ngIf="orcamento.servicos?.length > 0">
-        <ion-list-header>Serviços deste orçamento</ion-list-header>
-        <ion-item *ngFor="let servico of orcamento.servicos">
-          <ion-label>
-            <h3>{{ servico.nome }}</h3>
-            <p>Preço: {{ servico.preco | currency:'EUR' }}</p>
-          </ion-label>
-        </ion-item>
-
-        <ion-item>
-          <ion-label color="dark">
-            <strong>Total Serviços:</strong> {{ calcularTotalServicos(orcamento) | currency:'EUR' }}
-          </ion-label>
-        </ion-item>
-      </ion-list>
-
-      <ion-item *ngIf="!orcamento.servicos?.length">
-        <ion-label color="medium">Nenhum serviço associado.</ion-label>
-      </ion-item>
-
-    </ion-card-content>
-  </ion-card>
-
-  <!-- Lista de serviços diretamente do cliente -->
-  <ion-card *ngIf="servicos.length > 0">
-    <ion-card-header>
-      <ion-card-title>Serviços do Cliente</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-      <ion-list>
-        <ion-item *ngFor="let servico of servicos">
-          <ion-label>
-            <h3>{{ servico.nome }}</h3>
-            <p>Preço: {{ servico.preco | currency:'EUR' }}</p>
-          </ion-label>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-item *ngIf="servicos.length === 0">
-    <ion-label color="medium">Nenhum serviço direto encontrado para este cliente.</ion-label>
-  </ion-item>
-
+        @for (servico of servicos; track servico.id) {
+          <ion-item class="servico-item">
+            <ion-label>
+              <h2>{{ servico.dataServico }} às {{ servico.horaServico }}</h2>
+              <h3>{{ servico.marcaAparelho }} - {{ servico.modeloAparelho }}</h3>
+              <p><strong>Problema:</strong> {{ servico.problemaRelatado }}</p>
+              <p><strong>Solução:</strong> {{ servico.solucaoInicial }}</p>
+              <p><strong>Valor:</strong> {{ formatCurrency(servico.valorTotal) }}</p>
+              <p><strong>Status:</strong> <span [class]="'status-' + servico.status.toLowerCase()">{{ servico.status }}</span></p>
+            </ion-label>
+          </ion-item>
+        } @empty {
+          <ion-item>
+            <ion-label class="ion-text-center">
+              Nenhum serviço encontrado para este cliente.
+            </ion-label>
+          </ion-item>
+        }
+      </ion-item-group>
+    </ion-list>
+  }
 </ion-content>

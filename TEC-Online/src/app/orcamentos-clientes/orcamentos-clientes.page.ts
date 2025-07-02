@@ -1,72 +1,79 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IonicModule, LoadingController, AlertController } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
+import { 
+  IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, 
+  IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, 
+  IonList, IonItemGroup, IonItemDivider, IonLabel, IonItem 
+} from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
-import { firstValueFrom } from 'rxjs';
-
-import { ClienteService } from '../services/cliente.service';
 
 @Component({
   selector: 'app-orcamentos-clientes',
   templateUrl: './orcamentos-clientes.page.html',
   styleUrls: ['./orcamentos-clientes.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent,
+    IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
+    IonList, IonItemGroup, IonItemDivider, IonLabel, IonItem
+  ]
 })
 export class OrcamentosClientesPage implements OnInit {
-  clienteId: string | null = null;
   cliente: any = null;
-  orcamentos: any[] = [];
   servicos: any[] = [];
+  isLoading = true;
 
   constructor(
     private route: ActivatedRoute,
-    private clienteService: ClienteService,
-    private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController
-  ) {}
+    private http: HttpClient
+  ) { }
 
   ngOnInit() {
-    this.clienteId = this.route.snapshot.paramMap.get('id');
-    if (this.clienteId) {
-      this.carregarDados(this.clienteId);
+    const clienteId = this.route.snapshot.paramMap.get('id');
+    if (clienteId) {
+      this.carregarDadosCliente(clienteId);
+    } else {
+      console.error('ID do cliente não encontrado na rota.');
+      this.isLoading = false;
     }
   }
 
-  async carregarDados(clienteId: string) {
-    const loading = await this.loadingCtrl.create({
-      message: 'Carregando dados do cliente...'
-    });
-    await loading.present();
-
-    try {
-      const cliente = await firstValueFrom(this.clienteService.obterClientePorId(clienteId));
-      const orcamentos = await firstValueFrom(this.clienteService.getOrcamentosPorCliente(clienteId));
-      const servicos = await firstValueFrom(this.clienteService.getServicosPorCliente(clienteId));
-
-      this.cliente = cliente;
-      this.orcamentos = orcamentos || [];
-      this.servicos = servicos || [];
-
-      await loading.dismiss();
-    } catch (error) {
-      await loading.dismiss();
-      const alert = await this.alertCtrl.create({
-        header: 'Erro',
-        message: 'Não foi possível carregar os dados do cliente.',
-        buttons: ['OK'],
-      });
-      await alert.present();
-      console.error('Erro ao carregar dados:', error);
-    }
+  carregarDadosCliente(clienteId: string) {
+    this.isLoading = true;
+    
+    // Primeiro carrega os dados do cliente
+    this.http.get(`${environment.api_url}/clientes/${clienteId}`).subscribe(
+      (cliente: any) => {
+        this.cliente = cliente;
+        
+        // Depois carrega os serviços associados
+        this.http.get(`${environment.api_url}/servicos?clienteId=${clienteId}`).subscribe(
+          (servicos: any) => {
+            this.servicos = servicos;
+            this.isLoading = false;
+          },
+          (error) => {
+            console.error('Erro ao carregar serviços:', error);
+            this.isLoading = false;
+          }
+        );
+      },
+      (error) => {
+        console.error('Erro ao carregar cliente:', error);
+        this.isLoading = false;
+      }
+    );
   }
 
-  calcularTotalServicos(orcamento: any): number {
-    return orcamento.servicos?.reduce((acc: number, serv: any) => acc + (serv.preco || 0), 0) || 0;
-  }
-
-  formatarData(data: string): string {
-    return new Date(data).toLocaleDateString('pt-PT');
+  formatCurrency(value: number): string {
+    return new Intl.NumberFormat('pt-PT', { 
+      style: 'currency', 
+      currency: 'EUR' 
+    }).format(value);
   }
 }
