@@ -1,6 +1,12 @@
 :host {
   --ion-background-color: #1a1a1a;
 }
+.back-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 16px; /* espaço abaixo */
+}
 
 .center-content {
   display: flex;
