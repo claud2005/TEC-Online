@@ -171,61 +171,64 @@ ion-input {
 /* === Estilo para lista/tabela dos utilizadores cadastrados === */
 .user-list {
   margin: 20px auto;
-  width: 90vw;
-  max-width: 1400px;
-  background: rgba(0, 0, 0, 0.7); /* fundo mais escuro para contraste */
+  width: 95vw;           /* Mais largura */
+  max-width: 1600px;     /* Largura máxima maior */
+  background: #f9f9f9;   /* Fundo claro para destacar texto preto */
   border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  padding: 24px;         /* Mais padding */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
   overflow-x: auto;
-  color: white;
+  color: black;          /* Texto preto */
 }
 
 .user-list h3 {
-  color: white;
-  margin-bottom: 12px;
+  color: black;
+  margin-bottom: 20px;
   text-align: center;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: bold;
 }
 
 .user-list table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 1.1rem;     /* Texto maior */
 }
 
 .user-list th,
 .user-list td {
-  padding: 12px 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 16px 14px;       /* Células maiores */
+  border-bottom: 1.5px solid #ddd;
   text-align: left;
-  color: white;
-  font-size: 1rem;
+  color: black;
 }
 
 .user-list th {
-  border-bottom: 2px solid #3498db;
-  font-weight: 600;
+  border-bottom: 3px solid #3498db;
+  font-weight: 700;
+  background-color: #e1eaff;  /* Fundo leve azul nas colunas header */
 }
 
 .user-list tr:hover {
-  background-color: rgba(52, 152, 219, 0.2);
+  background-color: #d0e4ff; /* Fundo azul claro no hover */
 }
 
 /* Ações (botões) */
 .user-list ion-button {
   --padding-start: 0;
   --padding-end: 0;
-  font-size: 0.9rem;
-  min-width: 70px;
+  font-size: 1rem;
+  min-width: 90px;
+  color: #3498db;
 }
 
 /* Responsivo para mobile */
 @media screen and (max-width: 480px) {
   .user-list {
     width: 100vw;
-    padding: 12px;
+    padding: 16px;
     border-radius: 0;
+    background: #f9f9f9;
   }
 
   .user-list table,
@@ -243,26 +246,27 @@ ion-input {
   }
 
   .user-list tr {
-    margin-bottom: 15px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 18px;
+    border-bottom: 2px solid #ddd;
   }
 
   .user-list td {
     text-align: right;
-    padding-left: 50%;
+    padding-left: 55%;
     position: relative;
-    font-size: 1rem;
+    font-size: 1.1rem;
     border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid #ddd;
+    color: black;
   }
 
   .user-list td::before {
     content: attr(data-label);
     position: absolute;
-    left: 10px;
+    left: 16px;
     width: 45%;
     padding-left: 10px;
-    font-weight: bold;
+    font-weight: 700;
     text-align: left;
     color: #3498db;
   }
@@ -270,6 +274,8 @@ ion-input {
   .user-list ion-button {
     width: 48%;
     margin-top: 8px;
+    color: #3498db;
   }
 }
+
 
