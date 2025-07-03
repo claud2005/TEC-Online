@@ -1,4 +1,3 @@
-
 .back-button-container {
   width: 100%;
   display: flex;
@@ -11,12 +10,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start; /* subiu tudo para cima */
-  min-height: 100vh;
-  padding: 80px 20px 80px 20px;
+  min-height: auto; /* para evitar muito espaço vazio */
+  padding: 40px 20px 40px 20px; /* menos padding para subir conteúdo */
   background: linear-gradient(135deg, #2c3e50, #3498db);
   overflow: hidden;
 }
-
 
 .logo-container {
   position: relative;
@@ -170,6 +168,67 @@ ion-input {
   font-size: 1.5rem;
 }
 
+/* === Estilo para lista/tabela dos utilizadores cadastrados === */
+.user-list {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 900px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  overflow-x: auto;
+}
+
+.user-list h3 {
+  color: white;
+  margin-bottom: 12px;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.user-list ion-list {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-list ion-item {
+  --background: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.user-list ion-item:last-child {
+  border-bottom: none;
+}
+
+.user-list ion-label {
+  flex: 1 1 auto;
+  color: white;
+}
+
+.user-list ion-label h2 {
+  font-size: 1.25rem;
+  margin: 0 0 6px 0;
+}
+
+.user-list ion-label p {
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.user-list ion-button {
+  flex: 0 0 auto;
+  margin-left: 10px;
+  font-size: 0.9rem;
+  min-width: 75px;
+}
+
 /* ===== Adaptação para telemóvel ===== */
 @media screen and (max-width: 480px) {
   .center-content {
@@ -219,5 +278,16 @@ ion-input {
   .login-text a:hover {
     font-size: 1.2rem;
   }
-}
 
+  /* Lista responsiva para mobile */
+  .user-list ion-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .user-list ion-button {
+    margin-left: 0;
+    margin-top: 8px;
+    width: 100%;
+  }
+}
