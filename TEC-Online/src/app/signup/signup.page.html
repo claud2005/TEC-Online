@@ -120,35 +120,34 @@
       </ion-button>
     </form>
 
-    <div class="user-list" *ngIf="utilizadores.length > 0" style="margin-top: 30px; width: 100%; max-width: 1200px; margin-left: auto; margin-right: auto;">
+    <div class="user-list" *ngIf="utilizadores.length > 0" style="margin-top: 30px; width: 100%; max-width: 1600px; margin-left: auto; margin-right: auto;">
   <h3>Utilizadores Cadastrados</h3>
 
-  <ion-list>
-    <!-- Cabeçalho -->
-    <ion-item lines="full" style="font-weight: bold; --background: rgba(255, 255, 255, 0.15); color: white;">
-      <ion-label class="header-label" style="flex: 2;">Nome Completo</ion-label>
-      <ion-label class="header-label" style="flex: 1;">Utilizador</ion-label>
-      <ion-label class="header-label" style="flex: 2;">E-mail</ion-label>
-      <ion-label class="header-label" style="flex: 1;">Telefone</ion-label>
-      <ion-label class="header-label" style="flex: 1;">Tipo</ion-label>
-      <ion-label class="header-label" style="flex: 1; text-align: center;">Ações</ion-label>
-    </ion-item>
-
-    <!-- Itens da lista -->
-    <ion-item *ngFor="let u of utilizadores" lines="full" style="--background: transparent; color: white;">
-      <ion-label style="flex: 2;">{{ u.fullName }}</ion-label>
-      <ion-label style="flex: 1;">{{ u.username }}</ion-label>
-      <ion-label style="flex: 2;">{{ u.email }}</ion-label>
-      <ion-label style="flex: 1;">{{ u.telefone }}</ion-label>
-      <ion-label style="flex: 1;">
-        {{ u.role === 'admin' ? 'Administrador' : 'Utilizador' }}
-      </ion-label>
-      <ion-label style="flex: 1; text-align: center;">
-        <ion-button fill="clear" color="primary" size="small" (click)="editUser(u)">Editar</ion-button>
-        <ion-button fill="clear" color="danger" size="small" (click)="deleteUser(u)">Excluir</ion-button>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+  <table>
+    <thead>
+      <tr>
+        <th>Nome Completo</th>
+        <th>Utilizador</th>
+        <th>E-mail</th>
+        <th>Telefone</th>
+        <th>Tipo</th>
+        <th style="text-align: center;">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of utilizadores">
+        <td>{{ u.fullName }}</td>
+        <td>{{ u.username }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.telefone }}</td>
+        <td>{{ u.role === 'admin' ? 'Administrador' : 'Utilizador' }}</td>
+        <td style="text-align: center;">
+          <ion-button fill="clear" color="primary" size="small" (click)="editUser(u)">Editar</ion-button>
+          <ion-button fill="clear" color="danger" size="small" (click)="deleteUser(u)">Excluir</ion-button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
   </div>
