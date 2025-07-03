@@ -150,6 +150,7 @@ ion-col {
     font-weight: 600;
     margin-right: 0.75rem;
     flex-shrink: 0;
+    margin-top: 6px; /* Espaço extra para afastar os botões */
   }
 
   /* Ajustar botões para ficarem alinhados no início */
@@ -166,3 +167,4 @@ ion-col {
     --padding-end: 12px;
   }
 }
+
