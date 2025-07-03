@@ -3,6 +3,7 @@ ion-toolbar {
   --color: #fff;
 }
 
+/* Botões superiores */
 .top-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -11,35 +12,64 @@ ion-toolbar {
   margin-bottom: 1.5rem;
 }
 
+/* Tabela geral */
 .user-table {
   font-size: 0.95rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
 }
 
+/* Cabeçalho da tabela */
 .table-header {
   font-weight: bold;
-  background-color: #f2f2f2;
+  background: #f8f9fa;
+  color: #333;
   border-bottom: 2px solid #ccc;
-  padding: 0.75rem 0;
+  padding: 12px 0;
   text-align: left;
 }
 
+/* Linhas da tabela */
 .user-row {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e5e5e5;
   transition: background-color 0.2s ease;
   cursor: pointer;
+  padding: 12px 0;
 }
 
 .user-row:hover {
-  background-color: #f9f9f9;
+  background-color: #f1f3f5;
 }
 
+/* Última linha sem borda extra */
+.user-row:last-child {
+  border-bottom: none;
+}
+
+/* Coluna de ações */
+.actions {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Botões pequenos */
 .actions ion-button {
-  margin-inline-end: 0.3rem;
+  --border-radius: 8px;
+  --padding-start: 8px;
+  --padding-end: 8px;
 }
 
+/* Nenhum utilizador */
 .no-users {
   text-align: center;
   font-style: italic;
-  color: #666;
-  padding: 1rem;
+  color: #888;
+  padding: 1.5rem;
+  background-color: #fdfdfd;
+  border: 1px dashed #ccc;
+  border-radius: 6px;
 }
