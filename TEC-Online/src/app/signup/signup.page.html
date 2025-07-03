@@ -1,5 +1,5 @@
 <ion-content class="signup-content">
-  <div class="center-content" style="margin-top: 20px;">
+  <div class="center-content" style="margin-top: 20px; justify-content: flex-start;">
 
     <div class="back-button-container">
       <ion-button fill="clear" color="medium" (click)="goBack()" aria-label="Voltar página anterior">
@@ -120,18 +120,35 @@
       </ion-button>
     </form>
 
-    <div class="user-list" *ngIf="utilizadores.length > 0" style="margin-top: 30px;">
+    <div class="user-list" *ngIf="utilizadores.length > 0" style="margin-top: 30px; width: 100%; max-width: 900px;">
       <h3>Utilizadores Cadastrados</h3>
-      <ion-list>
-        <ion-item *ngFor="let u of utilizadores">
-          <ion-label>
-            <h2>{{ u.fullName }} ({{ u.username }})</h2>
-            <p>{{ u.email }} - {{ u.telefone }} - <strong>{{ u.role === 'admin' ? 'Administrador' : 'Utilizador' }}</strong></p>
-          </ion-label>
-          <ion-button fill="clear" color="primary" (click)="editUser(u)">Editar</ion-button>
-          <ion-button fill="clear" color="danger" (click)="deleteUser(u)">Excluir</ion-button>
-        </ion-item>
-      </ion-list>
+
+      <table style="width: 100%; border-collapse: collapse; color: white; font-size: 1.2rem;">
+        <thead>
+          <tr style="border-bottom: 2px solid #3498db;">
+            <th style="text-align: left; padding: 8px;">Nome Completo</th>
+            <th style="text-align: left; padding: 8px;">Utilizador</th>
+            <th style="text-align: left; padding: 8px;">E-mail</th>
+            <th style="text-align: left; padding: 8px;">Telefone</th>
+            <th style="text-align: left; padding: 8px;">Tipo</th>
+            <th style="text-align: center; padding: 8px;">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of utilizadores" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2);">
+            <td style="padding: 8px;">{{ u.fullName }}</td>
+            <td style="padding: 8px;">{{ u.username }}</td>
+            <td style="padding: 8px;">{{ u.email }}</td>
+            <td style="padding: 8px;">{{ u.telefone }}</td>
+            <td style="padding: 8px;">{{ u.role === 'admin' ? 'Administrador' : 'Utilizador' }}</td>
+            <td style="padding: 8px; text-align: center;">
+              <ion-button fill="clear" color="primary" size="small" (click)="editUser(u)">Editar</ion-button>
+              <ion-button fill="clear" color="danger" size="small" (click)="deleteUser(u)">Excluir</ion-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+
   </div>
 </ion-content>

@@ -10,12 +10,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* subiu tudo para cima */
   min-height: 100vh;
-  padding: 80px 20px 80px 20px; /* Aumentado o padding vertical para desktop */
+  padding: 80px 20px 80px 20px;
   background: linear-gradient(135deg, #2c3e50, #3498db);
   overflow: hidden;
 }
+
 
 .logo-container {
   position: relative;
