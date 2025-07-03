@@ -30,8 +30,8 @@
         @if (cliente.email) {
           <p>Email: {{ cliente.email }}</p>
         }
-        @if (cliente.telefone) {
-          <p>Telefone: {{ cliente.telefone }}</p>
+        @if (cliente.contacto) {
+          <p>Contacto: {{ cliente.contacto }}</p>
         }
       </ion-card-content>
     </ion-card>
@@ -50,7 +50,7 @@
               <p><strong>Problema:</strong> {{ servico.problemaRelatado }}</p>
               <p><strong>Solução:</strong> {{ servico.solucaoInicial }}</p>
               <p><strong>Valor:</strong> {{ formatCurrency(servico.valorTotal) }}</p>
-              <p><strong>Status:</strong> <span [class]="'status-' + servico.status.toLowerCase()">{{ servico.status }}</span></p>
+              <p><strong>Status:</strong> {{ servico.status }}</p>
             </ion-label>
           </ion-item>
         } @empty {
