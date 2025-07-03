@@ -112,61 +112,57 @@ ion-col {
   /* Cada coluna vira uma linha com label */
   ion-col {
     justify-content: flex-start;
-    padding: 8px 0;
-    width: 100%;
+    padding: 12px 0;    /* mais espaçamento vertical */
+    width: 95%;         /* largura maior para colunas mais largas */
+    max-width: 95%;
     display: flex;
     align-items: center;
+    word-break: break-word;
   }
 
   /* Label antes do conteúdo */
   ion-col:nth-child(1)::before {
     content: "Nome: ";
     font-weight: 600;
-    margin-right: 0.5rem;
+    margin-right: 0.75rem;
     flex-shrink: 0;
   }
   ion-col:nth-child(2)::before {
     content: "Email: ";
     font-weight: 600;
-    margin-right: 0.5rem;
+    margin-right: 0.75rem;
     flex-shrink: 0;
   }
   ion-col:nth-child(3)::before {
     content: "Telefone: ";
     font-weight: 600;
-    margin-right: 0.5rem;
+    margin-right: 0.75rem;
     flex-shrink: 0;
   }
   ion-col:nth-child(4)::before {
     content: "Administrador: ";
     font-weight: 600;
-    margin-right: 0.5rem;
+    margin-right: 0.75rem;
     flex-shrink: 0;
   }
   ion-col:nth-child(5)::before {
     content: "Gerenciar: ";
     font-weight: 600;
-    margin-right: 0.5rem;
+    margin-right: 0.75rem;
     flex-shrink: 0;
-  }
-
-  /* Para o conteúdo dentro do ion-col não quebrar em colunas muito pequenas */
-  ion-col {
-    word-break: break-word;
   }
 
   /* Ajustar botões para ficarem alinhados no início */
   .actions {
     justify-content: flex-start;
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
 
   /* Botões um pouco maiores e com espaçamento */
   .actions ion-button {
-    --min-width: 40px;
-    --height: 36px;
-    --padding-start: 10px;
-    --padding-end: 10px;
+    --min-width: 44px;
+    --height: 40px;
+    --padding-start: 12px;
+    --padding-end: 12px;
   }
 }
-
