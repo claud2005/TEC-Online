@@ -170,14 +170,15 @@ ion-input {
 
 /* === Estilo para lista/tabela dos utilizadores cadastrados === */
 .user-list {
-  margin: 20px auto;       /* centraliza horizontalmente e dá margem superior */
-  width: 90vw;             /* ocupa até 90% da largura da viewport */
-  max-width: 1400px;       /* largura máxima da tabela */
-  background: rgba(255, 255, 255, 0.1);
+  margin: 20px auto;
+  width: 90vw;
+  max-width: 1400px;
+  background: rgba(0, 0, 0, 0.7); /* fundo mais escuro para contraste */
   border-radius: 12px;
   padding: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   overflow-x: auto;
+  color: white;
 }
 
 .user-list h3 {
@@ -188,101 +189,87 @@ ion-input {
   font-weight: bold;
 }
 
-.user-list ion-list {
+.user-list table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.user-list ion-item {
-  --background: transparent;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 10px; /* Aumentei o padding vertical de 12px para 20px */
+.user-list th,
+.user-list td {
+  padding: 12px 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  min-height: 60px; /* Adicionei uma altura mínima para garantir espaçamento */
-}
-
-.user-list ion-item:last-child {
-  border-bottom: none;
-}
-
-.user-list ion-label {
-  flex: 1 1 auto;
+  text-align: left;
   color: white;
+  font-size: 1rem;
 }
 
-.user-list ion-label h2 {
-  font-size: 1.25rem;
-  margin: 0 0 8px 0; /* Mais espaço entre o título e o parágrafo */
+.user-list th {
+  border-bottom: 2px solid #3498db;
+  font-weight: 600;
 }
 
-.user-list ion-label p {
+.user-list tr:hover {
+  background-color: rgba(52, 152, 219, 0.2);
+}
+
+/* Ações (botões) */
+.user-list ion-button {
+  --padding-start: 0;
+  --padding-end: 0;
   font-size: 0.9rem;
-  margin: 0;
-  opacity: 0.8;
-  line-height: 1.4; /* Melhorar legibilidade */
+  min-width: 70px;
 }
 
-/* ===== Adaptação para telemóvel ===== */
+/* Responsivo para mobile */
 @media screen and (max-width: 480px) {
-  .center-content {
-    padding: 50px 10px 100px 10px; /* mais padding em baixo e menor nas laterais */
-    min-height: 100vh; /* garantir que preenche a altura toda */
-    justify-content: flex-start; /* evita conteúdo muito ao centro num ecrã pequeno */
+  .user-list {
+    width: 100vw;
+    padding: 12px;
+    border-radius: 0;
   }
 
-  .logo-container {
-    margin-bottom: 20px;
+  .user-list table,
+  .user-list thead,
+  .user-list tbody,
+  .user-list th,
+  .user-list td,
+  .user-list tr {
+    display: block;
+    width: 100%;
   }
 
-  .app-logo {
-    width: 80px;
-    height: 80px;
+  .user-list thead tr {
+    display: none;
   }
 
-  .logo-shadow {
-    width: 70px;
-    height: 14px;
+  .user-list tr {
+    margin-bottom: 15px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
   }
 
-  h2 {
-    font-size: 1.4rem;
-    margin-bottom: 10px;
+  .user-list td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+    font-size: 1rem;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .input-item,
-  ion-label,
-  ion-input,
-  .btn-animate,
-  .login-text,
-  .login-text a {
-    font-size: 1.1rem;
-  }
-
-  .btn-animate {
-    margin-top: 14px;
-    padding: 10px 16px;
-    border-radius: 20px;
-  }
-
-  .login-text {
-    margin-top: 16px;
-  }
-
-  .login-text a:hover {
-    font-size: 1.2rem;
-  }
-
-  /* Lista responsiva para mobile */
-  .user-list ion-item {
-    flex-direction: column;
-    align-items: flex-start;
+  .user-list td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: 45%;
+    padding-left: 10px;
+    font-weight: bold;
+    text-align: left;
+    color: #3498db;
   }
 
   .user-list ion-button {
-    margin-left: 0;
+    width: 48%;
     margin-top: 8px;
-    width: 100%;
   }
 }
+
