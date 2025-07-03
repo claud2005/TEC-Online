@@ -170,9 +170,9 @@ ion-input {
 
 /* === Estilo para lista/tabela dos utilizadores cadastrados === */
 .user-list {
-  margin-top: 20px;
-  width: 100%;
-  max-width: 1200px;
+  margin: 20px auto;       /* centraliza horizontalmente e dá margem superior */
+  width: 90vw;             /* ocupa até 90% da largura da viewport */
+  max-width: 1400px;       /* largura máxima da tabela */
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 16px;
