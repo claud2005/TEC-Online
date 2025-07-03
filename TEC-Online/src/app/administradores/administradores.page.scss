@@ -17,11 +17,11 @@ ion-toolbar {
   font-size: 0.95rem;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
   background-color: #fff;
   margin: 0 auto; /* Centraliza horizontalmente */
   max-width: 100%;
   width: 100%;
+  border: 1px solid #e0e0e0; /* Leve contorno para suavidade */
 }
 
 /* Cabeçalho */
