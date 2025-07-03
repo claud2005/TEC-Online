@@ -24,12 +24,11 @@ ion-toolbar {
   border: 1px solid #e0e0e0; /* Leve contorno para suavidade */
 }
 
-/* Cabeçalho */
+/* Cabeçalho das colunas */
 .table-header ion-col {
   font-weight: 600;
   font-size: 0.95rem;
-  /* Trocar esta linha: */
-  background-color: transparent; /* ou #fff */
+  background-color: transparent; /* removido sombreamento */
   padding: 12px;
   justify-content: center;
   color: #333;
@@ -64,15 +63,6 @@ ion-col {
   word-break: break-word;
 }
 
-/* Cabeçalho das colunas */
-.table-header ion-col {
-  font-weight: 600;
-  font-size: 0.95rem;
-  background-color: #e9ecef;
-  padding: 12px;
-  justify-content: center;
-}
-
 /* Coluna de ações */
 .actions {
   display: flex;
@@ -98,4 +88,59 @@ ion-col {
   border: 1px dashed #ccc;
   border-radius: 6px;
   margin-top: 1rem;
+}
+
+/* --- RESPONSIVO PARA MOBILE --- */
+@media (max-width: 768px) {
+  /* Esconde o cabeçalho da tabela */
+  .table-header {
+    display: none;
+  }
+
+  /* Cada linha vira um "cartão" vertical */
+  .user-row {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+  }
+
+  /* Cada coluna vira uma linha com label */
+  ion-col {
+    justify-content: flex-start;
+    padding: 4px 0;
+    width: 100%;
+  }
+
+  ion-col:nth-child(1)::before {
+    content: "Nome: ";
+    font-weight: 600;
+    margin-right: 0.5rem;
+  }
+  ion-col:nth-child(2)::before {
+    content: "Email: ";
+    font-weight: 600;
+    margin-right: 0.5rem;
+  }
+  ion-col:nth-child(3)::before {
+    content: "Telefone: ";
+    font-weight: 600;
+    margin-right: 0.5rem;
+  }
+  ion-col:nth-child(4)::before {
+    content: "Administrador: ";
+    font-weight: 600;
+    margin-right: 0.5rem;
+  }
+  ion-col:nth-child(5)::before {
+    content: "Gerenciar: ";
+    font-weight: 600;
+    margin-right: 0.5rem;
+  }
+
+  /* Ajustar botões para ficarem alinhados no início */
+  .actions {
+    justify-content: flex-start;
+  }
 }
