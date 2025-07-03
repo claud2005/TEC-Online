@@ -198,8 +198,9 @@ ion-input {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 10px;
+  padding: 20px 10px; /* Aumentei o padding vertical de 12px para 20px */
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  min-height: 60px; /* Adicionei uma altura mínima para garantir espaçamento */
 }
 
 .user-list ion-item:last-child {
@@ -213,20 +214,14 @@ ion-input {
 
 .user-list ion-label h2 {
   font-size: 1.25rem;
-  margin: 0 0 6px 0;
+  margin: 0 0 8px 0; /* Mais espaço entre o título e o parágrafo */
 }
 
 .user-list ion-label p {
   font-size: 0.9rem;
   margin: 0;
   opacity: 0.8;
-}
-
-.user-list ion-button {
-  flex: 0 0 auto;
-  margin-left: 10px;
-  font-size: 0.9rem;
-  min-width: 75px;
+  line-height: 1.4; /* Melhorar legibilidade */
 }
 
 /* ===== Adaptação para telemóvel ===== */
