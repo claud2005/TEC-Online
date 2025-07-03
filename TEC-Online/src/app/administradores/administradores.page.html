@@ -1,18 +1,27 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Utilizadores</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">Administração</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
 
-  <div style="display: flex; justify-content: flex-start; gap: 1rem; margin-bottom: 1rem;">
-    <ion-button (click)="criarUtilizador()">Criar Utilizador</ion-button>
-    <ion-button color="medium" (click)="sair()">Sair</ion-button>
+  <!-- Botões superiores -->
+  <div class="top-buttons">
+    <ion-button (click)="criarUtilizador()" color="success">
+      <ion-icon slot="start" name="person-add-outline"></ion-icon>
+      Criar Utilizador
+    </ion-button>
+
+    <ion-button color="medium" (click)="sair()">
+      <ion-icon slot="start" name="log-out-outline"></ion-icon>
+      Sair
+    </ion-button>
   </div>
 
-  <ion-grid>
-    <ion-row class="table-header" style="font-weight: bold; border-bottom: 2px solid #ccc;">
+  <!-- Tabela de utilizadores -->
+  <ion-grid class="user-table">
+    <ion-row class="table-header">
       <ion-col>Nome</ion-col>
       <ion-col>Email</ion-col>
       <ion-col>Telefone</ion-col>
@@ -20,24 +29,23 @@
       <ion-col>Gerenciar</ion-col>
     </ion-row>
 
-    <ion-row *ngFor="let user of utilizadores" style="border-bottom: 1px solid #eee; align-items: center; cursor: pointer;"
-      (click)="editarUtilizador(user.id)">
+    <ion-row *ngFor="let user of utilizadores" class="user-row" (click)="editarUtilizador(user.id)">
       <ion-col>{{ user.fullName }}</ion-col>
       <ion-col>{{ user.email }}</ion-col>
       <ion-col>{{ user.telefone }}</ion-col>
       <ion-col>{{ user.isAdmin ? 'Sim' : 'Não' }}</ion-col>
-      <ion-col>
-        <ion-button size="small" color="warning" (click)="alterarSenha(user); $event.stopPropagation()">
-  <ion-icon slot="icon-only" name="key-outline"></ion-icon>
-</ion-button>
+      <ion-col class="actions">
+        <ion-button size="small" color="warning" (click)="alterarSenha(user); $event.stopPropagation()" title="Alterar Senha">
+          <ion-icon slot="icon-only" name="key-outline"></ion-icon>
+        </ion-button>
 
-        <ion-button size="small" color="danger" (click)="eliminarUtilizador(user.id); $event.stopPropagation()">
+        <ion-button size="small" color="danger" (click)="eliminarUtilizador(user.id); $event.stopPropagation()" title="Eliminar">
           <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-button>
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="utilizadores.length === 0" style="text-align: center;">
+    <ion-row *ngIf="utilizadores.length === 0" class="no-users">
       <ion-col colspan="5">
         Nenhum utilizador registrado.
       </ion-col>
