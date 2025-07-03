@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { 
@@ -9,8 +9,8 @@ import {
   IonList, IonItemGroup, IonItemDivider, IonLabel, IonItem, IonSpinner,
   AlertController
 } from '@ionic/angular/standalone';
-import { catchError, finalize, tap } from 'rxjs/operators';
-import { throwError, of } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-orcamentos-clientes',
@@ -40,23 +40,19 @@ export class OrcamentosClientesPage implements OnInit {
   ngOnInit() {
     const clienteId = this.route.snapshot.paramMap.get('id');
     console.log('ID do cliente recebido:', clienteId);
-
-    if (clienteId && this.isValidMongoId(clienteId)) {
+    
+    if (clienteId) {
       this.carregarDadosCliente(clienteId);
     } else {
-      this.handleError('ID do cliente inválido');
-      this.mostrarAlertaComRedirect('ID inválido', '/gestor-clientes');
+      this.handleError('ID do cliente não encontrado na URL');
+      this.mostrarAlertaERedirect('ID inválido', 'ID do cliente não encontrado na URL', '/gestor-clientes');
     }
-  }
-
-  private isValidMongoId(id: string): boolean {
-    return /^[0-9a-fA-F]{24}$/.test(id);
   }
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     if (!token) {
-      this.handleError('Token de autenticação não encontrado');
+      this.handleError('Autenticação necessária - Token não encontrado');
       this.redirectToLogin();
       throw new Error('Token não disponível');
     }
@@ -66,10 +62,10 @@ export class OrcamentosClientesPage implements OnInit {
     });
   }
 
-  private async mostrarAlertaComRedirect(message: string, redirectUrl: string) {
+  private async mostrarAlertaERedirect(titulo: string, mensagem: string, redirectUrl: string) {
     const alert = await this.alertController.create({
-      header: 'Aviso',
-      message,
+      header: titulo,
+      message: mensagem,
       buttons: [{
         text: 'OK',
         handler: () => {
@@ -97,34 +93,30 @@ export class OrcamentosClientesPage implements OnInit {
     this.errorMessage = null;
     const headers = this.getAuthHeaders();
 
+    // Primeiro verifica se o cliente existe
     this.http.get(`${environment.api_url}/clientes/${clienteId}`, { headers }).pipe(
-      tap(response => {
-        if (!response) {
-          throw new Error('Resposta vazia da API');
-        }
-      }),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 404) {
-          this.mostrarAlertaComRedirect('Cliente não encontrado na base de dados', '/gestor-clientes');
-          return of(null);
+          this.mostrarAlertaERedirect(
+            'Cliente não encontrado', 
+            'O cliente solicitado não foi encontrado na base de dados.', 
+            '/gestor-clientes'
+          );
         } else if (error.status === 401) {
           this.redirectToLogin();
-          return throwError(() => new Error('Autenticação necessária'));
         } else {
-          return throwError(() => new Error(`Erro na API: ${error.message}`));
+          this.handleError('Erro ao conectar com o servidor');
         }
-      }),
-      finalize(() => this.isLoading = false)
-    ).subscribe({
-      next: (cliente: any) => {
-        if (cliente) {
-          this.cliente = cliente;
-          // Normaliza o ID para garantir compatibilidade
-          this.cliente.id = this.cliente._id ? this.cliente._id.toString() : clienteId;
-          this.carregarServicos(clienteId);
-        }
-      },
-      error: (err) => this.handleError(err.message, err)
+        return of(null);
+      })
+    ).subscribe(cliente => {
+      if (cliente) {
+        this.cliente = cliente;
+        // Normaliza o ID para garantir compatibilidade
+        this.cliente.id = this.cliente._id ? this.cliente._id.toString() : clienteId;
+        this.carregarServicos(clienteId);
+      }
+      this.isLoading = false;
     });
   }
 
@@ -132,20 +124,13 @@ export class OrcamentosClientesPage implements OnInit {
     const headers = this.getAuthHeaders();
 
     this.http.get(`${environment.api_url}/servicos?clienteId=${clienteId}`, { headers }).pipe(
-      catchError((error: HttpErrorResponse) => {
+      catchError(error => {
         console.error('Erro ao carregar serviços:', error);
         return of([]);
       }),
       finalize(() => this.isLoading = false)
-    ).subscribe({
-      next: (servicos: any) => {
-        this.servicos = servicos.map((servico: any) => ({
-          ...servico,
-          // Normaliza IDs dos serviços
-          id: servico._id ? servico._id.toString() : servico.id
-        }));
-      },
-      error: (err) => this.handleError('Erro ao carregar serviços', err)
+    ).subscribe(servicos => {
+      this.servicos = Array.isArray(servicos) ? servicos : [];
     });
   }
 
