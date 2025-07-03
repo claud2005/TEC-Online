@@ -120,6 +120,13 @@ ion-col {
     word-break: break-word;
   }
 
+  /* Aumenta a largura só da coluna Gerenciar para 100% */
+  ion-col:nth-child(5) {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 8px; /* espaço extra para afastar os botões */
+  }
+
   /* Label antes do conteúdo */
   ion-col:nth-child(1)::before {
     content: "Nome: ";
@@ -150,7 +157,6 @@ ion-col {
     font-weight: 600;
     margin-right: 0.75rem;
     flex-shrink: 0;
-    margin-top: 6px; /* Espaço extra para afastar os botões */
   }
 
   /* Ajustar botões para ficarem alinhados no início */
@@ -167,4 +173,5 @@ ion-col {
     --padding-end: 12px;
   }
 }
+
 
