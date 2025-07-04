@@ -5,8 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { NavController, IonicModule } from '@ionic/angular';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-
-// Import Capacitor Camera para abrir galeria do dispositivo
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
@@ -26,7 +24,6 @@ export class EditarServicosPage {
   horaServico: string = '';
   status: string = 'aberto';
   nomeCliente: string = '';
-  contatoCliente: string = '';
   modeloAparelho: string = '';
   marcaAparelho: string = '';
   problemaCliente: string = '';
@@ -34,7 +31,7 @@ export class EditarServicosPage {
   valorTotal: number | null = null;
   observacoes: string = '';
   autorServico: string = '';
-  imagens: string[] = []; // Array das imagens em base64 com prefixo data:image/jpeg;base64,
+  imagens: string[] = [];
 
   constructor(
     private navController: NavController,
@@ -67,7 +64,6 @@ export class EditarServicosPage {
         this.horaServico = data.horaServico ?? '';
         this.status = data.status ?? 'aberto';
         this.nomeCliente = data.nomeCompletoCliente ?? '';
-        this.contatoCliente = data.contatoCliente ?? '';
         this.modeloAparelho = data.modeloAparelho ?? '';
         this.marcaAparelho = data.marcaAparelho ?? '';
         this.problemaCliente = data.problemaRelatado ?? '';
@@ -100,7 +96,6 @@ export class EditarServicosPage {
     formData.append('horaServico', this.horaServico);
     formData.append('status', this.status);
     formData.append('nomeCliente', this.nomeCliente);
-    formData.append('contatoCliente', this.contatoCliente);
     formData.append('modeloAparelho', this.modeloAparelho);
     formData.append('marcaAparelho', this.marcaAparelho);
     formData.append('problemaCliente', this.problemaCliente);
@@ -109,7 +104,6 @@ export class EditarServicosPage {
     formData.append('observacoes', this.observacoes.trim() || 'Sem observações');
     formData.append('autorServico', this.autorServico);
 
-    // Adiciona as imagens no formulário para envio
     this.imagens.forEach((base64) => {
       formData.append('imagens', base64);
     });
@@ -141,7 +135,6 @@ export class EditarServicosPage {
       { nome: 'horaServico', valor: this.horaServico },
       { nome: 'status', valor: this.status },
       { nome: 'nomeCliente', valor: this.nomeCliente },
-      { nome: 'contatoCliente', valor: this.contatoCliente },
       { nome: 'modeloAparelho', valor: this.modeloAparelho },
       { nome: 'marcaAparelho', valor: this.marcaAparelho },
       { nome: 'problemaCliente', valor: this.problemaCliente },
@@ -164,25 +157,24 @@ export class EditarServicosPage {
     return camposPreenchidos && valorValido;
   }
 
-  // Método para abrir galeria e adicionar foto
-async adicionarFoto() {
-  try {
-    const foto = await Camera.getPhoto({
-      quality: 80,
-      allowEditing: false,
-      resultType: CameraResultType.Base64,
-      source: CameraSource.Photos,
-    });
+  async adicionarFoto() {
+    try {
+      const foto = await Camera.getPhoto({
+        quality: 80,
+        allowEditing: false,
+        resultType: CameraResultType.Base64,
+        source: CameraSource.Photos,
+      });
 
-    if (foto?.base64String) {
-      const base64ComPrefixo = `data:image/jpeg;base64,${foto.base64String}`;
-      this.imagens.push(base64ComPrefixo);
+      if (foto?.base64String) {
+        const base64ComPrefixo = `data:image/jpeg;base64,${foto.base64String}`;
+        this.imagens.push(base64ComPrefixo);
+      }
+    } catch (error) {
+      console.error('Erro ao adicionar foto:', error);
     }
-  } catch (error) {
-    console.error('Erro ao adicionar foto:', error);
   }
-}
-  // Remove a foto da lista pelo índice
+
   removerFoto(index: number) {
     this.imagens.splice(index, 1);
   }
