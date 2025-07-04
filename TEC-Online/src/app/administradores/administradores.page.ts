@@ -58,8 +58,9 @@ export class AdministradoresPage implements OnInit {
   }
 
   sair() {
-    this.location.back();
-  }
+  this.navCtrl.navigateRoot('/plano-semanal');
+}
+
 
   alterarSenha(user: any) {
     // Navega para a página esqueceu-password passando o id do utilizador
