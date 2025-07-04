@@ -71,12 +71,15 @@ export class CriarServicosPage implements OnInit {
 
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
-        // Usa _id do Mongo e converte para id
+        console.log('Resposta completa da API:', response);
+
         this.clientes = response.map(cliente => ({
-          id: cliente.id,
+          id: cliente.id,                    // ou cliente._id dependendo do backend
           nome: cliente.nome,
-          numeroCliente: cliente.numeroCliente
+          numeroCliente: cliente.numeroCliente // ou cliente.telefone se vier assim
         }));
+
+        console.log('Clientes formatados:', this.clientes);
       },
       error: (error) => {
         console.error('Erro ao carregar clientes:', error);
@@ -96,7 +99,9 @@ export class CriarServicosPage implements OnInit {
       return;
     }
 
+    console.log('Tentando achar cliente com ID:', this.clienteSelecionado);
     const cliente = this.clientes.find(c => c.id === this.clienteSelecionado);
+    console.log('Cliente encontrado:', cliente);
 
     if (!cliente) {
       alert('Cliente selecionado não encontrado.');
@@ -108,9 +113,10 @@ export class CriarServicosPage implements OnInit {
       horaServico: this.horaServico,
       status: this.status,
       autorServico: this.autorServico,
-      clienteId: cliente.id,  // manda clienteId para API
-      nomeCompletoCliente: cliente.nome,
-      contatoCliente: cliente.numeroCliente,
+      clienteId: cliente.id,               // ID real do cliente
+      cliente: cliente.nome,               // campo 'cliente' no schema (required)
+      nomeCompletoCliente: cliente.nome,   // campo 'nomeCompletoCliente' no schema
+      contatoCliente: cliente.numeroCliente, // campo 'contatoCliente' no schema
       marcaAparelho: this.marcaAparelho,
       modeloAparelho: this.modeloAparelho,
       problemaRelatado: this.problemaRelatado,
@@ -118,6 +124,8 @@ export class CriarServicosPage implements OnInit {
       valorTotal: this.valorTotal || 0,
       observacoes: this.observacoes || 'Sem observações'
     };
+
+    console.log('Dados a serem enviados:', dadosServico);
 
     try {
       const token = localStorage.getItem('token');
