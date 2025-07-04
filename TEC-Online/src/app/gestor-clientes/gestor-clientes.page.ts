@@ -42,7 +42,7 @@ export class GestorClientesPage implements OnInit {
   }
 
   voltar() {
-    this.router.navigate(['/']); // Ajustar conforme necessário
+    this.router.navigate(['/plano-semanal']); // Ajustar conforme necessário
   }
 
   filtrarClientes() {
