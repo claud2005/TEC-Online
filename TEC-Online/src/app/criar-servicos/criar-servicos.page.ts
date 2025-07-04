@@ -113,7 +113,7 @@ const dadosServico = {
   horaServico: this.horaServico,
   status: this.status,
   autorServico: this.autorServico,
-  cliente: cliente.id, // <- AQUI corrigido
+  clienteId: cliente.id,  // alterado para clienteId
   nomeCompletoCliente: cliente.nome,
   contatoCliente: cliente.numeroCliente,
   marcaAparelho: this.marcaAparelho,
@@ -123,6 +123,7 @@ const dadosServico = {
   valorTotal: this.valorTotal || 0,
   observacoes: this.observacoes || 'Sem observações'
 };
+
 
     console.log('Dados a serem enviados:', dadosServico);
 
