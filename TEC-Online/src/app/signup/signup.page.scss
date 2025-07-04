@@ -5,10 +5,35 @@
   justify-content: flex-start;
   min-height: auto;
   padding: 40px 20px 40px 20px;
-  background: linear-gradient(135deg, #2c3e50, #3498db);
+  background: white; /* fundo branco */
   overflow: hidden;
   padding-bottom: 0 !important;
   margin-bottom: 0 !important;
+  color: #333; /* texto escuro */
+}
+
+.back-button {
+  align-self: flex-start;
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  color: #3498db;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  transition: color 0.3s ease;
+}
+.back-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start; /* Alinha o botão à esquerda */
+  margin-bottom: 20px;
+}
+
+.back-button:hover {
+  color: #e74c3c;
+  text-decoration: underline;
 }
 
 .logo-container {
@@ -31,7 +56,7 @@
   transform: translateX(-50%);
   width: 100px;
   height: 20px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 50%;
   filter: blur(10px);
   animation: shadow 3s ease-in-out infinite;
@@ -58,8 +83,8 @@
 h2 {
   font-size: 2rem;
   margin-bottom: 20px;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  color: #333;
+  text-shadow: none;
   animation: fadeIn 1.5s ease-in-out;
   text-align: center;
 }
@@ -76,9 +101,9 @@ h2 {
 }
 
 .input-item {
-  --background: rgba(255, 255, 255, 0.1);
-  --border-color: rgba(255, 255, 255, 0.3);
-  --color: white;
+  --background: rgba(0, 0, 0, 0.05);
+  --border-color: rgba(0, 0, 0, 0.2);
+  --color: #333;
   --padding-start: 16px;
   --padding-end: 16px;
   --inner-padding-end: 16px;
@@ -90,34 +115,34 @@ h2 {
 
 .input-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .input-icon {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(0, 0, 0, 0.6);
   margin-right: 10px;
   font-size: 1.6rem;
   transition: color 0.3s ease;
 }
 
 .input-item:hover .input-icon {
-  color: white;
+  color: #000;
 }
 
 ion-label {
   font-size: 1.4rem;
   font-weight: bold;
-  color: rgba(255, 255, 255, 0.8);
+  color: #444;
   transition: color 0.3s ease;
 }
 
 .input-item:hover ion-label {
-  color: white;
+  color: #000;
 }
 
 ion-input {
-  --color: white;
-  --placeholder-color: rgba(255, 255, 255, 0.5);
+  --color: #333;
+  --placeholder-color: rgba(0, 0, 0, 0.5);
   --placeholder-opacity: 1;
   font-size: 1.4rem;
   --padding-start: 0;
@@ -144,7 +169,7 @@ ion-input {
 .login-text {
   margin-top: 20px;
   text-align: center;
-  color: white;
+  color: #333;
   font-size: 1.4rem;
 }
 
