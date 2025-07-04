@@ -38,12 +38,4 @@ export class HomePage {
       }
     );
   }  
-
-  registrar() {
-    this.router.navigate(['/signup']); // Redireciona para a página de registro
-  }
-
-  recuperarSenha() {
-    this.router.navigate(['/esqueceu-password']);  // Redireciona para a página de recuperação de senha
-  }
 }
