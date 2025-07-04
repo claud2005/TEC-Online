@@ -71,11 +71,11 @@ export class CriarServicosPage implements OnInit {
 
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
-        // Corrigido: usar _id do Mongo
+        // Usa _id do Mongo e converte para id
         this.clientes = response.map(cliente => ({
           id: cliente._id,
           nome: cliente.nome,
-          numeroCliente: cliente.numeroCliente // ou telefone
+          numeroCliente: cliente.numeroCliente
         }));
       },
       error: (error) => {
@@ -108,7 +108,7 @@ export class CriarServicosPage implements OnInit {
       horaServico: this.horaServico,
       status: this.status,
       autorServico: this.autorServico,
-      clienteId: cliente.Id,  // Enviar clienteId (correto)
+      clienteId: cliente.id,  // manda clienteId para API
       nomeCompletoCliente: cliente.nome,
       contatoCliente: cliente.numeroCliente,
       marcaAparelho: this.marcaAparelho,
