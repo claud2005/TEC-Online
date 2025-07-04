@@ -71,15 +71,12 @@ export class CriarServicosPage implements OnInit {
 
     this.http.get<any[]>(`${environment.api_url}/api/clientes/`, { headers }).subscribe({
       next: (response) => {
-        console.log('Resposta completa da API:', response);
-
+        // Corrigido: usar _id do Mongo
         this.clientes = response.map(cliente => ({
-          id: cliente.id,                    // ou cliente._id dependendo do backend
+          id: cliente._id,
           nome: cliente.nome,
-          numeroCliente: cliente.numeroCliente // ou cliente.telefone se vier assim
+          numeroCliente: cliente.numeroCliente // ou telefone
         }));
-
-        console.log('Clientes formatados:', this.clientes);
       },
       error: (error) => {
         console.error('Erro ao carregar clientes:', error);
@@ -99,33 +96,28 @@ export class CriarServicosPage implements OnInit {
       return;
     }
 
-    console.log('Tentando achar cliente com ID:', this.clienteSelecionado);
     const cliente = this.clientes.find(c => c.id === this.clienteSelecionado);
-    console.log('Cliente encontrado:', cliente);
 
     if (!cliente) {
       alert('Cliente selecionado não encontrado.');
       return;
     }
 
-const dadosServico = {
-  dataServico: this.dataServico,
-  horaServico: this.horaServico,
-  status: this.status,
-  autorServico: this.autorServico,
-  clienteId: cliente.id,  // alterado para clienteId
-  nomeCompletoCliente: cliente.nome,
-  contatoCliente: cliente.numeroCliente,
-  marcaAparelho: this.marcaAparelho,
-  modeloAparelho: this.modeloAparelho,
-  problemaRelatado: this.problemaRelatado,
-  solucaoInicial: this.solucaoInicial,
-  valorTotal: this.valorTotal || 0,
-  observacoes: this.observacoes || 'Sem observações'
-};
-
-
-    console.log('Dados a serem enviados:', dadosServico);
+    const dadosServico = {
+      dataServico: this.dataServico,
+      horaServico: this.horaServico,
+      status: this.status,
+      autorServico: this.autorServico,
+      clienteId: cliente.id,  // Enviar clienteId (correto)
+      nomeCompletoCliente: cliente.nome,
+      contatoCliente: cliente.numeroCliente,
+      marcaAparelho: this.marcaAparelho,
+      modeloAparelho: this.modeloAparelho,
+      problemaRelatado: this.problemaRelatado,
+      solucaoInicial: this.solucaoInicial,
+      valorTotal: this.valorTotal || 0,
+      observacoes: this.observacoes || 'Sem observações'
+    };
 
     try {
       const token = localStorage.getItem('token');
