@@ -1,6 +1,5 @@
-<ion-content fullscreen class="signup-content">
-
-  <div class="center-content">
+<ion-content class="signup-content">
+  <div class="center-content" style="margin-top: 20px; justify-content: flex-start;">
 
     <div class="back-button-container">
       <ion-button fill="clear" color="medium" (click)="goBack()" aria-label="Voltar página anterior">
@@ -15,86 +14,141 @@
       <ion-item class="input-item">
         <ion-icon name="person-outline" slot="start" class="input-icon"></ion-icon>
         <ion-label position="floating">Nome Completo</ion-label>
-        <ion-input type="text" [(ngModel)]="utilizador.fullName" name="fullName" required></ion-input>
+        <ion-input
+          type="text"
+          [(ngModel)]="utilizador.fullName"
+          name="fullName"
+          required
+        ></ion-input>
       </ion-item>
 
       <ion-item class="input-item">
         <ion-icon name="at-outline" slot="start" class="input-icon"></ion-icon>
         <ion-label position="floating">Utilizador</ion-label>
-        <ion-input type="text" [(ngModel)]="utilizador.username" name="username" required></ion-input>
+        <ion-input
+          type="text"
+          [(ngModel)]="utilizador.username"
+          name="username"
+          required
+        ></ion-input>
       </ion-item>
 
       <ion-item class="input-item">
         <ion-icon name="call-outline" slot="start" class="input-icon"></ion-icon>
         <ion-label position="floating">Telefone</ion-label>
-        <ion-input type="tel" [(ngModel)]="utilizador.telefone" name="telefone"></ion-input>
+        <ion-input
+          type="tel"
+          [(ngModel)]="utilizador.telefone"
+          name="telefone"
+        ></ion-input>
       </ion-item>
 
       <ion-item class="input-item">
         <ion-icon name="mail-outline" slot="start" class="input-icon"></ion-icon>
         <ion-label position="floating">E-mail</ion-label>
-        <ion-input type="email" [(ngModel)]="utilizador.email" name="email" required email></ion-input>
+        <ion-input
+          type="email"
+          [(ngModel)]="utilizador.email"
+          name="email"
+          required
+          email
+        ></ion-input>
       </ion-item>
 
+      <!-- Seletor de tipo de utilizador -->
       <ion-item class="input-item">
         <ion-icon name="shield-checkmark-outline" slot="start" class="input-icon"></ion-icon>
         <ion-label position="floating">Tipo de Utilizador</ion-label>
-        <ion-select [(ngModel)]="utilizador.role" name="role" required interface="popover">
+        <ion-select
+          [(ngModel)]="utilizador.role"
+          name="role"
+          required
+          interface="popover"
+        >
           <ion-select-option value="user">Utilizador</ion-select-option>
           <ion-select-option value="admin">Administrador</ion-select-option>
         </ion-select>
       </ion-item>
 
       <ion-item class="input-item" *ngIf="!editing">
-        <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+        <ion-icon
+          name="lock-closed-outline"
+          slot="start"
+          class="input-icon"
+        ></ion-icon>
         <ion-label position="floating">Senha</ion-label>
-        <ion-input type="password" [(ngModel)]="utilizador.password" name="password" required></ion-input>
+        <ion-input
+          type="password"
+          [(ngModel)]="utilizador.password"
+          name="password"
+          required
+        ></ion-input>
       </ion-item>
 
       <ion-item class="input-item" *ngIf="!editing">
-        <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+        <ion-icon
+          name="lock-closed-outline"
+          slot="start"
+          class="input-icon"
+        ></ion-icon>
         <ion-label position="floating">Confirmar Senha</ion-label>
-        <ion-input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required></ion-input>
+        <ion-input
+          type="password"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          required
+        ></ion-input>
       </ion-item>
 
-      <ion-button expand="full" fill="solid" class="btn-animate btn-register" type="submit">
+      <ion-button
+        expand="full"
+        fill="solid"
+        class="btn-animate btn-register"
+        type="submit"
+      >
         {{ editing ? 'Atualizar Utilizador' : 'Salvar Utilizador' }}
       </ion-button>
 
-      <ion-button *ngIf="editing" expand="full" fill="outline" color="medium" (click)="cancelEdit()">
+      <ion-button
+        *ngIf="editing"
+        expand="full"
+        fill="outline"
+        color="medium"
+        (click)="cancelEdit()"
+      >
         Cancelar
       </ion-button>
     </form>
 
-    <div class="user-list" *ngIf="utilizadores.length > 0">
-      <h3>Utilizadores Cadastrados</h3>
+    <div class="user-list" *ngIf="utilizadores.length > 0" style="margin-top: 30px; width: 100%; max-width: 1600px; margin-left: auto; margin-right: auto;">
+  <h3>Utilizadores Cadastrados</h3>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Nome Completo</th>
-            <th>Utilizador</th>
-            <th>E-mail</th>
-            <th>Telefone</th>
-            <th>Tipo</th>
-            <th style="text-align: center;">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let u of utilizadores">
-            <td>{{ u.fullName }}</td>
-            <td>{{ u.username }}</td>
-            <td>{{ u.email }}</td>
-            <td>{{ u.telefone }}</td>
-            <td>{{ u.role === 'admin' ? 'Administrador' : 'Utilizador' }}</td>
-            <td style="text-align: center;">
-              <ion-button fill="clear" color="primary" size="small" (click)="editUser(u)">Editar</ion-button>
-              <ion-button fill="clear" color="danger" size="small" (click)="deleteUser(u)">Excluir</ion-button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Nome Completo</th>
+        <th>Utilizador</th>
+        <th>E-mail</th>
+        <th>Telefone</th>
+        <th>Tipo</th>
+        <th style="text-align: center;">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of utilizadores">
+        <td>{{ u.fullName }}</td>
+        <td>{{ u.username }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.telefone }}</td>
+        <td>{{ u.role === 'admin' ? 'Administrador' : 'Utilizador' }}</td>
+        <td style="text-align: center;">
+          <ion-button fill="clear" color="primary" size="small" (click)="editUser(u)">Editar</ion-button>
+          <ion-button fill="clear" color="danger" size="small" (click)="deleteUser(u)">Excluir</ion-button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
   </div>
 </ion-content>
