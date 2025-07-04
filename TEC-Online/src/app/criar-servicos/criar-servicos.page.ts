@@ -73,7 +73,7 @@ export class CriarServicosPage implements OnInit {
       next: (response) => {
         // Usa _id do Mongo e converte para id
         this.clientes = response.map(cliente => ({
-          id: cliente._id,
+          id: cliente.id,
           nome: cliente.nome,
           numeroCliente: cliente.numeroCliente
         }));
