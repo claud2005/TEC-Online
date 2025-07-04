@@ -56,7 +56,7 @@ export class OrcamentosClientesPage implements OnInit {
     this.errorMessage = null;
     const headers = this.getAuthHeaders();
 
-    this.http.get(`${environment.api_url}/clientes/${clienteId}`, { headers }).subscribe({
+    this.http.get(`${environment.api_url}/api/clientes/${clienteId}`, { headers }).subscribe({
       next: (cliente: any) => {
         this.cliente = cliente;
         this.carregarServicos(clienteId);
@@ -73,16 +73,16 @@ export class OrcamentosClientesPage implements OnInit {
 
   carregarServicos(clienteId: string): void {
     const headers = this.getAuthHeaders();
-    this.http.get(`${environment.api_url}/clientes/${clienteId}/orcamentos`, { headers }).subscribe({
-      next: (servicos: any) => {
-        this.servicos = servicos;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.handleError('Erro ao carregar serviços do cliente');
-        this.isLoading = false;
-      }
-    });
+    this.http.get(`${environment.api_url}/api/clientes/${clienteId}/orcamentos`, { headers }).subscribe({
+        next: (servicos: any) => {
+          this.servicos = servicos;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          this.handleError('Erro ao carregar serviços do cliente');
+          this.isLoading = false;
+        }
+      });
   }
 
   private handleError(message: string): void {
