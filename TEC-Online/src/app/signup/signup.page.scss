@@ -12,6 +12,24 @@
   color: #333; /* texto escuro */
 }
 
+.back-button {
+  align-self: flex-start;
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  color: #3498db;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  transition: color 0.3s ease;
+}
+
+.back-button:hover {
+  color: #e74c3c;
+  text-decoration: underline;
+}
+
 .logo-container {
   position: relative;
   margin-bottom: 40px;
