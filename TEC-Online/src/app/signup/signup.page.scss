@@ -14,6 +14,8 @@
   padding: 40px 20px 40px 20px; /* menos padding para subir conteúdo */
   background: linear-gradient(135deg, #2c3e50, #3498db);
   overflow: hidden;
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .logo-container {
@@ -171,14 +173,14 @@ ion-input {
 /* === Estilo para lista/tabela dos utilizadores cadastrados === */
 .user-list {
   margin: 20px auto;
-  width: 95vw;           /* Mais largura */
-  max-width: 1600px;     /* Largura máxima maior */
-  background: #f9f9f9;   /* Fundo claro para destacar texto preto */
+  width: 95vw;
+  max-width: 1600px;
+  background: #f9f9f9;
   border-radius: 12px;
-  padding: 24px;         /* Mais padding */
+  padding: 24px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
   overflow-x: auto;
-  color: black;          /* Texto preto */
+  color: black;
 }
 
 .user-list h3 {
@@ -192,12 +194,12 @@ ion-input {
 .user-list table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 1.1rem;     /* Texto maior */
+  font-size: 1.1rem;
 }
 
 .user-list th,
 .user-list td {
-  padding: 16px 14px;       /* Células maiores */
+  padding: 16px 14px;
   border-bottom: 1.5px solid #ddd;
   text-align: left;
   color: black;
@@ -206,14 +208,13 @@ ion-input {
 .user-list th {
   border-bottom: 3px solid #3498db;
   font-weight: 700;
-  background-color: #e1eaff;  /* Fundo leve azul nas colunas header */
+  background-color: #e1eaff;
 }
 
 .user-list tr:hover {
-  background-color: #d0e4ff; /* Fundo azul claro no hover */
+  background-color: #d0e4ff;
 }
 
-/* Ações (botões) */
 .user-list ion-button {
   --padding-start: 0;
   --padding-end: 0;
@@ -278,7 +279,13 @@ ion-input {
   }
 }
 
-
+/* === Remover espaços inferiores do conteúdo === */
 ion-content {
   --padding-top: 0 !important;
+  --padding-bottom: 0 !important;
+}
+
+form {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
 }
