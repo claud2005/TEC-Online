@@ -83,63 +83,127 @@ export class EditarServicosPage {
       }
     );
   }
+async atualizarServico() {
+  try {
+    // Validações iniciais
+    if (!this.isFormValid()) {
+      alert('Por favor, preencha todos os campos obrigatórios corretamente.');
+      return;
+    }
 
-atualizarServico() {
-  if (!this.isFormValid()) {
-    alert('Preencha todos os campos obrigatórios.');
-    return;
+    // Validação do formato da hora
+    if (!/^\d{2}:\d{2}$/.test(this.horaServico)) {
+      alert('Formato de hora inválido. Use HH:mm (ex: 14:30)');
+      return;
+    }
+
+    // Validação do valor total
+    if (this.valorTotal === null || this.valorTotal < 0) {
+      alert('O valor total deve ser um número positivo.');
+      return;
+    }
+
+    // Preparação do FormData
+    const formData = new FormData();
+    formData.append('dataServico', this.dataServico);
+    formData.append('horaServico', this.horaServico);
+    formData.append('status', this.status);
+    formData.append('nomeCliente', this.nomeCliente);
+    formData.append('telefoneContato', this.contatoCliente);
+    formData.append('modeloAparelho', this.modeloAparelho);
+    formData.append('marcaAparelho', this.marcaAparelho);
+    formData.append('problemaCliente', this.problemaCliente);
+    formData.append('solucaoInicial', this.solucaoInicial);
+    formData.append('valorTotal', this.valorTotal.toString());
+    formData.append('observacoes', this.observacoes || 'Sem observações');
+    formData.append('autorServico', this.autorServico);
+
+    // Processamento das imagens (se houver)
+    if (this.imagens && this.imagens.length > 0) {
+      for (let i = 0; i < this.imagens.length; i++) {
+        const base64Data = this.imagens[i];
+        
+        // Verifica se já é uma URL (imagem existente) ou base64 (nova imagem)
+        if (base64Data.startsWith('http')) {
+          // Se for uma URL, assumimos que é uma imagem já existente no servidor
+          formData.append('imagensExistentes', base64Data);
+        } else {
+          // Se for base64, converte para blob
+          try {
+            const blob = await this.base64ToBlob(base64Data);
+            formData.append('imagens', blob, `imagem_${Date.now()}_${i}.jpg`);
+          } catch (e) {
+            console.error('Erro ao processar imagem:', e);
+            alert('Erro ao processar uma das imagens. Por favor, tente novamente.');
+            return;
+          }
+        }
+      }
+    }
+
+    // Obter token e configurar headers
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Sessão expirada. Por favor, faça login novamente.');
+      this.navController.navigateRoot('/login');
+      return;
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      // Não definir Content-Type - o browser vai definir automaticamente com o boundary
+    });
+
+    // Enviar requisição
+    this.http.put(`${environment.api_url}/api/servicos/${this.id}`, formData, { headers })
+      .subscribe({
+        next: () => {
+          alert('Serviço atualizado com sucesso!');
+          this.fecharEAtualizar();
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('Erro completo:', error);
+          
+          let errorMessage = 'Erro ao atualizar serviço';
+          
+          if (error.status === 401) {
+            errorMessage = 'Sessão expirada. Faça login novamente.';
+            this.navController.navigateRoot('/login');
+          } else if (error.status === 404) {
+            errorMessage = 'Serviço não encontrado.';
+          } else if (error.error?.message) {
+            errorMessage = error.error.message;
+          } else if (error.statusText) {
+            errorMessage += `: ${error.statusText}`;
+          }
+
+          alert(errorMessage);
+        }
+      });
+
+  } catch (error) {
+    console.error('Erro inesperado:', error);
+    alert('Ocorreu um erro inesperado. Por favor, tente novamente.');
+  }
+}
+
+// Método auxiliar para converter base64 para Blob
+private async base64ToBlob(base64Data: string): Promise<Blob> {
+  // Extrai o tipo MIME e os dados base64
+  const parts = base64Data.split(';base64,');
+  const mimeType = parts[0].split(':')[1];
+  const byteString = atob(parts[1]);
+
+  // Cria um ArrayBuffer e uma view Uint8Array
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
   }
 
-  if (!/^\d{2}:\d{2}$/.test(this.horaServico)) {
-    alert('Hora inválida. Use o formato HH:mm');
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append('dataServico', this.dataServico);
-  formData.append('horaServico', this.horaServico);
-  formData.append('status', this.status);
-  formData.append('nomeCliente', this.nomeCliente);
-  formData.append('telefoneContato', this.contatoCliente); // Corrigido para match com backend
-  formData.append('modeloAparelho', this.modeloAparelho);
-  formData.append('marcaAparelho', this.marcaAparelho);
-  formData.append('problemaCliente', this.problemaCliente);
-  formData.append('solucaoInicial', this.solucaoInicial);
-  formData.append('valorTotal', this.valorTotal?.toString() ?? '0');
-  formData.append('observacoes', this.observacoes.trim() || 'Sem observações');
-  formData.append('autorServico', this.autorServico);
-
-  // Converter base64 para Blob e adicionar ao FormData
-  this.imagens.forEach((base64, index) => {
-    const byteString = atob(base64.split(',')[1]);
-    const mimeString = base64.split(',')[0].split(':')[1].split(';')[0];
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-    
-    const blob = new Blob([ab], { type: mimeString });
-    formData.append('imagens', blob, `imagem_${index}.jpg`);
-  });
-
-  const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-    'Authorization': `Bearer ${token}`,
-    // Removido 'Content-Type' para permitir que o browser defina o boundary
-  });
-
-  this.http.put(`${environment.api_url}/api/servicos/${this.id}`, formData, { headers }).subscribe(
-    () => {
-      alert('Serviço atualizado com sucesso!');
-      this.fecharEAtualizar();
-    },
-    (error: HttpErrorResponse) => {
-      console.error('Erro ao atualizar o serviço:', error);
-      alert(`Erro ao atualizar o serviço: ${error.message}`);
-    }
-  );
+  // Cria e retorna o Blob
+  return new Blob([ab], { type: mimeType });
 }
 
   fecharEAtualizar() {
