@@ -1,18 +1,18 @@
 <ion-content [fullscreen]="true" class="modern-background">
   <ion-header>
-    <ion-buttons slot="start">
-      <ion-button (click)="goBack()">
-        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="goBack()">
+          <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title>Criar Novo Serviço</ion-title>
+    </ion-toolbar>
   </ion-header>
 
   <div class="form-container">
-    <h1>Criar Serviço</h1>
-    <p class="form-description">Preencha os campos abaixo para criar um novo serviço</p>
-
     <form class="grid-container">
-      <!-- Data -->
+      <!-- Linha 1 -->
       <div class="form-group">
         <ion-label position="floating">Data *</ion-label>
         <ion-input
@@ -20,11 +20,9 @@
           [(ngModel)]="dataServico"
           name="dataServico"
           required
-          placeholder="Selecione a data do serviço"
         ></ion-input>
       </div>
 
-      <!-- Hora -->
       <div class="form-group">
         <ion-label position="floating">Hora *</ion-label>
         <ion-input
@@ -32,61 +30,57 @@
           [(ngModel)]="horaServico"
           name="horaServico"
           required
-          placeholder="Selecione a hora do serviço"
         ></ion-input>
       </div>
 
-      <!-- Status -->
+      <!-- Linha 2 -->
       <div class="form-group">
         <ion-label position="floating">Status *</ion-label>
         <ion-select
           [(ngModel)]="status"
           name="status"
+          interface="popover"
           required
-          placeholder="Selecione o status do serviço"
         >
           <ion-select-option value="aberto">Aberto</ion-select-option>
-          <ion-select-option value="em_andamento">Em Andamento</ion-select-option>
-          <ion-select-option value="fechado">Fechado</ion-select-option>
+          <ion-select-option value="em-andamento">Em Andamento</ion-select-option>
+          <ion-select-option value="concluido">Concluído</ion-select-option>
+          <ion-select-option value="cancelado">Cancelado</ion-select-option>
         </ion-select>
       </div>
 
-      <!-- Autor -->
       <div class="form-group">
-        <ion-label position="floating">Autor *</ion-label>
+        <ion-label position="floating">Técnico *</ion-label>
         <ion-input
           [(ngModel)]="autorServico"
           name="autorServico"
           required
-          placeholder="Digite o nome do autor do serviço"
+          readonly
         ></ion-input>
       </div>
 
-      <!-- Cliente -->
-      <div class="form-group">
-        <ion-label>Cliente</ion-label>
-      <ion-select
+      <!-- Linha 3 -->
+      <div class="form-group full-width">
+        <ion-label>Cliente *</ion-label>
+        <ion-select
           [(ngModel)]="clienteSelecionado"
           name="clienteSelecionado"
-          placeholder="Selecione o cliente"
-          interface="popover"
-          (ionChange)="onClienteChange($event)"
+          interface="action-sheet"
           required
-      >
-        <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.id">
-          {{ cliente.nome }}
-        </ion-select-option>
-      </ion-select>
+        >
+          <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.id">
+            {{ cliente.nome }} ({{ cliente.numeroCliente || 'N/C' }})
+          </ion-select-option>
+        </ion-select>
       </div>
 
-      <!-- Marca/Modelo -->
+      <!-- Linha 4 -->
       <div class="form-group">
         <ion-label position="floating">Marca *</ion-label>
         <ion-input
           [(ngModel)]="marcaAparelho"
           name="marcaAparelho"
           required
-          placeholder="Digite a marca do aparelho"
         ></ion-input>
       </div>
 
@@ -96,33 +90,33 @@
           [(ngModel)]="modeloAparelho"
           name="modeloAparelho"
           required
-          placeholder="Digite o modelo do aparelho"
         ></ion-input>
       </div>
 
-      <!-- Problema/Solução -->
+      <!-- Linha 5 -->
       <div class="form-group full-width">
-        <ion-label position="floating">Problema *</ion-label>
+        <ion-label position="floating">Problema Relatado *</ion-label>
         <ion-textarea
           [(ngModel)]="problemaRelatado"
           name="problemaRelatado"
           rows="3"
           required
-          placeholder="Descreva o problema relatado pelo cliente"
+          auto-grow
         ></ion-textarea>
       </div>
 
+      <!-- Linha 6 -->
       <div class="form-group full-width">
-        <ion-label position="floating">Solução</ion-label>
+        <ion-label position="floating">Solução Proposta</ion-label>
         <ion-textarea
           [(ngModel)]="solucaoInicial"
           name="solucaoInicial"
           rows="3"
-          placeholder="Descreva a solução proposta (opcional)"
+          auto-grow
         ></ion-textarea>
       </div>
 
-      <!-- Valor/Observações -->
+      <!-- Linha 7 -->
       <div class="form-group">
         <ion-label position="floating">Valor (€)</ion-label>
         <ion-input
@@ -131,17 +125,16 @@
           name="valorTotal"
           min="0"
           step="0.01"
-          placeholder="0.00"
         ></ion-input>
       </div>
 
-      <div class="form-group full-width">
+      <div class="form-group">
         <ion-label position="floating">Observações</ion-label>
         <ion-textarea
           [(ngModel)]="observacoes"
           name="observacoes"
           rows="2"
-          placeholder="Adicione observações relevantes (opcional)"
+          auto-grow
         ></ion-textarea>
       </div>
     </form>
@@ -152,9 +145,8 @@
         (click)="salvarServico()"
         [disabled]="!isFormValid()"
         class="save-button"
-        [class.button-disabled]="!isFormValid()"
       >
-        <ion-icon slot="start" name="save-outline"></ion-icon>
+        <ion-icon slot="start" name="save"></ion-icon>
         Salvar Serviço
       </ion-button>
     </div>
