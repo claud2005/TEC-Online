@@ -84,52 +84,63 @@ export class EditarServicosPage {
     );
   }
 
-  atualizarServico() {
-    if (!this.isFormValid()) {
-      alert('Preencha todos os campos obrigatórios.');
-      return;
-    }
-
-    if (!/^\d{2}:\d{2}$/.test(this.horaServico)) {
-      alert('Hora inválida. Use o formato HH:mm');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('dataServico', this.dataServico);
-    formData.append('horaServico', this.horaServico);
-    formData.append('status', this.status);
-    formData.append('nomeCliente', this.nomeCliente);
-    formData.append('contatoCliente', this.contatoCliente);
-    formData.append('modeloAparelho', this.modeloAparelho);
-    formData.append('marcaAparelho', this.marcaAparelho);
-    formData.append('problemaCliente', this.problemaCliente);
-    formData.append('solucaoInicial', this.solucaoInicial);
-    formData.append('valorTotal', this.valorTotal?.toString() ?? '0');
-    formData.append('observacoes', this.observacoes.trim() || 'Sem observações');
-    formData.append('autorServico', this.autorServico);
-
-    // Adiciona as imagens no formulário para envio
-    this.imagens.forEach((base64) => {
-      formData.append('imagens', base64);
-    });
-
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    this.http.put(`${environment.api_url}/api/servicos/${this.id}`, formData, { headers }).subscribe(
-      () => {
-        alert('Serviço atualizado com sucesso!');
-        this.fecharEAtualizar();
-      },
-      (error: HttpErrorResponse) => {
-        console.error('Erro ao atualizar o serviço:', error);
-        alert('Erro ao atualizar o serviço.');
-      }
-    );
+atualizarServico() {
+  if (!this.isFormValid()) {
+    alert('Preencha todos os campos obrigatórios.');
+    return;
   }
+
+  if (!/^\d{2}:\d{2}$/.test(this.horaServico)) {
+    alert('Hora inválida. Use o formato HH:mm');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('dataServico', this.dataServico);
+  formData.append('horaServico', this.horaServico);
+  formData.append('status', this.status);
+  formData.append('nomeCliente', this.nomeCliente);
+  formData.append('telefoneContato', this.contatoCliente); // Corrigido para match com backend
+  formData.append('modeloAparelho', this.modeloAparelho);
+  formData.append('marcaAparelho', this.marcaAparelho);
+  formData.append('problemaCliente', this.problemaCliente);
+  formData.append('solucaoInicial', this.solucaoInicial);
+  formData.append('valorTotal', this.valorTotal?.toString() ?? '0');
+  formData.append('observacoes', this.observacoes.trim() || 'Sem observações');
+  formData.append('autorServico', this.autorServico);
+
+  // Converter base64 para Blob e adicionar ao FormData
+  this.imagens.forEach((base64, index) => {
+    const byteString = atob(base64.split(',')[1]);
+    const mimeString = base64.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    
+    const blob = new Blob([ab], { type: mimeString });
+    formData.append('imagens', blob, `imagem_${index}.jpg`);
+  });
+
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`,
+    // Removido 'Content-Type' para permitir que o browser defina o boundary
+  });
+
+  this.http.put(`${environment.api_url}/api/servicos/${this.id}`, formData, { headers }).subscribe(
+    () => {
+      alert('Serviço atualizado com sucesso!');
+      this.fecharEAtualizar();
+    },
+    (error: HttpErrorResponse) => {
+      console.error('Erro ao atualizar o serviço:', error);
+      alert(`Erro ao atualizar o serviço: ${error.message}`);
+    }
+  );
+}
 
   fecharEAtualizar() {
     this.navController.back();
