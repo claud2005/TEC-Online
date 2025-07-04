@@ -45,6 +45,8 @@ export class SignupPage implements OnInit {
       this.editing = true;
     } else {
       this.loadUsers();
+      this.editing = false;
+      this.utilizador = this.getEmptyUser();
     }
   }
 
@@ -55,17 +57,18 @@ export class SignupPage implements OnInit {
       email: '',
       telefone: '',
       password: '',
-      role: 'user' // Valor padrão
+      role: 'user' // valor padrão
     };
   }
 
   loadUsers() {
     this.http.get<User[]>(`${environment.api_url}/api/users`).subscribe(
-      (data) => {
+      data => {
         this.utilizadores = data;
       },
-      (error) => {
+      error => {
         console.error('Erro ao carregar utilizadores', error);
+        alert('Erro ao carregar utilizadores');
       }
     );
   }
@@ -75,10 +78,10 @@ export class SignupPage implements OnInit {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     this.http.get<User>(`${environment.api_url}/api/users/${id}`, { headers }).subscribe(
-      (user) => {
-        this.utilizador = { ...user, password: '' }; // limpa a senha para edição
+      user => {
+        this.utilizador = { ...user, password: '' }; // limpa senha para edição
       },
-      (error) => {
+      error => {
         console.error('Erro ao carregar utilizador', error);
         alert('Erro ao carregar dados do utilizador');
         this.location.back();
@@ -87,17 +90,18 @@ export class SignupPage implements OnInit {
   }
 
   submitForm() {
-    if (!this.utilizador.fullName || !this.utilizador.username || !this.utilizador.email || !this.utilizador.role) {
+    // Validação campos obrigatórios
+    if (!this.utilizador.fullName.trim() || !this.utilizador.username.trim() || !this.utilizador.email.trim() || !this.utilizador.role) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
     if (!this.editing) {
+      // Validação senha no cadastro
       if (!this.utilizador.password || this.utilizador.password.length < 6) {
         alert('A senha deve ter pelo menos 6 caracteres.');
         return;
       }
-
       if (this.utilizador.password !== this.confirmPassword) {
         alert('As senhas não coincidem.');
         return;
@@ -110,15 +114,17 @@ export class SignupPage implements OnInit {
           this.confirmPassword = '';
           this.loadUsers();
         },
-        (error) => {
+        error => {
           console.error('Erro ao criar utilizador', error);
           alert(error.error?.message || 'Erro ao criar utilizador');
         }
       );
+
     } else {
+      // Atualizar utilizador
       const dataToUpdate = { ...this.utilizador };
       if (!dataToUpdate.password || dataToUpdate.password.trim() === '') {
-        delete dataToUpdate.password;
+        delete dataToUpdate.password; // não atualiza senha se vazia
       }
 
       this.http.put(`${environment.api_url}/api/users/${this.utilizador._id}`, dataToUpdate).subscribe(
@@ -126,9 +132,9 @@ export class SignupPage implements OnInit {
           alert('Utilizador atualizado com sucesso!');
           this.cancelEdit();
           this.loadUsers();
-          this.router.navigate(['/signup']); // volta para lista sem id na rota
+          this.router.navigate(['/signup']);
         },
-        (error) => {
+        error => {
           console.error('Erro ao atualizar utilizador', error);
           alert('Erro ao atualizar utilizador');
         }
@@ -144,7 +150,7 @@ export class SignupPage implements OnInit {
     this.editing = false;
     this.utilizador = this.getEmptyUser();
     this.confirmPassword = '';
-    this.router.navigate(['/signup']); // limpa o id da rota e volta à lista
+    this.router.navigate(['/signup']);
   }
 
   deleteUser(u: User) {
@@ -154,7 +160,7 @@ export class SignupPage implements OnInit {
           alert('Utilizador excluído com sucesso!');
           this.loadUsers();
         },
-        (error) => {
+        error => {
           console.error('Erro ao excluir utilizador', error);
           alert('Erro ao excluir utilizador');
         }

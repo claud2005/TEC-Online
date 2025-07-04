@@ -73,8 +73,7 @@ export class OrcamentosClientesPage implements OnInit {
 
   carregarServicos(clienteId: string): void {
     const headers = this.getAuthHeaders();
-
-    this.http.get(`${environment.api_url}/servicos?clienteId=${clienteId}`, { headers }).subscribe({
+    this.http.get(`${environment.api_url}/clientes/${clienteId}/orcamentos`, { headers }).subscribe({
       next: (servicos: any) => {
         this.servicos = servicos;
         this.isLoading = false;
