@@ -108,22 +108,21 @@ export class CriarServicosPage implements OnInit {
       return;
     }
 
-    const dadosServico = {
-      dataServico: this.dataServico,
-      horaServico: this.horaServico,
-      status: this.status,
-      autorServico: this.autorServico,
-      clienteId: cliente.id,               // ID real do cliente
-      cliente: cliente.nome,               // campo 'cliente' no schema (required)
-      nomeCompletoCliente: cliente.nome,   // campo 'nomeCompletoCliente' no schema
-      contatoCliente: cliente.numeroCliente, // campo 'contatoCliente' no schema
-      marcaAparelho: this.marcaAparelho,
-      modeloAparelho: this.modeloAparelho,
-      problemaRelatado: this.problemaRelatado,
-      solucaoInicial: this.solucaoInicial,
-      valorTotal: this.valorTotal || 0,
-      observacoes: this.observacoes || 'Sem observações'
-    };
+const dadosServico = {
+  dataServico: this.dataServico,
+  horaServico: this.horaServico,
+  status: this.status,
+  autorServico: this.autorServico,
+  cliente: cliente.id, // <- AQUI corrigido
+  nomeCompletoCliente: cliente.nome,
+  contatoCliente: cliente.numeroCliente,
+  marcaAparelho: this.marcaAparelho,
+  modeloAparelho: this.modeloAparelho,
+  problemaRelatado: this.problemaRelatado,
+  solucaoInicial: this.solucaoInicial,
+  valorTotal: this.valorTotal || 0,
+  observacoes: this.observacoes || 'Sem observações'
+};
 
     console.log('Dados a serem enviados:', dadosServico);
 
