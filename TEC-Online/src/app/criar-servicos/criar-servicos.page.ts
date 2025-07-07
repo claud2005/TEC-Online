@@ -1,18 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {
-  NavController,
-  IonicModule,
-  ToastController,
-  AlertController,
-  LoadingController
-} from '@ionic/angular';
+import { NavController, IonicModule, ToastController, AlertController, LoadingController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { IonSearchbar, IonItem, IonLabel, IonList } from '@ionic/angular/standalone';
+import { IonSelect, IonSelectOption } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment.prod';
-import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-criar-servicos',
@@ -23,30 +16,24 @@ import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
     CommonModule,
     FormsModule,
     IonicModule,
-    IonSearchbar,
-    IonItem,
-    IonLabel,
-    IonList
+    IonSelect,
+    IonSelectOption,
   ],
 })
 export class CriarServicosPage implements OnInit {
-  // Campos do formulário
-  dataServico = '';
-  horaServico = '';
-  status = 'aberto';
-  autorServico = '';
-  clienteSelecionadoId: string | null = null;
-  clienteSelecionadoNome: string = '';
-  marcaAparelho = '';
-  modeloAparelho = '';
-  problemaRelatado = '';
-  solucaoInicial = '';
+  dataServico: string = '';
+  horaServico: string = '';
+  status: string = 'aberto';
+  autorServico: string = '';
+  clienteSelecionado: string | null = null;
+  marcaAparelho: string = '';
+  modeloAparelho: string = '';
+  problemaRelatado: string = '';
+  solucaoInicial: string = '';
   valorTotal: number | null = null;
-  observacoes = '';
+  observacoes: string = '';
 
-  // Clientes
-  clientesEncontrados: any[] = [];
-  pesquisaCliente$ = new Subject<string>();
+  clientes: any[] = [];
 
   constructor(
     private http: HttpClient,
@@ -57,12 +44,12 @@ export class CriarServicosPage implements OnInit {
     private loadingController: LoadingController
   ) {}
 
-  ngOnInit() {
-    this.inicializarDados();
-    this.configurarBuscaClientes();
+  async ngOnInit() {
+    await this.carregarDadosIniciais();
+    await this.carregarClientes();
   }
 
-  inicializarDados() {
+  async carregarDadosIniciais() {
     const hoje = new Date();
     this.dataServico = hoje.toISOString().split('T')[0];
     this.horaServico = this.formatarHora(hoje);
@@ -70,91 +57,41 @@ export class CriarServicosPage implements OnInit {
   }
 
   formatarHora(data: Date): string {
-    return `${data.getHours().toString().padStart(2, '0')}:${data.getMinutes().toString().padStart(2, '0')}`;
+    const horas = data.getHours().toString().padStart(2, '0');
+    const minutos = data.getMinutes().toString().padStart(2, '0');
+    return `${horas}:${minutos}`;
   }
 
-  configurarBuscaClientes() {
-    this.pesquisaCliente$
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        switchMap((termo) => this.buscarClientes(termo))
-      )
-      .subscribe((clientes) => {
-        this.clientesEncontrados = clientes;
-      });
-  }
-
-  buscarClientes(termo: string): Promise<any[]> {
-    if (!termo || termo.trim().length < 2) return Promise.resolve([]);
-
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.http
-      .get<any[]>(`${environment.api_url}/api/clientes/busca?nome=${encodeURIComponent(termo)}`, { headers })
-      .toPromise()
-      .then((res) => res || [])
-      .catch(() => []);
-  }
-
-  selecionarCliente(cliente: any) {
-    this.clienteSelecionadoId = cliente._id || cliente.id;
-    this.clienteSelecionadoNome = cliente.nome;
-    this.clientesEncontrados = [];
-  }
-
-  async salvarServico() {
-    if (!this.isFormValid()) {
-      const toast = await this.toastController.create({
-        message: 'Preencha todos os campos obrigatórios!',
-        duration: 3000,
-        color: 'warning',
-      });
-      await toast.present();
-      return;
-    }
-
-    const loading = await this.loadingController.create({ message: 'Salvando serviço...' });
+  async carregarClientes() {
+    const loading = await this.loadingController.create({
+      message: 'Carregando clientes...'
+    });
     await loading.present();
 
     try {
-      const dadosServico = {
-        dataServico: this.dataServico,
-        horaServico: this.horaServico,
-        status: this.status,
-        autorServico: this.autorServico,
-        clienteId: this.clienteSelecionadoId,
-        nomeCompletoCliente: this.clienteSelecionadoNome,
-        contatoCliente: '', // Pode preencher com mais info depois
-        marcaAparelho: this.marcaAparelho,
-        modeloAparelho: this.modeloAparelho,
-        problemaRelatado: this.problemaRelatado,
-        solucaoInicial: this.solucaoInicial || 'A definir',
-        valorTotal: Number(this.valorTotal) || 0,
-        observacoes: this.observacoes || 'Sem observações',
-      };
-
       const token = localStorage.getItem('token');
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      });
+      if (!token) {
+        throw new Error('Token não encontrado');
+      }
 
-      await this.http.post(`${environment.api_url}/api/servicos`, dadosServico, { headers }).toPromise();
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-      const toast = await this.toastController.create({
-        message: 'Serviço criado com sucesso!',
-        duration: 2000,
-        color: 'success'
-      });
-      await toast.present();
+      const response = await this.http.get<any[]>(
+        `${environment.api_url}/api/clientes`,
+        { headers }
+      ).toPromise();
 
-      this.router.navigate(['/plano-semanal', this.clienteSelecionadoId]);
-    } catch (error: any) {
+      this.clientes = response?.map(cliente => ({
+        id: cliente.id || cliente._id,
+        nome: cliente.nome,
+        numeroCliente: cliente.numeroCliente || cliente.contacto
+      })) || [];
+      
+    } catch (error) {
+      console.error('Erro ao carregar clientes:', error);
       const alert = await this.alertController.create({
         header: 'Erro',
-        message: error.error?.message || 'Erro ao criar serviço',
+        message: 'Não foi possível carregar a lista de clientes',
         buttons: ['OK']
       });
       await alert.present();
@@ -163,13 +100,90 @@ export class CriarServicosPage implements OnInit {
     }
   }
 
+  onClienteChange(event: any) {
+    this.clienteSelecionado = event.detail.value;
+  }
+
+  async salvarServico() {
+    if (!this.isFormValid()) {
+      const toast = await this.toastController.create({
+        message: 'Por favor, preencha todos os campos obrigatórios!',
+        duration: 3000,
+        color: 'warning'
+      });
+      await toast.present();
+      return;
+    }
+
+    const loading = await this.loadingController.create({
+      message: 'Salvando serviço...'
+    });
+    await loading.present();
+
+    try {
+      const cliente = this.clientes.find(c => c.id === this.clienteSelecionado);
+      if (!cliente) {
+        throw new Error('Cliente não encontrado');
+      }
+
+      const dadosServico = {
+        dataServico: this.dataServico,
+        horaServico: this.horaServico,
+        status: this.status.replace('_', '-'),
+        autorServico: this.autorServico,
+        clienteId: cliente.id,
+        nomeCompletoCliente: cliente.nome,
+        contatoCliente: cliente.numeroCliente || 'Não informado',
+        marcaAparelho: this.marcaAparelho,
+        modeloAparelho: this.modeloAparelho,
+        problemaRelatado: this.problemaRelatado,
+        solucaoInicial: this.solucaoInicial || 'A definir',
+        valorTotal: Number(this.valorTotal) || 0,
+        observacoes: this.observacoes || 'Sem observações'
+      };
+
+      const token = localStorage.getItem('token');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      });
+
+      await this.http.post(
+        `${environment.api_url}/api/servicos`,
+        dadosServico,
+        { headers }
+      ).toPromise();
+
+      const toast = await this.toastController.create({
+        message: 'Serviço criado com sucesso!',
+        duration: 2000,
+        color: 'success'
+      });
+      await toast.present();
+
+    this.router.navigate(['/plano-semanal', cliente.id]);
+  }
+  catch (error: any) {
+    console.error('Erro ao criar serviço:', error);
+    
+    const alert = await this.alertController.create({
+      header: 'Erro',
+      message: error.error?.message || 'Falha ao criar serviço',
+      buttons: ['OK']
+    });
+    await alert.present();
+  } finally {
+    await loading.dismiss();
+  }
+}
+
   isFormValid(): boolean {
     return !!(
       this.dataServico &&
       this.horaServico &&
       this.status &&
       this.autorServico &&
-      this.clienteSelecionadoId &&
+      this.clienteSelecionado &&
       this.marcaAparelho &&
       this.modeloAparelho &&
       this.problemaRelatado
