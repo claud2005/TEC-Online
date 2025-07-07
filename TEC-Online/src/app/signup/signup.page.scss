@@ -297,58 +297,130 @@ ion-input {
   }
 }
 
-/* === Responsivo Geral para Mobile === */
+/* === Responsivo Geral para Mobile (até 480px) === */
 @media screen and (max-width: 480px) {
+  body {
+    font-size: 16px;
+  }
+
   .center-content {
-    padding: 20px 12px;
+    padding: 16px 12px;
     align-items: stretch;
+    gap: 16px;
   }
 
   .back-button-container {
     padding-left: 0;
     margin-bottom: 12px;
+    justify-content: flex-start;
   }
 
   .back-button {
-    font-size: 1.1rem;
+    font-size: 1rem;
     padding: 6px 12px;
   }
 
   .app-logo {
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px auto;
   }
 
   h2 {
-    font-size: 1.5rem;
-    margin-bottom: 16px;
+    font-size: 1.4rem;
+    margin-bottom: 14px;
+    text-align: center;
   }
 
   .input-item {
-    font-size: 1.2rem;
-    margin-bottom: 16px;
-    border-radius: 10px;
+    font-size: 1.1rem;
+    margin-bottom: 14px;
+    border-radius: 8px;
+    padding: 10px 12px;
   }
 
   ion-label,
   ion-input {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   .btn-animate {
-    font-size: 1.2rem;
-    padding: 10px;
+    font-size: 1.1rem;
+    padding: 12px;
+    border-radius: 8px;
   }
 
   .login-text {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-top: 16px;
   }
 
   .login-text a {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #3498db;
   }
 
   .login-text a:hover {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+    color: #e74c3c;
+  }
+
+  /* Ajuste da lista/tabela responsiva */
+  .user-list {
+    padding: 16px 12px;
+    border-radius: 0;
+    box-shadow: none;
+    background: #fff;
+  }
+
+  .user-list table,
+  .user-list thead,
+  .user-list tbody,
+  .user-list th,
+  .user-list td,
+  .user-list tr {
+    display: block;
+    width: 100%;
+  }
+
+  .user-list thead {
+    display: none;
+  }
+
+  .user-list tr {
+    margin-bottom: 16px;
+    background: #f2f2f2;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .user-list td {
+    padding-left: 50%;
+    position: relative;
+    font-size: 1rem;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+    color: #333;
+    padding: 12px 8px;
+  }
+
+  .user-list td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 8px;
+    width: 45%;
+    font-weight: 600;
+    color: #3498db;
+    text-align: left;
+  }
+
+  .user-list ion-button {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 1rem;
   }
 }
