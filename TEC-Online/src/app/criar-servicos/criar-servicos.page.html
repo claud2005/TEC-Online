@@ -11,8 +11,7 @@
   </ion-header>
 
   <div class="form-container">
-    <form class="grid-container" (submit)="salvarServico()">
-
+    <form class="grid-container">
       <!-- Linha 1 -->
       <div class="form-group">
         <ion-label position="floating">Data *</ion-label>
@@ -63,41 +62,20 @@
         ></ion-input>
       </div>
 
-      <!-- Linha 3 - Clientes múltiplos com busca -->
+      <!-- Linha 3 -->
       <div class="form-group full-width">
-        <ion-label>Clientes *</ion-label>
-
-        <ion-input
-          type="text"
-          placeholder="Digite para buscar clientes"
-          [(ngModel)]="termoPesquisa"
-          (input)="filtrarClientes()"
-          (focus)="mostrarSugestoes = true"
-          (blur)="onBlurInput()"
-          autocomplete="off"
-        ></ion-input>
-
-        <div
-          *ngIf="mostrarSugestoes && clientesFiltrados.length > 0"
-          class="autocomplete-list"
-          (mousedown)="$event.preventDefault()"
-          style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc; background: white;"
+        <ion-label>Cliente *</ion-label>
+        <ion-select
+          [(ngModel)]="clienteSelecionado"
+          name="clienteSelecionado"
+          interface="action-sheet"
+          required
+          placeholder="Selecione um cliente"
         >
-          <ion-item
-            button
-            *ngFor="let cliente of clientesFiltrados"
-            (click)="adicionarCliente(cliente)"
-          >
+          <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.id">
             {{ cliente.nome }} ({{ cliente.numeroCliente || 'N/C' }})
-          </ion-item>
-        </div>
-
-        <div class="selected-tags" style="margin-top: 8px;">
-          <ion-chip *ngFor="let c of clientesSelecionados; let i = index" outline color="primary" style="margin-right: 5px; margin-bottom: 5px;">
-            <ion-label>{{ c.nome }}</ion-label>
-            <ion-icon name="close-circle" (click)="removerCliente(i)" style="cursor: pointer;"></ion-icon>
-          </ion-chip>
-        </div>
+          </ion-select-option>
+        </ion-select>
       </div>
 
       <!-- Linha 4 -->
@@ -161,19 +139,26 @@
 
       <div class="form-group">
         <ion-label position="floating">Observações</ion-label>
-        <ion-input
+        <ion-textarea
           [(ngModel)]="observacoes"
           name="observacoes"
-          placeholder="Observações adicionais"
-        ></ion-input>
-      </div>
-
-      <!-- Botão salvar -->
-      <div class="form-group full-width" style="text-align: center;">
-        <ion-button type="submit" expand="block" color="primary">
-          Criar Serviço
-        </ion-button>
+          rows="2"
+          auto-grow
+          placeholder="Ex: Cliente pediu urgência, aparelho com riscos, etc..."
+        ></ion-textarea>
       </div>
     </form>
+
+    <div class="button-container">
+      <ion-button
+        expand="block"
+        (click)="salvarServico()"
+        [disabled]="!isFormValid()"
+        class="save-button"
+      >
+        <ion-icon slot="start" name="save"></ion-icon>
+        Salvar Serviço
+      </ion-button>
+    </div>
   </div>
 </ion-content>

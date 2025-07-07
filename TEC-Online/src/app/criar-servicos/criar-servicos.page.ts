@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NavController, IonicModule, ToastController, AlertController, LoadingController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+import { IonSelect, IonSelectOption } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment.prod';
 
@@ -15,6 +16,8 @@ import { environment } from 'src/environments/environment.prod';
     CommonModule,
     FormsModule,
     IonicModule,
+    IonSelect,
+    IonSelectOption,
   ],
 })
 export class CriarServicosPage implements OnInit {
@@ -22,20 +25,15 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-
-  // Multi-select clientes
-  termoPesquisa: string = '';
-  mostrarSugestoes = false;
-  clientes: any[] = [];
-  clientesFiltrados: any[] = [];
-  clientesSelecionados: any[] = [];
-
+  clienteSelecionado: string | null = null;
   marcaAparelho: string = '';
   modeloAparelho: string = '';
   problemaRelatado: string = '';
   solucaoInicial: string = '';
   valorTotal: number | null = null;
   observacoes: string = '';
+
+  clientes: any[] = [];
 
   constructor(
     private http: HttpClient,
@@ -72,7 +70,9 @@ export class CriarServicosPage implements OnInit {
 
     try {
       const token = localStorage.getItem('token');
-      if (!token) throw new Error('Token não encontrado');
+      if (!token) {
+        throw new Error('Token não encontrado');
+      }
 
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
@@ -86,7 +86,7 @@ export class CriarServicosPage implements OnInit {
         nome: cliente.nome,
         numeroCliente: cliente.numeroCliente || cliente.contacto
       })) || [];
-
+      
     } catch (error) {
       console.error('Erro ao carregar clientes:', error);
       const alert = await this.alertController.create({
@@ -100,48 +100,8 @@ export class CriarServicosPage implements OnInit {
     }
   }
 
-  filtrarClientes() {
-    const termo = this.termoPesquisa.toLowerCase().trim();
-
-    if (termo.length < 2) {
-      this.clientesFiltrados = [];
-      return;
-    }
-
-    this.clientesFiltrados = this.clientes.filter(cliente =>
-      cliente.nome.toLowerCase().includes(termo) &&
-      !this.clientesSelecionados.some(sel => sel.id === cliente.id)
-    );
-  }
-
-  adicionarCliente(cliente: any) {
-    this.clientesSelecionados.push(cliente);
-    this.termoPesquisa = '';
-    this.clientesFiltrados = [];
-    this.mostrarSugestoes = false;
-  }
-
-  removerCliente(index: number) {
-    this.clientesSelecionados.splice(index, 1);
-  }
-
-  onBlurInput() {
-    setTimeout(() => {
-      this.mostrarSugestoes = false;
-    }, 200);
-  }
-
-  isFormValid(): boolean {
-    return !!(
-      this.dataServico &&
-      this.horaServico &&
-      this.status &&
-      this.autorServico &&
-      this.clientesSelecionados.length > 0 &&
-      this.marcaAparelho &&
-      this.modeloAparelho &&
-      this.problemaRelatado
-    );
+  onClienteChange(event: any) {
+    this.clienteSelecionado = event.detail.value;
   }
 
   async salvarServico() {
@@ -161,10 +121,10 @@ export class CriarServicosPage implements OnInit {
     await loading.present();
 
     try {
-      // Para exemplo, vamos salvar o serviço para o primeiro cliente selecionado
-      // ou você pode adaptar para salvar para todos ou outro fluxo que desejar
-      const cliente = this.clientesSelecionados[0];
-      if (!cliente) throw new Error('Cliente não encontrado');
+      const cliente = this.clientes.find(c => c.id === this.clienteSelecionado);
+      if (!cliente) {
+        throw new Error('Cliente não encontrado');
+      }
 
       const dadosServico = {
         dataServico: this.dataServico,
@@ -204,7 +164,7 @@ export class CriarServicosPage implements OnInit {
       this.router.navigate(['/plano-semanal', cliente.id]);
     } catch (error: any) {
       console.error('Erro ao criar serviço:', error);
-
+      
       const alert = await this.alertController.create({
         header: 'Erro',
         message: error.error?.message || 'Falha ao criar serviço',
@@ -214,6 +174,19 @@ export class CriarServicosPage implements OnInit {
     } finally {
       await loading.dismiss();
     }
+  }
+
+  isFormValid(): boolean {
+    return !!(
+      this.dataServico &&
+      this.horaServico &&
+      this.status &&
+      this.autorServico &&
+      this.clienteSelecionado &&
+      this.marcaAparelho &&
+      this.modeloAparelho &&
+      this.problemaRelatado
+    );
   }
 
   goBack() {
