@@ -132,11 +132,11 @@ formatCurrency(value: any): string {
 }
 
 formatarNumero(numero: number): string {
-  return '#' + numero.toString().padStart(3, '0');
-}
+  return '' + numero.toString().padStart(3, '0');
+} 
   irParaEditarServico(event: Event, servicoId: string) {
     event.stopPropagation();
-    this.router.navigate(['/editar-servico', servicoId]);
+    this.router.navigate(['/editar-servicos', servicoId]);
   }
 
   async gerarPDFSelecionados() {
