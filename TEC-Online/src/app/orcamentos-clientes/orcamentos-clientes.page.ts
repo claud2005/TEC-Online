@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ToastController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController, IonicModule } from '@ionic/angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import jsPDF from 'jspdf';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-orcamentos-clientes',
   templateUrl: './orcamentos-clientes.page.html',
   styleUrls: ['./orcamentos-clientes.page.scss'],
+  standalone: true,
+  imports: [IonicModule, CommonModule, FormsModule]
 })
 export class OrcamentosClientesPage implements OnInit {
   cliente: any = null;
@@ -38,7 +42,7 @@ export class OrcamentosClientesPage implements OnInit {
         this.cliente = res.cliente;
         this.servicos = res.servicos.map((s: any) => ({ ...s, selecionado: false }));
       },
-      error: async (err) => {
+      error: async () => {
         await this.showAlert('Erro ao carregar dados do cliente.');
       }
     });
@@ -50,7 +54,7 @@ export class OrcamentosClientesPage implements OnInit {
   }
 
   trackById(index: number, item: any): string {
-    return item.id || item._id;
+    return (item.id || item._id || index.toString()).toString();
   }
 
   async gerarPDFSelecionados() {
@@ -61,8 +65,6 @@ export class OrcamentosClientesPage implements OnInit {
     }
 
     const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
 
     for (let i = 0; i < selecionados.length; i++) {
       const servico = selecionados[i];
@@ -91,10 +93,10 @@ export class OrcamentosClientesPage implements OnInit {
     const empresaEmail = 'rfm@gmail.com';
     const empresaTelefone = '911234567';
 
-    const addMultilineText = (text: string, x: number, y: number, maxWidth: number, lineHeight: number) => {
+    const addMultilineText = (text: string, x: number, y: number, maxWidth: number, lh: number) => {
       const splitText = doc.splitTextToSize(text, maxWidth);
       doc.text(splitText, x, y);
-      return splitText.length * lineHeight;
+      return splitText.length * lh;
     };
 
     const printLabelValue = (label: string, value: string, indent = 0) => {
@@ -108,14 +110,15 @@ export class OrcamentosClientesPage implements OnInit {
 
       doc.setFont('helvetica', 'normal');
       doc.setTextColor('#444');
-      const lines = addMultilineText(value || 'Não informado', valueX, verticalPos, valueWidth, lineHeight - 1);
-      verticalPos += Math.max(lineHeight, lines);
+      const heightUsed = addMultilineText(value || 'Não informado', valueX, verticalPos, valueWidth, lineHeight - 1);
+      verticalPos += Math.max(lineHeight, heightUsed);
     };
 
     // Cabeçalho com logo e nome da empresa
     try {
       const imgData = await this.getBase64ImageFromAssets('assets/icon/logotipo.png');
       const img = new Image();
+      img.crossOrigin = 'anonymous';
       img.src = imgData;
 
       await new Promise<void>((resolve) => {
@@ -132,7 +135,7 @@ export class OrcamentosClientesPage implements OnInit {
           resolve();
         };
       });
-    } catch (e) {
+    } catch {
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(16);
       doc.setTextColor(primaryColor);
@@ -179,8 +182,8 @@ export class OrcamentosClientesPage implements OnInit {
     doc.setFillColor(lightColor);
     doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
 
-    printLabelValue('Marca', servico.marcaAparelho);
-    printLabelValue('Modelo', servico.modeloAparelho);
+    printLabelValue('Marca', servico.marcaAparelho || 'Não informado');
+    printLabelValue('Modelo', servico.modeloAparelho || 'Não informado');
     verticalPos += 2;
 
     doc.setFont('helvetica', 'bold');
@@ -191,9 +194,9 @@ export class OrcamentosClientesPage implements OnInit {
     doc.setFillColor(lightColor);
     doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
 
-    printLabelValue('Problema relatado', servico.problemaRelatado);
-    printLabelValue('Solução aplicada', servico.solucaoInicial);
-    printLabelValue('Observações', servico.observacoes);
+    printLabelValue('Problema relatado', servico.problemaRelatado || 'Não informado');
+    printLabelValue('Solução aplicada', servico.solucaoInicial || 'Não informado');
+    printLabelValue('Observações', servico.observacoes || 'Não informado');
     verticalPos += 2;
 
     doc.setFont('helvetica', 'bold');
@@ -204,8 +207,8 @@ export class OrcamentosClientesPage implements OnInit {
     doc.setFillColor(lightColor);
     doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
 
-    printLabelValue('Custo estimado', servico.custoEstimado ? `€ ${parseFloat(servico.custoEstimado).toFixed(2)}` : 'Não informado');
-    printLabelValue('Valor total', servico.valorTotal ? `€ ${parseFloat(servico.valorTotal).toFixed(2)}` : 'Não informado');
+    printLabelValue('Custo estimado', servico.custoEstimado ? `€ ${Number(servico.custoEstimado).toFixed(2)}` : 'Não informado');
+    printLabelValue('Valor total', servico.valorTotal ? `€ ${Number(servico.valorTotal).toFixed(2)}` : 'Não informado');
     verticalPos += 2;
 
     doc.setFont('helvetica', 'bold');
@@ -216,45 +219,51 @@ export class OrcamentosClientesPage implements OnInit {
     doc.setFillColor(lightColor);
     doc.rect(leftMargin, verticalPos - 3, contentWidth, lineHeight + 4, 'F');
 
-    printLabelValue('Técnico', servico.responsavel);
+    printLabelValue('Técnico', servico.responsavel || 'Não informado');
     if (servico.dataConclusao) {
-      printLabelValue('Data conclusão', servico.dataConclusao);
+      const dataFormatada = new Date(servico.dataConclusao).toLocaleDateString();
+      printLabelValue('Data conclusão', dataFormatada);
     }
 
     // Rodapé
     doc.setDrawColor(primaryColor);
     doc.setLineWidth(0.3);
     doc.line(leftMargin, pageHeight - 20, pageWidth - rightMargin, pageHeight - 20);
+
     doc.setFontSize(10);
     doc.setFont('helvetica', 'italic');
     doc.setTextColor('#666');
+
     doc.text(empresaNome, pageWidth / 2, pageHeight - 15, { align: 'center' });
-    doc.text(`Email: ${empresaEmail}  |  Tel: ${empresaTelefone}`, pageWidth / 2, pageHeight - 11, { align: 'center' });
-    doc.text(`Página ${paginaAtual}/${totalPaginas}`, pageWidth - rightMargin, pageHeight - 6, { align: 'right' });
+    doc.text(`Email: ${empresaEmail} | Tel: ${empresaTelefone}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
+
+    doc.text(`Página ${paginaAtual} de ${totalPaginas}`, pageWidth - rightMargin, pageHeight - 10, { align: 'right' });
   }
 
-  private getBase64ImageFromAssets(path: string): Promise<string> {
+  private getBase64ImageFromAssets(url: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const img = new Image();
-      img.src = path;
       img.crossOrigin = 'anonymous';
+      img.src = url;
+
       img.onload = () => {
         const canvas = document.createElement('canvas');
         canvas.width = img.width;
         canvas.height = img.height;
         const ctx = canvas.getContext('2d');
-        if (!ctx) return reject('Erro ao obter contexto do canvas');
+        if (!ctx) return reject('Canvas context not available');
         ctx.drawImage(img, 0, 0);
         const dataURL = canvas.toDataURL('image/png');
         resolve(dataURL);
       };
-      img.onerror = (err) => reject(err);
+
+      img.onerror = () => reject('Erro ao carregar imagem');
     });
   }
 
-  private async showAlert(message: string) {
+  async showAlert(message: string) {
     const alert = await this.alertCtrl.create({
-      header: 'Atenção',
+      header: 'Aviso',
       message,
       buttons: ['OK']
     });
