@@ -76,7 +76,7 @@ export class AdministradoresPage implements OnInit {
   async confirmarEliminarUtilizador(user: any) {
     const alert = await this.alertCtrl.create({
       header: 'Confirmação',
-      message: `Tens certeza que queres eliminar o utilizador <strong>${user.fullName}</strong>?`,
+      message: `Tens certeza que queres eliminar o utilizador ${user.fullName}?`,
       buttons: [
         {
           text: 'Cancelar',

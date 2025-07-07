@@ -8,6 +8,9 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class ClienteService {
+  getClientes() {
+    throw new Error('Method not implemented.');
+  }
   private apiUrl = `${environment.api_url}/api/clientes`;
 
   constructor(private http: HttpClient) {}

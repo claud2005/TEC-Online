@@ -42,7 +42,7 @@ export class GestorClientesPage implements OnInit {
   }
 
   voltar() {
-    this.router.navigate(['/plano-semanal']); // Ajustar conforme necessário
+    this.router.navigate(['/plano-semanal']); // Ajuste conforme sua rota
   }
 
   filtrarClientes() {
@@ -76,8 +76,7 @@ export class GestorClientesPage implements OnInit {
           handler: () => {
             this.clienteService.deletarCliente(cliente.id).subscribe({
               next: () => {
-                this.clientes = this.clientes.filter(c => c.id !== cliente.id);
-                this.filtrarClientes();
+                this.carregarClientes(); // Recarrega após exclusão para manter os códigos atualizados
                 this.showAlert('Sucesso', 'Cliente excluído com sucesso!');
               },
               error: (err) => {
