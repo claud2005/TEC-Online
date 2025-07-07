@@ -3,7 +3,6 @@ ion-toolbar {
   --color: #fff;
 }
 
-/* Botões superiores */
 .top-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -12,29 +11,26 @@ ion-toolbar {
   margin-bottom: 1.5rem;
 }
 
-/* Container geral da tabela */
 .user-table {
   font-size: 0.95rem;
   border-radius: 8px;
   overflow: hidden;
   background-color: #fff;
-  margin: 0 auto; /* Centraliza horizontalmente */
+  margin: 0 auto;
   max-width: 100%;
   width: 100%;
-  border: 1px solid #e0e0e0; /* Leve contorno para suavidade */
+  border: 1px solid #e0e0e0;
 }
 
-/* Cabeçalho das colunas */
 .table-header ion-col {
   font-weight: 600;
   font-size: 0.95rem;
-  background-color: transparent; /* removido sombreamento */
+  background-color: transparent;
   padding: 12px;
   justify-content: center;
   color: #333;
 }
 
-/* Linha do utilizador */
 .user-row {
   display: flex;
   align-items: center;
@@ -49,12 +45,6 @@ ion-toolbar {
   background-color: #f9fafc;
 }
 
-/* Última linha */
-.user-row:last-child {
-  border-bottom: none;
-}
-
-/* Células (ion-col) */
 ion-col {
   display: flex;
   align-items: center;
@@ -63,7 +53,10 @@ ion-col {
   word-break: break-word;
 }
 
-/* Coluna de ações */
+.update-col {
+  min-width: 120px;
+}
+
 .actions {
   display: flex;
   justify-content: center;
@@ -71,14 +64,12 @@ ion-col {
   gap: 0.4rem;
 }
 
-/* Botões pequenos */
 .actions ion-button {
   --border-radius: 8px;
   --padding-start: 8px;
   --padding-end: 8px;
 }
 
-/* Estilo quando não há utilizadores */
 .no-users {
   text-align: center;
   font-style: italic;
@@ -92,86 +83,47 @@ ion-col {
 
 /* --- RESPONSIVO PARA MOBILE --- */
 @media (max-width: 768px) {
-  /* Esconde o cabeçalho da tabela */
   .table-header {
     display: none;
   }
 
-  /* Cada linha vira um "cartão" vertical */
   .user-row {
     flex-direction: column;
-    align-items: stretch; /* para as colunas ocuparem toda a largura */
+    align-items: stretch;
     text-align: left;
-    padding: 1rem 1.2rem; /* mais espaçamento nas laterais */
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 1rem; /* separação entre cartões */
-    background-color: #fafafa; /* fundo leve para destacar */
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: #f9f9f9;
     border-radius: 8px;
+    position: relative;
   }
 
-  /* Cada coluna vira uma linha com label */
   ion-col {
-    justify-content: flex-start;
-    padding: 12px 0;    /* mais espaçamento vertical */
-    width: 95%;         /* largura maior para colunas mais largas */
-    max-width: 95%;
-    display: flex;
-    align-items: center;
-    word-break: break-word;
-  }
-
-  /* Aumenta a largura só da coluna Gerenciar para 100% */
-  ion-col:nth-child(5) {
+    justify-content: space-between;
+    padding: 8px 0;
     width: 100%;
     max-width: 100%;
-    margin-top: 8px; /* espaço extra para afastar os botões */
+    
+    &::before {
+      content: attr(data-label);
+      font-weight: 600;
+      margin-right: 1rem;
+      flex-shrink: 0;
+    }
   }
 
-  /* Label antes do conteúdo */
-  ion-col:nth-child(1)::before {
-    content: "Nome: ";
-    font-weight: 600;
-    margin-right: 0.75rem;
-    flex-shrink: 0;
-  }
-  ion-col:nth-child(2)::before {
-    content: "Email: ";
-    font-weight: 600;
-    margin-right: 0.75rem;
-    flex-shrink: 0;
-  }
-  ion-col:nth-child(3)::before {
-    content: "Telefone: ";
-    font-weight: 600;
-    margin-right: 0.75rem;
-    flex-shrink: 0;
-  }
-  ion-col:nth-child(4)::before {
-    content: "Administrador: ";
-    font-weight: 600;
-    margin-right: 0.75rem;
-    flex-shrink: 0;
-  }
-  ion-col:nth-child(5)::before {
-    content: "Gerenciar: ";
-    font-weight: 600;
-    margin-right: 0.75rem;
-    flex-shrink: 0;
+  .update-col {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 
-  /* Ajustar botões para ficarem alinhados no início */
   .actions {
-    justify-content: flex-start;
-    gap: 0.75rem;
-  }
-
-  /* Botões um pouco maiores e com espaçamento */
-  .actions ion-button {
-    --min-width: 44px;
-    --height: 40px;
-    --padding-start: 12px;
-    --padding-end: 12px;
+    justify-content: flex-end;
+    margin-top: 8px;
+    
+    &::before {
+      display: none;
+    }
   }
 }
-
-
