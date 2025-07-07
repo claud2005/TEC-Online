@@ -25,8 +25,8 @@
       <ion-col>Nome</ion-col>
       <ion-col>Email</ion-col>
       <ion-col>Telefone</ion-col>
-      <ion-col>Administrador</ion-col>
-      <ion-col>Última Atualização</ion-col>
+      <ion-col>Admin</ion-col>
+      <ion-col class="update-col">Últ. Atualização</ion-col>
       <ion-col>Gerenciar</ion-col>
     </ion-row>
 
@@ -35,7 +35,7 @@
       <ion-col>{{ user.email }}</ion-col>
       <ion-col>{{ user.telefone }}</ion-col>
       <ion-col>{{ user.isAdmin ? 'Sim' : 'Não' }}</ion-col>
-      <ion-col>{{ user.dataAtualizacao | date:'dd/MM/yyyy' }} ás {{ user.horaAtualizacao | date:'HH:mm' }}</ion-col>
+      <ion-col class="update-col">{{ user.dataAtualizacao | date:'dd/MM/yy' }} ás {{ user.horaAtualizacao | date:'HH:mm' }}</ion-col>
       <ion-col class="actions">
         <ion-button size="small" color="warning" (click)="alterarSenha(user); $event.stopPropagation()" title="Alterar Senha">
           <ion-icon slot="icon-only" name="key-outline"></ion-icon>
