@@ -18,38 +18,38 @@
   </div>
 
   <!-- Tabela de utilizadores -->
-  <ion-grid class="user-table">
-    <ion-row class="table-header">
-      <ion-col>Nome</ion-col>
-      <ion-col>Email</ion-col>
-      <ion-col>Telefone</ion-col>
-      <ion-col>Admin</ion-col>
-      <ion-col class="update-col">Últ. Atualização</ion-col>
-      <ion-col>Gerenciar</ion-col>
-    </ion-row>
+  <div class="table-container">
+    <ion-grid class="user-table">
+      <ion-row class="table-header">
+        <ion-col>Nome</ion-col>
+        <ion-col>Email</ion-col>
+        <ion-col>Telefone</ion-col>
+        <ion-col>Admin</ion-col>
+        <ion-col class="update-col">Atualizado</ion-col>
+        <ion-col>Ações</ion-col>
+      </ion-row>
+   <ion-row *ngFor="let user of utilizadores" class="user-row" (click)="editarUtilizador(user.id)"></ion-row>
+      <ion-row *ngFor="let user of utilizadores" class="user-row">
+        <ion-col data-label="Nome">{{ user.fullName }}</ion-col>
+        <ion-col data-label="Email">{{ user.email }}</ion-col>
+        <ion-col data-label="Telefone">{{ user.telefone }}</ion-col>
+        <ion-col data-label="Admin">{{ user.isAdmin ? 'Sim' : 'Não' }}</ion-col>
+        <ion-col class="update-col" data-label="Atualizado">
+          {{ user.dataAtualizacao | date:'dd/MM/yy' }} às {{ user.horaAtualizacao | date:'HH:mm' }}
+        </ion-col>
+        <ion-col class="actions" data-label="Ações">
+          <ion-button size="small" color="warning" (click)="alterarSenha(user); $event.stopPropagation()">
+            <ion-icon slot="icon-only" name="key-outline"></ion-icon>
+          </ion-button>
+          <ion-button size="small" color="danger" (click)="eliminarUtilizador(user.id); $event.stopPropagation()">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
 
-    <ion-row *ngFor="let user of utilizadores" class="user-row">
-      <ion-col data-label="Nome">{{ user.fullName }}</ion-col>
-      <ion-col data-label="Email">{{ user.email }}</ion-col>
-      <ion-col data-label="Telefone">{{ user.telefone }}</ion-col>
-      <ion-col data-label="Admin">{{ user.isAdmin ? 'Sim' : 'Não' }}</ion-col>
-      <ion-col class="update-col" data-label="Atualizado">
-        {{ user.dataAtualizacao | date:'dd/MM/yy' }} às {{ user.horaAtualizacao | date:'HH:mm' }}
-      </ion-col>
-      <ion-col class="actions" data-label="Ações">
-        <ion-button size="small" color="warning" (click)="alterarSenha(user); $event.stopPropagation()" title="Alterar Senha">
-          <ion-icon slot="icon-only" name="key-outline"></ion-icon>
-        </ion-button>
-        <ion-button size="small" color="danger" (click)="eliminarUtilizador(user.id); $event.stopPropagation()" title="Eliminar">
-          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-
-    <ion-row *ngIf="utilizadores.length === 0" class="no-users">
-      <ion-col colspan="6">
-        Nenhum utilizador registrado.
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+      <ion-row *ngIf="utilizadores.length === 0" class="no-users">
+        <ion-col colspan="6">Nenhum utilizador registrado.</ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>
