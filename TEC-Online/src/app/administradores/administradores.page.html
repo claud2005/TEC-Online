@@ -35,9 +35,7 @@
       <ion-col>{{ user.email }}</ion-col>
       <ion-col>{{ user.telefone }}</ion-col>
       <ion-col>{{ user.isAdmin ? 'Sim' : 'Não' }}</ion-col>
-      <ion-col>
-        {{ user.dataAtualizacao | date:'dd/MM/yyyy' }} ás {{ user.horaAtualizacao | date:'HH:mm' }}
-      </ion-col>
+      <ion-col>{{ user.dataAtualizacao | date:'dd/MM/yyyy' }} ás {{ user.horaAtualizacao | date:'HH:mm' }}</ion-col>
       <ion-col class="actions">
         <ion-button size="small" color="warning" (click)="alterarSenha(user); $event.stopPropagation()" title="Alterar Senha">
           <ion-icon slot="icon-only" name="key-outline"></ion-icon>
