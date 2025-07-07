@@ -26,6 +26,10 @@ export class CriarServicosPage implements OnInit {
   status: string = 'aberto';
   autorServico: string = '';
   clienteSelecionado: string | null = null;
+  clienteSelecionadoNome: string = '';
+  termoPesquisa: string = '';
+  mostrarSugestoes: boolean = false;
+
   marcaAparelho: string = '';
   modeloAparelho: string = '';
   problemaRelatado: string = '';
@@ -34,6 +38,7 @@ export class CriarServicosPage implements OnInit {
   observacoes: string = '';
 
   clientes: any[] = [];
+  clientesFiltrados: any[] = [];
 
   constructor(
     private http: HttpClient,
@@ -70,9 +75,7 @@ export class CriarServicosPage implements OnInit {
 
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('Token não encontrado');
-      }
+      if (!token) throw new Error('Token não encontrado');
 
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
@@ -86,7 +89,7 @@ export class CriarServicosPage implements OnInit {
         nome: cliente.nome,
         numeroCliente: cliente.numeroCliente || cliente.contacto
       })) || [];
-      
+
     } catch (error) {
       console.error('Erro ao carregar clientes:', error);
       const alert = await this.alertController.create({
@@ -100,8 +103,24 @@ export class CriarServicosPage implements OnInit {
     }
   }
 
-  onClienteChange(event: any) {
-    this.clienteSelecionado = event.detail.value;
+  filtrarClientes(event: any) {
+    const termo = event.target.value.toLowerCase();
+    this.mostrarSugestoes = true;
+
+    if (termo && termo.length > 1) {
+      this.clientesFiltrados = this.clientes.filter(cliente =>
+        cliente.nome.toLowerCase().includes(termo)
+      );
+    } else {
+      this.clientesFiltrados = [];
+    }
+  }
+
+  selecionarCliente(cliente: any) {
+    this.clienteSelecionado = cliente.id;
+    this.clienteSelecionadoNome = cliente.nome;
+    this.termoPesquisa = cliente.nome;
+    this.mostrarSugestoes = false;
   }
 
   async salvarServico() {
@@ -122,9 +141,7 @@ export class CriarServicosPage implements OnInit {
 
     try {
       const cliente = this.clientes.find(c => c.id === this.clienteSelecionado);
-      if (!cliente) {
-        throw new Error('Cliente não encontrado');
-      }
+      if (!cliente) throw new Error('Cliente não encontrado');
 
       const dadosServico = {
         dataServico: this.dataServico,
@@ -164,7 +181,7 @@ export class CriarServicosPage implements OnInit {
       this.router.navigate(['/plano-semanal', cliente.id]);
     } catch (error: any) {
       console.error('Erro ao criar serviço:', error);
-      
+
       const alert = await this.alertController.create({
         header: 'Erro',
         message: error.error?.message || 'Falha ao criar serviço',

@@ -62,20 +62,30 @@
         ></ion-input>
       </div>
 
-      <!-- Linha 3 -->
+      <!-- Linha 3 - Cliente com busca -->
       <div class="form-group full-width">
-        <ion-label>Cliente *</ion-label>
-        <ion-select
-          [(ngModel)]="clienteSelecionado"
-          name="clienteSelecionado"
-          interface="action-sheet"
-          required
-          placeholder="Selecione um cliente"
-        >
-          <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.id">
+        <ion-label position="stacked">Cliente *</ion-label>
+        <ion-searchbar
+          [(ngModel)]="termoPesquisa"
+          (ionInput)="filtrarClientes($event)"
+          placeholder="Digite para procurar cliente"
+          debounce="300"
+          name="termoPesquisa"
+        ></ion-searchbar>
+
+        <ion-list *ngIf="clientesFiltrados.length > 0 && mostrarSugestoes">
+          <ion-item
+            button
+            *ngFor="let cliente of clientesFiltrados"
+            (click)="selecionarCliente(cliente)"
+          >
             {{ cliente.nome }} ({{ cliente.numeroCliente || 'N/C' }})
-          </ion-select-option>
-        </ion-select>
+          </ion-item>
+        </ion-list>
+
+        <div *ngIf="clienteSelecionadoNome" class="cliente-selecionado">
+          Selecionado: {{ clienteSelecionadoNome }}
+        </div>
       </div>
 
       <!-- Linha 4 -->
