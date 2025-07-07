@@ -17,13 +17,14 @@
     </ion-button>
   </div>
 
-  <ion-grid class="user-table">
+  <!-- Tabela para desktop -->
+  <ion-grid class="user-table" *ngIf="utilizadores.length > 0">
     <ion-row class="table-header">
       <ion-col>Nome</ion-col>
       <ion-col>Email</ion-col>
       <ion-col>Telefone</ion-col>
       <ion-col>Administrador</ion-col>
-      <ion-col>Última Atualizacao</ion-col>
+      <ion-col>Última Atualização</ion-col>
       <ion-col>Gerenciar</ion-col>
     </ion-row>
 
@@ -32,7 +33,7 @@
       <ion-col>{{ user.email }}</ion-col>
       <ion-col>{{ user.telefone }}</ion-col>
       <ion-col>{{ user.isAdmin ? 'Sim' : 'Não' }}</ion-col>
-      <ion-col>{{ user.dataAtualizacao | date:'dd/MM/yyyy' }} às {{ user.horaAtualizacao | date:'HH:mm' }}</ion-col>
+      <ion-col>{{ user.atualizado | date:'dd/MM/yyyy' }} às {{ user.atualizado | date:'HH:mm' }}</ion-col>
       <ion-col class="actions">
         <ion-button size="small" color="warning" (click)="alterarSenha(user); $event.stopPropagation()" title="Alterar Senha">
           <ion-icon slot="icon-only" name="key-outline"></ion-icon>
@@ -43,11 +44,33 @@
         </ion-button>
       </ion-col>
     </ion-row>
-
-    <ion-row *ngIf="utilizadores.length === 0" class="no-users">
-      <ion-col colspan="5">
-        Nenhum utilizador registrado.
-      </ion-col>
-    </ion-row>
   </ion-grid>
+
+  <!-- Mensagem se nenhum utilizador -->
+  <ion-row *ngIf="utilizadores.length === 0" class="no-users">
+    <ion-col>
+      Nenhum utilizador registrado.
+    </ion-col>
+  </ion-row>
+
+  <!-- Cards para mobile, se quiser adicionar (opcional) -->
+  <ion-card *ngFor="let user of utilizadores" class="mobile-user-card">
+    <ion-card-header>
+      <ion-card-title>{{ user.fullName }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Telefone:</strong> {{ user.telefone }}</p>
+      <p><strong>Administrador:</strong> {{ user.isAdmin ? 'Sim' : 'Não' }}</p>
+      <p><strong>Atualizado:</strong> {{ user.atualizado | date:'dd/MM/yyyy' }} às {{ user.atualizado | date:'HH:mm' }}</p>
+
+      <ion-button size="small" color="warning" (click)="alterarSenha(user)">
+        <ion-icon slot="start" name="key-outline"></ion-icon> Alterar Senha
+      </ion-button>
+      <ion-button size="small" color="danger" (click)="eliminarUtilizador(user.id)">
+        <ion-icon slot="start" name="trash-outline"></ion-icon> Eliminar
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>

@@ -18,17 +18,17 @@ ion-toolbar {
   border-radius: 8px;
   overflow: hidden;
   background-color: #fff;
-  margin: 0 auto; /* Centraliza horizontalmente */
+  margin: 0 auto;
   max-width: 100%;
   width: 100%;
-  border: 1px solid #e0e0e0; /* Leve contorno para suavidade */
+  border: 1px solid #e0e0e0;
 }
 
 /* Cabeçalho das colunas */
 .table-header ion-col {
   font-weight: 600;
   font-size: 0.95rem;
-  background-color: transparent; /* removido sombreamento */
+  background-color: transparent;
   padding: 12px;
   justify-content: center;
   color: #333;
@@ -71,18 +71,19 @@ ion-col {
   gap: 0.4rem;
 }
 
-/* Botões pequenos */
+/* Botões pequenos (melhoria 1) */
 .actions ion-button {
+  font-size: 0.9rem;
   --border-radius: 8px;
-  --padding-start: 8px;
-  --padding-end: 8px;
+  --padding-start: 10px;
+  --padding-end: 10px;
 }
 
-/* Estilo quando não há utilizadores */
+/* Estilo quando não há utilizadores (melhoria 4 - contraste) */
 .no-users {
   text-align: center;
   font-style: italic;
-  color: #888;
+  color: #666;
   padding: 1.5rem;
   background-color: #fdfdfd;
   border: 1px dashed #ccc;
@@ -92,42 +93,38 @@ ion-col {
 
 /* --- RESPONSIVO PARA MOBILE --- */
 @media (max-width: 768px) {
-  /* Esconde o cabeçalho da tabela */
   .table-header {
     display: none;
   }
 
-  /* Cada linha vira um "cartão" vertical */
   .user-row {
     flex-direction: column;
-    align-items: stretch; /* para as colunas ocuparem toda a largura */
+    align-items: stretch;
     text-align: left;
-    padding: 1rem 1.2rem; /* mais espaçamento nas laterais */
+    padding: 1rem 1.2rem;
     border-bottom: 1px solid #ddd;
-    margin-bottom: 1rem; /* separação entre cartões */
-    background-color: #fafafa; /* fundo leve para destacar */
+    margin-bottom: 1rem;
+    background-color: #fafafa;
     border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04); /* melhoria 2 */
   }
 
-  /* Cada coluna vira uma linha com label */
   ion-col {
     justify-content: flex-start;
-    padding: 12px 0;    /* mais espaçamento vertical */
-    width: 95%;         /* largura maior para colunas mais largas */
+    padding: 12px 0;
+    width: 95%;
     max-width: 95%;
     display: flex;
     align-items: center;
     word-break: break-word;
   }
 
-  /* Aumenta a largura só da coluna Gerenciar para 100% */
   ion-col:nth-child(5) {
     width: 100%;
     max-width: 100%;
-    margin-top: 8px; /* espaço extra para afastar os botões */
+    margin-top: 8px;
   }
 
-  /* Label antes do conteúdo */
   ion-col:nth-child(1)::before {
     content: "Nome: ";
     font-weight: 600;
@@ -159,13 +156,11 @@ ion-col {
     flex-shrink: 0;
   }
 
-  /* Ajustar botões para ficarem alinhados no início */
   .actions {
-    justify-content: flex-start;
+    justify-content: flex-start; /* melhoria 3 */
     gap: 0.75rem;
   }
 
-  /* Botões um pouco maiores e com espaçamento */
   .actions ion-button {
     --min-width: 44px;
     --height: 40px;

@@ -46,8 +46,7 @@ export class AdministradoresPage implements OnInit {
             email: user.email,
             isAdmin: user.role === 'admin',
             telefone: user.telefone || '-',
-            dataAtualização: atualizado,
-            horaAtualização: atualizado
+            atualizado: atualizado
           };
         });
       },
