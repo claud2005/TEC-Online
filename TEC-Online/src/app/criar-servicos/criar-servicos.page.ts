@@ -40,6 +40,8 @@ export class CriarServicosPage implements OnInit {
   clientes: any[] = [];
   clientesFiltrados: any[] = [];
 
+  private timeoutBlur: any;
+
   constructor(
     private http: HttpClient,
     private navController: NavController,
@@ -90,6 +92,8 @@ export class CriarServicosPage implements OnInit {
         numeroCliente: cliente.numeroCliente || cliente.contacto
       })) || [];
 
+      this.clientesFiltrados = [...this.clientes];
+
     } catch (error) {
       console.error('Erro ao carregar clientes:', error);
       const alert = await this.alertController.create({
@@ -105,15 +109,14 @@ export class CriarServicosPage implements OnInit {
 
   filtrarClientes(event: any) {
     const termo = event.target.value.toLowerCase();
-    this.mostrarSugestoes = true;
-
-    if (termo && termo.length > 1) {
+    if (termo && termo.length > 0) {
       this.clientesFiltrados = this.clientes.filter(cliente =>
         cliente.nome.toLowerCase().includes(termo)
       );
     } else {
-      this.clientesFiltrados = [];
+      this.clientesFiltrados = [...this.clientes];
     }
+    this.mostrarSugestoes = true;
   }
 
   selecionarCliente(cliente: any) {
@@ -121,6 +124,13 @@ export class CriarServicosPage implements OnInit {
     this.clienteSelecionadoNome = cliente.nome;
     this.termoPesquisa = cliente.nome;
     this.mostrarSugestoes = false;
+    clearTimeout(this.timeoutBlur);
+  }
+
+  onBlurCliente() {
+    this.timeoutBlur = setTimeout(() => {
+      this.mostrarSugestoes = false;
+    }, 200);
   }
 
   async salvarServico() {
