@@ -17,7 +17,7 @@
   <ion-list>
     <ion-item
       class="servico-item"
-      *ngFor="let servico of servicos"
+      *ngFor="let servico of servicos; let i = index"
       (click)="irParaEditarServico($event, servico._id)"
     >
       <ion-checkbox
@@ -28,7 +28,7 @@
       </ion-checkbox>
 
       <ion-label>
-        <h2>Serviço Nº {{ formatarNumero(servico.numero) }}</h2>
+        <h2>Serviço Nº {{ formatarNumero(i + 1) }}</h2>
         <h3>{{ servico.marcaAparelho }} - {{ servico.modeloAparelho }}</h3>
         <p><strong>Problema:</strong> {{ servico.problemaRelatado }}</p>
         <p><strong>Valor:</strong> {{ formatCurrency(+servico.valorTotal) }}</p>
