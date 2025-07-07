@@ -20,6 +20,7 @@
           [(ngModel)]="dataServico"
           name="dataServico"
           required
+          placeholder="Escolha a data do serviço"
         ></ion-input>
       </div>
 
@@ -30,6 +31,7 @@
           [(ngModel)]="horaServico"
           name="horaServico"
           required
+          placeholder="Escolha a hora do serviço"
         ></ion-input>
       </div>
 
@@ -56,6 +58,7 @@
           name="autorServico"
           required
           readonly
+          placeholder="Nome do técnico"
         ></ion-input>
       </div>
 
@@ -67,6 +70,7 @@
           name="clienteSelecionado"
           interface="action-sheet"
           required
+          placeholder="Selecione um cliente"
         >
           <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.id">
             {{ cliente.nome }} ({{ cliente.numeroCliente || 'N/C' }})
@@ -81,6 +85,7 @@
           [(ngModel)]="marcaAparelho"
           name="marcaAparelho"
           required
+          placeholder="Ex: Apple, Samsung, Xiaomi"
         ></ion-input>
       </div>
 
@@ -90,6 +95,7 @@
           [(ngModel)]="modeloAparelho"
           name="modeloAparelho"
           required
+          placeholder="Ex: iPhone 15, Galaxy S21, Redmi Note 12"
         ></ion-input>
       </div>
 
@@ -102,6 +108,7 @@
           rows="3"
           required
           auto-grow
+          placeholder="Ex: Ecrã partido, não liga, bateria descarrega rápido..."
         ></ion-textarea>
       </div>
 
@@ -113,6 +120,7 @@
           name="solucaoInicial"
           rows="3"
           auto-grow
+          placeholder="Ex: Substituição do ecrã, troca de bateria, limpeza interna..."
         ></ion-textarea>
       </div>
 
@@ -125,6 +133,7 @@
           name="valorTotal"
           min="0"
           step="0.01"
+          placeholder="Ex: 49.90"
         ></ion-input>
       </div>
 
@@ -135,6 +144,7 @@
           name="observacoes"
           rows="2"
           auto-grow
+          placeholder="Ex: Cliente pediu urgência, aparelho com riscos, etc..."
         ></ion-textarea>
       </div>
     </form>
