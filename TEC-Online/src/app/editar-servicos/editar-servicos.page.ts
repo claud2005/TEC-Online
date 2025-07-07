@@ -29,7 +29,7 @@ export class EditarServicosPage {
   contatoCliente: string = '';
   modeloAparelho: string = '';
   marcaAparelho: string = '';
-  problemaCliente: string = '';
+  problemaRelatado: string = '';
   solucaoInicial: string = '';
   valorTotal: number | null = null;
   observacoes: string = '';
@@ -70,7 +70,7 @@ export class EditarServicosPage {
         this.contatoCliente = data.contatoCliente ?? '';
         this.modeloAparelho = data.modeloAparelho ?? '';
         this.marcaAparelho = data.marcaAparelho ?? '';
-        this.problemaCliente = data.problemaRelatado ?? '';
+        this.problemaRelatado = data.problemaRelatado ?? '';
         this.solucaoInicial = data.solucaoInicial ?? '';
         this.valorTotal = data.valorTotal ?? 0;
         this.observacoes = data.observacoes ?? '';
@@ -112,7 +112,7 @@ async atualizarServico() {
     formData.append('telefoneContato', this.contatoCliente);
     formData.append('modeloAparelho', this.modeloAparelho);
     formData.append('marcaAparelho', this.marcaAparelho);
-    formData.append('problemaCliente', this.problemaCliente);
+    formData.append('problemaRelatado', this.problemaRelatado);
     formData.append('solucaoInicial', this.solucaoInicial);
     formData.append('valorTotal', this.valorTotal.toString());
     formData.append('observacoes', this.observacoes || 'Sem observações');
@@ -179,7 +179,7 @@ async atualizarServico() {
 
           alert(errorMessage);
         }
-      });
+      }); 
 
   } catch (error) {
     console.error('Erro inesperado:', error);
@@ -219,7 +219,7 @@ private async base64ToBlob(base64Data: string): Promise<Blob> {
       { nome: 'contatoCliente', valor: this.contatoCliente },
       { nome: 'modeloAparelho', valor: this.modeloAparelho },
       { nome: 'marcaAparelho', valor: this.marcaAparelho },
-      { nome: 'problemaCliente', valor: this.problemaCliente },
+      { nome: 'problemaRelatado', valor: this.problemaRelatado },
       { nome: 'solucaoInicial', valor: this.solucaoInicial },
       { nome: 'autorServico', valor: this.autorServico },
     ];
