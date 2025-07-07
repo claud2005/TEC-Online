@@ -297,17 +297,7 @@ ion-input {
   }
 }
 
-/* === Remover espaços inferiores do conteúdo === */
-ion-content {
-  --padding-top: 0 !important;
-  --padding-bottom: 0 !important;
-}
-
-form {
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
-}
-
+/* === Responsivo Geral para Mobile === */
 @media screen and (max-width: 480px) {
   .center-content {
     padding: 20px 12px;
