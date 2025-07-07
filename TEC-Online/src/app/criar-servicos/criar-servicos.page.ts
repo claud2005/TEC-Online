@@ -25,10 +25,10 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  clienteSelecionado: string | null = null;
-  clienteSelecionadoNome: string = '';
-  termoPesquisa: string = '';
-  mostrarSugestoes: boolean = false;
+  
+  // novo: input e cliente selecionado
+  clienteInput: string = '';
+  clienteSelecionado: any = null; // guarda objeto cliente
 
   marcaAparelho: string = '';
   modeloAparelho: string = '';
@@ -39,8 +39,7 @@ export class CriarServicosPage implements OnInit {
 
   clientes: any[] = [];
   clientesFiltrados: any[] = [];
-
-  private timeoutBlur: any;
+  mostrarAutocomplete: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -93,7 +92,6 @@ export class CriarServicosPage implements OnInit {
       })) || [];
 
       this.clientesFiltrados = [...this.clientes];
-
     } catch (error) {
       console.error('Erro ao carregar clientes:', error);
       const alert = await this.alertController.create({
@@ -107,29 +105,33 @@ export class CriarServicosPage implements OnInit {
     }
   }
 
-  filtrarClientes(event: any) {
-    const termo = event.target.value.toLowerCase();
-    if (termo && termo.length > 0) {
-      this.clientesFiltrados = this.clientes.filter(cliente =>
-        cliente.nome.toLowerCase().includes(termo)
-      );
-    } else {
+  filtrarClientes() {
+    const texto = this.clienteInput.toLowerCase().trim();
+    if (texto.length === 0) {
       this.clientesFiltrados = [...this.clientes];
+      this.clienteSelecionado = null;
+      return;
     }
-    this.mostrarSugestoes = true;
+
+    this.clientesFiltrados = this.clientes.filter(c =>
+      c.nome.toLowerCase().includes(texto)
+    );
+    this.clienteSelecionado = null;
   }
 
   selecionarCliente(cliente: any) {
-    this.clienteSelecionado = cliente.id;
-    this.clienteSelecionadoNome = cliente.nome;
-    this.termoPesquisa = cliente.nome;
-    this.mostrarSugestoes = false;
-    clearTimeout(this.timeoutBlur);
+    this.clienteSelecionado = cliente;
+    this.clienteInput = cliente.nome;
+    this.mostrarAutocomplete = false;
   }
 
+  // Para evitar fechar o dropdown ao clicar no item, delay para fechar depois do blur
   onBlurCliente() {
-    this.timeoutBlur = setTimeout(() => {
-      this.mostrarSugestoes = false;
+    setTimeout(() => {
+      this.mostrarAutocomplete = false;
+      if (!this.clienteSelecionado || this.clienteInput !== this.clienteSelecionado.nome) {
+        this.clienteSelecionado = null;
+      }
     }, 200);
   }
 
@@ -144,62 +146,56 @@ export class CriarServicosPage implements OnInit {
       return;
     }
 
-    const loading = await this.loadingController.create({
-      message: 'Salvando serviço...'
-    });
-    await loading.present();
+    if (!this.clienteSelecionado) {
+      const toast = await this.toastController.create({
+        message: 'Por favor, selecione um cliente da lista',
+        duration: 3000,
+        color: 'warning'
+      });
+      await toast.present();
+      return;
+    }
+
+    const novoServico = {
+      dataServico: this.dataServico,
+      horaServico: this.horaServico,
+      status: this.status,
+      autorServico: this.autorServico,
+      cliente: this.clienteSelecionado,
+      marcaAparelho: this.marcaAparelho,
+      modeloAparelho: this.modeloAparelho,
+      problemaRelatado: this.problemaRelatado,
+      solucaoInicial: this.solucaoInicial,
+      valorTotal: this.valorTotal,
+      observacoes: this.observacoes,
+    };
 
     try {
-      const cliente = this.clientes.find(c => c.id === this.clienteSelecionado);
-      if (!cliente) throw new Error('Cliente não encontrado');
-
-      const dadosServico = {
-        dataServico: this.dataServico,
-        horaServico: this.horaServico,
-        status: this.status.replace('_', '-'),
-        autorServico: this.autorServico,
-        clienteId: cliente.id,
-        nomeCompletoCliente: cliente.nome,
-        contatoCliente: cliente.numeroCliente || 'Não informado',
-        marcaAparelho: this.marcaAparelho,
-        modeloAparelho: this.modeloAparelho,
-        problemaRelatado: this.problemaRelatado,
-        solucaoInicial: this.solucaoInicial || 'A definir',
-        valorTotal: Number(this.valorTotal) || 0,
-        observacoes: this.observacoes || 'Sem observações'
-      };
-
       const token = localStorage.getItem('token');
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      });
+      if (!token) throw new Error('Token não encontrado');
 
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       await this.http.post(
         `${environment.api_url}/api/servicos`,
-        dadosServico,
+        novoServico,
         { headers }
       ).toPromise();
 
       const toast = await this.toastController.create({
         message: 'Serviço criado com sucesso!',
-        duration: 2000,
+        duration: 2500,
         color: 'success'
       });
       await toast.present();
-
-      this.router.navigate(['/plano-semanal', cliente.id]);
-    } catch (error: any) {
-      console.error('Erro ao criar serviço:', error);
-
+      this.router.navigate(['/servicos']);
+    } catch (error) {
+      console.error('Erro ao salvar serviço:', error);
       const alert = await this.alertController.create({
         header: 'Erro',
-        message: error.error?.message || 'Falha ao criar serviço',
+        message: 'Não foi possível salvar o serviço.',
         buttons: ['OK']
       });
       await alert.present();
-    } finally {
-      await loading.dismiss();
     }
   }
 
