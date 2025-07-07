@@ -4,6 +4,7 @@
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/" class="back-button"></ion-back-button>
       </ion-buttons>
+      <ion-title>Editar Serviço</ion-title>
     </ion-toolbar>
   </ion-header>
 
@@ -17,17 +18,17 @@
       <!-- Campos do formulário -->
       <div class="form-group">
         <ion-label position="stacked">Data do Serviço *</ion-label>
-        <ion-input type="date" name="dataServico" [(ngModel)]="dataServico" required></ion-input>
+        <ion-input type="date" [(ngModel)]="dataServico" name="dataServico" required></ion-input>
       </div>
 
       <div class="form-group">
         <ion-label position="stacked">Hora do Serviço *</ion-label>
-        <ion-input type="time" name="horaServico" [(ngModel)]="horaServico" required></ion-input>
+        <ion-input type="time" [(ngModel)]="horaServico" name="horaServico" required></ion-input>
       </div>
 
       <div class="form-group">
         <ion-label position="stacked">Status do Serviço *</ion-label>
-        <ion-select name="status" [(ngModel)]="status" required>
+        <ion-select [(ngModel)]="status" name="status" required>
           <ion-select-option value="aberto">Aberto</ion-select-option>
           <ion-select-option value="fechado">Fechado</ion-select-option>
         </ion-select>
@@ -35,60 +36,61 @@
 
       <div class="form-group">
         <ion-label position="stacked">Nome Completo do Cliente *</ion-label>
-        <ion-input name="nomeCliente" [(ngModel)]="nomeCliente" required></ion-input>
+        <ion-input [(ngModel)]="nomeCliente" name="nomeCliente" required></ion-input>
       </div>
 
       <div class="form-group">
         <ion-label position="stacked">Contato *</ion-label>
-        <ion-input name="contatoCliente" [(ngModel)]="contatoCliente" required></ion-input>
+        <ion-input [(ngModel)]="contatoCliente" name="contatoCliente" required></ion-input>
       </div>
 
       <div class="form-group">
         <ion-label position="stacked">Marca do Aparelho *</ion-label>
-        <ion-input name="marcaAparelho" [(ngModel)]="marcaAparelho" required></ion-input>
+        <ion-input [(ngModel)]="marcaAparelho" name="marcaAparelho" required></ion-input>
       </div>
 
       <div class="form-group">
         <ion-label position="stacked">Modelo do Aparelho *</ion-label>
-        <ion-input name="modeloAparelho" [(ngModel)]="modeloAparelho" required></ion-input>
+        <ion-input [(ngModel)]="modeloAparelho" name="modeloAparelho" required></ion-input>
       </div>
 
       <div class="form-group full-width">
         <ion-label position="stacked">Problema Relatado pelo Cliente *</ion-label>
-        <ion-textarea name="problemaRelatado" [(ngModel)]="problemaCliente" required></ion-textarea>
+        <ion-textarea [(ngModel)]="problemaRelatado" name="problemaRelatado" required></ion-textarea>
       </div>
 
       <div class="form-group full-width">
         <ion-label position="stacked">Solução *</ion-label>
-        <ion-textarea name="solucaoInicial" [(ngModel)]="solucaoInicial" required></ion-textarea>
+        <ion-textarea [(ngModel)]="solucaoInicial" name="solucaoInicial" required></ion-textarea>
       </div>
 
       <div class="form-group">
         <ion-label position="stacked">Valor Total *</ion-label>
-        <ion-input name="valorTotal" type="number" [(ngModel)]="valorTotal" min="0" required></ion-input>
+        <ion-input type="number" [(ngModel)]="valorTotal" name="valorTotal" min="0" required></ion-input>
       </div>
 
       <div class="form-group full-width">
         <ion-label position="stacked">Observações</ion-label>
-        <ion-textarea name="observacoes" [(ngModel)]="observacoes"></ion-textarea>
+        <ion-textarea [(ngModel)]="observacoes" name="observacoes"></ion-textarea>
       </div>
 
-      <!-- Parte das Fotos -->
+      <!-- Fotos -->
       <div class="form-group full-width">
         <ion-label position="stacked">Fotos do Serviço</ion-label>
         <div class="fotos-container">
-          <div *ngFor="let img of imagens; let i = index" class="foto-item" (click)="removerFoto(i)">
+          <div *ngFor="let img of imagens; let i = index" class="foto-item">
             <img [src]="img" class="foto-preview" />
-            <div class="remove-icon">×</div>
+            <div class="remove-icon" (click)="removerFoto(i)">×</div>
           </div>
-          <ion-button (click)="adicionarFoto()" expand="block" class="adicionar-foto-btn">
-            <ion-icon name="add-circle-outline"></ion-icon>
-            Adicionar Foto
-          </ion-button>        
         </div>
+        <ion-button expand="block" (click)="adicionarFoto()" class="adicionar-foto-btn">
+          <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+          Adicionar Foto
+        </ion-button>
       </div>
     </form>
 
+    <!-- Botão de ação -->
     <div class="button-container">
       <ion-button expand="block" (click)="atualizarServico()" class="save-button">
         Atualizar Serviço
