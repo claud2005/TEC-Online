@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { Location } from '@angular/common';
-import { environment } from 'src/environments/environment.prod';  // Ajusta conforme o caminho correto
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-utilizadores',
@@ -37,15 +37,19 @@ export class AdministradoresPage implements OnInit {
 
     this.http.get<any[]>(`${environment.api_url}/api/users`, { headers }).subscribe(
       (data) => {
-        this.utilizadores = data.map(user => ({
-          id: user._id,
-          fullName: user.fullName,
-          username: user.username,
-          email: user.email,
-          isAdmin: user.role === 'admin',
-          telefone: user.telefone || '-'
-        }));
-        console.log('Utilizadores carregados:', this.utilizadores);
+        this.utilizadores = data.map(user => {
+          const atualizado = new Date(user.updatedAt || user.createdAt);
+          return {
+            id: user._id,
+            fullName: user.fullName,
+            username: user.username,
+            email: user.email,
+            isAdmin: user.role === 'admin',
+            telefone: user.telefone || '-',
+            dataAtualização: atualizado,
+            horaAtualização: atualizado
+          };
+        });
       },
       (error) => {
         console.error('Erro ao carregar utilizadores:', error);
@@ -58,12 +62,10 @@ export class AdministradoresPage implements OnInit {
   }
 
   sair() {
-  this.navCtrl.navigateRoot('/plano-semanal');
-}
-
+    this.navCtrl.navigateRoot('/plano-semanal');
+  }
 
   alterarSenha(user: any) {
-    // Navega para a página esqueceu-password passando o id do utilizador
     this.navCtrl.navigateForward(`/esqueceu-password/${user.id}`);
   }
 
@@ -83,6 +85,6 @@ export class AdministradoresPage implements OnInit {
   }
 
   editarUtilizador(id: string) {
-    this.navCtrl.navigateForward(`/signup/${id}`); // Navega para página signup com id para edição
+    this.navCtrl.navigateForward(`/signup/${id}`);
   }
 }

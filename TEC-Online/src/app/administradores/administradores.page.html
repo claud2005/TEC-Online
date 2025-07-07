@@ -5,8 +5,6 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-
-  <!-- Botões superiores -->
   <div class="top-buttons">
     <ion-button (click)="criarUtilizador()" color="success">
       <ion-icon slot="start" name="person-add-outline"></ion-icon>
@@ -19,13 +17,13 @@
     </ion-button>
   </div>
 
-  <!-- Tabela de utilizadores -->
   <ion-grid class="user-table">
     <ion-row class="table-header">
       <ion-col>Nome</ion-col>
       <ion-col>Email</ion-col>
       <ion-col>Telefone</ion-col>
       <ion-col>Administrador</ion-col>
+      <ion-col>Última Atualizacao</ion-col>
       <ion-col>Gerenciar</ion-col>
     </ion-row>
 
@@ -34,6 +32,7 @@
       <ion-col>{{ user.email }}</ion-col>
       <ion-col>{{ user.telefone }}</ion-col>
       <ion-col>{{ user.isAdmin ? 'Sim' : 'Não' }}</ion-col>
+      <ion-col>{{ user.dataAtualizacao | date:'dd/MM/yyyy' }} às {{ user.horaAtualizacao | date:'HH:mm' }}</ion-col>
       <ion-col class="actions">
         <ion-button size="small" color="warning" (click)="alterarSenha(user); $event.stopPropagation()" title="Alterar Senha">
           <ion-icon slot="icon-only" name="key-outline"></ion-icon>
@@ -51,5 +50,4 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-
 </ion-content>
