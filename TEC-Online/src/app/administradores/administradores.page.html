@@ -18,38 +18,39 @@
       Sair
     </ion-button>
   </div>
-
   <!-- Tabela de utilizadores -->
-  <ion-grid class="user-table">
-    <ion-row class="table-header">
-      <ion-col>Nome</ion-col>
-      <ion-col>Email</ion-col>
-      <ion-col>Telefone</ion-col>
-      <ion-col>Administrador</ion-col>
-      <ion-col>Gerenciar</ion-col>
-    </ion-row>
+<ion-grid class="user-table">
+  <ion-row class="table-header">
+    <ion-col>Nome</ion-col>
+    <ion-col>Email</ion-col>
+    <ion-col>Telefone</ion-col>
+    <ion-col>Administrador</ion-col>
+    <ion-col>Atualizado a:</ion-col>
+    <ion-col>Gerenciar</ion-col>
+  </ion-row>
 
-    <ion-row *ngFor="let user of utilizadores" class="user-row" (click)="editarUtilizador(user.id)">
-      <ion-col>{{ user.fullName }}</ion-col>
-      <ion-col>{{ user.email }}</ion-col>
-      <ion-col>{{ user.telefone }}</ion-col>
-      <ion-col>{{ user.isAdmin ? 'Sim' : 'Não' }}</ion-col>
-      <ion-col class="actions">
-        <ion-button size="small" color="warning" (click)="alterarSenha(user); $event.stopPropagation()" title="Alterar Senha">
-          <ion-icon slot="icon-only" name="key-outline"></ion-icon>
-        </ion-button>
+  <ion-row *ngFor="let user of utilizadores" class="user-row" (click)="editarUtilizador(user.id)">
+    <ion-col>{{ user.fullName }}</ion-col>
+    <ion-col>{{ user.email }}</ion-col>
+    <ion-col>{{ user.telefone }}</ion-col>
+    <ion-col>{{ user.isAdmin ? 'Sim' : 'Não' }}</ion-col>
+    <ion-col>{{ user.updatedAt | date:'dd/MM/yyyy HH:mm' }}</ion-col>
+    <ion-col class="actions">
+      <ion-button size="small" color="warning" (click)="alterarSenha(user); $event.stopPropagation()" title="Alterar Senha">
+        <ion-icon slot="icon-only" name="key-outline"></ion-icon>
+      </ion-button>
 
-        <ion-button size="small" color="danger" (click)="eliminarUtilizador(user.id); $event.stopPropagation()" title="Eliminar">
-          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
+      <ion-button size="small" color="danger" (click)="eliminarUtilizador(user.id); $event.stopPropagation()" title="Eliminar">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
 
-    <ion-row *ngIf="utilizadores.length === 0" class="no-users">
-      <ion-col colspan="5">
-        Nenhum utilizador registrado.
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <ion-row *ngIf="utilizadores.length === 0" class="no-users">
+    <ion-col colspan="6">
+      Nenhum utilizador registrado.
+    </ion-col>
+  </ion-row>
+</ion-grid>
 
 </ion-content>

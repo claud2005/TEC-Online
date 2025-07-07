@@ -32,26 +32,27 @@ export class AdministradoresPage implements OnInit {
   }
 
   carregarUtilizadores() {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.get<any[]>(`${environment.api_url}/api/users`, { headers }).subscribe(
-      (data) => {
-        this.utilizadores = data.map(user => ({
-          id: user._id,
-          fullName: user.fullName,
-          username: user.username,
-          email: user.email,
-          isAdmin: user.role === 'admin',
-          telefone: user.telefone || '-'
-        }));
-        console.log('Utilizadores carregados:', this.utilizadores);
-      },
-      (error) => {
-        console.error('Erro ao carregar utilizadores:', error);
-      }
-    );
-  }
+  this.http.get<any[]>(`${environment.api_url}/api/users`, { headers }).subscribe(
+    (data) => {
+      this.utilizadores = data.map(user => ({
+        id: user._id,
+        fullName: user.fullName,
+        username: user.username,
+        email: user.email,
+        isAdmin: user.role === 'admin',
+        telefone: user.telefone || '-',
+        updatedAt: user.updatedAt || user.createdAt // Usa updatedAt ou createdAt se updatedAt não existir
+      }));
+      console.log('Utilizadores carregados:', this.utilizadores);
+    },
+    (error) => {
+      console.error('Erro ao carregar utilizadores:', error);
+    }
+  );
+}
 
   criarUtilizador() {
     this.navCtrl.navigateForward('/signup');
