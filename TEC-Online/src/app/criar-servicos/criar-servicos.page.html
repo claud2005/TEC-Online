@@ -20,7 +20,7 @@
           [(ngModel)]="dataServico"
           name="dataServico"
           required
-          placeholder="Escolha a data"
+          placeholder="Escolha a data do serviço"
         ></ion-input>
       </div>
 
@@ -31,13 +31,13 @@
           [(ngModel)]="horaServico"
           name="horaServico"
           required
-          placeholder="Escolha a hora"
+          placeholder="Escolha a hora do serviço"
         ></ion-input>
       </div>
 
       <!-- Linha 2 -->
       <div class="form-group">
-        <ion-label position="floating">Estado *</ion-label>
+        <ion-label position="floating">Status *</ion-label>
         <ion-select
           [(ngModel)]="status"
           name="status"
@@ -62,32 +62,30 @@
         ></ion-input>
       </div>
 
-      <!-- Campo de Cliente -->
+      <!-- Linha 3 - Cliente com busca -->
       <div class="form-group full-width">
-        <ion-label>Cliente *</ion-label>
+        <ion-label position="stacked">Cliente *</ion-label>
         <ion-searchbar
-          [(ngModel)]="searchTerm"
-          (ionInput)="filtrarClientes()"
-          placeholder="Pesquisar (A-Z)..."
-          *ngIf="mostrarSearchbar"
-          class="animated-searchbar"
+          [(ngModel)]="termoPesquisa"
+          (ionInput)="filtrarClientes($event)"
+          placeholder="Digite para procurar cliente"
+          debounce="300"
+          name="termoPesquisa"
         ></ion-searchbar>
-        
-        <ion-select
-          [(ngModel)]="clienteSelecionado"
-          name="clienteSelecionado"
-          interface="popover"
-          (ionFocus)="carregarTodosClientes()"
-          required
-        >
-          <ion-select-option 
-            *ngFor="let cliente of clientesFiltrados" 
-            [value]="cliente._id"
+
+        <ion-list *ngIf="clientesFiltrados.length > 0 && mostrarSugestoes">
+          <ion-item
+            button
+            *ngFor="let cliente of clientesFiltrados"
+            (click)="selecionarCliente(cliente)"
           >
-            {{ cliente.nome }}
-            <span *ngIf="cliente.email" class="email-text">({{ cliente.email }})</span>
-          </ion-select-option>
-        </ion-select>
+            {{ cliente.nome }} ({{ cliente.numeroCliente || 'N/C' }})
+          </ion-item>
+        </ion-list>
+
+        <div *ngIf="clienteSelecionadoNome" class="cliente-selecionado">
+          Selecionado: {{ clienteSelecionadoNome }}
+        </div>
       </div>
 
       <!-- Linha 4 -->
@@ -97,7 +95,7 @@
           [(ngModel)]="marcaAparelho"
           name="marcaAparelho"
           required
-          placeholder="Ex: Apple"
+          placeholder="Ex: Apple, Samsung, Xiaomi"
         ></ion-input>
       </div>
 
@@ -107,30 +105,32 @@
           [(ngModel)]="modeloAparelho"
           name="modeloAparelho"
           required
-          placeholder="Ex: iPhone 15"
+          placeholder="Ex: iPhone 15, Galaxy S21, Redmi Note 12"
         ></ion-input>
       </div>
 
       <!-- Linha 5 -->
       <div class="form-group full-width">
-        <ion-label position="floating">Problema *</ion-label>
+        <ion-label position="floating">Problema Relatado *</ion-label>
         <ion-textarea
           [(ngModel)]="problemaRelatado"
           name="problemaRelatado"
           rows="3"
           required
-          placeholder="Descreva o problema"
+          auto-grow
+          placeholder="Ex: Ecrã partido, não liga, bateria descarrega rápido..."
         ></ion-textarea>
       </div>
 
       <!-- Linha 6 -->
       <div class="form-group full-width">
-        <ion-label position="floating">Solução</ion-label>
+        <ion-label position="floating">Solução Proposta</ion-label>
         <ion-textarea
           [(ngModel)]="solucaoInicial"
           name="solucaoInicial"
           rows="3"
-          placeholder="Proposta de solução"
+          auto-grow
+          placeholder="Ex: Substituição do ecrã, troca de bateria, limpeza interna..."
         ></ion-textarea>
       </div>
 
@@ -143,7 +143,7 @@
           name="valorTotal"
           min="0"
           step="0.01"
-          placeholder="0.00"
+          placeholder="Ex: 49.90"
         ></ion-input>
       </div>
 
@@ -153,7 +153,8 @@
           [(ngModel)]="observacoes"
           name="observacoes"
           rows="2"
-          placeholder="Notas adicionais"
+          auto-grow
+          placeholder="Ex: Cliente pediu urgência, aparelho com riscos, etc..."
         ></ion-textarea>
       </div>
     </form>
@@ -166,7 +167,7 @@
         class="save-button"
       >
         <ion-icon slot="start" name="save"></ion-icon>
-        Guardar Serviço
+        Salvar Serviço
       </ion-button>
     </div>
   </div>
