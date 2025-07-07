@@ -39,7 +39,7 @@
           <ion-icon slot="icon-only" name="key-outline"></ion-icon>
         </ion-button>
 
-        <ion-button size="small" color="danger" (click)="eliminarUtilizador(user.id); $event.stopPropagation()" title="Eliminar">
+        <ion-button size="small" color="danger" (click)="confirmarEliminarUtilizador(user); $event.stopPropagation()" title="Eliminar">
           <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-button>
       </ion-col>
@@ -67,7 +67,7 @@
       <ion-button size="small" color="warning" (click)="alterarSenha(user)">
         <ion-icon slot="start" name="key-outline"></ion-icon> Alterar Senha
       </ion-button>
-      <ion-button size="small" color="danger" (click)="eliminarUtilizador(user.id)">
+      <ion-button size="small" color="danger" (click)="confirmarEliminarUtilizador(user)">
         <ion-icon slot="start" name="trash-outline"></ion-icon> Eliminar
       </ion-button>
     </ion-card-content>

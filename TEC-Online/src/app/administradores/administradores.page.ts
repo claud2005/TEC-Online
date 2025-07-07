@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicModule, NavController } from '@ionic/angular';
+import { IonicModule, NavController, AlertController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
@@ -24,10 +24,15 @@ export class AdministradoresPage implements OnInit {
   constructor(
     private http: HttpClient,
     private navCtrl: NavController,
-    private location: Location
+    private location: Location,
+    private alertCtrl: AlertController
   ) {}
 
   ngOnInit() {
+    this.carregarUtilizadores();
+  }
+
+  ionViewWillEnter() {
     this.carregarUtilizadores();
   }
 
@@ -66,6 +71,29 @@ export class AdministradoresPage implements OnInit {
 
   alterarSenha(user: any) {
     this.navCtrl.navigateForward(`/esqueceu-password/${user.id}`);
+  }
+
+  async confirmarEliminarUtilizador(user: any) {
+    const alert = await this.alertCtrl.create({
+      header: 'Confirmação',
+      message: `Tens certeza que queres eliminar o utilizador <strong>${user.fullName}</strong>?`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'Eliminar',
+          cssClass: 'danger',
+          handler: () => {
+            this.eliminarUtilizador(user.id);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   eliminarUtilizador(id: string) {
