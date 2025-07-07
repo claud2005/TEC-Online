@@ -168,3 +168,20 @@ ion-col {
     --padding-end: 12px;
   }
 }
+/* Mostrar apenas em desktops (≥ 769px) */
+.only-desktop {
+  display: block;
+}
+
+.only-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .only-desktop {
+    display: none !important;
+  }
+  .only-mobile {
+    display: block !important;
+  }
+}

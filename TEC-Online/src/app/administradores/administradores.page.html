@@ -18,7 +18,7 @@
   </div>
 
   <!-- Tabela para desktop -->
-  <ion-grid class="user-table" *ngIf="utilizadores.length > 0">
+  <ion-grid class="user-table only-desktop" *ngIf="utilizadores.length > 0">
     <ion-row class="table-header">
       <ion-col>Nome</ion-col>
       <ion-col>Email</ion-col>
@@ -54,7 +54,7 @@
   </ion-row>
 
   <!-- Cards para mobile, se quiser adicionar (opcional) -->
-  <ion-card *ngFor="let user of utilizadores" class="mobile-user-card">
+  <ion-card *ngFor="let user of utilizadores" class="mobile-user-card only-mobile">
     <ion-card-header>
       <ion-card-title>{{ user.fullName }}</ion-card-title>
     </ion-card-header>
