@@ -25,7 +25,7 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  clienteSelecionado: { id: any; nome: string; numeroCliente?: any } | null = null;
+  clienteSelecionado: string | null = null;
   clienteSelecionadoNome: string = '';
   termoPesquisa: string = '';
   mostrarSugestoes: boolean = false;
@@ -39,10 +39,6 @@ export class CriarServicosPage implements OnInit {
 
   clientes: any[] = [];
   clientesFiltrados: any[] = [];
-
-  private timeoutBlur: any;
-  clienteInput: any;
-  mostrarAutocomplete: boolean | undefined;
 
   constructor(
     private http: HttpClient,
@@ -94,8 +90,6 @@ export class CriarServicosPage implements OnInit {
         numeroCliente: cliente.numeroCliente || cliente.contacto
       })) || [];
 
-      this.clientesFiltrados = [...this.clientes];
-
     } catch (error) {
       console.error('Erro ao carregar clientes:', error);
       const alert = await this.alertController.create({
@@ -109,40 +103,25 @@ export class CriarServicosPage implements OnInit {
     }
   }
 
-filtrarClientes() {
-  const texto = this.clienteInput.toLowerCase().trim();
-  if (texto.length === 0) {
-    this.clientesFiltrados = [];
-    this.clienteSelecionado = null;
-    return;
+  filtrarClientes(event: any) {
+    const termo = event.target.value.toLowerCase();
+    this.mostrarSugestoes = true;
+
+    if (termo && termo.length > 1) {
+      this.clientesFiltrados = this.clientes.filter(cliente =>
+        cliente.nome.toLowerCase().includes(termo)
+      );
+    } else {
+      this.clientesFiltrados = [];
+    }
   }
 
-  this.clientesFiltrados = this.clientes.filter(c =>
-    c.nome.toLowerCase().includes(texto)
-  );
-  this.clienteSelecionado = null;
-}
-
-selecionarCliente(cliente: any) {
-  this.clienteSelecionado = cliente;
-  this.clienteInput = cliente.nome;
-  this.mostrarAutocomplete = false;
-}
-
-// Delay para evitar fechar o dropdown antes do clique funcionar
-onBlurCliente() {
-  setTimeout(() => {
-    this.mostrarAutocomplete = false;
-    // Se digitou algo que não corresponde ao cliente selecionado, limpa seleção
-    if (
-      !this.clienteSelecionado ||
-      (typeof this.clienteSelecionado === 'object' && this.clienteInput !== this.clienteSelecionado.nome) ||
-      (typeof this.clienteSelecionado === 'string' && this.clienteInput !== this.clienteSelecionado)
-    ) {
-      this.clienteSelecionado = null;
-    }
-  }, 200);
-}
+  selecionarCliente(cliente: any) {
+    this.clienteSelecionado = cliente.id;
+    this.clienteSelecionadoNome = cliente.nome;
+    this.termoPesquisa = cliente.nome;
+    this.mostrarSugestoes = false;
+  }
 
   async salvarServico() {
     if (!this.isFormValid()) {
