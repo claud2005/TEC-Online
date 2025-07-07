@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { Location } from '@angular/common';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment.prod';  // Ajusta conforme o caminho correto
 
 @Component({
   selector: 'app-utilizadores',
@@ -32,37 +32,38 @@ export class AdministradoresPage implements OnInit {
   }
 
   carregarUtilizadores() {
-  const token = localStorage.getItem('token');
-  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-  this.http.get<any[]>(`${environment.api_url}/api/users`, { headers }).subscribe(
-    (data) => {
-      this.utilizadores = data.map(user => ({
-        id: user._id,
-        fullName: user.fullName,
-        username: user.username,
-        email: user.email,
-        isAdmin: user.role === 'admin',
-        telefone: user.telefone || '-',
-        dataAtualizacao: user.updatedAt || user.createdAt,
-        horaAtualizacao: user.updatedAt || user.createdAt
-      }));
-    },
-    (error) => {
-      console.error('Erro ao carregar utilizadores:', error);
-    }
-  );
-}
+    this.http.get<any[]>(`${environment.api_url}/api/users`, { headers }).subscribe(
+      (data) => {
+        this.utilizadores = data.map(user => ({
+          id: user._id,
+          fullName: user.fullName,
+          username: user.username,
+          email: user.email,
+          isAdmin: user.role === 'admin',
+          telefone: user.telefone || '-'
+        }));
+        console.log('Utilizadores carregados:', this.utilizadores);
+      },
+      (error) => {
+        console.error('Erro ao carregar utilizadores:', error);
+      }
+    );
+  }
 
   criarUtilizador() {
     this.navCtrl.navigateForward('/signup');
   }
 
   sair() {
-    this.navCtrl.navigateRoot('/plano-semanal');
-  }
+  this.navCtrl.navigateRoot('/plano-semanal');
+}
+
 
   alterarSenha(user: any) {
+    // Navega para a página esqueceu-password passando o id do utilizador
     this.navCtrl.navigateForward(`/esqueceu-password/${user.id}`);
   }
 
@@ -82,13 +83,6 @@ export class AdministradoresPage implements OnInit {
   }
 
   editarUtilizador(id: string) {
-    // Atualiza a data localmente antes de navegar (como fallback)
-    const userIndex = this.utilizadores.findIndex(u => u.id === id);
-    if (userIndex !== -1) {
-      const now = new Date();
-      this.utilizadores[userIndex].dataAtualizacao = now;
-      this.utilizadores[userIndex].horaAtualizacao = now;
-    }
-    this.navCtrl.navigateForward(`/signup/${id}`);
+    this.navCtrl.navigateForward(`/signup/${id}`); // Navega para página signup com id para edição
   }
 }

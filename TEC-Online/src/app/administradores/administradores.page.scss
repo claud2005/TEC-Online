@@ -1,9 +1,9 @@
-/* Estilos gerais */
 ion-toolbar {
   --background: #3880ff;
   --color: #fff;
 }
 
+/* Botões superiores */
 .top-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -12,130 +12,164 @@ ion-toolbar {
   margin-bottom: 1.5rem;
 }
 
-.table-container {
-  overflow-x: auto;
-}
-
+/* Container geral da tabela */
 .user-table {
-  width: 100%;
-  min-width: 600px; /* Largura mínima para desktop */
-  border-collapse: collapse;
-  margin: 0 auto;
-  background: white;
+  font-size: 0.95rem;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: #fff;
+  margin: 0 auto; /* Centraliza horizontalmente */
+  max-width: 100%;
+  width: 100%;
+  border: 1px solid #e0e0e0; /* Leve contorno para suavidade */
 }
 
-.table-header {
-  background-color: #f8f9fa;
-  font-weight: bold;
-  
-  ion-col {
-    padding: 12px;
-    text-align: center;
-    color: #333;
-  }
+/* Cabeçalho das colunas */
+.table-header ion-col {
+  font-weight: 600;
+  font-size: 0.95rem;
+  background-color: transparent; /* removido sombreamento */
+  padding: 12px;
+  justify-content: center;
+  color: #333;
 }
 
+/* Linha do utilizador */
 .user-row {
-  border-bottom: 1px solid #e9ecef;
-  transition: background-color 0.2s;
-  
-  &:hover {
-    background-color: #f8f9fa;
-  }
-  
-  ion-col {
-    padding: 12px;
-    text-align: center;
-    vertical-align: middle;
-  }
+  display: flex;
+  align-items: center;
+  text-align: center;
+  border-bottom: 1px solid #e5e5e5;
+  transition: background-color 0.2s ease;
+  padding: 12px 0;
+  cursor: pointer;
 }
 
-.update-col {
-  white-space: nowrap;
+.user-row:hover {
+  background-color: #f9fafc;
 }
 
+/* Última linha */
+.user-row:last-child {
+  border-bottom: none;
+}
+
+/* Células (ion-col) */
+ion-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  word-break: break-word;
+}
+
+/* Coluna de ações */
 .actions {
   display: flex;
   justify-content: center;
-  gap: 8px;
-  
-  ion-button {
-    --padding-start: 8px;
-    --padding-end: 8px;
-    margin: 0;
-  }
+  align-items: center;
+  gap: 0.4rem;
 }
 
+/* Botões pequenos */
+.actions ion-button {
+  --border-radius: 8px;
+  --padding-start: 8px;
+  --padding-end: 8px;
+}
+
+/* Estilo quando não há utilizadores */
 .no-users {
   text-align: center;
-  padding: 20px;
-  color: #6c757d;
   font-style: italic;
+  color: #888;
+  padding: 1.5rem;
+  background-color: #fdfdfd;
+  border: 1px dashed #ccc;
+  border-radius: 6px;
+  margin-top: 1rem;
 }
 
-/* Layout Mobile (abaixo de 768px) */
+/* --- RESPONSIVO PARA MOBILE --- */
 @media (max-width: 768px) {
-  .table-container {
-    overflow-x: visible;
-  }
-  
-  .user-table {
-    min-width: 100%;
-    display: block;
-  }
-  
+  /* Esconde o cabeçalho da tabela */
   .table-header {
     display: none;
   }
-  
+
+  /* Cada linha vira um "cartão" vertical */
   .user-row {
-    display: block;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background: #fff;
+    flex-direction: column;
+    align-items: stretch; /* para as colunas ocuparem toda a largura */
+    text-align: left;
+    padding: 1rem 1.2rem; /* mais espaçamento nas laterais */
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 1rem; /* separação entre cartões */
+    background-color: #fafafa; /* fundo leve para destacar */
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 1px solid #e9ecef;
-    
-    ion-col {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
-      text-align: left;
-      border-bottom: 1px solid #f1f1f1;
-      
-      &::before {
-        content: attr(data-label);
-        font-weight: bold;
-        margin-right: 1rem;
-        color: #495057;
-      }
-      
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-    
-    .actions {
-      justify-content: flex-end;
-      padding-top: 12px;
-      
-      &::before {
-        display: none;
-      }
-    }
-    
-    .update-col {
-      white-space: normal;
-    }
   }
-  
-  .no-users {
-    padding: 1.5rem;
-    background: #f8f9fa;
-    border-radius: 8px;
+
+  /* Cada coluna vira uma linha com label */
+  ion-col {
+    justify-content: flex-start;
+    padding: 12px 0;    /* mais espaçamento vertical */
+    width: 95%;         /* largura maior para colunas mais largas */
+    max-width: 95%;
+    display: flex;
+    align-items: center;
+    word-break: break-word;
+  }
+
+  /* Aumenta a largura só da coluna Gerenciar para 100% */
+  ion-col:nth-child(5) {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 8px; /* espaço extra para afastar os botões */
+  }
+
+  /* Label antes do conteúdo */
+  ion-col:nth-child(1)::before {
+    content: "Nome: ";
+    font-weight: 600;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+  }
+  ion-col:nth-child(2)::before {
+    content: "Email: ";
+    font-weight: 600;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+  }
+  ion-col:nth-child(3)::before {
+    content: "Telefone: ";
+    font-weight: 600;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+  }
+  ion-col:nth-child(4)::before {
+    content: "Administrador: ";
+    font-weight: 600;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+  }
+  ion-col:nth-child(5)::before {
+    content: "Gerenciar: ";
+    font-weight: 600;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  /* Ajustar botões para ficarem alinhados no início */
+  .actions {
+    justify-content: flex-start;
+    gap: 0.75rem;
+  }
+
+  /* Botões um pouco maiores e com espaçamento */
+  .actions ion-button {
+    --min-width: 44px;
+    --height: 40px;
+    --padding-start: 12px;
+    --padding-end: 12px;
   }
 }
