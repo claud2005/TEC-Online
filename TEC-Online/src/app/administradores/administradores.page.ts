@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { Location } from '@angular/common';
-import { environment } from 'src/environments/environment.prod';  // Ajusta conforme o caminho correto
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-utilizadores',
@@ -44,9 +44,9 @@ export class AdministradoresPage implements OnInit {
         email: user.email,
         isAdmin: user.role === 'admin',
         telefone: user.telefone || '-',
-        updatedAt: user.updatedAt || user.createdAt // Usa updatedAt ou createdAt se updatedAt não existir
+        dataAtualizacao: user.updatedAt || user.createdAt,
+        horaAtualizacao: user.updatedAt || user.createdAt
       }));
-      console.log('Utilizadores carregados:', this.utilizadores);
     },
     (error) => {
       console.error('Erro ao carregar utilizadores:', error);
@@ -59,12 +59,10 @@ export class AdministradoresPage implements OnInit {
   }
 
   sair() {
-  this.navCtrl.navigateRoot('/plano-semanal');
-}
-
+    this.navCtrl.navigateRoot('/plano-semanal');
+  }
 
   alterarSenha(user: any) {
-    // Navega para a página esqueceu-password passando o id do utilizador
     this.navCtrl.navigateForward(`/esqueceu-password/${user.id}`);
   }
 
@@ -84,6 +82,13 @@ export class AdministradoresPage implements OnInit {
   }
 
   editarUtilizador(id: string) {
-    this.navCtrl.navigateForward(`/signup/${id}`); // Navega para página signup com id para edição
+    // Atualiza a data localmente antes de navegar (como fallback)
+    const userIndex = this.utilizadores.findIndex(u => u.id === id);
+    if (userIndex !== -1) {
+      const now = new Date();
+      this.utilizadores[userIndex].dataAtualizacao = now;
+      this.utilizadores[userIndex].horaAtualizacao = now;
+    }
+    this.navCtrl.navigateForward(`/signup/${id}`);
   }
 }
