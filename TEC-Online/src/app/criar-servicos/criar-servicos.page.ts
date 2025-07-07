@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NavController, IonicModule, ToastController, AlertController, LoadingController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { IonSelect, IonSelectOption } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment.prod';
 
@@ -16,8 +15,6 @@ import { environment } from 'src/environments/environment.prod';
     CommonModule,
     FormsModule,
     IonicModule,
-    IonSelect,
-    IonSelectOption,
   ],
 })
 export class CriarServicosPage implements OnInit {
@@ -25,10 +22,13 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  clienteSelecionado: string | null = null;
-  clienteSelecionadoNome: string = '';
+
+  // Multi-select clientes
   termoPesquisa: string = '';
-  mostrarSugestoes: boolean = false;
+  mostrarSugestoes = false;
+  clientes: any[] = [];
+  clientesFiltrados: any[] = [];
+  clientesSelecionados: any[] = [];
 
   marcaAparelho: string = '';
   modeloAparelho: string = '';
@@ -36,9 +36,6 @@ export class CriarServicosPage implements OnInit {
   solucaoInicial: string = '';
   valorTotal: number | null = null;
   observacoes: string = '';
-
-  clientes: any[] = [];
-  clientesFiltrados: any[] = [];
 
   constructor(
     private http: HttpClient,
@@ -103,24 +100,48 @@ export class CriarServicosPage implements OnInit {
     }
   }
 
-  filtrarClientes(event: any) {
-    const termo = event.target.value.toLowerCase();
-    this.mostrarSugestoes = true;
+  filtrarClientes() {
+    const termo = this.termoPesquisa.toLowerCase().trim();
 
-    if (termo && termo.length > 1) {
-      this.clientesFiltrados = this.clientes.filter(cliente =>
-        cliente.nome.toLowerCase().includes(termo)
-      );
-    } else {
+    if (termo.length < 2) {
       this.clientesFiltrados = [];
+      return;
     }
+
+    this.clientesFiltrados = this.clientes.filter(cliente =>
+      cliente.nome.toLowerCase().includes(termo) &&
+      !this.clientesSelecionados.some(sel => sel.id === cliente.id)
+    );
   }
 
-  selecionarCliente(cliente: any) {
-    this.clienteSelecionado = cliente.id;
-    this.clienteSelecionadoNome = cliente.nome;
-    this.termoPesquisa = cliente.nome;
+  adicionarCliente(cliente: any) {
+    this.clientesSelecionados.push(cliente);
+    this.termoPesquisa = '';
+    this.clientesFiltrados = [];
     this.mostrarSugestoes = false;
+  }
+
+  removerCliente(index: number) {
+    this.clientesSelecionados.splice(index, 1);
+  }
+
+  onBlurInput() {
+    setTimeout(() => {
+      this.mostrarSugestoes = false;
+    }, 200);
+  }
+
+  isFormValid(): boolean {
+    return !!(
+      this.dataServico &&
+      this.horaServico &&
+      this.status &&
+      this.autorServico &&
+      this.clientesSelecionados.length > 0 &&
+      this.marcaAparelho &&
+      this.modeloAparelho &&
+      this.problemaRelatado
+    );
   }
 
   async salvarServico() {
@@ -140,7 +161,9 @@ export class CriarServicosPage implements OnInit {
     await loading.present();
 
     try {
-      const cliente = this.clientes.find(c => c.id === this.clienteSelecionado);
+      // Para exemplo, vamos salvar o serviço para o primeiro cliente selecionado
+      // ou você pode adaptar para salvar para todos ou outro fluxo que desejar
+      const cliente = this.clientesSelecionados[0];
       if (!cliente) throw new Error('Cliente não encontrado');
 
       const dadosServico = {
@@ -191,19 +214,6 @@ export class CriarServicosPage implements OnInit {
     } finally {
       await loading.dismiss();
     }
-  }
-
-  isFormValid(): boolean {
-    return !!(
-      this.dataServico &&
-      this.horaServico &&
-      this.status &&
-      this.autorServico &&
-      this.clienteSelecionado &&
-      this.marcaAparelho &&
-      this.modeloAparelho &&
-      this.problemaRelatado
-    );
   }
 
   goBack() {
