@@ -25,10 +25,10 @@ export class CriarServicosPage implements OnInit {
   horaServico: string = '';
   status: string = 'aberto';
   autorServico: string = '';
-  
-  // novo: input e cliente selecionado
-  clienteInput: string = '';
-  clienteSelecionado: any = null; // guarda objeto cliente
+  clienteSelecionado: { id: any; nome: string; numeroCliente?: any } | null = null;
+  clienteSelecionadoNome: string = '';
+  termoPesquisa: string = '';
+  mostrarSugestoes: boolean = false;
 
   marcaAparelho: string = '';
   modeloAparelho: string = '';
@@ -39,7 +39,10 @@ export class CriarServicosPage implements OnInit {
 
   clientes: any[] = [];
   clientesFiltrados: any[] = [];
-  mostrarAutocomplete: boolean = false;
+
+  private timeoutBlur: any;
+  clienteInput: any;
+  mostrarAutocomplete: boolean | undefined;
 
   constructor(
     private http: HttpClient,
@@ -92,6 +95,7 @@ export class CriarServicosPage implements OnInit {
       })) || [];
 
       this.clientesFiltrados = [...this.clientes];
+
     } catch (error) {
       console.error('Erro ao carregar clientes:', error);
       const alert = await this.alertController.create({
@@ -105,35 +109,40 @@ export class CriarServicosPage implements OnInit {
     }
   }
 
-  filtrarClientes() {
-    const texto = this.clienteInput.toLowerCase().trim();
-    if (texto.length === 0) {
-      this.clientesFiltrados = [...this.clientes];
-      this.clienteSelecionado = null;
-      return;
-    }
-
-    this.clientesFiltrados = this.clientes.filter(c =>
-      c.nome.toLowerCase().includes(texto)
-    );
+filtrarClientes() {
+  const texto = this.clienteInput.toLowerCase().trim();
+  if (texto.length === 0) {
+    this.clientesFiltrados = [];
     this.clienteSelecionado = null;
+    return;
   }
 
-  selecionarCliente(cliente: any) {
-    this.clienteSelecionado = cliente;
-    this.clienteInput = cliente.nome;
+  this.clientesFiltrados = this.clientes.filter(c =>
+    c.nome.toLowerCase().includes(texto)
+  );
+  this.clienteSelecionado = null;
+}
+
+selecionarCliente(cliente: any) {
+  this.clienteSelecionado = cliente;
+  this.clienteInput = cliente.nome;
+  this.mostrarAutocomplete = false;
+}
+
+// Delay para evitar fechar o dropdown antes do clique funcionar
+onBlurCliente() {
+  setTimeout(() => {
     this.mostrarAutocomplete = false;
-  }
-
-  // Para evitar fechar o dropdown ao clicar no item, delay para fechar depois do blur
-  onBlurCliente() {
-    setTimeout(() => {
-      this.mostrarAutocomplete = false;
-      if (!this.clienteSelecionado || this.clienteInput !== this.clienteSelecionado.nome) {
-        this.clienteSelecionado = null;
-      }
-    }, 200);
-  }
+    // Se digitou algo que não corresponde ao cliente selecionado, limpa seleção
+    if (
+      !this.clienteSelecionado ||
+      (typeof this.clienteSelecionado === 'object' && this.clienteInput !== this.clienteSelecionado.nome) ||
+      (typeof this.clienteSelecionado === 'string' && this.clienteInput !== this.clienteSelecionado)
+    ) {
+      this.clienteSelecionado = null;
+    }
+  }, 200);
+}
 
   async salvarServico() {
     if (!this.isFormValid()) {
@@ -146,56 +155,62 @@ export class CriarServicosPage implements OnInit {
       return;
     }
 
-    if (!this.clienteSelecionado) {
-      const toast = await this.toastController.create({
-        message: 'Por favor, selecione um cliente da lista',
-        duration: 3000,
-        color: 'warning'
-      });
-      await toast.present();
-      return;
-    }
-
-    const novoServico = {
-      dataServico: this.dataServico,
-      horaServico: this.horaServico,
-      status: this.status,
-      autorServico: this.autorServico,
-      cliente: this.clienteSelecionado,
-      marcaAparelho: this.marcaAparelho,
-      modeloAparelho: this.modeloAparelho,
-      problemaRelatado: this.problemaRelatado,
-      solucaoInicial: this.solucaoInicial,
-      valorTotal: this.valorTotal,
-      observacoes: this.observacoes,
-    };
+    const loading = await this.loadingController.create({
+      message: 'Salvando serviço...'
+    });
+    await loading.present();
 
     try {
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error('Token não encontrado');
+      const cliente = this.clientes.find(c => c.id === this.clienteSelecionado);
+      if (!cliente) throw new Error('Cliente não encontrado');
 
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      const dadosServico = {
+        dataServico: this.dataServico,
+        horaServico: this.horaServico,
+        status: this.status.replace('_', '-'),
+        autorServico: this.autorServico,
+        clienteId: cliente.id,
+        nomeCompletoCliente: cliente.nome,
+        contatoCliente: cliente.numeroCliente || 'Não informado',
+        marcaAparelho: this.marcaAparelho,
+        modeloAparelho: this.modeloAparelho,
+        problemaRelatado: this.problemaRelatado,
+        solucaoInicial: this.solucaoInicial || 'A definir',
+        valorTotal: Number(this.valorTotal) || 0,
+        observacoes: this.observacoes || 'Sem observações'
+      };
+
+      const token = localStorage.getItem('token');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      });
+
       await this.http.post(
         `${environment.api_url}/api/servicos`,
-        novoServico,
+        dadosServico,
         { headers }
       ).toPromise();
 
       const toast = await this.toastController.create({
         message: 'Serviço criado com sucesso!',
-        duration: 2500,
+        duration: 2000,
         color: 'success'
       });
       await toast.present();
-      this.router.navigate(['/servicos']);
-    } catch (error) {
-      console.error('Erro ao salvar serviço:', error);
+
+      this.router.navigate(['/plano-semanal', cliente.id]);
+    } catch (error: any) {
+      console.error('Erro ao criar serviço:', error);
+
       const alert = await this.alertController.create({
         header: 'Erro',
-        message: 'Não foi possível salvar o serviço.',
+        message: error.error?.message || 'Falha ao criar serviço',
         buttons: ['OK']
       });
       await alert.present();
+    } finally {
+      await loading.dismiss();
     }
   }
 

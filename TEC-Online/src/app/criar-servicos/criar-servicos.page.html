@@ -10,161 +10,115 @@
     </ion-toolbar>
   </ion-header>
 
-  <div class="form-container" style="position: relative;">
-    <form class="grid-container" (submit)="salvarServico()">
-      <!-- Linha 1 -->
-      <div class="form-group">
-        <ion-label position="floating">Data *</ion-label>
-        <ion-input
-          type="date"
+  <div class="form-container">
+    <form class="grid-container">
+
+      <ion-item>
+        <ion-label position="stacked">Data do Serviço *</ion-label>
+        <ion-datetime
+          displayFormat="DD/MM/YYYY"
           [(ngModel)]="dataServico"
           name="dataServico"
           required
-          placeholder="Escolha a data do serviço"
-        ></ion-input>
-      </div>
+        ></ion-datetime>
+      </ion-item>
 
-      <div class="form-group">
-        <ion-label position="floating">Hora *</ion-label>
-        <ion-input
-          type="time"
+      <ion-item>
+        <ion-label position="stacked">Hora do Serviço *</ion-label>
+        <ion-datetime
+          displayFormat="HH:mm"
+          pickerFormat="HH:mm"
           [(ngModel)]="horaServico"
           name="horaServico"
           required
-          placeholder="Escolha a hora do serviço"
-        ></ion-input>
-      </div>
+          value="{{ horaServico }}"
+        ></ion-datetime>
+      </ion-item>
 
-      <!-- Linha 2 -->
-      <div class="form-group">
-        <ion-label position="floating">Status *</ion-label>
-        <ion-select
-          [(ngModel)]="status"
-          name="status"
-          interface="popover"
-          required
-        >
+      <ion-item>
+        <ion-label position="stacked">Status *</ion-label>
+        <ion-select [(ngModel)]="status" name="status" required>
           <ion-select-option value="aberto">Aberto</ion-select-option>
-          <ion-select-option value="em-andamento">Em Andamento</ion-select-option>
-          <ion-select-option value="concluido">Concluído</ion-select-option>
+          <ion-select-option value="em-andamento">Em andamento</ion-select-option>
+          <ion-select-option value="finalizado">Finalizado</ion-select-option>
           <ion-select-option value="cancelado">Cancelado</ion-select-option>
         </ion-select>
-      </div>
+      </ion-item>
 
-      <div class="form-group">
-        <ion-label position="floating">Técnico *</ion-label>
-        <ion-input
-          [(ngModel)]="autorServico"
-          name="autorServico"
-          required
-          readonly
-          placeholder="Nome do técnico"
-        ></ion-input>
-      </div>
+      <ion-item>
+        <ion-label position="stacked">Autor *</ion-label>
+        <ion-input [(ngModel)]="autorServico" name="autorServico" readonly></ion-input>
+      </ion-item>
 
-      <!-- Linha 3: Cliente com autocomplete -->
+      <!-- Cliente autocomplete -->
       <div class="form-group full-width" style="position: relative;">
-        <ion-label position="floating">Cliente *</ion-label>
+          <ion-label position="floating">Cliente *</ion-label>
+      <ion-input
+        type="text"
+        [(ngModel)]="clienteInput"
+        name="clienteInput"
+        (input)="filtrarClientes()"
+        (focus)="mostrarAutocomplete = true"
+        (blur)="onBlurCliente()"
+        autocomplete="off"
+        placeholder="Digite o nome do cliente"
+        required
+      ></ion-input>
+
+      <div
+        *ngIf="mostrarAutocomplete && clientesFiltrados.length > 0"
+        class="autocomplete-list"
+        (mousedown)="$event.preventDefault()"
+        style="position: absolute; background: white; z-index: 10; width: 100%; max-height: 180px; overflow-y: auto; border: 1px solid #ccc; border-radius: 4px;"
+      >
+      <ion-item
+        button
+        *ngFor="let cliente of clientesFiltrados"
+        (click)="selecionarCliente(cliente)"
+      >
+      {{ cliente.nome }}
+    </ion-item>
+      </div>
+      </div>
+
+      <ion-item>
+        <ion-label position="stacked">Marca do Aparelho *</ion-label>
+        <ion-input [(ngModel)]="marcaAparelho" name="marcaAparelho" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Modelo do Aparelho *</ion-label>
+        <ion-input [(ngModel)]="modeloAparelho" name="modeloAparelho" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Problema Relatado *</ion-label>
+        <ion-textarea [(ngModel)]="problemaRelatado" name="problemaRelatado" required></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Solução Inicial</ion-label>
+        <ion-textarea [(ngModel)]="solucaoInicial" name="solucaoInicial"></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Valor Total</ion-label>
         <ion-input
-          type="text"
-          [(ngModel)]="clienteInput"
-          name="clienteInput"
-          (ionInput)="filtrarClientes()"
-          (focus)="mostrarAutocomplete = true"
-          (blur)="onBlurCliente()"
-          autocomplete="off"
-          placeholder="Digite o nome do cliente"
-          required
-        ></ion-input>
-
-        <!-- Dropdown autocomplete -->
-        <div
-          *ngIf="mostrarAutocomplete && clientesFiltrados.length > 0"
-          class="autocomplete-list"
-          (mousedown)="$event.preventDefault()" 
-        >
-          <ion-item
-            button
-            *ngFor="let cliente of clientesFiltrados"
-            (click)="selecionarCliente(cliente)"
-          >
-            {{ cliente.nome }} ({{ cliente.numeroCliente || 'N/C' }})
-          </ion-item>
-        </div>
-      </div>
-
-      <!-- Linha 4 -->
-      <div class="form-group">
-        <ion-label position="floating">Marca *</ion-label>
-        <ion-input
-          [(ngModel)]="marcaAparelho"
-          name="marcaAparelho"
-          required
-          placeholder="Ex: Apple, Samsung, Xiaomi"
-        ></ion-input>
-      </div>
-
-      <div class="form-group">
-        <ion-label position="floating">Modelo *</ion-label>
-        <ion-input
-          [(ngModel)]="modeloAparelho"
-          name="modeloAparelho"
-          required
-          placeholder="Ex: iPhone 15, Galaxy S21, Redmi Note 12"
-        ></ion-input>
-      </div>
-
-      <!-- Linha 5 -->
-      <div class="form-group full-width">
-        <ion-label position="floating">Problema Relatado *</ion-label>
-        <ion-textarea
-          [(ngModel)]="problemaRelatado"
-          name="problemaRelatado"
-          rows="3"
-          required
-          auto-grow
-          placeholder="Ex: Ecrã partido, não liga, bateria descarrega rápido..."
-        ></ion-textarea>
-      </div>
-
-      <!-- Linha 6 -->
-      <div class="form-group full-width">
-        <ion-label position="floating">Solução Proposta</ion-label>
-        <ion-textarea
-          [(ngModel)]="solucaoInicial"
-          name="solucaoInicial"
-          rows="3"
-          auto-grow
-          placeholder="Ex: Substituição do ecrã, troca de bateria, limpeza interna..."
-        ></ion-textarea>
-      </div>
-
-      <!-- Linha 7 -->
-      <div class="form-group">
-        <ion-label position="floating">Valor (€)</ion-label>
-        <ion-input
-          type="number"
           [(ngModel)]="valorTotal"
           name="valorTotal"
+          type="number"
           min="0"
           step="0.01"
-          placeholder="Ex: 49.90"
         ></ion-input>
-      </div>
+      </ion-item>
 
-      <div class="form-group">
-        <ion-label position="floating">Observações</ion-label>
-        <ion-textarea
-          [(ngModel)]="observacoes"
-          name="observacoes"
-          rows="2"
-          auto-grow
-          placeholder="Ex: Cliente pediu urgência, aparelho com riscos, etc..."
-        ></ion-textarea>
-      </div>
+      <ion-item>
+        <ion-label position="stacked">Observações</ion-label>
+        <ion-textarea [(ngModel)]="observacoes" name="observacoes"></ion-textarea>
+      </ion-item>
     </form>
 
-    <div class="button-container" style="margin-top: 18px;">
+    <div class="button-container">
       <ion-button
         expand="block"
         (click)="salvarServico()"
@@ -177,3 +131,4 @@
     </div>
   </div>
 </ion-content>
+
