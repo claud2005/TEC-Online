@@ -130,6 +130,16 @@ formatCurrency(value: any): string {
     maximumFractionDigits: 2
   });
 }
+  formatarNumero(numero: string | number): string {
+    const num = parseInt(numero as string, 10);
+    if (isNaN(num)) return 'N/A';
+    return '#' + num.toString().padStart(4, '0');
+  }
+
+  irParaEditarServico(event: Event, servicoId: string) {
+    event.stopPropagation();
+    this.router.navigate(['/editar-servicos', servicoId]);
+  }
 
   async gerarPDFSelecionados() {
     const selecionados = this.servicos.filter(s => this.servicoSelecionado[s._id]);
