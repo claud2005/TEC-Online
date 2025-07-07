@@ -5,33 +5,46 @@
 </ion-header>
 
 <ion-content *ngIf="!isLoading && cliente">
-  <ion-card>
+  <ion-card class="cliente-info">
     <ion-card-header>
       <ion-card-title>{{ cliente.nome }}</ion-card-title>
       <ion-card-subtitle>{{ cliente.email }}</ion-card-subtitle>
     </ion-card-header>
   </ion-card>
 
+  <ion-item-divider>Serviços</ion-item-divider>
+
   <ion-list>
-    <ion-item *ngFor="let servico of servicos">
+    <ion-item class="servico-item" *ngFor="let servico of servicos">
       <ion-checkbox
         slot="start"
         [(ngModel)]="servicoSelecionado[servico._id]">
       </ion-checkbox>
+
       <ion-label>
         <h2>Serviço Nº {{ servico.numero }}</h2>
-        <p>{{ servico.marcaAparelho }} - {{ servico.modeloAparelho }}</p>
-        <p><strong>Valor:</strong> {{ formatCurrency(servico.valorTotal) }}</p>
+        <h3>{{ servico.marcaAparelho }} - {{ servico.modeloAparelho }}</h3>
+        <p><strong>Problema:</strong> {{ servico.problemaRelatado }}</p>
+        <p><strong>Valor:</strong> {{ formatCurrency(+servico.valorTotal) }}</p>
+
+        <ion-badge
+          [color]="
+            servico.status === 'Concluído' ? 'success' :
+            servico.status === 'Pendente' ? 'warning' : 'danger'
+          ">
+          {{ servico.status }}
+        </ion-badge>
       </ion-label>
     </ion-item>
   </ion-list>
 
   <ion-button expand="block" color="primary" (click)="gerarPDFSelecionados()">
+    <ion-icon name="document-outline" slot="start"></ion-icon>
     Gerar PDF dos Selecionados
   </ion-button>
 </ion-content>
 
-<ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+<ion-spinner *ngIf="isLoading" name="crescent" class="loading-spinner"></ion-spinner>
 
 <ion-text color="danger" *ngIf="errorMessage">
   <p class="ion-padding">{{ errorMessage }}</p>

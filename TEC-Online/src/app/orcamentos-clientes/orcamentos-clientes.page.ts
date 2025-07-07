@@ -21,6 +21,7 @@ interface Servico {
   valorTotal: string;
   responsavel: string;
   dataConclusao?: string;
+  status: 'Pendente' | 'Concluído' | 'Cancelado';
 }
 
 @Component({

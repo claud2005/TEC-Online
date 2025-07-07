@@ -1,5 +1,6 @@
 ion-content {
   --background: #f5f5f5;
+  padding: 16px;
 }
 
 .loading-spinner {
@@ -19,49 +20,71 @@ ion-content {
 .cliente-info {
   margin-bottom: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  background: white;
+
+  ion-card-title {
+    font-size: 1.4rem;
+    color: var(--ion-color-primary);
+  }
+
+  ion-card-subtitle {
+    font-size: 1rem;
+    color: #666;
+  }
+}
+
+ion-item-divider {
+  --background: #e0e0e0;
+  --color: var(--ion-color-primary);
+  font-weight: bold;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 6px;
 }
 
 .servico-item {
-  margin-bottom: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 12px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
   --background: #ffffff;
+  padding: 8px;
 
   ion-label {
     white-space: normal;
 
     h2 {
-      font-weight: 600;
+      font-weight: 700;
+      font-size: 1.2rem;
       color: var(--ion-color-primary);
+      margin-bottom: 4px;
     }
 
     h3 {
       font-weight: 500;
-      color: #555;
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 6px;
     }
 
     p {
-      color: #666;
-      margin: 5px 0;
+      color: #555;
+      font-size: 0.95rem;
+      margin: 2px 0;
+    }
+
+    ion-badge {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      padding: 6px 10px;
+      border-radius: 12px;
     }
   }
 }
 
-.status-pendente {
-  color: var(--ion-color-warning);
-}
-
-.status-concluido {
-  color: var(--ion-color-success);
-}
-
-.status-cancelado {
-  color: var(--ion-color-danger);
-}
-
-ion-item-divider {
-  --background: #f5f5f5;
-  --color: var(--ion-color-primary);
-  font-weight: bold;
+ion-button {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
