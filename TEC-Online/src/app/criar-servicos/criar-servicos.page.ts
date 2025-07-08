@@ -113,7 +113,8 @@ export class CriarServicosPage implements OnInit {
         cliente.nome.toLowerCase().includes(termo)
       );
     } else {
-      this.clientesFiltrados = [];
+      this.clientesFiltrados = [...this.clientes];
+      this.clientesFiltrados = this.clientesFiltrados.slice(0,5);
     }
   }
 
