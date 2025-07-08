@@ -89,7 +89,7 @@ export class CriarServicosPage implements OnInit {
         nome: cliente.nome,
         numeroCliente: cliente.numeroCliente || cliente.contacto
       })) || [];
-
+      this.clientesFiltrados = [...this.clientes];
     } catch (error) {
       console.error('Erro ao carregar clientes:', error);
       const alert = await this.alertController.create({

@@ -73,7 +73,7 @@
           name="termoPesquisa"
         ></ion-searchbar>
 
-        <ion-list *ngIf="clientesFiltrados.length > 0 && mostrarSugestoes">
+        <ion-list *ngIf="clientesFiltrados.length > 0">
           <ion-item
             button
             *ngFor="let cliente of clientesFiltrados"
