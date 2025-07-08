@@ -33,6 +33,7 @@ export class EditarServicosPage {
   observacoes: string = '';
   autorServico: string = '';
   imagens: string[] = []; // Pode conter base64 ou URLs
+  imagensParaRemover: string[] = []; // ← Novidade
   clienteId: string = ''; // ← IMPORTANTE
 
   constructor(
@@ -129,6 +130,11 @@ export class EditarServicosPage {
         }
       }
 
+      // Adiciona imagens a serem removidas
+      this.imagensParaRemover.forEach(url => {
+        formData.append('imagensParaRemover', url);
+      });
+
       const token = localStorage.getItem('token');
       if (!token) {
         alert('Sessão expirada. Faça login novamente.');
@@ -178,6 +184,14 @@ export class EditarServicosPage {
     return obrigatorios.every(val => val && val.trim() !== '') && this.valorTotal !== null && this.valorTotal >= 0;
   }
 
+    removerFoto(index: number) {
+    const imagemRemovida = this.imagens[index];
+    if (imagemRemovida.startsWith('http')) {
+      this.imagensParaRemover.push(imagemRemovida);
+    }
+    this.imagens.splice(index, 1);
+  }
+  
   async adicionarFoto() {
     try {
       const foto = await Camera.getPhoto({
@@ -194,10 +208,6 @@ export class EditarServicosPage {
     } catch (error) {
       console.error('Erro ao adicionar foto:', error);
     }
-  }
-
-  removerFoto(index: number) {
-    this.imagens.splice(index, 1);
   }
 
   private async base64ToBlob(base64Data: string): Promise<Blob> {
