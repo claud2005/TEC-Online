@@ -33,6 +33,7 @@ export class EditarServicosPage {
   observacoes: string = '';
   autorServico: string = '';
   imagens: string[] = []; // Pode conter base64 ou URLs
+  clienteId: string = ''; // ← IMPORTANTE
 
   constructor(
     private navController: NavController,
@@ -73,6 +74,7 @@ export class EditarServicosPage {
         this.observacoes = data.observacoes ?? '';
         this.autorServico = data.autorServico ?? '';
         this.imagens = data.imagens ?? [];
+        this.clienteId = data.cliente ?? ''; // ← Captura o ID do cliente
       },
       (error: HttpErrorResponse) => {
         console.error("Erro ao carregar serviço:", error);
@@ -102,6 +104,7 @@ export class EditarServicosPage {
       formData.append('dataServico', this.dataServico);
       formData.append('horaServico', this.horaServico);
       formData.append('status', this.status);
+      formData.append('clienteId', this.clienteId); // ← ESSENCIAL
       formData.append('nomeCliente', this.nomeCliente);
       formData.append('telefoneContato', this.contatoCliente);
       formData.append('modeloAparelho', this.modeloAparelho);
