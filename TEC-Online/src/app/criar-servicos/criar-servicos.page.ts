@@ -90,6 +90,7 @@ export class CriarServicosPage implements OnInit {
         numeroCliente: cliente.numeroCliente || cliente.contacto
       })) || [];
       this.clientesFiltrados = [...this.clientes];
+      this.clientesFiltrados = this.clientesFiltrados.slice(0,5);
     } catch (error) {
       console.error('Erro ao carregar clientes:', error);
       const alert = await this.alertController.create({
