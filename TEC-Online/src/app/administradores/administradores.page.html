@@ -65,11 +65,11 @@
       <p><strong>Atualizado:</strong> {{ user.atualizado | date:'dd/MM/yyyy' }} às {{ user.atualizado | date:'HH:mm' }}</p>
       <ion-col class="actions">
         <ion-button size="small" color="warning" (click)="alterarSenha(user); $event.stopPropagation()">
-          <ion-icon slot="start" name="key-outline"></ion-icon> Alterar Senha
+          <ion-icon slot="start" name="key-outline"></ion-icon> 
         </ion-button>
 
         <ion-button size="small" color="danger" (click)="confirmarEliminarUtilizador(user); $event.stopPropagation()">
-          <ion-icon slot="start" name="trash-outline"></ion-icon> Eliminar
+          <ion-icon slot="start" name="trash-outline"></ion-icon> 
         </ion-button>
       </ion-col>
     </ion-card-content>
