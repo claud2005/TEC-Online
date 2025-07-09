@@ -1,256 +1,351 @@
 /* Estilo global */
 ion-content.modern-background {
-    --background: #f0f4f8; /* Fundo azul claro suave */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    padding: 20px;
-  }
-  
-  /* Container do formulário */
-  .form-container {
-    width: 90%;
-    max-width: 800px;
-    padding: 20px;
-    margin: auto;
-  }
-  
-  /* Seção do cabeçalho */
-  .header-section {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
-  /* Título */
-  h1 {
-    font-size: 50px; /* Aumentado de 48px para 50px */
-    font-weight: 700;
-    color: #2575fc; /* Azul */
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-  }
-  
-  /* Descrição */
-  p {
-    font-size: 24px; /* Aumentado de 22px para 24px */
-    color: #666; /* Texto cinza */
-    margin-bottom: 30px;
-  }
-  
-  /* Grid responsivo */
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    width: 100%;
-  }
-  
-  @media (max-width: 768px) {
-    .grid-container {
-      grid-template-columns: 1fr;
-    }
-  }
-  
-  /* Grupos de formulário */
-  .form-group {
-    margin-bottom: 25px;
-  }
-  
-  /* Labels */
-  ion-label {
-    font-weight: 600;
-    font-size: 22px; /* Aumentado de 20px para 22px */
-    color: #2575fc; /* Azul */
-    margin-bottom: 8px;
-    display: block;
-    transform: translateY(-10px); /* Sobe o label */
-  }
-  
-  /* Inputs e Selects */
-  ion-input,
-  ion-textarea,
-  ion-select {
-    background: #fff; /* Fundo branco */
-    border: 2px solid #e0e0e0; /* Borda suave */
-    border-radius: 12px;
-    padding: 16px;
-    font-size: 22px; /* Aumentado de 20px para 22px */
-    color: #333;
-    width: 100%;
-    transition: all 0.3s ease;
-    margin-top: 10px; /* Espaçamento acima do input */
-  }
-  
-  /* Placeholder dos inputs */
-  ion-input::placeholder,
-  ion-textarea::placeholder {
-    color: #aaa; /* Placeholder cinza */
-    font-size: 20px; /* Aumentado de 18px para 20px */
-  }
-  
-  /* Efeito de foco */
-  ion-input:focus,
-  ion-textarea:focus,
-  ion-select:focus {
-    border-color: #2575fc; /* Borda azul ao focar */
-    box-shadow: 0 0 8px rgba(37, 117, 252, 0.2); /* Sombra azul */
-  }
-  
-  /* Campos que ocupam a linha toda */
-  .full-width {
-    grid-column: span 2;
-  }
-  
-  @media (max-width: 768px) {
-    .full-width {
-      grid-column: span 1;
-    }
-  }
-  
-  /* Botão de voltar */
-  .back-button {
-    --background: transparent;
-    --color: #2575fc; /* Azul */
-    --padding-start: 0;
-    --padding-end: 0;
-  }
-  
-  .back-icon {
-    font-size: 38px; /* Aumentado de 36px para 38px */
-    color: #2575fc; /* Azul */
-    transition: transform 0.3s ease;
-  }
-  
-  .back-button:hover .back-icon {
-    transform: translateX(-5px); /* Efeito de movimento ao passar o mouse */
-  }
-  
-  /* Botão de salvar */
-  .save-button {
-    --background: #2575fc; /* Azul */
-    --border-radius: 12px;
-    font-size: 24px; /* Aumentado de 22px para 24px */
-    font-weight: 600;
-    color: #fff;
-    padding: 18px;
-    width: 100%;
-    transition: background-color 0.3s ease;
-  }
-  
-  .save-button:hover {
-    --background: #1a5bbf; /* Azul mais escuro ao passar o mouse */
-  }
-  
-  /* Centralizar botão */
-  .button-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px; /* Reduzido para quase juntar os botões */
-    width: 100%;
-  }
-  
-  /* Estilo para as fotos */
-  .fotos-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 10px; /* Reduzido para quase juntar os botões */
-    max-width: 100%;
-    margin-top: 20px; /* Adicionado para espaçamento acima das fotos */
-  }
-  
-  .foto-item {
-    position: relative;
-    width: 90px;
-    height: 90px;
-    border-radius: 10px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  
-    &:hover {
-      transform: scale(1.05);
-    }
-  
-    .foto-preview {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  
-    .remove-icon {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      background: rgba(255, 0, 0, 0.8);
-      color: white;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-  }
-  
-  .adicionar-foto-btn {
-    width: 100%;
-    height: 50px; /* Botão maior */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    border-radius: 30px;
-    background-color: #2575fc; /* Azul */
-    color: white;
-    font-size: 22px; /* Aumentado de 20px para 22px */
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-transform: uppercase;
-    margin-top: 20px; /* Reduzido para quase juntar os botões */
-  
-    &:hover {
-      background-color: #1a5bbf; /* Azul mais escuro ao passar o mouse */
-    }
-  
-    ion-icon {
-      margin-right: 8px;
-      font-size: 26px; /* Aumentado de 24px para 26px */
-    }
-  }
-  .modal-imagem-container {
-  --background: #000;
+  --background: #f0f4f8; /* Fundo azul claro suave */
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.imagem-expandida-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  height: 100vh;
   padding: 20px;
 }
 
-.imagem-expandida {
-  max-width: 100%;
-  max-height: 70vh;
-  margin-bottom: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+/* Container do formulário */
+.form-container {
+  width: 90%;
+  max-width: 800px;
+  padding: 20px;
+  margin: auto;
 }
 
-.btn-salvar-imagem {
+/* Seção do cabeçalho */
+.header-section {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Título */
+h1 {
+  font-size: 50px;
+  font-weight: 700;
+  color: #2575fc; /* Azul */
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+/* Descrição */
+p {
+  font-size: 24px;
+  color: #666; /* Texto cinza */
+  margin-bottom: 30px;
+}
+
+/* Grid responsivo */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Grupos de formulário */
+.form-group {
+  margin-bottom: 25px;
+}
+
+/* Labels */
+ion-label {
+  font-weight: 600;
+  font-size: 22px;
+  color: #2575fc; /* Azul */
+  margin-bottom: 8px;
+  display: block;
+  transform: translateY(-10px); /* Sobe o label */
+}
+
+/* Inputs e Selects */
+ion-input,
+ion-textarea,
+ion-select {
+  background: #fff; /* Fundo branco */
+  border: 2px solid #e0e0e0; /* Borda suave */
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 22px;
+  color: #333;
+  width: 100%;
+  transition: all 0.3s ease;
+  margin-top: 10px; /* Espaçamento acima do input */
+}
+
+/* Placeholder dos inputs */
+ion-input::placeholder,
+ion-textarea::placeholder {
+  color: #aaa; /* Placeholder cinza */
+  font-size: 20px;
+}
+
+/* Efeito de foco */
+ion-input:focus,
+ion-textarea:focus,
+ion-select:focus {
+  border-color: #2575fc; /* Borda azul ao focar */
+  box-shadow: 0 0 8px rgba(37, 117, 252, 0.2); /* Sombra azul */
+}
+
+/* Campos que ocupam a linha toda */
+.full-width {
+  grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+  .full-width {
+    grid-column: span 1;
+  }
+}
+
+/* Botão de voltar */
+.back-button {
+  --background: transparent;
+  --color: #2575fc;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.back-icon {
+  font-size: 38px;
+  color: #2575fc;
+  transition: transform 0.3s ease;
+}
+
+.back-button:hover .back-icon {
+  transform: translateX(-5px); /* Efeito de movimento ao passar o mouse */
+}
+
+/* Botão de salvar */
+.save-button {
   --background: #2575fc;
-  --color: white;
-  font-size: 18px;
+  --border-radius: 12px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+  padding: 18px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+  --background: #1a5bbf;
+}
+
+/* Centralizar botão */
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  width: 100%;
+}
+
+/* Estilo para as fotos */
+.fotos-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+  max-width: 100%;
+  margin-top: 20px;
+}
+
+.foto-item {
+  position: relative;
+  width: 90px;
+  height: 90px;
   border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  .foto-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .remove-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+
+.adicionar-foto-btn {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 30px;
+  background-color: #2575fc;
+  color: white;
+  font-size: 22px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-transform: uppercase;
+  margin-top: 20px;
+
+  &:hover {
+    background-color: #1a5bbf;
+  }
+
+  ion-icon {
+    margin-right: 8px;
+    font-size: 26px;
+  }
+}
+
+/* MODAL DE IMAGEM - ESTILOS MELHORADOS */
+.image-modal {
+  --width: 100%;
+  --height: 100%;
+  --border-radius: 0;
+  --background: rgba(0, 0, 0, 0.9);
+  --backdrop-opacity: 1;
+
+  &::part(content) {
+    background: transparent;
+  }
+
+  .modal-imagem-container {
+    --background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+  }
+
+  .imagem-expandida-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .imagem-expandida {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    cursor: zoom-out;
+  }
+
+  .btn-salvar-imagem {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    --background: #2575fc;
+    --background-hover: #1a5bbf;
+    --color: white;
+    --padding-start: 20px;
+    --padding-end: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    margin: 0;
+
+    ion-icon {
+      margin-right: 8px;
+    }
+  }
+
+  .btn-fechar-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    --background: rgba(255, 255, 255, 0.2);
+    --background-hover: rgba(255, 255, 255, 0.3);
+    --color: white;
+    --padding-start: 0;
+    --padding-end: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    z-index: 10;
+
+    ion-icon {
+      font-size: 24px;
+    }
+  }
+}
+
+/* Ajustes para mobile */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 36px;
+  }
+
+  p {
+    font-size: 18px;
+  }
+
+  ion-label {
+    font-size: 18px;
+  }
+
+  ion-input,
+  ion-textarea,
+  ion-select {
+    font-size: 18px;
+    padding: 12px;
+  }
+
+  .save-button {
+    font-size: 20px;
+    padding: 14px;
+  }
+
+  .image-modal {
+    .btn-salvar-imagem {
+      bottom: 20px;
+      right: 20px;
+      font-size: 16px;
+      --padding-start: 15px;
+      --padding-end: 15px;
+    }
+
+    .btn-fechar-modal {
+      top: 15px;
+      right: 15px;
+      width: 36px;
+      height: 36px;
+    }
+  }
 }
