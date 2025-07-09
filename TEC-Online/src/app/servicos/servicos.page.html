@@ -35,7 +35,7 @@
     </div>
   </div>
 
-  <!-- Lista de serviços com visual de tabela -->
+  <!-- MODO MOBILE (CARD) -->
   <div class="mobile-view">
     <ion-card *ngFor="let servico of servicosFiltrados">
       <ion-card-header>
@@ -92,5 +92,49 @@
         </ion-button>
       </ion-card-content>
     </ion-card>
+  </div>
+
+  <!-- MODO DESKTOP (TABELA) -->
+  <div class="tabela-wrapper">
+    <ion-grid class="tabela-servicos">
+      <!-- Cabeçalho -->
+      <ion-row class="tabela-header">
+        <ion-col size="1">Nº</ion-col>
+        <ion-col size="1.5">Data</ion-col>
+        <ion-col size="1.5">Autor</ion-col>
+        <ion-col size="2">Cliente</ion-col>
+        <ion-col size="1.5">Modelo</ion-col>
+        <ion-col size="1.5">Marca</ion-col>
+        <ion-col size="2">Problema</ion-col>
+        <ion-col size="1">Status</ion-col>
+        <ion-col size="1.5">Valor</ion-col>
+        <ion-col size="2">Ações</ion-col>
+      </ion-row>
+
+      <!-- Conteúdo da tabela -->
+      <ion-row class="tabela-row" *ngFor="let servico of servicosFiltrados">
+        <ion-col size="1">{{ servico.numero }}</ion-col>
+        <ion-col size="1.5">{{ servico.dataServico }}</ion-col>
+        <ion-col size="1.5">{{ servico.autorServico }}</ion-col>
+        <ion-col size="2">{{ servico.nomeCompletoCliente }}</ion-col>
+        <ion-col size="1.5">{{ servico.modeloAparelho }}</ion-col>
+        <ion-col size="1.5">{{ servico.marcaAparelho }}</ion-col>
+        <ion-col size="2">{{ servico.problemaRelatado }}</ion-col>
+        <ion-col size="1">
+          <ion-badge [color]="servico.status === 'ABERTA' ? 'warning' : 'success'">
+            {{ servico.status }}
+          </ion-badge>
+        </ion-col>
+        <ion-col size="1.5">{{ servico.valorTotal }}</ion-col>
+        <ion-col size="2">
+          <ion-button size="small" fill="solid" color="tertiary" (click)="gerarPDF(servico)">
+            PDF
+          </ion-button>
+          <ion-button size="small" fill="solid" color="warning" (click)="editarServico(servico)">
+            Editar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
 </ion-content>
