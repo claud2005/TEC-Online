@@ -53,8 +53,8 @@
     </ion-col>
   </ion-row>
 
-  <!-- Cards para mobile, se quiser adicionar (opcional) -->
-  <ion-card *ngFor="let user of utilizadores" class="mobile-user-card only-mobile">
+  <!-- Cards para mobile -->
+  <ion-card *ngFor="let user of utilizadores" class="mobile-user-card only-mobile" (click)="editarUtilizador(user.id)">
     <ion-card-header>
       <ion-card-title>{{ user.fullName }}</ion-card-title>
     </ion-card-header>
@@ -64,11 +64,11 @@
       <p><strong>Administrador:</strong> {{ user.isAdmin ? 'Sim' : 'Não' }}</p>
       <p><strong>Atualizado:</strong> {{ user.atualizado | date:'dd/MM/yyyy' }} às {{ user.atualizado | date:'HH:mm' }}</p>
       <ion-col class="actions">
-        <ion-button size="small" color="warning" (click)="alterarSenha(user)">
+        <ion-button size="small" color="warning" (click)="alterarSenha(user); $event.stopPropagation()">
           <ion-icon slot="start" name="key-outline"></ion-icon> Alterar Senha
         </ion-button>
 
-        <ion-button size="small" color="danger" (click)="confirmarEliminarUtilizador(user)">
+        <ion-button size="small" color="danger" (click)="confirmarEliminarUtilizador(user); $event.stopPropagation()">
           <ion-icon slot="start" name="trash-outline"></ion-icon> Eliminar
         </ion-button>
       </ion-col>
