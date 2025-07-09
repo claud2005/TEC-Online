@@ -98,17 +98,21 @@
     </div>
   </div>
 
-  <!-- Modal para visualização de imagem -->
-  <ion-modal [isOpen]="modalAberto" (didDismiss)="modalAberto = false">
-    <ng-template>
-      <ion-content class="modal-imagem-container">
-        <div class="imagem-expandida-wrapper">
-          <img [src]="imagemSelecionada" class="imagem-expandida" />
-          <ion-button expand="block" (click)="salvarImagem()" class="btn-salvar-imagem">
-            Salvar Imagem
-          </ion-button>
-        </div>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
+<!-- Modal para visualização de imagem -->
+<ion-modal [isOpen]="modalAberto" (didDismiss)="modalAberto = false" class="image-modal">
+  <ng-template>
+    <ion-content class="modal-imagem-container">
+      <div class="imagem-expandida-wrapper">
+        <img [src]="imagemSelecionada" class="imagem-expandida" (click)="modalAberto = false" />
+        <ion-button (click)="salvarImagem()" class="btn-salvar-imagem">
+          <ion-icon name="download-outline" slot="start"></ion-icon>
+          Salvar
+        </ion-button>
+        <ion-button (click)="modalAberto = false" fill="clear" class="btn-fechar-modal">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
 </ion-content>

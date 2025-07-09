@@ -62,19 +62,37 @@ export class EditarServicosPage {
   }
 
   // Método para salvar a imagem no dispositivo
-  salvarImagem() {
-    const link = document.createElement('a');
-    link.download = 'imagem_servico.jpg';
-
-    if (this.imagemSelecionada.startsWith('data:image')) {
-      link.href = this.imagemSelecionada;
-    } else {
-      // URL externa
-      link.href = this.imagemSelecionada;
-      link.target = '_blank';
+  async salvarImagem() {
+    try {
+      if (this.imagemSelecionada.startsWith('data:image')) {
+        // Para imagens em base64
+        const link = document.createElement('a');
+        link.href = this.imagemSelecionada;
+        link.download = `servico_${new Date().getTime()}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        // Para URLs externas
+        const response = await fetch(this.imagemSelecionada);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+      
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `servico_${new Date().getTime()}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+      
+        // Limpeza
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(link);
+      }
+    } catch (error) {
+      console.error('Erro ao salvar imagem:', error);
+      // Fallback para abrir em nova aba se o download falhar
+      window.open(this.imagemSelecionada, '_blank');
     }
-
-    link.click();
   }
 
   carregarServico() {
