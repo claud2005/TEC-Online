@@ -202,12 +202,14 @@ ion-button {
     z-index: 100;
   }
 
+  /* ===== Aumentar espaçamento e fonte nas linhas da tabela ===== */
   .tabela-row {
     background: #ffffff;
     border-bottom: 2px solid #e0e0e0;
     text-align: center;
     transition: background 0.2s ease-in-out;
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: 600;
     color: black;
   }
 
@@ -220,12 +222,64 @@ ion-button {
   }
 
   .tabela-row ion-col {
-    padding: 14px;
+    padding: 18px 24px;
     border-right: 1px solid #d1d1d1;
-    font-weight: 500;
+    font-weight: 600;
+  }
+
+  .tabela-row ion-col[size="2"] {
+    flex: 0 0 18.5%;
+  }
+
+  .tabela-row ion-col[size="1.5"] {
+    flex: 0 0 14%;
+  }
+
+  .tabela-row ion-col[size="1"] {
+    flex: 0 0 9%;
+  }
+
+  .tabela-row ion-col[size="0.5"] {
+    flex: 0 0 5%;
   }
 
   .tabela-row ion-col:last-child {
     border-right: none;
+  }
+
+  /* ===== Linha de detalhes - alinhamento à esquerda e espaçamento ===== */
+  .detalhes-row {
+    background-color: #f8f8f8 !important;
+  }
+
+  .detalhes-row ion-col {
+    text-align: left !important;
+    padding: 20px 24px !important;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .detalhes-row ion-grid ion-row {
+    margin-bottom: 10px;
+  }
+
+  /* Valor para a parte de baixo e alinhado à esquerda */
+  .detalhes-row ion-grid ion-row:last-child ion-col:first-child {
+    font-weight: bold;
+    font-size: 18px;
+    color: #000;
+  }
+
+  /* Botões na parte de baixo alinhados à esquerda */
+  .botoes-acao ion-col {
+    text-align: left !important;
+    padding-top: 12px;
+  }
+
+  /* Botão expandir centralizado */
+  .tabela-servicos ion-row.tabela-row ion-col.size-0\.5 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
