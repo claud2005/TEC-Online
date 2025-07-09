@@ -306,13 +306,24 @@ async gerarPDF(servico: Servico) {
 
 
   filtrarServicos() {
-    this.servicosFiltrados = this.servicos.filter(servico => {
-      const matchStatus = this.filtroStatus === 'todos' || servico.status === this.filtroStatus;
-      const matchSearch = servico.cliente.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                          servico.descricao.toLowerCase().includes(this.searchTerm.toLowerCase());
-      return matchStatus && matchSearch;
-    });
-  }
+  const termo = this.searchTerm?.toLowerCase() || '';
+
+  this.servicosFiltrados = this.servicos.filter(servico => {
+    const matchStatus = this.filtroStatus === 'todos' || servico.status === this.filtroStatus;
+
+    const matchSearch =
+      servico.nomeCompletoCliente?.toLowerCase().includes(termo) ||
+      servico.contatoCliente?.toLowerCase().includes(termo) ||
+      servico.modeloAparelho?.toLowerCase().includes(termo) ||
+      servico.marcaAparelho?.toLowerCase().includes(termo) ||
+      servico.problemaRelatado?.toLowerCase().includes(termo) ||
+      servico.responsavel?.toLowerCase().includes(termo) ||
+      servico.numero?.toLowerCase().includes(termo);
+
+    return matchStatus && matchSearch;
+  });
+}
+
 
   voltarParaPlanoSemanal() {
     this.router.navigate(['/plano-semanal']);
