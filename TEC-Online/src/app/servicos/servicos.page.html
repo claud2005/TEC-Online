@@ -35,31 +35,73 @@
     </div>
   </div>
 
-  <!-- Layout Mobile -->
-  <div class="mobile-view">
-    <ion-card *ngFor="let servico of servicosFiltrados">
-      <ion-card-header>
-        <ion-card-title>Serviço Nº {{ servico.numero }}</ion-card-title>
-        <ion-card-subtitle>
-          Status:
-          <ion-badge [color]="servico.status === 'ABERTA' ? 'warning' : 'success'">
-            {{ servico.status }}
-          </ion-badge>
-        </ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content>
-        <p><strong>Data:</strong> {{ servico.dataServico }}</p>
-        <p><strong>Autor do Serviço:</strong> {{ servico.autorServico }}</p>
-        <p><strong>Nome Completo do Cliente:</strong> {{ servico.nomeCompletoCliente }}</p>
-        <p><strong>Modelo do Aparelho:</strong> {{ servico.modeloAparelho }}</p>
-        <p><strong>Marca do Aparelho:</strong> {{ servico.marcaAparelho }}</p>
-        <p><strong>Problema Relatado:</strong> {{ servico.problemaRelatado }}</p>
-        <p><strong>Valor Total:</strong> {{ servico.valorTotal }}</p>
-        <p><strong>Observações:</strong> {{ servico.observacoes }}</p>
+  <ion-grid class="tabela-servicos">
+  <ion-row class="tabela-header">
+    <ion-col size="1">Nº</ion-col>
+    <ion-col size="3">Cliente</ion-col>  <!-- aumentei -->
+    <ion-col size="2">Data</ion-col>     <!-- aumentei -->
+    <ion-col size="2">Autor</ion-col>    <!-- aumentei -->
+    <ion-col size="2">Status</ion-col>   <!-- aumentei -->
+    <ion-col size="0.5"></ion-col> <!-- botão expandir -->
+  </ion-row>
 
-        <ion-button expand="full" fill="solid" color="tertiary" (click)="gerarPDF(servico)">Gerar PDF</ion-button>
-        <ion-button expand="full" fill="solid" color="warning" (click)="editarServico(servico)">Editar Serviço</ion-button>
-      </ion-card-content>
-    </ion-card>
-  </div>
-</ion-content>
+  <ng-container *ngFor="let servico of servicosFiltrados">
+    <!-- Linha principal -->
+    <ion-row class="tabela-row">
+      <ion-col size="1">{{ servico.numero }}</ion-col>
+      <ion-col size="3">{{ servico.nomeCompletoCliente }}</ion-col>
+      <ion-col size="2">{{ servico.dataServico }}</ion-col>
+      <ion-col size="2">{{ servico.autorServico }}</ion-col>
+      <ion-col size="2">
+        <ion-badge [color]="servico.status === 'ABERTA' ? 'warning' : 'success'">
+          {{ servico.status }}
+        </ion-badge>
+      </ion-col>
+      <ion-col size="0.5" class="ion-text-center">
+        <ion-button size="small" fill="clear" (click)="toggleDetalhes(servico)">
+          <ion-icon
+            [name]="servico.expandido ? 'chevron-down-outline' : 'chevron-forward-outline'">
+          </ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <!-- Linha de detalhes expansível -->
+    <ion-row *ngIf="servico.expandido" class="detalhes-row" style="background-color: #f8f8f8;">
+      <ion-col size="12" class="ion-text-start">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6"><strong>Modelo:</strong> {{ servico.modeloAparelho }}</ion-col>
+            <ion-col size="6"><strong>Marca:</strong> {{ servico.marcaAparelho }}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="6"><strong>Problema Relatado:</strong> {{ servico.problemaRelatado }}</ion-col>
+            <ion-col size="6"><strong>Contato Cliente:</strong> {{ servico.contatoCliente }}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="6"><strong>Observações:</strong> {{ servico.observacoes }}</ion-col>
+            <ion-col size="6"><strong>Solução Inicial:</strong> {{ servico.solucaoInicial }}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="6"><strong>Data Conclusão:</strong> {{ servico.dataConclusao || '---' }}</ion-col>
+            <ion-col size="6"></ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="6"><strong>Valor:</strong> € {{ servico.valorTotal }}</ion-col> <!-- valor aqui -->
+            <ion-col size="6"></ion-col>
+          </ion-row>
+          <ion-row class="botoes-acao">
+            <ion-col size="12" class="ion-text-start">
+              <ion-button size="small" fill="solid" color="tertiary" (click)="gerarPDF(servico)">
+                Gerar PDF
+              </ion-button>
+              <ion-button size="small" fill="solid" color="warning" (click)="editarServico(servico)">
+                Editar Serviço
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+    </ion-row>
+  </ng-container>
+</ion-grid>
