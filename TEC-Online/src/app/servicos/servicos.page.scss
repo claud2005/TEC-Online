@@ -175,6 +175,7 @@ ion-badge[color="warning"] {
   .tabela-wrapper {
     overflow-x: auto;
     padding: 0 16px;
+    display: block;
   }
 
   .tabela-servicos {
@@ -224,5 +225,45 @@ ion-badge[color="warning"] {
 
   .tabela-row ion-col:last-child {
     border-right: none;
+  }
+
+  .cards-mobile-wrapper {
+    display: none;
+  }
+}
+
+/* ======= Cards para Telemóvel ======= */
+@media screen and (max-width: 767px) {
+  .tabela-wrapper {
+    display: none;
+  }
+
+  .cards-mobile-wrapper {
+    display: block;
+  }
+
+  .card-mobile {
+    display: block;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    margin: 10px 0;
+  }
+
+  .card-mobile h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+
+  .card-mobile p {
+    margin: 4px 0;
+    font-size: 15px;
+    color: #333;
+  }
+
+  .card-mobile ion-badge {
+    margin-top: 6px;
   }
 }
