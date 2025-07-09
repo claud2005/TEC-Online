@@ -10,17 +10,17 @@
 </ion-header>
 
 <ion-content class="custom-background">
-  <!-- Filtros -->
+  <!-- Container com filtros -->
   <div class="filtro-container">
     <div class="filtro-linha">
       <ion-segment [(ngModel)]="filtroStatus" (ionChange)="filtrarServicos()" color="secondary">
         <ion-segment-button value="todos">
           <ion-label>Todos</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="aberto">
+        <ion-segment-button value="ABERTA">
           <ion-label>Abertos</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="fechado">
+        <ion-segment-button value="FECHADA">
           <ion-label>Fechados</ion-label>
         </ion-segment-button>
       </ion-segment>
@@ -35,8 +35,8 @@
     </div>
   </div>
 
-  <!-- Layout Mobile -->
-  <div class="mobile-view" *ngIf="isMobile">
+  <!-- Visualização dos serviços -->
+  <div class="mobile-view">
     <ion-card *ngFor="let servico of servicosFiltrados">
       <ion-card-header>
         <ion-card-title>Serviço Nº {{ servico.numero }}</ion-card-title>
@@ -47,59 +47,29 @@
           </ion-badge>
         </ion-card-subtitle>
       </ion-card-header>
+
       <ion-card-content>
         <p><strong>Data:</strong> {{ servico.dataServico }}</p>
         <p><strong>Autor do Serviço:</strong> {{ servico.autorServico }}</p>
-        <p><strong>Nome Completo do Cliente:</strong> {{ servico.nomeCompletoCliente }}</p>
-        <p><strong>Modelo do Aparelho:</strong> {{ servico.modeloAparelho }}</p>
-        <p><strong>Marca do Aparelho:</strong> {{ servico.marcaAparelho }}</p>
+        <p><strong>Nome do Cliente:</strong> {{ servico.nomeCompletoCliente }}</p>
+        <p><strong>Contato:</strong> {{ servico.contatoCliente }}</p>
+        <p><strong>Modelo:</strong> {{ servico.modeloAparelho }}</p>
+        <p><strong>Marca:</strong> {{ servico.marcaAparelho }}</p>
         <p><strong>Problema Relatado:</strong> {{ servico.problemaRelatado }}</p>
+        <p><strong>Solução Aplicada:</strong> {{ servico.solucaoInicial }}</p>
         <p><strong>Valor Total:</strong> {{ servico.valorTotal }}</p>
+        <p><strong>Custo Estimado:</strong> {{ servico.custoEstimado }}</p>
+        <p><strong>Data de Conclusão:</strong> {{ servico.dataConclusao }}</p>
+        <p><strong>Responsável:</strong> {{ servico.responsavel }}</p>
         <p><strong>Observações:</strong> {{ servico.observacoes }}</p>
 
-        <ion-button expand="full" fill="solid" color="tertiary" (click)="gerarPDF(servico)">Gerar PDF</ion-button>
-        <ion-button expand="full" fill="solid" color="warning" (click)="editarServico(servico)">Editar Serviço</ion-button>
+        <ion-button expand="full" fill="solid" color="tertiary" (click)="gerarPDF(servico)">
+          Gerar PDF
+        </ion-button>
+        <ion-button expand="full" fill="solid" color="warning" (click)="editarServico(servico)">
+          Editar Serviço
+        </ion-button>
       </ion-card-content>
     </ion-card>
-  </div>
-
-  <!-- Layout Desktop (Tabela) -->
-  <div class="desktop-view" *ngIf="!isMobile">
-    <ion-grid>
-      <ion-row class="header">
-        <ion-col><strong>Nº</strong></ion-col>
-        <ion-col><strong>Status</strong></ion-col>
-        <ion-col><strong>Data</strong></ion-col>
-        <ion-col><strong>Autor</strong></ion-col>
-        <ion-col><strong>Cliente</strong></ion-col>
-        <ion-col><strong>Modelo</strong></ion-col>
-        <ion-col><strong>Marca</strong></ion-col>
-        <ion-col><strong>Problema</strong></ion-col>
-        <ion-col><strong>Valor</strong></ion-col>
-        <ion-col><strong>Observações</strong></ion-col>
-        <ion-col><strong>Ações</strong></ion-col>
-      </ion-row>
-
-      <ion-row *ngFor="let servico of servicosFiltrados">
-        <ion-col>{{ servico.numero }}</ion-col>
-        <ion-col>
-          <ion-badge [color]="servico.status === 'ABERTA' ? 'warning' : 'success'">
-            {{ servico.status }}
-          </ion-badge>
-        </ion-col>
-        <ion-col>{{ servico.dataServico }}</ion-col>
-        <ion-col>{{ servico.autorServico }}</ion-col>
-        <ion-col>{{ servico.nomeCompletoCliente }}</ion-col>
-        <ion-col>{{ servico.modeloAparelho }}</ion-col>
-        <ion-col>{{ servico.marcaAparelho }}</ion-col>
-        <ion-col>{{ servico.problemaRelatado }}</ion-col>
-        <ion-col>{{ servico.valorTotal }}</ion-col>
-        <ion-col>{{ servico.observacoes }}</ion-col>
-        <ion-col>
-          <ion-button size="small" color="tertiary" (click)="gerarPDF(servico)">PDF</ion-button>
-          <ion-button size="small" color="warning" (click)="editarServico(servico)">Editar</ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
   </div>
 </ion-content>
