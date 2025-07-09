@@ -318,7 +318,7 @@ async gerarPDF(servico: Servico) {
     this.router.navigate(['/plano-semanal']);
   }
 
-  toggleDetalhes(servico: Servico) {
+ toggleDetalhes(servico: Servico) {
     servico.expandido = !servico.expandido;
   }
 

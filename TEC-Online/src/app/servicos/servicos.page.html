@@ -40,43 +40,50 @@
       <ion-col size="1.5">Data</ion-col>
       <ion-col size="1.5">Autor</ion-col>
       <ion-col size="2">Cliente</ion-col>
-      <ion-col size="1.5">Modelo</ion-col>
-      <ion-col size="1.5">Marca</ion-col>
-      <ion-col size="2">Problema</ion-col>
-      <ion-col size="1">Status</ion-col>
+      <ion-col size="1.5">Status</ion-col>
       <ion-col size="1.5">Valor</ion-col>
+      <ion-col size="0.5"></ion-col> <!-- Coluna para o ícone de expandir -->
     </ion-row>
 
-    <!-- Linha principal + linha de detalhes dentro do *ngFor -->
     <ng-container *ngFor="let servico of servicosFiltrados">
       <!-- Linha principal -->
-      <ion-row class="tabela-row" (click)="toggleDetalhes(servico)">
+      <ion-row class="tabela-row" (click)="toggleDetalhes(servico)" style="cursor: pointer;">
         <ion-col size="1">{{ servico.numero }}</ion-col>
         <ion-col size="1.5">{{ servico.dataServico }}</ion-col>
         <ion-col size="1.5">{{ servico.autorServico }}</ion-col>
         <ion-col size="2">{{ servico.nomeCompletoCliente }}</ion-col>
-        <ion-col size="1.5">{{ servico.modeloAparelho }}</ion-col>
-        <ion-col size="1.5">{{ servico.marcaAparelho }}</ion-col>
-        <ion-col size="2">{{ servico.problemaRelatado }}</ion-col>
-        <ion-col size="1">
+        <ion-col size="1.5">
           <ion-badge [color]="servico.status === 'ABERTA' ? 'warning' : 'success'">
             {{ servico.status }}
           </ion-badge>
         </ion-col>
         <ion-col size="1.5">€ {{ servico.valorTotal }}</ion-col>
+        <ion-col size="0.5" class="ion-text-center">
+          <ion-icon
+            [name]="servico.expandido ? 'chevron-down-outline' : 'chevron-forward-outline'">
+          </ion-icon>
+        </ion-col>
       </ion-row>
 
-      <!-- Linha de detalhes -->
-      <ion-row *ngIf="servico.expandido" class="detalhes-row">
+      <!-- Linha de detalhes expansível -->
+      <ion-row *ngIf="servico.expandido" class="detalhes-row" style="background-color: #f8f8f8;">
         <ion-col size="12">
           <ion-grid>
             <ion-row>
-              <ion-col size="6"><strong>Contato Cliente:</strong> {{ servico.contatoCliente }}</ion-col>
-              <ion-col size="6"><strong>Observações:</strong> {{ servico.observacoes }}</ion-col>
+              <ion-col size="6"><strong>Modelo:</strong> {{ servico.modeloAparelho }}</ion-col>
+              <ion-col size="6"><strong>Marca:</strong> {{ servico.marcaAparelho }}</ion-col>
             </ion-row>
             <ion-row>
+              <ion-col size="6"><strong>Problema Relatado:</strong> {{ servico.problemaRelatado }}</ion-col>
+              <ion-col size="6"><strong>Contato Cliente:</strong> {{ servico.contatoCliente }}</ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="6"><strong>Observações:</strong> {{ servico.observacoes }}</ion-col>
               <ion-col size="6"><strong>Solução Inicial:</strong> {{ servico.solucaoInicial }}</ion-col>
+            </ion-row>
+            <ion-row>
               <ion-col size="6"><strong>Data Conclusão:</strong> {{ servico.dataConclusao || '---' }}</ion-col>
+              <ion-col size="6"></ion-col>
             </ion-row>
             <ion-row class="botoes-acao">
               <ion-col size="12" class="ion-text-end">
