@@ -36,6 +36,10 @@ export class EditarServicosPage {
   imagensParaRemover: string[] = []; // ← Novidade
   clienteId: string = ''; // ← IMPORTANTE
 
+  // Propriedades para o modal de imagem
+  modalAberto: boolean = false;
+  imagemSelecionada: string = '';
+
   constructor(
     private navController: NavController,
     private route: ActivatedRoute,
@@ -49,6 +53,28 @@ export class EditarServicosPage {
     if (this.id) {
       this.carregarServico();
     }
+  }
+
+  // Método para abrir o modal com a imagem selecionada
+  abrirModalImagem(img: string) {
+    this.imagemSelecionada = img;
+    this.modalAberto = true;
+  }
+
+  // Método para salvar a imagem no dispositivo
+  salvarImagem() {
+    const link = document.createElement('a');
+    link.download = 'imagem_servico.jpg';
+
+    if (this.imagemSelecionada.startsWith('data:image')) {
+      link.href = this.imagemSelecionada;
+    } else {
+      // URL externa
+      link.href = this.imagemSelecionada;
+      link.target = '_blank';
+    }
+
+    link.click();
   }
 
   carregarServico() {
@@ -184,7 +210,7 @@ export class EditarServicosPage {
     return obrigatorios.every(val => val && val.trim() !== '') && this.valorTotal !== null && this.valorTotal >= 0;
   }
 
-    removerFoto(index: number) {
+  removerFoto(index: number) {
     const imagemRemovida = this.imagens[index];
     if (imagemRemovida.startsWith('http')) {
       this.imagensParaRemover.push(imagemRemovida);

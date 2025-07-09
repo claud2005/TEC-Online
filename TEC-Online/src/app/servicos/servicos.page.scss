@@ -53,14 +53,14 @@ ion-content.custom-background {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow-x: auto;
 }
 
-ion-segment,
-ion-searchbar {
-  width: 100%;
-}
-
+/* Tornar o ion-segment rolável horizontalmente */
 ion-segment {
+  display: flex;
+  overflow-x: auto;
+  flex-wrap: nowrap;
   background: white;
   border-radius: 12px;
   padding: 8px;
@@ -75,7 +75,8 @@ ion-segment-button {
   white-space: nowrap;
   text-align: center;
   justify-content: center;
-  min-width: 100px;
+  min-width: max-content;
+  flex: 0 0 auto;
 }
 
 ion-segment-button.ion-activated {
