@@ -13,7 +13,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot({ mode: 'ios' }),  // indispensável para Ionic funcionar bem
+    IonicModule.forRoot(),  // indispensável para Ionic funcionar bem
+    HttpClientModule,
     ReactiveFormsModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
