@@ -36,10 +36,10 @@
   <ion-grid class="tabela-servicos">
   <ion-row class="tabela-header">
     <ion-col size="1">Nº</ion-col>
-    <ion-col size="2">Cliente</ion-col>
-    <ion-col size="1.5">Data</ion-col>
-    <ion-col size="1.5">Autor</ion-col>
-    <ion-col size="1.5">Status</ion-col>
+    <ion-col size="3">Cliente</ion-col>  <!-- aumentei -->
+    <ion-col size="2">Data</ion-col>     <!-- aumentei -->
+    <ion-col size="2">Autor</ion-col>    <!-- aumentei -->
+    <ion-col size="2">Status</ion-col>   <!-- aumentei -->
     <ion-col size="0.5"></ion-col> <!-- botão expandir -->
   </ion-row>
 
@@ -47,10 +47,10 @@
     <!-- Linha principal -->
     <ion-row class="tabela-row">
       <ion-col size="1">{{ servico.numero }}</ion-col>
-      <ion-col size="2">{{ servico.nomeCompletoCliente }}</ion-col>
-      <ion-col size="1.5">{{ servico.dataServico }}</ion-col>
-      <ion-col size="1.5">{{ servico.autorServico }}</ion-col>
-      <ion-col size="1.5">
+      <ion-col size="3">{{ servico.nomeCompletoCliente }}</ion-col>
+      <ion-col size="2">{{ servico.dataServico }}</ion-col>
+      <ion-col size="2">{{ servico.autorServico }}</ion-col>
+      <ion-col size="2">
         <ion-badge [color]="servico.status === 'ABERTA' ? 'warning' : 'success'">
           {{ servico.status }}
         </ion-badge>
@@ -66,7 +66,7 @@
 
     <!-- Linha de detalhes expansível -->
     <ion-row *ngIf="servico.expandido" class="detalhes-row" style="background-color: #f8f8f8;">
-      <ion-col size="12">
+      <ion-col size="12" class="ion-text-start">
         <ion-grid>
           <ion-row>
             <ion-col size="6"><strong>Modelo:</strong> {{ servico.modeloAparelho }}</ion-col>
@@ -84,8 +84,12 @@
             <ion-col size="6"><strong>Data Conclusão:</strong> {{ servico.dataConclusao || '---' }}</ion-col>
             <ion-col size="6"></ion-col>
           </ion-row>
+          <ion-row>
+            <ion-col size="6"><strong>Valor:</strong> € {{ servico.valorTotal }}</ion-col> <!-- valor aqui -->
+            <ion-col size="6"></ion-col>
+          </ion-row>
           <ion-row class="botoes-acao">
-            <ion-col size="12" class="ion-text-end">
+            <ion-col size="12" class="ion-text-start">
               <ion-button size="small" fill="solid" color="tertiary" (click)="gerarPDF(servico)">
                 Gerar PDF
               </ion-button>
@@ -99,6 +103,7 @@
     </ion-row>
   </ng-container>
 </ion-grid>
+
 
 
       
