@@ -79,7 +79,7 @@
         <ion-label position="stacked">Fotos do Serviço</ion-label>
         <div class="fotos-container">
           <div *ngFor="let img of imagens; let i = index" class="foto-item">
-            <img [src]="img" class="foto-preview" />
+            <img [src]="img" class="foto-preview" (click)="abrirModalImagem(img)" />
             <div class="remove-icon" (click)="removerFoto(i)">×</div>
           </div>
         </div>
@@ -97,4 +97,18 @@
       </ion-button>
     </div>
   </div>
+
+  <!-- Modal para visualização de imagem -->
+  <ion-modal [isOpen]="modalAberto" (didDismiss)="modalAberto = false">
+    <ng-template>
+      <ion-content class="modal-imagem-container">
+        <div class="imagem-expandida-wrapper">
+          <img [src]="imagemSelecionada" class="imagem-expandida" />
+          <ion-button expand="block" (click)="salvarImagem()" class="btn-salvar-imagem">
+            Salvar Imagem
+          </ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
