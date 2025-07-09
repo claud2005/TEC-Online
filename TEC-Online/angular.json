@@ -40,7 +40,9 @@
               "rgbcolor",
               "html2canvas",
               "core-js"
-            ]
+            ],
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "production": {
