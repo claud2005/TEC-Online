@@ -26,12 +26,10 @@
       </ion-segment>
 
       <ion-searchbar
-        [(ngModel)]="searchTerm"
-        (ionInput)="filtrarServicos()"
-        debounce="500"
-        placeholder="Buscar serviço..."
-        animated>
-      </ion-searchbar>
+  [(ngModel)]="searchTerm"
+  (ionInput)="filtrarServicos()"
+  placeholder="Pesquisar serviços...">
+</ion-searchbar>
     </div>
   </div>
 
