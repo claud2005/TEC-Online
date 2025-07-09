@@ -64,13 +64,22 @@
       <p><strong>Administrador:</strong> {{ user.isAdmin ? 'Sim' : 'Não' }}</p>
       <p><strong>Atualizado:</strong> {{ user.atualizado | date:'dd/MM/yyyy' }} às {{ user.atualizado | date:'HH:mm' }}</p>
 
-      <ion-button size="small" color="warning" (click)="alterarSenha(user)">
-        <ion-icon slot="start" name="key-outline"></ion-icon> Alterar Senha
-      </ion-button>
-      <ion-button size="small" color="danger" (click)="confirmarEliminarUtilizador(user)">
-        <ion-icon slot="start" name="trash-outline"></ion-icon> Eliminar
-      </ion-button>
+    <ion-row *ngFor="let user of utilizadores" class="user-row" (click)="editarUtilizador(user.id)">
+      <ion-col>{{ user.fullName }}</ion-col>
+      <ion-col>{{ user.email }}</ion-col>
+      <ion-col>{{ user.telefone }}</ion-col>
+      <ion-col>{{ user.isAdmin ? 'Sim' : 'Não' }}</ion-col>
+      <ion-col>{{ user.atualizado | date:'dd/MM/yyyy' }} às {{ user.atualizado | date:'HH:mm' }}</ion-col>
+      <ion-col class="actions">
+        <ion-button size="small" color="warning" (click)="alterarSenha(user)">
+          <ion-icon slot="start" name="key-outline"></ion-icon> Alterar Senha
+        </ion-button>
+
+        <ion-button size="small" color="danger" (click)="confirmarEliminarUtilizador(user)">
+          <ion-icon slot="start" name="trash-outline"></ion-icon> Eliminar
+        </ion-button>
+      </ion-col>
+    </ion-row> 
     </ion-card-content>
   </ion-card>
-
 </ion-content>
