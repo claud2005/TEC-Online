@@ -315,12 +315,11 @@ async gerarPDF(servico: Servico) {
       servico.numero?.toLowerCase().includes(termo) ||
       servico.nomeCompletoCliente?.toLowerCase().includes(termo) ||
       servico.marcaAparelho?.toLowerCase().includes(termo) ||
-      servico.descricao?.toLowerCase().includes(termo);
+      servico.dataServico?.toLowerCase().includes(termo);
 
     return matchStatus && matchSearch;
   });
 }
-
 
   voltarParaPlanoSemanal() {
     this.router.navigate(['/plano-semanal']);
