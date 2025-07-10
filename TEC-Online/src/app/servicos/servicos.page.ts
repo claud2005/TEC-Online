@@ -311,12 +311,12 @@ async gerarPDF(servico: Servico) {
   this.servicosFiltrados = this.servicos.filter(servico => {
     const matchStatus = this.filtroStatus === 'todos' || servico.status.toLowerCase() === this.filtroStatus.toLowerCase();
 
+    const dataServico = this.formatarData(servico.dataServico).toLowerCase();
     const matchSearch =
       servico.numero?.toLowerCase().includes(termo) ||
       servico.nomeCompletoCliente?.toLowerCase().includes(termo) ||
       servico.marcaAparelho?.toLowerCase().includes(termo) ||
-      servico.dataServico?.toLowerCase().includes(termo);
-
+      dataServico.includes(termo);
     return matchStatus && matchSearch;
   });
 }
